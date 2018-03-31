@@ -1,6 +1,6 @@
 # Warm up
 
-## 627 Longest Palindrome 
+## 627 Longest Palindrome
 
 Given a string which consists of lowercase or uppercase letters, find the length of the longest palindromes that can be built with those letters.
 
@@ -79,4 +79,91 @@ public:
 ### 复杂度分析:
 
 O（n\) , n = s.size\(\)
+
+
+
+## 415 Valid Palindrome
+
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+##### Notice
+
+Have you consider that the string might be empty? This is a good question to ask during an interview.
+
+For the purpose of this problem, we define empty string as valid palindrome.
+
+
+
+**Example**
+
+`"A man, a plan, a canal: Panama"`is a palindrome.
+
+`"race a car"`is not a palindrome.
+
+http://www.lintcode.com/en/problem/valid-palindrome/
+
+### 解题分析:
+
+在627中的解题分析中已经写了如何判断是否为回文的代码， 但是不满足此题目的要求， 此题要求字母必须为a-zA-Z0-9, 其余可以忽略。 那么就有一些corner case需要考虑， 列举如下：
+
+1. 空字符串
+2. 忽略大小写
+3. 忽略非字符
+
+实现非常简单。
+
+### 代码：
+
+```
+class Solution {
+public:
+    /**
+     * @param s: A string
+     * @return: Whether the string is a valid palindrome
+     */
+    bool isPalindrome(string &s) {
+        // write your code here
+        if (s.empty())
+            return true;
+        int beg = 0, end = s.size()-1;
+        
+        while( beg <= end)
+        {
+            while( beg <= end && !isValid(s[beg]))
+                beg++;
+            while( beg <= end && !isValid(s[end]))
+                end--;
+            if (beg <= end && std::tolower(s[beg]) != std::tolower(s[end]))
+                return false;
+            beg++;
+            end--;
+        }
+        return true;
+    }
+    
+private:
+    bool isValid(const char& c)
+    {
+        return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9';
+    }
+};
+```
+
+### 复杂度分析:
+
+O（n\) , n = s.size\(\)
+
+### 笔记
+
+```
+if (beg <= end && std::tolower(s[beg]) != std::tolower(s[end]))
+```
+
+这一行有两个位置容易出错， 在忽略完非法字符后，应该再判断是否越界，并且将待比较字符归一。
+
+
+
+
+
+
 
