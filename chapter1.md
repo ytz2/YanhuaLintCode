@@ -1,6 +1,6 @@
 # Warm up
 
-## Longest Palindrome
+## 627 Longest Palindrome 
 
 Given a string which consists of lowercase or uppercase letters, find the length of the longest palindromes that can be built with those letters.
 
@@ -42,7 +42,7 @@ One longest palindrome that can be built is`"dccaccd"`, whose length is`7`.
 
    1. If ever marked return len+1, else return len
 
-* ### 代码：
+3. ### 代码：
 
 ```
 class Solution {
