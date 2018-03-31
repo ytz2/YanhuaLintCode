@@ -157,8 +157,6 @@ if (beg <= end && std::tolower(s[beg]) != std::tolower(s[end]))
 
 这一行有两个位置容易出错， 在忽略完非法字符后，应该再判断是否越界，并且将待比较字符归一。
 
-
-
 ## 13 strStr
 
 For a given source string and a target string, you should output the**first**index\(from 0\) of target string in source string.
@@ -185,9 +183,7 @@ If source =`"abcdabcdefg"`and target =`"bcd"`, return`1`.
 
 ### 解题分析:
 
-读书的时候implement过boyer-morre 的算法， 可以达到O\(N\)的复杂度，空间复杂度记得是O\(256\)， 256为ascii码长度，但是这道题目是不可能用这种算法面试的时候写出的。 
-
-
+读书的时候implement过boyer-morre 的算法， 可以达到O\(N\)的复杂度，空间复杂度记得是O\(256\)， 256为ascii码长度，但是这道题目是不可能用这种算法面试的时候写出的。
 
 所以可以简单看成一个str find的implementation. 这道题目在leetcode上有用string版本的， 这个依然是cstring style,所以考虑好以下corner case:
 
@@ -196,9 +192,7 @@ If source =`"abcdabcdefg"`and target =`"bcd"`, return`1`.
 3. source == "\0"
 4. target == "\0"
 
-双层遍历即可实现。 
-
-
+双层遍历即可实现。
 
 ### 代码：
 
@@ -218,9 +212,9 @@ public:
             return 0;
         if (!source)
             return -1;
-  
+
         int res = 0;
-        
+
         while(*source && *target)
         {
             const char *sourcePtr = source;
@@ -230,24 +224,22 @@ public:
                 sourcePtr++;
                 targetPtr++;
             }
-            
+
             if (!*targetPtr)
                 return res;
             source++;
             res++;
         }
-        
+
         return -1;
     }
-    
+
 };
 ```
 
 ### 复杂度分析:
 
 O（mn\) m = strlen\(m\) n=strlen\(target\)
-
-
 
 ## 200 Longest Palindromic Substring
 
@@ -261,9 +253,7 @@ Yes
 
 Given the string =`"abcdzdcab"`, return`"cdzdc"`.
 
-http://www.lintcode.com/en/problem/longest-palindromic-substring/
-
-
+[http://www.lintcode.com/en/problem/longest-palindromic-substring/](http://www.lintcode.com/en/problem/longest-palindromic-substring/)
 
 ### 解题分析:
 
@@ -304,7 +294,7 @@ public:
             return s;
         vector<vector<bool>> isPalindromeTbl(s.size(), vector<bool>(s.size(), false));
         buildTable(s, isPalindromeTbl);
-        
+
         int start =0, len = 1;
         for (int i =0; i < s.size(); i++)
         {
@@ -317,10 +307,10 @@ public:
                 }
             }
         }
-        
+
         return s.substr(start, len);
     }
-    
+
 private:
 
     void buildTable(const string& s, vector<vector<bool>>& isPalindrome_)
@@ -330,7 +320,7 @@ private:
             isPalindrome_[i][i] = true;
         for(int i=0; i < n-1; i++)
             isPalindrome_[i][i+1] = s[i] == s[i+1];
-        
+
         for (int len = 2; len < n; len++)
         {
             for (int i = 0; i + len < n; i++)
@@ -350,7 +340,7 @@ private:
 };
 ```
 
-2. 中心射线法
+1. 中心射线法
 
 ```cpp
 class Solution {
@@ -361,7 +351,7 @@ public:
      */
     string longestPalindrome(string &s) {
         // write your code here
-        
+
         int start = 0, len = 1;
         for (int i = 0; i < s.size(); i++)
         {
@@ -382,7 +372,7 @@ public:
         }
         return s.substr(start, len);
     }
-    
+
     int radius(const string& s, int i, int j)
     {
         while(i >= 0 && j < s.size() && s[i] == s[j])
@@ -399,11 +389,75 @@ public:
 
 都是o\(n^2\)， DP有额外o\(n^2\)的空间复杂度
 
-
-
-
-
 ### 
+
+## 667 Longest Palindromic Subsequence
+
+Given a string s, find the longest palindromic subsequence's length in s. You may assume that the maximum length of s is`1000`.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given s =`"bbbab"`return`4`  
+One possible longest palindromic subsequence is`"bbbb"`.
+
+[http://www.lintcode.com/en/problem/valid-palindrome/](http://www.lintcode.com/en/problem/longest-palindromic-subsequence/#)
+
+### 解题分析:
+
+同是回文的题目，此题与200有类似，不同之处为子回文串需要顺序但是不需要连续， 这就否定了中心射线法。当然，如果需要做中心射线法也可以，但就变成了一个递归问题，复杂度会更高一些。
+
+那么需要选择DP解法，DP有一类问题的最大最小路径问题与这个其实类似， 200题中buildTable的过程中只是把是否为回文串\(boolean\)放在其中， 如果换个思路， tbl\[i\]\[j\] 存的是最大回文串长度呢？
+
+状态描述： a\[i\]\[j\] = max of palindrome length from i to j
+
+状态初始： a\[i\]\[i\] = 1, a\[i\]\[i+1\] = a\[i\]==a\[i+1\]?2:1
+
+状态方程： a\[i\]\[j\] = maxmax \(a\[i+1\]\[j\[, a\[i\]\[j-1\],  s\[i\] == s\[j\] ? a\[i+1\]\[j-1\]+2 : INT\_MIN\)
+
+最后结果： a\[0\]\[n-1\]
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param s: the maximum length of s is 1000
+     * @return: the longest palindromic subsequence's length
+     */
+    int longestPalindromeSubseq(string &s) {
+        // write your code here
+        if (s.empty())
+            return 0;
+        vector<vector<int>> tbl(s.size(), vector<int>(s.size(), 0));
+        for(int i = 0; i < s.size(); i++)
+            tbl[i][i] = 1;
+        for(int i = 0; i < s.size()-1; i++)
+            tbl[i][i+1] = (s[i] == s[i+1]? 2 : 1);
+        for (int len = 2; len < s.size(); len++)
+        {
+            for (int i = 0; i+len < s.size(); i++)
+            {
+                int j = i+len;
+                tbl[i][j] = max(max(tbl[i+1][j], tbl[i][j-1]), s[i]==s[j]? tbl[i+1][j-1]+2 : INT_MIN);
+            }
+        }
+        return tbl[0][s.size()-1];
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n^2\)
+
+
 
 
 
