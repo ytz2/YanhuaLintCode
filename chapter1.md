@@ -420,8 +420,6 @@ One possible longest palindromic subsequence is`"bbbb"`.
 
 最后结果： a\[0\]\[n-1\]
 
-
-
 ### 代码：
 
 ```cpp
@@ -459,5 +457,131 @@ o\(n^2\)
 
 
 
+## 841 String Replace
 
+Given two identical-sized string array`A`,`B`and a string`S`. All substrings`A`appearing in`S`are replaced by`B`.\(Notice: From left to right, it**must**be replaced if it can be replaced. If there are multiple alternatives, replace longer priorities. After the replacement of the characters can't be replaced again.\)
+
+##### Notice
+
+* The size of each string array does not exceed
+  `100`
+  , the total string length does not exceed
+  `50000`
+  .
+* The lengths of A \[i\] and B \[i\] are equal.
+* The length of S does not exceed
+  `50000`
+  .
+* All characters are lowercase letters.
+* We guarantee that the A array does not have the same string
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given A =`["ab","aba"]`, B =`["cc","ccc"]`, S =`"ababa"`, return`"cccba"`.
+
+```
+In accordance with the rules, the substring that can be replaced is "ab" or "aba". Since "aba" is longer, we replace "aba" with "ccc".  
+
+```
+
+Given A =`["ab","aba"]`, B =`["cc","ccc"]`,S =`"aaaaa"`,return`"aaaaa"`.
+
+```
+S does not contain strings in A, so no replacement is done.
+
+```
+
+Given A =`["cd","dab","ab"]`, B =`["cc","aaa","dd"]`, S =`"cdab"`, return`"ccdd"`.
+
+```
+From left to right, you can find the "cd" can be replaced at first, so after the replacement becomes "ccab", then you can find "ab" can be replaced, so the string after the replacement is "ccdd".
+```
+
+http://www.lintcode.com/en/problem/string-replace/
+
+
+
+### 解题分析:
+
+这道题目挺接地气的， 至少看上去是日常写代码的时候需要解决的一个具体的问题。 
+
+题目要求用a,b 组成的key value pair 作为字典， 把s中最长的串替换掉。 写起来很好玩，至少在production中我也会这么写替换不难， 难道是找出最长的替换
+
+那么就可以用一个两层的字典来存， 第一层存长度，字典， 第二层字典中存 string, 对应的在a中的位置。 在搜索s的时候， 从最长的长高度开始查找我们的字典， 如果有则替换， 否则向下继续搜索。
+
+以题目的例子
+
+A =`["ab","aba"]`, B =`["cc","ccc"]`, S =`"ababa"`
+
+dict = {
+
+  2: {'ab': 0}
+
+  3: {'aba' :1}
+
+}
+
+从s.substr\(0, 3\) 开始搜索， 发现可以把a\[1\]替换成b\[1\], 继续搜索，不能搜索长度3， 直接搜索长度2， 未果， 结束。最后为：cccba
+
+网上有直接自己写hash的方法， 我个人认为没有必要，而且也不会变成一个production usable 的代码。 
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param a: The A array
+     * @param b: The B array
+     * @param s: The S string
+     * @return: The answer
+     */
+    string stringReplace(vector<string> &a, vector<string> &b, string &s) {
+        // Write your code here
+        if (s.empty() || a.empty() || b.empty())
+            return s;
+        unordered_map<int /*length*/, unordered_map<string /*input of a*/, int /*index*/>> table;
+        for (int i = 0; i < a.size(); i++)
+            table[a[i].size()][a[i]] = i;
+        vector<int> keys;
+        for(const auto& eachLen : table)
+            keys.push_back(eachLen.first);
+        sort(keys.begin(), keys.end(), std::greater<int>()); // hight to low;
+        string res;
+        int i = 0;
+        while( i < s.size())
+        {
+            bool found = false;
+            for (const auto& len : keys)
+            {
+                string token = s.substr(i, len);
+                if (table[len].find(token) == table[len].end())
+                    continue;
+                else
+                {
+                    found = true;
+                    res += b[table[len][token]];
+                    i+=len;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                res.push_back(s[i++]);
+            }
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+哈希的时候是有复杂度的， 所以 复杂度为 O\( average string length in a \* size of a \* size of s\) = o \(kmn\) 
 
