@@ -455,8 +455,6 @@ public:
 
 o\(n^2\)
 
-
-
 ## 841 String Replace
 
 Given two identical-sized string array`A`,`B`and a string`S`. All substrings`A`appearing in`S`are replaced by`B`.\(Notice: From left to right, it**must**be replaced if it can be replaced. If there are multiple alternatives, replace longer priorities. After the replacement of the characters can't be replaced again.\)
@@ -484,15 +482,13 @@ Yes
 Given A =`["ab","aba"]`, B =`["cc","ccc"]`, S =`"ababa"`, return`"cccba"`.
 
 ```
-In accordance with the rules, the substring that can be replaced is "ab" or "aba". Since "aba" is longer, we replace "aba" with "ccc".  
-
+In accordance with the rules, the substring that can be replaced is "ab" or "aba". Since "aba" is longer, we replace "aba" with "ccc".
 ```
 
 Given A =`["ab","aba"]`, B =`["cc","ccc"]`,S =`"aaaaa"`,return`"aaaaa"`.
 
 ```
 S does not contain strings in A, so no replacement is done.
-
 ```
 
 Given A =`["cd","dab","ab"]`, B =`["cc","aaa","dd"]`, S =`"cdab"`, return`"ccdd"`.
@@ -501,13 +497,11 @@ Given A =`["cd","dab","ab"]`, B =`["cc","aaa","dd"]`, S =`"cdab"`, return`"ccdd"
 From left to right, you can find the "cd" can be replaced at first, so after the replacement becomes "ccab", then you can find "ab" can be replaced, so the string after the replacement is "ccdd".
 ```
 
-http://www.lintcode.com/en/problem/string-replace/
-
-
+[http://www.lintcode.com/en/problem/string-replace/](http://www.lintcode.com/en/problem/string-replace/)
 
 ### 解题分析:
 
-这道题目挺接地气的， 至少看上去是日常写代码的时候需要解决的一个具体的问题。 
+这道题目挺接地气的， 至少看上去是日常写代码的时候需要解决的一个具体的问题。
 
 题目要求用a,b 组成的key value pair 作为字典， 把s中最长的串替换掉。 写起来很好玩，至少在production中我也会这么写替换不难， 难道是找出最长的替换
 
@@ -519,17 +513,15 @@ A =`["ab","aba"]`, B =`["cc","ccc"]`, S =`"ababa"`
 
 dict = {
 
-  2: {'ab': 0}
+2: {'ab': 0}
 
-  3: {'aba' :1}
+3: {'aba' :1}
 
 }
 
 从s.substr\(0, 3\) 开始搜索， 发现可以把a\[1\]替换成b\[1\], 继续搜索，不能搜索长度3， 直接搜索长度2， 未果， 结束。最后为：cccba
 
-网上有直接自己写hash的方法， 我个人认为没有必要，而且也不会变成一个production usable 的代码。 
-
-
+网上有直接自己写hash的方法， 我个人认为没有必要，而且也不会变成一个production usable 的代码。
 
 ### 代码：
 
@@ -583,5 +575,134 @@ public:
 
 ### 复杂度分析:
 
-哈希的时候是有复杂度的， 所以 复杂度为 O\( average string length in a \* size of a \* size of s\) = o \(kmn\) 
+哈希的时候是有复杂度的， 所以 复杂度为 O\( average string length in a \* size of a \* size of s\) = o \(kmn\)
+
+
+
+## 594 strStr II
+
+Implement`strStr`function in O\(n + m\) time.
+
+`strStr`return the first index of the target string in a source string. The length of the target string is_m_and the length of the source string is_n_.  
+If target does not exist in source, just return -1.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given source =`abcdef`, target =`bcd`, return`1`.
+
+
+
+http://www.lintcode.com/en/problem/strstr-ii/\#
+
+### 解题分析:
+
+这
+
+道题目其实是考察背诵的，无力吐槽，做一遍robin-karp
+
+robin-karp背后的思想很容易理解：
+
+比如，abcde -&gt; cde， strstr里用了双重循环。 第一层为abcde 遍历, 第二重为cde遍历， 从a-&gt;b-&gt;c都需要从头到尾比一遍。 rk算法就是解决不需要从头到尾比的问题， 首先要hash \(cde\) = hashTarget, 那么分别去和 hash\(abc\), hash\(bcd\), hash \(cde\)来比较， 假设hash是一个o\(1\)的算法， 那么实际上可以达到O\(m+n） 的复杂度。 但是实际问题是hash是一个o\(targetLen\)的复杂度的算法。 如何使他变成O\(1\) 
+
+hash\(abc\) = \(a\*BASE^2 + b\* BASE^1 +c\) % MOD ;
+
+当移到hash\(bcd\)的时候 hash\(bcd\) = \(hash\(abcd\) - a\*BASE^3 + MOD\) %MOD, 实际上一步就可以求得
+
+当我们发现hash\(cde\) = hash\(target）的时候， 因为hash相等只是必要条件， 序言验证是否充分，则需要从头比较。
+
+要注意的细节如下：
+
+
+
+BASE 取 31 or 33, 为什么？ 经验值
+
+MOD 取 1E5， 为什么？ 如果是32位机器，不会overflow \(lintcode跑在32位机上， 试出来的\)
+
+掌握 hash： hash = \(hash\*BASE+c\) % MOD hash start with 0
+
+迭代更新的时候如果小于0， 加上MOD即可
+
+
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param source: A source string
+     * @param target: A target string
+     * @return: An integer as index
+     */
+    int strStr2(const char* source, const char* target) {
+        // write your code here
+        
+        if (!source || !target)
+            return -1;
+        if (!*target)
+            return 0;
+            
+        // abcde ,  bcd 
+        int sourceLen = strlen(source);
+        int targetLen = strlen(target);
+        
+        // step 1. define hash
+        int BASE = 31;
+        int MOD = 1e6;
+        
+        // step 2. hash target
+        int targetHash = 0;
+        for (int i = 0; i < targetLen; i++ )
+            targetHash = (targetHash * BASE + target[i]) % MOD;
+        
+        // step 2.5, prepare pow, why? we need it in step 3
+        int power = 1;
+        for (int i = 0; i < targetLen; i++ )
+            power = power * BASE % MOD;
+        // step 3 match
+        int hashSource = 0;
+        for (int i = 0; i < sourceLen; i++)
+        {
+            hashSource = (hashSource * BASE + source[i]) % MOD;
+            if (i < targetLen-1)
+                continue;
+            // abcd -a
+            if (i >= targetLen )
+            {
+                hashSource = (hashSource - source[i - targetLen] * power ) % MOD;
+                if (hashSource < 0)
+                    hashSource += MOD;
+            }
+            if (hashSource == targetHash)
+            {
+                bool found = true;
+                for (int j = 0; j < targetLen; j++)
+                {
+                    if (source[i-targetLen+j+1] != target[j])
+                    {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found)
+                    return i-targetLen+1;
+            }
+        }
+        
+        return -1;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(m+n\), m = source.size\(\), n=target.size\(\)
+
+
 
