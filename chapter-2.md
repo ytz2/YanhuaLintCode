@@ -26,8 +26,6 @@ For target =`6`, return -1.
 
 典型的二分查找加线性搜索， 直接写代码就行了
 
-
-
 ### 代码：
 
 ```cpp
@@ -69,8 +67,6 @@ public:
 
 O\(log\(n\)\), n = nums.size\(\), 最坏的情况是o\(n\)
 
-
-
 ## 585 Maximum Number in Mountain Sequence
 
 Given a mountain sequence of`n`integers which increase firstly and then decrease, find the mountain top.
@@ -84,31 +80,37 @@ Yes
 Given`nums`=`[1, 2, 4, 8, 6, 3]`return`8`  
 Given`nums`=`[10, 9, 8, 7]`, return`10`
 
-http://www.lintcode.com/en/problem/maximum-number-in-mountain-sequence/\#
+[http://www.lintcode.com/en/problem/maximum-number-in-mountain-sequence/\#](http://www.lintcode.com/en/problem/maximum-number-in-mountain-sequence/#)
 
 ### 解题分析:
 
 二分法的第二种应用OOOXXX， 找分界点问题。
 
-任何一类问题，当左边是O， 右边是X的时候找最后一个O，或者第一个X的时候可以用二分法的思想来解决。 
+任何一类问题，当左边是O， 右边是X的时候找最后一个O，或者第一个X的时候可以用二分法的思想来解决。
 
 找第一个X伪码如下：
 
 for \( beg : end\)
 
-   mid = beg + \(end - beg\) /2 
+mid = beg + \(end - beg\) /2
 
-   if  isX\(mid\):
+if  isX\(mid\):
 
-       beg = mid
+```
+   beg = mid
+```
 
-   else
+else
 
-       end = mid
+```
+   end = mid
+```
 
 if \(isX\(end\)\)
 
-      return end
+```
+  return end
+```
 
 return beg
 
@@ -128,7 +130,7 @@ public:
             return INT_MIN;
         if ( 1 == n)
             return nums[0];
-    
+
         int beg = 0, end = n-1, mid = 0;
         while( beg + 1 < end)
         {
@@ -148,6 +150,96 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\)\)
+
+
+
+## 460 Find K Closest Elements
+
+Given a target number, a non-negative integer`target`and an integer array A sorted in ascending order, find the`k`closest numbers to target in A, sorted in ascending order by the difference between the number and target. Otherwise, sorted in ascending order by number if the difference is same.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given A =`[1, 2, 3]`, target =`2`and k =`3`, return`[2, 1, 3]`.
+
+Given A =`[1, 4, 6, 8]`, target =`3`and k =`3`, return`[4, 1, 6]`.
+
+http://www.lintcode.com/en/problem/find-k-closest-elements/\#
+
+### 解题分析:
+
+算是一道二分法的变种
+
+关键词： sorted, closest, ascending
+
+二分法的时候不但可以用来找给定数字，而且可以用来找最近。因为本质上二分是用的夹逼， 同微积分里面算极限类似。如果用基本二分法的通用模板的话，我们可以发现，最后beg和end的index所代表的值是最逼近所需要查找的值的。 
+
+那么从beg 或者 end开始， 向周围扩散k个数字则是我们期望的答案。  以\[ 1, 4, 6, 8\] ， target = 3, k =3 为例子， beg = 0, end = 1, 因为a\[1\] = 4 最接近3，从end 开始，两边用双指针法逐步更新答案 \[4, 1, 6\] 为所得。
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: an integer array
+     * @param target: An integer
+     * @param k: An integer
+     * @return: an integer array
+     */
+    vector<int> kClosestNumbers(vector<int> &A, int target, int k) {
+        // write your code here
+        vector<int> result;
+        if (A.empty() || k == 0)
+            return result;
+        // what if k > A.size()?
+        
+        int beg = 0, end = A.size() - 1, mid = 0;
+        while (beg + 1 < end)
+        {
+            mid = beg + (end - beg) / 2;
+            if (A[mid] >= target)
+                end = mid;
+            else
+                beg = mid;
+        }
+        
+        int left = beg, right = end;
+        for (int i = 0; i < k ; i++)
+        {
+            if (left < 0 && right >= A.size())
+                break;
+            
+            if (left < 0)
+            {
+                result.push_back(A[right++]);
+                continue;
+            }
+            if (right >= A.size())
+            {
+                result.push_back(A[left--]);
+                continue;
+            }
+            if ( abs(A[left] - target) <= abs(A[right] - target) )
+            {
+                result.push_back(A[left--]);
+            }
+            else
+            {
+                result.push_back(A[right++]);
+            }
+        }
+        return result;
+    }
+};
+```
+
+### 复杂度分析:
+
+O\(log\(n\) + k\), n = A.size\(\)
 
 
 
