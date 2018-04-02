@@ -239,8 +239,6 @@ public:
 
 O\(log\(n\) + k\), n = A.size\(\)
 
-
-
 ## 447 Search in a Big Sorted Array
 
 Given a big sorted array with positive integers sorted by ascending order. The array is so big so that you can not get the length of the whole array directly, and you can only access the kth number by`ArrayReader.get(k)`\(or ArrayReader-&gt;get\(k\) for C++\). Find the first index of a target number. Your algorithm should be in O\(log k\), where k is the first index of the target number.
@@ -285,10 +283,10 @@ public:
         if (!reader)
             return -1;
         int beg = 0, end = 1;
-    
+
         while(reader->get(end) < target)
             end *= 2;
-            
+
         while(beg + 1 < end)
         {
             int mid = beg + (end-beg)/2;
@@ -309,5 +307,77 @@ public:
 
 ### 复杂度分析:
 
-O\(log\(n\) + k\), n = A.size\(\)
+O\(log\(k\) \)
+
+
+
+## 428 Pow\(x, n\)
+
+Implement pow\(x, n\).
+
+##### Notice
+
+You don't need to care about the precision of your answer, it's acceptable if the expected answer and your answer 's difference is smaller than`1e-3`.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+```
+Pow(2.1, 3) = 9.261
+Pow(0, 1) = 0
+Pow(1, 0) = 1
+```
+
+http://www.lintcode.com/en/problem/powx-n/
+
+### 解题分析:
+
+求power肯定就是二分了 ， 关键是有几个corner case
+
+x= 0
+
+n = 0
+
+n是负数
+
+考虑清楚这几个边界条件后，直接写代码
+
+### 代码：
+
+递归版本：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param x: the base number
+     * @param n: the power number
+     * @return: the result
+     */
+    double myPow(double x, int n) {
+        // write your code here
+        if (n == 0)
+            return 1;
+        if (n == 1)
+            return x;
+        if (n == -1)
+            return 1./x;
+        double val = myPow(x, n/2);
+        if (n%2)
+            return val*val* (n<0? 1./x:x);
+        return val*val;
+    }
+};
+```
+
+非递归版本：非递归版本看的答案，我觉得很巧妙。 有一个地方要想到： 就是如果要以log\(n\)的复杂度来解决问题需要从n收敛到n=0,在收敛过程中不行的n/=2,同时不停的ans\*= tmp, tmp的初始值为x， 这样在幂指数收敛过程中答案也在以log\(n\)的速度给出， 我觉得很巧妙, 可惜我没看懂lol中间的一个trick, 放弃非递归的解法
+
+
+
+### 复杂度分析:
+
+O\(log\(k\) \)
 
