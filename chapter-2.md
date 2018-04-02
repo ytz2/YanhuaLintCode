@@ -377,3 +377,77 @@ public:
 
 O\(log\(n\) \)
 
+
+
+## 159 Find Minimum in Rotated Sorted Array
+
+Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+\(i.e.,`0 1 2 4 5 6 7`might become`4 5 6 7 0 1 2`\).
+
+Find the minimum element.
+
+##### Notice
+
+You may assume no duplicate exists in the array.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[4, 5, 6, 7, 0, 1, 2]`return`0`
+
+### 解题分析:
+
+因为是rotated array, 那么最小的值就是rotated的位置符合前面描述的OOXX的标准：
+
+左面大于A\[0\], 右面小于A\[0\]
+
+如图![](/assets/159.png)
+
+### 代码：
+
+
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    int findMin(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        if (0 == n)
+            return INT_MAX;
+        if (1 == n)
+            return nums[0];
+        if (nums[0] < nums[n-1])
+            return nums[0];
+        int beg = 0, end = n-1, mid = 0;
+        while(beg + 1 < end)
+        {
+            mid = beg + (end - beg)/2;
+            if (nums[mid] < nums[0])
+                end = mid;
+            else
+                beg = mid;
+        }
+        return nums[beg] < nums[end]? nums[beg] : nums[end];
+    }
+};
+```
+
+### 复杂度分析:
+
+O\(log\(n\) \)
+
+### 笔记:
+
+这个题目在升序的情况下出错了， \[1, 2, 3\]， 后来临时加了一个判断来判定是不是升序。 原因是OOXX假设了先升序后降序，这样代码就不work, 所以OOXX的套路下， 做好先判断是不是符合再OOXX
+
+
+
