@@ -1,3 +1,4 @@
-# My Awesome Book
+# 我的Lintcode解题报告
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+最近发现自己偷懒了，另外发现自己以前解出来的题目自己再解的时候还要再想一遍。写一个解题报告放在git上，这样一则防止自己偷懒，二则方便自己总结
+
