@@ -535,7 +535,7 @@ Return index`1`\(which is number 2\) or`6`\(which is number 7\)
 
 ### 解题分析:
 
-还是OOXX问题， 只不过是可以有多个peak 
+还是OOXX问题， 只不过是可以有多个peak
 
 先考虑只有一个peak的问题：
 
@@ -543,7 +543,7 @@ Return index`1`\(which is number 2\) or`6`\(which is number 7\)
 
 再考虑有多个peak的问题：
 
-mid 肯定在 0， n-1中间产生， 0为升序，n-1为降序， 如果mid为升序， start = mid,  在mid 和 end 中产生， 如果为降序，则在start和mid中产生，依然满足了二分的原则。 因为题目只要求求出其中一个，所以可解。 
+mid 肯定在 0， n-1中间产生， 0为升序，n-1为降序， 如果mid为升序， start = mid,  在mid 和 end 中产生， 如果为降序，则在start和mid中产生，依然满足了二分的原则。 因为题目只要求求出其中一个，所以可解。
 
 ### 代码：
 
@@ -576,8 +576,6 @@ public:
 
 O\(log\(n\) \)
 
-
-
 ## 74 First Bad Version
 
 The code base version is an integer start from 1 to n. One day, someone committed a bad version in the code case, so it caused this version and the following versions are all failed in the unit tests. Find the first bad version.
@@ -606,12 +604,11 @@ isBadVersion(5) -
 isBadVersion(4) -
 >
  true
-
 ```
 
 Here we are 100% sure that the 4th version is the first bad version.
 
-http://www.lintcode.com/en/problem/first-bad-version/\#
+[http://www.lintcode.com/en/problem/first-bad-version/\#](http://www.lintcode.com/en/problem/first-bad-version/#)
 
 ### 解题分析:
 
@@ -656,16 +653,13 @@ public:
         return SVNRepo::isBadVersion(beg)? beg : end;
     }
 };
-
 ```
 
 ### 复杂度分析:
 
 O\(log\(n\) \)
 
-
-
-## 62 159 Find Minimum in Rotated Sorted Array
+## 62 159 Find Minimum in Rotated Sorted Array \(需要重点再看下，每次都错\)
 
 Suppose a sorted array is rotated at some pivot unknown to you beforehand.
 
@@ -687,17 +681,11 @@ For`[4, 5, 1, 2, 3]`and`target=0`, return`-1`.
 
 ### 解题分析:
 
-借用rotated array, 这道题目算二分的扩展， 如果beg, end都落在左边或者右边，那么就是典型的二分搜索。 如果beg在左，end在右， 那么搜索的时候就要特殊处理：
-
-if A\[left\] &lt; A\[right\]
-
-    normal binary search
-
-else
-
-   decide based on mid, beg, end values,
+做这道题做了第三次了，每次再做还是错的，我都郁闷了。 每次二分的时候我都是用 A\[beg\] &lt; A\[end\] 来做二分，如果成立，说明在左右两区间正常二分，但是处理中间区间的时候逻辑务必混乱。 
 
 
+
+看来只能靠背了， 用mid作为二分的标准，通过判断mid在上面还是在下面，只解决可解的情况： 去掉\[beg, mid\] 或者\[mid, end\]的情形。 郁闷！！！！
 
 ![](/assets/159 - Copy.png)
 
@@ -707,28 +695,38 @@ else
 class Solution {
 public:
     /**
-     * @param nums: a rotated sorted array
-     * @return: the minimum number in the array
+     * @param A: an integer rotated sorted array
+     * @param target: an integer to be searched
+     * @return: an integer
      */
-    int findMin(vector<int> &nums) {
+    int search(vector<int> &A, int target) {
         // write your code here
-        int n = nums.size();
-        if (0 == n)
-            return INT_MAX;
-        if (1 == n)
-            return nums[0];
-        if (nums[0] < nums[n-1])
-            return nums[0];
-        int beg = 0, end = n-1, mid = 0;
+        if (A.empty())
+            return -1;
+        int beg = 0, end = A.size()-1, mid = 0;
         while(beg + 1 < end)
         {
-            mid = beg + (end - beg)/2;
-            if (nums[mid] < nums[0])
-                end = mid;
+            mid = beg + (end - beg) / 2;
+            if (A[beg] < A[mid])
+            {
+                if (A[beg] <= target && A[mid] >= target)
+                    end = mid;
+                else
+                    beg = mid;
+            }
             else
-                beg = mid;
+            {
+                if (A[end] >= target && A[mid] <= target )
+                    beg = mid;
+                else
+                    end = mid;
+            }
         }
-        return nums[beg] < nums[end]? nums[beg] : nums[end];
+        if (A[beg] == target)
+            return beg;
+        if (A[end] == target)
+            return end;
+        return -1;
     }
 };
 ```
@@ -736,8 +734,4 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) \)
-
-
-
-
 
