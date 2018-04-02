@@ -309,8 +309,6 @@ public:
 
 O\(log\(k\) \)
 
-
-
 ## 428 Pow\(x, n\)
 
 Implement pow\(x, n\).
@@ -331,7 +329,7 @@ Pow(0, 1) = 0
 Pow(1, 0) = 1
 ```
 
-http://www.lintcode.com/en/problem/powx-n/
+[http://www.lintcode.com/en/problem/powx-n/](http://www.lintcode.com/en/problem/powx-n/)
 
 ### 解题分析:
 
@@ -375,9 +373,7 @@ public:
 
 非递归版本：非递归版本看的答案，我觉得很巧妙。 有一个地方要想到： 就是如果要以log\(n\)的复杂度来解决问题需要从n收敛到n=0,在收敛过程中不行的n/=2,同时不停的ans\*= tmp, tmp的初始值为x， 这样在幂指数收敛过程中答案也在以log\(n\)的速度给出， 我觉得很巧妙, 可惜我没看懂lol中间的一个trick, 放弃非递归的解法
 
-
-
 ### 复杂度分析:
 
-O\(log\(k\) \)
+O\(log\(n\) \)
 
