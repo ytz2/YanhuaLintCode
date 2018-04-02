@@ -504,8 +504,6 @@ O\(log\(n\) \)
 
 这个题目在升序的情况下出错了， \[1, 2, 3\]， 后来临时加了一个判断来判定是不是升序。 原因是OOXX假设了先升序后降序，这样代码就不work, 所以OOXX的套路下， 做好先判断是不是符合再OOXX
 
-
-
 ## 75 Find Peak Element
 
 There is an integer array which has the following features:
@@ -527,50 +525,49 @@ Find a peak element in this array. Return the index of the peak.
 * The array may contain multiple peeks, find any of them.
 * The array has at least 3 numbers in it.
 
-Have you met this question in a real interview?
-
-Yes
-
 **Example**
 
 Given`[1, 2, 1, 3, 4, 5, 7, 6]`
 
 Return index`1`\(which is number 2\) or`6`\(which is number 7\)
 
-  
-
-
-http://www.lintcode.com/en/problem/find-peak-element/\#
+[http://www.lintcode.com/en/problem/find-peak-element/\#](http://www.lintcode.com/en/problem/find-peak-element/#)
 
 ### 解题分析:
 
-这道题就是一边求power一边取模， 和拿到用robin-karp做strstr做法一样。原因就是取模怎么取都行， 取几次都可以，这样就不会overflow.
+还是OOXX问题， 只不过是可以有多个peak 
+
+先考虑只有一个peak的问题：
+
+如果mid为升序，则start = mid, else end =mid; 最终 peak在start, end中选取
+
+再考虑有多个peak的问题：
+
+mid 肯定在 0， n-1中间产生， 0为升序，n-1为降序， 如果mid为升序， start = mid,  在mid 和 end 中产生， 如果为降序，则在start和mid中产生，依然满足了二分的原则。 因为题目只要求求出其中一个，所以可解。 
 
 ### 代码：
-
-递归版本：
 
 ```cpp
 class Solution {
 public:
-    /**
-     * @param a: A 32bit integer
-     * @param b: A 32bit integer
-     * @param n: A 32bit integer
-     * @return: An integer
+    /*
+     * @param A: An integers array.
+     * @return: return any of peek positions.
      */
-    int fastPower(int a, int b, int n) {
+    int findPeak(vector<int>& A) {
         // write your code here
-        if (n == 0)
-            return 1%b;
-        if (n == 1)
-            return a%b;
-
-        long long val = fastPower(a, b, n/2);
-        long long  res = ((val%b)*(val%b))%b;
-        if (n%2)
-            return res*a%b;
-        return res;
+        int beg = 0, end = A.size() - 1, mid = 0;
+        while(beg + 1 < end)
+        {
+            mid = beg + (end - beg)/2;
+            if (A[mid] > A[mid-1])
+                beg = mid;
+            else
+                end = mid;
+        }
+        if (A[beg] > A[beg-1] && A[beg] > A[beg-1])
+            return beg;
+        return end;
     }
 };
 ```
@@ -578,6 +575,169 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) \)
+
+
+
+## 74 First Bad Version
+
+The code base version is an integer start from 1 to n. One day, someone committed a bad version in the code case, so it caused this version and the following versions are all failed in the unit tests. Find the first bad version.
+
+You can call`isBadVersion`to help you determine which version is the first bad one. The details interface can be found in the code's annotation part.
+
+##### Notice
+
+Please read the annotation in code area to get the correct way to call isBadVersion in different language. For example, Java is`SVNRepo.isBadVersion(v)`
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given n =`5`:
+
+```
+isBadVersion(3) -
+>
+ false
+isBadVersion(5) -
+>
+ true
+isBadVersion(4) -
+>
+ true
+
+```
+
+Here we are 100% sure that the 4th version is the first bad version.
+
+http://www.lintcode.com/en/problem/first-bad-version/\#
+
+### 解题分析:
+
+这道题比数据流搜索简单多了， 就是一个OOXX，由于前面一题的教训， OOXX之前要先判断一下
+
+### 代码：
+
+递归版本：
+
+```cpp
+/**
+ * class SVNRepo {
+ *     public:
+ *     static bool isBadVersion(int k);
+ * }
+ * you can use SVNRepo::isBadVersion(k) to judge whether 
+ * the kth code version is bad or not.
+*/
+
+
+class Solution {
+public:
+    /**
+     * @param n: An integers.
+     * @return: An integer which is the first bad version.
+     */
+    int findFirstBadVersion(int n) {
+        // write your code here
+        if (n<=0)
+            return -1;
+        if (SVNRepo::isBadVersion(1))
+            return 1;
+        int beg = 1, end = n;
+        while(beg + 1 < end)
+        {
+            int mid = beg + (end - beg) / 2;
+            if (SVNRepo::isBadVersion(mid))
+                end = mid;
+            else
+                beg = mid;
+        }
+        return SVNRepo::isBadVersion(beg)? beg : end;
+    }
+};
+
+```
+
+### 复杂度分析:
+
+O\(log\(n\) \)
+
+
+
+## 62 159 Find Minimum in Rotated Sorted Array
+
+Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+\(i.e.,`0 1 2 4 5 6 7`might become`4 5 6 7 0 1 2`\).
+
+You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+You may assume no duplicate exists in the array.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For`[4, 5, 1, 2, 3]`and`target=1`, return`2`.
+
+For`[4, 5, 1, 2, 3]`and`target=0`, return`-1`.
+
+### 解题分析:
+
+借用rotated array, 这道题目算二分的扩展， 如果beg, end都落在左边或者右边，那么就是典型的二分搜索。 如果beg在左，end在右， 那么搜索的时候就要特殊处理：
+
+if A\[left\] &lt; A\[right\]
+
+    normal binary search
+
+else
+
+   decide based on mid, beg, end values,
+
+
+
+![](/assets/159 - Copy.png)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    int findMin(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        if (0 == n)
+            return INT_MAX;
+        if (1 == n)
+            return nums[0];
+        if (nums[0] < nums[n-1])
+            return nums[0];
+        int beg = 0, end = n-1, mid = 0;
+        while(beg + 1 < end)
+        {
+            mid = beg + (end - beg)/2;
+            if (nums[mid] < nums[0])
+                end = mid;
+            else
+                beg = mid;
+        }
+        return nums[beg] < nums[end]? nums[beg] : nums[end];
+    }
+};
+```
+
+### 复杂度分析:
+
+O\(log\(n\) \)
+
+
 
 
 
