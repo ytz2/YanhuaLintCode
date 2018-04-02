@@ -377,11 +377,9 @@ public:
 
 O\(log\(n\) \)
 
-
-
 ## 140 Fast Power
 
-Calculate the **a^n % b **where a, b and n are all 32bit integers.
+Calculate the **a^n % b **where a, b and n are all 32bit integers.
 
 Have you met this question in a real interview?
 
@@ -393,7 +391,7 @@ For 231% 3 = 2
 
 For 1001000% 1000 = 0
 
-http://www.lintcode.com/en/problem/fast-power/\#
+[http://www.lintcode.com/en/problem/fast-power/\#](http://www.lintcode.com/en/problem/fast-power/#)
 
 ### 解题分析:
 
@@ -434,13 +432,9 @@ public:
 };
 ```
 
-
-
 ### 复杂度分析:
 
 O\(log\(n\) \)
-
-
 
 ## 159 Find Minimum in Rotated Sorted Array
 
@@ -511,6 +505,79 @@ O\(log\(n\) \)
 这个题目在升序的情况下出错了， \[1, 2, 3\]， 后来临时加了一个判断来判定是不是升序。 原因是OOXX假设了先升序后降序，这样代码就不work, 所以OOXX的套路下， 做好先判断是不是符合再OOXX
 
 
+
+## 75 Find Peak Element
+
+There is an integer array which has the following features:
+
+* The numbers in adjacent positions are different.
+* A\[0\] &lt;A\[1\] && A\[A.length - 2\] &gt; A\[A.length - 1\].
+
+We define a position P is a peak if:
+
+```
+A[P] > A[P-1] && A[P] >A[P+1]
+```
+
+Find a peak element in this array. Return the index of the peak.
+
+##### Notice
+
+* It's guaranteed the array has at least one peak.
+* The array may contain multiple peeks, find any of them.
+* The array has at least 3 numbers in it.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[1, 2, 1, 3, 4, 5, 7, 6]`
+
+Return index`1`\(which is number 2\) or`6`\(which is number 7\)
+
+  
+
+
+http://www.lintcode.com/en/problem/find-peak-element/\#
+
+### 解题分析:
+
+这道题就是一边求power一边取模， 和拿到用robin-karp做strstr做法一样。原因就是取模怎么取都行， 取几次都可以，这样就不会overflow.
+
+### 代码：
+
+递归版本：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param a: A 32bit integer
+     * @param b: A 32bit integer
+     * @param n: A 32bit integer
+     * @return: An integer
+     */
+    int fastPower(int a, int b, int n) {
+        // write your code here
+        if (n == 0)
+            return 1%b;
+        if (n == 1)
+            return a%b;
+
+        long long val = fastPower(a, b, n/2);
+        long long  res = ((val%b)*(val%b))%b;
+        if (n%2)
+            return res*a%b;
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+O\(log\(n\) \)
 
 
 
