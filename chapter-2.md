@@ -616,7 +616,7 @@ Here we are 100% sure that the 4th version is the first bad version.
 
 ### 代码：
 
-递归版本：
+
 
 ```cpp
 /**
@@ -681,9 +681,7 @@ For`[4, 5, 1, 2, 3]`and`target=0`, return`-1`.
 
 ### 解题分析:
 
-做这道题做了第三次了，每次再做还是错的，我都郁闷了。 每次二分的时候我都是用 A\[beg\] &lt; A\[end\] 来做二分，如果成立，说明在左右两区间正常二分，但是处理中间区间的时候逻辑务必混乱。 
-
-
+做这道题做了第三次了，每次再做还是错的，我都郁闷了。 每次二分的时候我都是用 A\[beg\] &lt; A\[end\] 来做二分，如果成立，说明在左右两区间正常二分，但是处理中间区间的时候逻辑务必混乱。
 
 看来只能靠背了， 用mid作为二分的标准，通过判断mid在上面还是在下面，只解决可解的情况： 去掉\[beg, mid\] 或者\[mid, end\]的情形。 郁闷！！！！
 
@@ -734,4 +732,185 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) \)
+
+
+
+## 235 Prime Factorization
+
+Prime factorize a given integer.
+
+##### Notice
+
+You should sort the factors in ascending order.
+
+
+
+**Example**
+
+Given`10`, return`[2, 5]`.
+
+Given`660`, return`[2, 2, 3, 5, 11]`.
+
+http://www.lintcode.com/en/problem/prime-factorization/
+
+### 解题分析:
+
+这是一道数学题， 分析如下：
+
+要求1： 求质因子
+
+要求2： 从小到大排
+
+
+
+解决要求1： a\) 需要知道一个数字是否为另一个数字整除 mod = 0
+
+                      b\) 如果该质因子可以被除多次，则除到mod！=0为止
+
+解决要求2： 从小到大排，就要从小到大除，这样做有个好处就是8除以2除三次终止，而不是会先除以4
+
+
+
+Corner case: 如果给定数字本身就位质数， 那么就是他本身
+
+
+
+### 代码：
+
+### 
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param num: An integer
+     * @return: an integer array
+     */
+    vector<int> primeFactorization(int num) {
+        // write your code here
+        vector<int> res;
+ 
+        if (num <= 1)
+            return res;
+        
+        for (int i = 2; i <= num; i++)
+        {
+            while(num % i == 0)
+            {
+                num /= i;
+                res.push_back(i);
+            }
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+最坏情况nlog\(n\)
+
+
+
+## 462 total Occurrence of Target
+
+Given a target number and an integer array sorted in ascending order. Find the total number of occurrences of target in the array.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[1, 3, 3, 4, 5]`and target =`3`, return`2`.
+
+Given`[2, 2, 3, 4, 6]`and target =`4`, return`1`.
+
+Given`[1, 2, 3, 4, 5]`and target =`6`, return`0`.
+
+http://www.lintcode.com/en/problem/total-occurrence-of-target/\#
+
+### 解题分析:
+
+挺简单的一道题，找最左面，再找最右面，两边end-beg+1就是了，这道题不要当二分来做，要当OOXX来做就行了。
+
+### 代码：
+
+### 
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: A an integer array sorted in ascending order
+     * @param target: An integer
+     * @return: An integer
+     */
+
+    int totalOccurrence(vector<int> &A, int target) {
+        // write your code here
+        if (A.empty())
+            return 0;
+        int beg = search(A, target, Solution::FIRST);
+        if (beg == -1)
+            return 0;
+        int end = search(A, target, Solution::LAST);
+        return end-beg+1;
+    }
+private:
+
+    enum SearchPattern
+    {
+        FIRST = 0,
+        LAST = 1
+    };
+    int search(vector<int>& A, int target, SearchPattern pattern)
+    {
+        int beg = 0, end = A.size()-1;
+        while(beg + 1 < end)
+        {
+            int mid = beg + (end - beg) / 2;
+            if (pattern == FIRST)
+            {
+                if (A[mid] >= target)
+                    end = mid;
+                else
+                    beg = mid;
+            }
+            else
+            {
+                if (A[mid] <= target)
+                    beg = mid;
+                else
+                    end = mid;
+            }
+        }
+        
+        if (pattern == FIRST)
+        {
+            if (A[beg] == target)
+                return beg;
+            if (A[end] == target)
+                return end;
+        }
+        else
+        {
+            if (A[end] == target)
+                return end;
+            if (A[beg] == target)
+                return beg;
+        }
+        
+        return -1;
+    }
+    
+    
+};
+```
+
+### 复杂度分析:
+
+最坏情况log\(n\)
+
+
 
