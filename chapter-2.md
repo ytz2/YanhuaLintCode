@@ -616,8 +616,6 @@ Here we are 100% sure that the 4th version is the first bad version.
 
 ### 代码：
 
-
-
 ```cpp
 /**
  * class SVNRepo {
@@ -733,8 +731,6 @@ public:
 
 O\(log\(n\) \)
 
-
-
 ## 235 Prime Factorization
 
 Prime factorize a given integer.
@@ -743,15 +739,13 @@ Prime factorize a given integer.
 
 You should sort the factors in ascending order.
 
-
-
 **Example**
 
 Given`10`, return`[2, 5]`.
 
 Given`660`, return`[2, 2, 3, 5, 11]`.
 
-http://www.lintcode.com/en/problem/prime-factorization/
+[http://www.lintcode.com/en/problem/prime-factorization/](http://www.lintcode.com/en/problem/prime-factorization/)
 
 ### 解题分析:
 
@@ -761,19 +755,15 @@ http://www.lintcode.com/en/problem/prime-factorization/
 
 要求2： 从小到大排
 
-
-
 解决要求1： a\) 需要知道一个数字是否为另一个数字整除 mod = 0
 
-                      b\) 如果该质因子可以被除多次，则除到mod！=0为止
+```
+                  b\) 如果该质因子可以被除多次，则除到mod！=0为止
+```
 
 解决要求2： 从小到大排，就要从小到大除，这样做有个好处就是8除以2除三次终止，而不是会先除以4
 
-
-
 Corner case: 如果给定数字本身就位质数， 那么就是他本身
-
-
 
 ### 代码：
 
@@ -789,10 +779,10 @@ public:
     vector<int> primeFactorization(int num) {
         // write your code here
         vector<int> res;
- 
+
         if (num <= 1)
             return res;
-        
+
         for (int i = 2; i <= num; i++)
         {
             while(num % i == 0)
@@ -810,8 +800,6 @@ public:
 
 最坏情况nlog\(n\)
 
-
-
 ## 462 total Occurrence of Target
 
 Given a target number and an integer array sorted in ascending order. Find the total number of occurrences of target in the array.
@@ -828,7 +816,7 @@ Given`[2, 2, 3, 4, 6]`and target =`4`, return`1`.
 
 Given`[1, 2, 3, 4, 5]`and target =`6`, return`0`.
 
-http://www.lintcode.com/en/problem/total-occurrence-of-target/\#
+[http://www.lintcode.com/en/problem/total-occurrence-of-target/\#](http://www.lintcode.com/en/problem/total-occurrence-of-target/#)
 
 ### 解题分析:
 
@@ -885,7 +873,7 @@ private:
                     end = mid;
             }
         }
-        
+
         if (pattern == FIRST)
         {
             if (A[beg] == target)
@@ -900,17 +888,256 @@ private:
             if (A[beg] == target)
                 return beg;
         }
-        
+
         return -1;
     }
-    
-    
+
+
 };
 ```
 
 ### 复杂度分析:
 
 最坏情况log\(n\)
+
+
+
+### 459. Closest Number in Sorted Array
+
+Given a target number and an integer array A sorted in ascending order, find the index`i`in A such that A\[i\] is closest to the given target.
+
+Return -1 if there is no element in the array.
+
+##### Notice
+
+There can be duplicate elements in the array, and we can return any of the indices with same value.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[1, 2, 3]`and target =`2`, return`1`.
+
+Given`[1, 4, 6]`and target =`3`, return`1`.
+
+Given`[1, 4, 6]`and target =`5`, return`1`or`2`.
+
+Given`[1, 3, 3, 4]`and target =`2`, return`0`or`1`or`2`.
+
+### 
+
+### 代码：
+
+### 
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param A: an integer array sorted in ascending order
+     * @param target: An integer
+     * @return: an integer
+     */
+    int closestNumber(vector<int> &A, int target) {
+        // write your code here
+        if (A.empty())
+            return -1;
+        int beg = 0, end = A.size()-1, mid = 0;
+        while(beg + 1 < end)
+        {
+            mid = beg + (end - beg) / 2;
+            if (A[mid] >= target)
+                end = mid;
+            else
+                beg = mid;
+        }
+        int ind = abs(A[beg] -target) < abs(A[end] - target)? beg:end;
+        return ind;
+    }
+};
+```
+
+### 254. Drop Eggs
+
+There is a building of`n`floors. If an egg drops from the_k_th floor or above, it will break. If it's dropped from any floor below, it will not break.
+
+You're given two eggs, Find_k_while minimize the number of drops for the worst case. Return the number of drops in the worst case.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Clarification**
+
+For n = 10, a naive way to find_k_is drop egg from 1st floor, 2nd floor ... kth floor. But in this worst case \(k = 10\), you have to drop 10 times.
+
+Notice that you have two eggs, so you can drop at 4th, 7th & 9th floor, in the worst case \(for example, k = 9\) you have to drop 4 times.
+
+**Example**
+
+Given n =`10`, return`4`.  
+Given n =`100`, return`14`.
+
+### 
+
+### 代码：
+
+### 
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @return: The sum of a and b
+     */
+    int dropEggs(int n) {
+        // write your code here
+        long  beg = 1;
+        long  end = 1;
+        while(end *(end+1) <2*(long)n)
+            end*=2;
+        while(beg+1<end)
+        {
+            long mid = beg + (end-beg)/2;
+            if (mid*(mid+1)<2*(long)n)
+                beg = mid;
+            else
+                end = mid;
+        }
+        if (beg*(beg+1) >= 2*(long)n)
+            return beg;
+        return end;
+    }
+};
+```
+
+### 
+
+### 28. Search a 2D Matrix
+
+Write an efficient algorithm that searches for a value in an_m_x_n_matrix.
+
+This matrix has the following properties:
+
+* Integers in each row are sorted from left to right.
+* The first integer of each row is greater than the last integer of the previous row.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Consider the following matrix:
+
+```
+[
+    [1, 3, 5, 7],
+    [10, 11, 16, 20],
+    [23, 30, 34, 50]
+]
+
+```
+
+Given`target = 3`, return`true`.
+
+### 
+
+### 代码：
+
+### 
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param matrix: matrix, a list of lists of integers
+     * @param target: An integer
+     * @return: a boolean, indicate whether matrix contains target
+     */
+    bool searchMatrix(vector<vector<int>> &matrix, int target) {
+        // write your code here
+        if (matrix.empty() || matrix[0].empty())
+            return false;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int beg=0, end = m*n-1;
+        while(beg + 1 < end)
+        {
+            int mid = beg + (end - beg)/2;
+            int i = mid / n;
+            int j = mid % n ;
+            if (matrix[i][j] <= target)
+                beg = mid;
+            else
+                end = mid;
+        }
+        
+        if (matrix[beg/n][beg%n] == target)
+            return true;
+        if (matrix[end/n][end%n] == target)
+            return true;
+        return false;
+    }
+};
+```
+
+### 
+
+#### 14. First Position of Target
+
+For a given sorted array \(ascending order\) and a`target`number, find the first index of this number in`O(log n)`time complexity.
+
+If the target number does not exist in the array, return`-1`.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+If the array is`[1, 2, 3, 3, 4, 5, 10]`, for given target`3`, return`2`.
+
+### 
+
+### 代码：
+
+### 
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: The integer array.
+     * @param target: Target to find.
+     * @return: The first position of target. Position starts from 0.
+     */
+    int binarySearch(vector<int> &nums, int target) {
+        // write your code here
+        if (nums.empty())
+            return -1;
+        int beg = 0, end = nums.size()-1, mid = 0;
+        while(beg+1<end)
+        {
+            mid = beg + (end - beg) /2;
+            if (nums[mid] >= target )
+                end = mid;
+            else
+                beg = mid;
+        }
+        if (nums[beg] == target)
+            return beg;
+        if (nums[end] == target)
+            return end;
+        return -1;
+    }
+};
+```
+
+### 
 
 
 
