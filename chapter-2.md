@@ -898,9 +898,7 @@ private:
 
 ### 复杂度分析:
 
-最坏情况log\(n\)
-
-
+log\(n\)
 
 ### 459. Closest Number in Sorted Array
 
@@ -961,9 +959,9 @@ public:
 
 ### 254. Drop Eggs
 
-There is a building of`n`floors. If an egg drops from the_k_th floor or above, it will break. If it's dropped from any floor below, it will not break.
+There is a building of`n`floors. If an egg drops from the\_k\_th floor or above, it will break. If it's dropped from any floor below, it will not break.
 
-You're given two eggs, Find_k_while minimize the number of drops for the worst case. Return the number of drops in the worst case.
+You're given two eggs, Find\_k\_while minimize the number of drops for the worst case. Return the number of drops in the worst case.
 
 Have you met this question in a real interview?
 
@@ -971,7 +969,7 @@ Yes
 
 **Clarification**
 
-For n = 10, a naive way to find_k_is drop egg from 1st floor, 2nd floor ... kth floor. But in this worst case \(k = 10\), you have to drop 10 times.
+For n = 10, a naive way to find\_k\_is drop egg from 1st floor, 2nd floor ... kth floor. But in this worst case \(k = 10\), you have to drop 10 times.
 
 Notice that you have two eggs, so you can drop at 4th, 7th & 9th floor, in the worst case \(for example, k = 9\) you have to drop 4 times.
 
@@ -1018,7 +1016,7 @@ public:
 
 ### 28. Search a 2D Matrix
 
-Write an efficient algorithm that searches for a value in an_m_x_n_matrix.
+Write an efficient algorithm that searches for a value in an\_m\_x\_n\_matrix.
 
 This matrix has the following properties:
 
@@ -1039,7 +1037,6 @@ Consider the following matrix:
     [10, 11, 16, 20],
     [23, 30, 34, 50]
 ]
-
 ```
 
 Given`target = 3`, return`true`.
@@ -1075,7 +1072,7 @@ public:
             else
                 end = mid;
         }
-        
+
         if (matrix[beg/n][beg%n] == target)
             return true;
         if (matrix[end/n][end%n] == target)
@@ -1139,5 +1136,94 @@ public:
 
 ### 
 
+## 414 Divide Two Integers
 
+Divide two integers without using multiplication, division and mod operator.
+
+If it is overflow, return`2147483647`
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given dividend =`100`and divisor =`9`, return`11`.
+
+http://www.lintcode.com/en/problem/divide-two-integers/
+
+### 解题分析:
+
+y/x不能用乘法， 那就只能用位操作 x&lt;&lt;1 = x\*2， 所以把y表示成 y= 2^c1\*x + 2^c2\*x +....
+
+做法就是不断的更新x&lt;&lt;1， 然后系数从c=1开始也不断的c &lt;&lt;1, 那么一直到x&lt;&lt;1 &gt; y的时候c1可得 ，然后继续求\(y-c1x\) /x,直到 y =0为止。中间要注意的是overflow,再就是要会用x^y 与或非符号。
+
+
+
+同理，乘法也是这样的 x\*y , 相对简单一点
+
+count = 0;
+
+val = 0;
+
+while count &lt; x;
+
+    int tmp = 1;
+
+    int tmpres = y
+
+    while \(tmp&lt;&lt;1 &lt;= x\)
+
+            tmp &lt;&lt;=1
+
+            res &lt;&lt;=1
+
+    count += tmp
+
+    val += res
+
+return val
+
+
+
+### 代码：
+
+### 
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param dividend: the dividend
+     * @param divisor: the divisor
+     * @return: the result
+     */
+    int divide(int dividend, int divisor) {
+        // write your code here
+        long long dividendVal = abs((long long) dividend);
+        long long divisorVal = abs((long long) divisor);
+        bool isNegative = dividend > 0 ^ divisor > 0;
+        long long res = 0;
+        while( dividendVal >= divisorVal)
+        {
+            long long tmp = divisorVal;
+            long long count = 1;
+            while( dividendVal >= tmp<<1)
+            {
+                tmp <<=1;
+                count <<=1;
+            }
+            dividendVal -= tmp;
+            res += count;
+        }
+        if (isNegative)
+            return -res < INT_MIN? INT_MIN:-res;
+        return res > INT_MAX ? INT_MAX:res;
+    }
+};
+```
+
+### 复杂度分析:
+
+log\(n\)
 
