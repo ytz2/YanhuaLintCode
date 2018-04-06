@@ -1150,15 +1150,13 @@ Yes
 
 Given dividend =`100`and divisor =`9`, return`11`.
 
-http://www.lintcode.com/en/problem/divide-two-integers/
+[http://www.lintcode.com/en/problem/divide-two-integers/](http://www.lintcode.com/en/problem/divide-two-integers/)
 
 ### 解题分析:
 
 y/x不能用乘法， 那就只能用位操作 x&lt;&lt;1 = x\*2， 所以把y表示成 y= 2^c1\*x + 2^c2\*x +....
 
 做法就是不断的更新x&lt;&lt;1， 然后系数从c=1开始也不断的c &lt;&lt;1, 那么一直到x&lt;&lt;1 &gt; y的时候c1可得 ，然后继续求\(y-c1x\) /x,直到 y =0为止。中间要注意的是overflow,再就是要会用x^y 与或非符号。
-
-
 
 同理，乘法也是这样的 x\*y , 相对简单一点
 
@@ -1168,23 +1166,23 @@ val = 0;
 
 while count &lt; x;
 
-    int tmp = 1;
+```
+int tmp = 1;
 
-    int tmpres = y
+int tmpres = y
 
-    while \(tmp&lt;&lt;1 &lt;= x\)
+while \(tmp&lt;&lt;1 &lt;= x\)
 
-            tmp &lt;&lt;=1
+        tmp &lt;&lt;=1
 
-            res &lt;&lt;=1
+        res &lt;&lt;=1
 
-    count += tmp
+count += tmp
 
-    val += res
+val += res
+```
 
 return val
-
-
 
 ### 代码：
 
@@ -1226,4 +1224,74 @@ public:
 ### 复杂度分析:
 
 log\(n\)
+
+
+
+## 61 Search for a Range
+
+Given a sorted array of_n_integers, find the starting and ending position of a given target value.
+
+If the target is not found in the array, return`[-1, -1]`.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[5, 7, 7, 8, 8, 10]`and target value`8`,  
+return`[3, 4]`.
+
+http://www.lintcode.com/en/problem/search-for-a-range/\#
+
+
+
+### 解题分析:
+
+先找到一遍，另外一遍向外衍射就好了，当然end也可以用 二分找，但其实没啥必要，因为当数组内重复元素过高后，复杂度就不算log\(n\)了
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: an integer sorted array
+     * @param target: an integer to be inserted
+     * @return: a list of length 2, [index1, index2]
+     */
+    vector<int> searchRange(vector<int> &A, int target) {
+        // write your code here
+        vector<int> res(2, -1);
+        if (A.empty())
+            return res;
+        
+        int beg = 0, end = A.size()-1, mid = 0;
+        while( beg + 1 < end)
+        {
+            mid = beg + (end - beg)/2;
+            if (A[mid] >= target)
+                end = mid;
+            else 
+                beg = mid;
+        }
+        int ind = -1;
+        if (A[beg] == target)
+            ind = beg;
+        else if ( A[end] == target )
+            ind = end;
+        else
+            return res;
+        res[0] = ind;
+        while(ind+1 < A.size() && A[ind+1] == A[ind])
+            ind++;
+        res[1] = ind;
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+O\(log\(n\) + k\), k为重复大小
 
