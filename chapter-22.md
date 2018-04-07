@@ -63,15 +63,11 @@ public:
 
 log\(n\)
 
-
-
 ## 141 Sqrt\(x\)
 
 Implement int`sqrt(int x)`.
 
 Compute and return the square root of_x_.
-
-
 
 **Example**
 
@@ -83,11 +79,9 @@ sqrt\(5\) = 2
 
 sqrt\(10\) = 3
 
-http://www.lintcode.com/en/problem/sqrtx/
+[http://www.lintcode.com/en/problem/sqrtx/](http://www.lintcode.com/en/problem/sqrtx/)
 
 ### 解题分析:
-
-
 
 求解sqrt就是找一个OOXX的位置，左面的平方小于x,右面的平方大于x，中间要注意的是大数的溢出。再就是注意等于号
 
@@ -126,8 +120,6 @@ public:
 
 log\(x\)
 
-
-
 ## 586 Sqrt\(x\) II
 
 Implement`double sqrt(double x)`and`x >= 0`.
@@ -138,17 +130,15 @@ Compute and return the square root of x.
 
 You do not care about the accuracy of the result, we will help you to output results.
 
-
-
 **Example**
 
 Given`n`=`2`return`1.41421356`
 
-http://www.lintcode.com/en/problem/sqrtx-ii/
+[http://www.lintcode.com/en/problem/sqrtx-ii/](http://www.lintcode.com/en/problem/sqrtx-ii/)
 
 ### 解题分析:
 
-求解sqrt就是找一个OOXX的位置, 但是稍微有点无聊的就是delta，这个是靠试出来的， 否则过不了，题目应该加个精度。 ooxx的精髓就是保证两边在分歧位置的两侧， 所以mid\*mid &gt; x 
+求解sqrt就是找一个OOXX的位置, 但是稍微有点无聊的就是delta，这个是靠试出来的， 否则过不了，题目应该加个精度。 ooxx的精髓就是保证两边在分歧位置的两侧， 所以mid\*mid &gt; x
 
 ### 代码：
 
@@ -183,7 +173,72 @@ public:
 
 ### 复杂度分析:
 
+log\(x/delta\)
+
+
+
+## 617 Maximum Average Subarray II
+
+Given an array with positive and negative numbers, find the`maximum average subarray`which length should be greater or equal to given length`k`.
+
+##### Notice
+
+It's guaranteed that the size of the array is greater or equal to_k_.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given nums =`[1, 12, -5, -6, 50, 3]`, k =`3`
+
+Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
+
+http://www.lintcode.com/en/problem/maximum-average-subarray-ii/
+
+
+
+### 解题分析:
+
+求解sqrt就是找一个OOXX的位置，左面的平方小于x,右面的平方大于x，中间要注意的是大数的溢出。再就是注意等于号
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param x: An integer
+     * @return: The sqrt of x
+     */
+    int sqrt(int x) {
+        // write your code here
+        if (x<0)
+            return INT_MAX;
+        if (x==0)
+            return 0;
+        long beg = 1, end = x, mid = 0;
+        while(beg + 1 < end)
+        {
+            mid = beg + (end - beg)/2;
+            if (mid*mid <= x)
+                beg = mid;
+            else
+                end = mid;
+        }
+        if (end*end <= x)
+            return end;
+        return beg;
+    }
+};
+```
+
+### 复杂度分析:
+
 log\(x\)
+
+## 
 
 
 
