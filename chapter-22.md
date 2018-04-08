@@ -195,6 +195,72 @@ Given`[4,4,5,6,7,0,1,2]`return`0`.
 
 ### 解题分析:
 
+OOXX问题， 所以上来先判断是不是符合OOXX， 另外和上一题不一样的是相等的时候如何处理， 相等的时候不能再任性左右移动了，而是要判断移动beg/ end， 这个要根据情况来写了。最坏就是o（n\)了
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    int findMin(vector<int> &nums) {
+        // write your code here
+        if (nums.empty())
+            return -1;
+        if (nums[0] < nums[nums.size()-1])
+            return nums[0];
+        int beg = 0, end = nums.size() - 1, mid = 0;
+
+        while (beg + 1 < end)
+        {
+            mid = beg + (end - beg)/2;
+            if (nums[mid] < nums[0])
+                end = mid;
+            else if (nums[mid] > nums[0])
+                beg = mid;
+            else
+            {
+                if (nums[beg] < nums[end])
+                    end--;
+                else 
+                    beg++;
+            }
+        }
+        return nums[beg] < nums[end]? nums[beg]:nums[end];
+    }
+};
+
+
+```
+
+log\(x\) , worst o\(n\)
+
+## 63 Search in Rotated Sorted Array II
+
+Follow up for[Search in Rotated Sorted Array](http://www.lintcode.com/problem/search-in-rotated-sorted-array/):
+
+What if**duplicates**are allowed?
+
+Would this affect the run-time complexity? How and why?
+
+Write a function to determine if a given target is in the array.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[1, 1, 0, 1, 1, 1]`and target =`0`, return`true`.  
+Given`[1, 1, 1, 1, 1, 1]`and target =`0`, return`false`.
+
+[http://www.lintcode.com/en/problem/search-in-rotated-sorted-array-ii/\#](http://www.lintcode.com/en/problem/search-in-rotated-sorted-array-ii/#)
+
+### 解题分析:
+
 还是类似的问题，先二分为mid在上面还是在下面，然后解决能解决的问题，target在beg,mid中间还是target在mid, end中间的问题
 
 不一样的是a\[mid\] = a\[beg\]， 这个时候就把beg往mid方向移动一下，其实无聊，直接扫一遍算了，反正最坏也是O（N\)
@@ -202,6 +268,7 @@ Given`[4,4,5,6,7,0,1,2]`return`0`.
 ### 代码：
 
 ```cpp
+
 class Solution {
 public:
     /**
@@ -239,70 +306,6 @@ public:
             }
         }
         return A[beg] == target || A[end]==target;
-    }
-};
-```
-
-log\(x\) , worst o\(n\)
-
-## 63 Search in Rotated Sorted Array II
-
-Follow up for[Search in Rotated Sorted Array](http://www.lintcode.com/problem/search-in-rotated-sorted-array/):
-
-What if**duplicates**are allowed?
-
-Would this affect the run-time complexity? How and why?
-
-Write a function to determine if a given target is in the array.
-
-Have you met this question in a real interview?
-
-Yes
-
-**Example**
-
-Given`[1, 1, 0, 1, 1, 1]`and target =`0`, return`true`.  
-Given`[1, 1, 1, 1, 1, 1]`and target =`0`, return`false`.
-
-[http://www.lintcode.com/en/problem/search-in-rotated-sorted-array-ii/\#](http://www.lintcode.com/en/problem/search-in-rotated-sorted-array-ii/#)
-
-### 解题分析:
-
-OOXX问题， 所以上来先判断是不是符合OOXX， 另外和上一题不一样的是相等的时候如何处理， 相等的时候不能再任性左右移动了，而是要判断移动beg/ end， 这个要根据情况来写了。最坏就是o（n\)了
-
-### 代码：
-
-```cpp
-class Solution {
-public:
-    /**
-     * @param nums: a rotated sorted array
-     * @return: the minimum number in the array
-     */
-    int findMin(vector<int> &nums) {
-        // write your code here
-        if (nums.empty())
-            return -1;
-        if (nums[0] < nums[nums.size()-1])
-            return nums[0];
-        int beg = 0, end = nums.size() - 1, mid = 0;
-
-        while (beg + 1 < end)
-        {
-            mid = beg + (end - beg)/2;
-            if (nums[mid] < nums[0])
-                end = mid;
-            else if (nums[mid] > nums[0])
-                beg = mid;
-            else
-            {
-                if (nums[beg] < nums[end])
-                    end--;
-                else 
-                    beg++;
-            }
-        }
-        return nums[beg] < nums[end]? nums[beg]:nums[end];
     }
 };
 ```
