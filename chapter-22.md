@@ -175,6 +175,73 @@ public:
 
 log\(x/delta\)
 
+
+
+## 160 Find Minimum in Rotated Sorted Array II
+
+Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+\(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2\).
+
+Find the minimum element.
+
+##### Notice
+
+The array may contain duplicates.
+
+**Example**
+
+Given`[4,4,5,6,7,0,1,2]`return`0`.
+
+http://www.lintcode.com/en/problem/find-minimum-in-rotated-sorted-array-ii/\#
+
+
+
+### 解题分析:
+
+OOXX问题， 所以上来先判断是不是符合OOXX， 另外和上一题不一样的是相等的时候如何处理， 相等的时候不能再任性左右移动了，而是要判断移动beg/ end， 这个要根据情况来写了。最坏就是o（n\)了
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    int findMin(vector<int> &nums) {
+        // write your code here
+        if (nums.empty())
+            return -1;
+        if (nums[0] < nums[nums.size()-1])
+            return nums[0];
+        int beg = 0, end = nums.size() - 1, mid = 0;
+        
+        while (beg + 1 < end)
+        {
+            mid = beg + (end - beg)/2;
+            if (nums[mid] < nums[0])
+                end = mid;
+            else if (nums[mid] > nums[0])
+                beg = mid;
+            else
+            {
+                if (nums[beg] < nums[end])
+                    end--;
+                else 
+                    beg++;
+            }
+        }
+        return nums[beg] < nums[end]? nums[beg]:nums[end];
+    }
+};
+```
+
+### 复杂度分析:
+
+log\(x\) , worst o\(n\)
+
 ## \*\*\*617 Maximum Average Subarray II
 
 Given an array with positive and negative numbers, find the`maximum average subarray`which length should be greater or equal to given length`k`.
@@ -199,19 +266,13 @@ Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
 
 二分答案：
 
-二分答案的题都挺难的，难在想到用二分答案，而且二分答案通常都是由一个 true or false的子问题来判定的。 比如这道题目，求解最值得问题，一般想到的就是BFS/DP， 但是明显不可解。 
-
-
+二分答案的题都挺难的，难在想到用二分答案，而且二分答案通常都是由一个 true or false的子问题来判定的。 比如这道题目，求解最值得问题，一般想到的就是BFS/DP， 但是明显不可解。
 
 先说二分答案是这怎么分吧：
 
-若果a\[0\] - a\[n\]中存在任意一个subarray 大于或等于k的长度，sum \( a\[i\] - A\) &gt;0 那么 则认为A 或者比A大的数字为解， 如果所有的子数组的sum\(a\[i\]-A\) 都小于 0， 那么 证明A 偏大，需要调小A的取值。  
-
-
+若果a\[0\] - a\[n\]中存在任意一个subarray 大于或等于k的长度，sum \( a\[i\] - A\) &gt;0 那么 则认为A 或者比A大的数字为解， 如果所有的子数组的sum\(a\[i\]-A\) 都小于 0， 那么 证明A 偏大，需要调小A的取值。
 
 那么A的取值如何来取？ 数组中最大和最小中间
-
-
 
 子问题：
 
@@ -221,11 +282,11 @@ Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
 
 B= 【a\[0\]-A, a\[1\]-A, ......a\[n-1\]-A】
 
-S  = \[ 0, s\[0\] + B\[1\], s\[1\] + B\[2\].... s\[n-2\]+ a\[n-1\]+A\] 
+S  = \[ 0, s\[0\] + B\[1\], s\[1\] + B\[2\].... s\[n-2\]+ a\[n-1\]+A\]
 
-求i, j 使得 s\[j\]-s\[i\] &gt;0 存在，其 i-j  &gt;= k   
+求i, j 使得 s\[j\]-s\[i\] &gt;0 存在，其 i-j  &gt;= k
 
-那么滚动的使得s\[j\]最大， s\[i\]最小即可。 
+那么滚动的使得s\[j\]最大， s\[i\]最小即可。
 
 ### 代码：
 
@@ -266,7 +327,7 @@ public:
         vector<double> s(nums.size()+1, 0);
         for (int i = 0; i < nums.size(); i++)
             s[i+1] = s[i]+nums[i] - mid;
-        
+
         double prevMin = 0, si = INT_MIN;
         for (int i = k; i < s.size(); i++)
         {
@@ -276,7 +337,7 @@ public:
         //只要最大子数组大于0，则必存在至少一个，若最大子数组小于0，则都不存在。
         return si > 0; 
     }
-    
+
 };
 ```
 
