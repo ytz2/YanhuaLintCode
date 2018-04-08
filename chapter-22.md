@@ -175,9 +175,7 @@ public:
 
 log\(x/delta\)
 
-
-
-## 617 Maximum Average Subarray II
+## \*\*\*617 Maximum Average Subarray II
 
 Given an array with positive and negative numbers, find the`maximum average subarray`which length should be greater or equal to given length`k`.
 
@@ -195,48 +193,96 @@ Given nums =`[1, 12, -5, -6, 50, 3]`, k =`3`
 
 Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
 
-http://www.lintcode.com/en/problem/maximum-average-subarray-ii/
-
-
+[http://www.lintcode.com/en/problem/maximum-average-subarray-ii/](http://www.lintcode.com/en/problem/maximum-average-subarray-ii/)
 
 ### 解题分析:
 
-求解sqrt就是找一个OOXX的位置，左面的平方小于x,右面的平方大于x，中间要注意的是大数的溢出。再就是注意等于号
+二分答案：
+
+二分答案的题都挺难的，难在想到用二分答案，而且二分答案通常都是由一个 true or false的子问题来判定的。 比如这道题目，求解最值得问题，一般想到的就是BFS/DP， 但是明显不可解。 
+
+
+
+先说二分答案是这怎么分吧：
+
+若果a\[0\] - a\[n\]中存在任意一个subarray 大于或等于k的长度，sum \( a\[i\] - A\) &gt;0 那么 则认为A 或者比A大的数字为解， 如果所有的子数组的sum\(a\[i\]-A\) 都小于 0， 那么 证明A 偏大，需要调小A的取值。  
+
+
+
+那么A的取值如何来取？ 数组中最大和最小中间
+
+
+
+子问题：
+
+如何证明在给定数组中 ，input A, k, 判定 至少有一组长度大于k的子数组其sum\(a\[i\]-A\) &gt; 0 这个算是第二个难点吧。
+
+看了下别人的答案，大家都说简单。。。 用到的是一个滚动数组的概念
+
+B= 【a\[0\]-A, a\[1\]-A, ......a\[n-1\]-A】
+
+S  = \[ 0, s\[0\] + B\[1\], s\[1\] + B\[2\].... s\[n-2\]+ a\[n-1\]+A\] 
+
+求i, j 使得 s\[j\]-s\[i\] &gt;0 存在，其 i-j  &gt;= k   
+
+那么滚动的使得s\[j\]最大， s\[i\]最小即可。 
 
 ### 代码：
 
 ```cpp
 class Solution {
 public:
-    /**
-     * @param x: An integer
-     * @return: The sqrt of x
+    /*
+     * @param nums: an array with positive and negative numbers
+     * @param k: an integer
+     * @return: the maximum average
      */
-    int sqrt(int x) {
+    double maxAverage(vector<int> &nums, int k) {
         // write your code here
-        if (x<0)
-            return INT_MAX;
-        if (x==0)
-            return 0;
-        long beg = 1, end = x, mid = 0;
-        while(beg + 1 < end)
+        double beg =  INT_MAX;
+        double end =  INT_MAX;
+        for (const auto& each: nums)
         {
-            mid = beg + (end - beg)/2;
-            if (mid*mid <= x)
+            beg = min(beg, (double)each);
+            end = max(end, (double)each);
+        }
+
+        static double eps = 1e-8;
+        while( beg + eps < end)
+        {
+            double mid = (beg + end)/2.;
+            if (check(nums, mid, k))
                 beg = mid;
             else
                 end = mid;
         }
-        if (end*end <= x)
-            return end;
         return beg;
     }
+
+    // 给定数组，判断数组中是否存在子数组的平均数大于mid,且长度大于k    
+    bool check(const vector<int>& nums, double mid, int k)
+    {
+        // 滚动数组
+        vector<double> s(nums.size()+1, 0);
+        for (int i = 0; i < nums.size(); i++)
+            s[i+1] = s[i]+nums[i] - mid;
+        
+        double prevMin = 0, si = INT_MIN;
+        for (int i = k; i < s.size(); i++)
+        {
+            si = max(si, s[i] - prevMin);
+            prevMin = min(s[i-k+1], prevMin);
+        }
+        //只要最大子数组大于0，则必存在至少一个，若最大子数组小于0，则都不存在。
+        return si > 0; 
+    }
+    
 };
 ```
 
 ### 复杂度分析:
 
-log\(x\)
+nlog\(\(max-min\)/eps\)
 
 ## 
 
