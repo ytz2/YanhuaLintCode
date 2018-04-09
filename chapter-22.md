@@ -515,3 +515,89 @@ public:
 
 nlog\(n\)
 
+
+
+## \*\*\*183 Wood Cut
+
+Given n pieces of wood with length`L[i]`\(integer array\). Cut them into small pieces to guarantee you could have equal or more than k pieces with the same length. What is the longest length you can get from the n pieces of wood? Given L & k, return the maximum length of the small pieces.
+
+##### Notice
+
+You couldn't cut wood into float length.
+
+If you couldn't get &gt;=_k_pieces, return`0`.
+
+
+
+**Example**
+
+For`L=[232, 124, 456]`,`k=7`, return`114`.
+
+http://www.lintcode.com/en/problem/wood-cut/\#
+
+### 解题分析:
+
+这道题比上题简单，但难点在于想到用二分答案， 这个不再是连续数组了，算是上题的逆过程， 如果把单个元素切分以满足要求， 如果这题不是在二分专题里面，我估计我是想不到用二分答案了
+
+二分：
+
+存在一个解x，使的从L数组中得到的个数大于k，则偏大， 可以调小x， 否则调大x
+
+x的范围， 1， max\(L\)
+
+子问题：
+
+bool check\(L, k, v\) 
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param L: Given n pieces of wood with length L[i]
+     * @param k: An integer
+     * @return: The maximum length of the small pieces
+     */
+    int woodCut(vector<int> &L, int k) {
+        // write your code here
+        // corner cases
+        if (L.empty() || k <= 0)
+            return 0;
+        int beg = 1, end = 0;
+        for (const auto& each : L)
+            end = max(end, each);
+        while( beg + 1 < end)
+        {
+            int mid = beg + (end - beg) / 2;
+            if (check(L,k,mid))
+                beg = mid;
+            else
+                end = mid;
+        }
+        if (check(L, k, end))
+            return end;
+        if (check(L, k, beg))
+            return beg;
+        return 0;
+    }
+    
+    bool check(const vector<int>& L, int k, int v)
+    {
+        int count = 0;
+        for (int i = 0; i < L.size(); i++)
+        {
+            int val = L[i];
+            while(val >= v)
+            {
+                val-=v;
+                count++;
+            }
+        }
+        return count >= k;
+    }
+};
+```
+
+nlog\(n\)
+
