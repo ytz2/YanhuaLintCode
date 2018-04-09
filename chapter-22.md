@@ -414,15 +414,13 @@ public:
 
 nlog\(\(max-min\)/eps\)
 
-## 437 Copy Books
+## \*\*\*437 Copy Books
 
-Given_n_books and the_i_th book has`A[i]`pages. You are given_k_people to copy the_n_books.
+Given\_n\_books and the\_i\_th book has`A[i]`pages. You are given\_k\_people to copy the\_n\_books.
 
-_n_books list in a row and each person can claim a continous range of the_n_books. For example one copier can copy the books from_i_th to_j_th continously, but he can not copy the 1st book, 2nd book and 4th book \(without 3rd book\).
+\_n\_books list in a row and each person can claim a continous range of the\_n\_books. For example one copier can copy the books from\_i\_th to\_j\_th continously, but he can not copy the 1st book, 2nd book and 4th book \(without 3rd book\).
 
 They start copying books at the same time and they all cost 1 minute to copy 1 page of a book. What's the best strategy to assign books so that the slowest copier can finish at earliest time?
-
-
 
 **Example**
 
@@ -430,13 +428,11 @@ Given array A =`[3,2,4]`, k =`2`.
 
 Return`5`\( First person spends 5 minutes to copy book 1 and book 2 and second person spends 4 minutes to copy book 3. \)
 
-http://www.lintcode.com/en/problem/copy-books/\#
-
-
+[http://www.lintcode.com/en/problem/copy-books/\#](http://www.lintcode.com/en/problem/copy-books/#)
 
 ### 解题分析:
 
-在连续区间求最优解（最大或者最小）问题，那么和上面的max subarray 是类似的，还是二分答案。 
+在连续区间求最优解（最大或者最小）问题，那么和上面的max subarray 是类似的，还是二分答案。
 
 二分：
 
@@ -448,9 +444,9 @@ min\(A\) to sum\(A\)
 
 子问题：
 
- 如果给每个人分配最多x 份工作，那么k个人能不能干完。 
+如果给每个人分配最多x 份工作，那么k个人能不能干完。
 
-bool check\( A, k, x\) 
+bool check\( A, k, x\)
 
 ### 代码：
 
@@ -464,7 +460,7 @@ public:
      */
     int copyBooks(vector<int> &pages, int k) {
         // write your code here
-        
+
         // corner case check
         if (pages.empty())
             return 0;
@@ -472,7 +468,7 @@ public:
             return INT_MAX;
         if (pages.size()==1)
             return pages[0];
-        
+
         // binary answer search
         int beg = 0;
         int end = 0;
@@ -481,7 +477,7 @@ public:
             beg = min(beg, each);
             end += each;
         }
-        
+
         while( beg + 1 < end)
         {
             int mid = beg + (end - beg)/2;
@@ -494,7 +490,7 @@ public:
             return end;
         return beg;
     }
-    
+
     bool check(const vector<int>& pages, int k, int val)
     {
         int sum = pages[0];
@@ -518,6 +514,4 @@ public:
 ```
 
 nlog\(n\)
-
-
 
