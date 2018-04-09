@@ -232,8 +232,6 @@ public:
         return nums[beg] < nums[end]? nums[beg]:nums[end];
     }
 };
-
-
 ```
 
 log\(x\) , worst o\(n\)
@@ -268,7 +266,6 @@ Given`[1, 1, 1, 1, 1, 1]`and target =`0`, return`false`.
 ### 代码：
 
 ```cpp
-
 class Solution {
 public:
     /**
@@ -417,7 +414,110 @@ public:
 
 nlog\(\(max-min\)/eps\)
 
-## 
+## 437 Copy Books
+
+Given_n_books and the_i_th book has`A[i]`pages. You are given_k_people to copy the_n_books.
+
+_n_books list in a row and each person can claim a continous range of the_n_books. For example one copier can copy the books from_i_th to_j_th continously, but he can not copy the 1st book, 2nd book and 4th book \(without 3rd book\).
+
+They start copying books at the same time and they all cost 1 minute to copy 1 page of a book. What's the best strategy to assign books so that the slowest copier can finish at earliest time?
+
+
+
+**Example**
+
+Given array A =`[3,2,4]`, k =`2`.
+
+Return`5`\( First person spends 5 minutes to copy book 1 and book 2 and second person spends 4 minutes to copy book 3. \)
+
+http://www.lintcode.com/en/problem/copy-books/\#
+
+
+
+### 解题分析:
+
+在连续区间求最优解（最大或者最小）问题，那么和上面的max subarray 是类似的，还是二分答案。 
+
+二分：
+
+存在一个解x, 如果给定k个人，能在x以内的工作量完成则x偏大，可以调小x， 如果不能完成，则x偏小，则调大x
+
+解的范围
+
+min\(A\) to sum\(A\)
+
+子问题：
+
+ 如果给每个人分配最多x 份工作，那么k个人能不能干完。 
+
+bool check\( A, k, x\) 
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param pages: an array of integers
+     * @param k: An integer
+     * @return: an integer
+     */
+    int copyBooks(vector<int> &pages, int k) {
+        // write your code here
+        
+        // corner case check
+        if (pages.empty())
+            return 0;
+        if (k <= 0)
+            return INT_MAX;
+        if (pages.size()==1)
+            return pages[0];
+        
+        // binary answer search
+        int beg = 0;
+        int end = 0;
+        for (const auto& each : pages)
+        {
+            beg = min(beg, each);
+            end += each;
+        }
+        
+        while( beg + 1 < end)
+        {
+            int mid = beg + (end - beg)/2;
+            if (check(pages, k, mid))
+                end = mid;
+            else
+                beg = mid;
+        }
+        if (check(pages, k, end))
+            return end;
+        return beg;
+    }
+    
+    bool check(const vector<int>& pages, int k, int val)
+    {
+        int sum = pages[0];
+        int counter = 1;
+        for (int i = 1; i < pages.size(); i++)
+        {
+            if (pages[i] > val)
+                return false;
+
+            if ( sum + pages[i] <= val)
+                sum += pages[i];
+            else
+            {
+                sum = pages[i];
+                counter++;
+            }
+        }
+        return counter <= k;
+    }
+};
+```
+
+nlog\(n\)
 
 
 
