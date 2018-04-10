@@ -1,7 +1,3 @@
-# 相向双指针
-
-
-
 ## 数组去重问题
 
 ## 521 Remove Duplicate Numbers in Array
@@ -62,8 +58,6 @@ public:
 
 nlog\(n\)
 
-
-
 ## 滑动窗口问题
 
 ## 604 Window Sum
@@ -82,11 +76,7 @@ For array`[1,2,7,8,5]`, moving window size k =`3`.
 7 + 8 + 5 = 20  
 return`[10,17,20]`
 
-
-
-http://www.lintcode.com/en/problem/window-sum/
-
-
+[http://www.lintcode.com/en/problem/window-sum/](http://www.lintcode.com/en/problem/window-sum/)
 
 ### 解题分析:
 
@@ -126,6 +116,8 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+
 
 
 
