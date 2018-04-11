@@ -230,7 +230,9 @@ public:
 
 klog\(k\) + \(n-k\)\*log\(k\)
 
+#### 笔记：
 
+upper_bound, lower\_bound, rotate, next, prev   这些std lib要熟悉_
 
 ## 362 Sliding Window Maximum
 
@@ -256,9 +258,7 @@ then the window move one step forward again.
 
 `[1, 2, |7, 7, 8|]`, return the maximum`8`;
 
-http://www.lintcode.com/en/problem/sliding-window-maximum/
-
-
+[http://www.lintcode.com/en/problem/sliding-window-maximum/](http://www.lintcode.com/en/problem/sliding-window-maximum/)
 
 ### 解题分析:
 
@@ -298,4 +298,8 @@ public:
 klog\(k\) + \(n-k\)\*log\(k\)
 
 
+
+#### 笔记：
+
+multiset最大数可直接从window.rbegin\(\)得到， 不需要移动iterator
 
