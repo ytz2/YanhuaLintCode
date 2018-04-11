@@ -119,5 +119,121 @@ o\(n\)
 
 
 
+## 360 Sliding Window Median
 
+Given an array of n integer, and a moving window\(size k\), move the window at each iteration from the start of the array, find the median of the element inside the window at each moving. \(If there are even numbers in the array, return the N/2-th number after sorting the element in the window. \)
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For array`[1,2,7,8,5]`, moving window size k = 3. return`[2,7,7]`
+
+At first the window is at the start of the array like this
+
+`[ | 1,2,7 | ,8,5]`, return the median`2`;
+
+then the window move one step forward.
+
+`[1, | 2,7,8 | ,5]`, return the median`7`;
+
+then the window move one step forward again.
+
+`[1,2, | 7,8,5 | ]`, return the median`7`;
+
+  
+http://www.lintcode.com/en/problem/sliding-window-median/
+
+### 解题分析 1:
+
+同上题，但是在处理window内的median的时候有问题。 一般处理数据流且要排序的情况下，需要用插入排序， 以下借用别人的一张图片来表示如下：
+
+先找到应该被去掉的数字，去掉，然后再插入新数字，插入排序，单个操作的话是o\(k\) 所以总的复杂度为klog\(k\) + \(n-k\)\*k
+
+![](/assets/import.png)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @param k: An integer
+     * @return: The median of the element inside the window at each moving
+     */
+    vector<int> medianSlidingWindow(vector<int> &nums, int k) {
+        // write your code here
+        vector<int> result;
+        if (nums.empty() || k<=0)
+            return result;
+            
+        vector<int> window(nums.begin(), nums.begin()+k-1);
+        sort(window.begin(), window.end());
+        for (int i = k-1; i < nums.size(); i++)
+        {
+            window.push_back(nums[i]);
+            auto it = prev(window.end(),1);
+            auto insertionPoint = upper_bound(window.begin(), it, *it);
+            rotate(insertionPoint, it, it+1);
+            result.push_back(window[k%2==0?k/2-1:k/2]);
+            auto deletePoint = find(window.begin(), window.end(), nums[i-k+1]);
+            window.erase(deletePoint);
+        }
+        return result;
+    }
+};
+```
+
+### 复杂度分析:
+
+klog\(k\) + \(n-k\)\*k
+
+
+
+### 解题分析 2:
+
+sliding window在siding排序的时候，用multiset大法好， multiset是binary search tree,且允许重复元素出现，这样既维持了顺序又维持了长度，且每次插入，删除的时间复杂度是log\(k\)。 比用两个q强。
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @param k: An integer
+     * @return: The median of the element inside the window at each moving
+     */
+    vector<int> medianSlidingWindow(vector<int> &nums, int k) {
+        // write your code here
+        vector<int> result;
+        if (nums.empty() || k<=0)
+            return result;
+        multiset<int> window(nums.begin(), nums.begin()+k);
+        auto mid = next(window.begin(), (k-1)/2);
+        result.push_back(*mid);
+        for (int i = k; i < nums.size(); i++)
+        {
+            window.insert(nums[i]);
+            // 枚举四种情况  最后可得，插入小的时候左移 而删除小于等于的时候右移
+            if (nums[i] <*mid)
+                --mid;
+            if (nums[i-k] <= *mid)
+                ++mid;
+            window.erase(window.lower_bound(nums[i-k]));
+            result.push_back(*mid);
+        }
+        return result;
+    }
+};
+```
+
+### 复杂度分析:
+
+klog\(k\) + \(n-k\)\*log\(k\)
 
