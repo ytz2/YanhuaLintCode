@@ -117,8 +117,6 @@ public:
 
 o\(n\)
 
-
-
 ## 360 Sliding Window Median
 
 Given an array of n integer, and a moving window\(size k\), move the window at each iteration from the start of the array, find the median of the element inside the window at each moving. \(If there are even numbers in the array, return the N/2-th number after sorting the element in the window. \)
@@ -143,8 +141,7 @@ then the window move one step forward again.
 
 `[1,2, | 7,8,5 | ]`, return the median`7`;
 
-  
-http://www.lintcode.com/en/problem/sliding-window-median/
+[http://www.lintcode.com/en/problem/sliding-window-median/](http://www.lintcode.com/en/problem/sliding-window-median/)
 
 ### 解题分析 1:
 
@@ -169,7 +166,7 @@ public:
         vector<int> result;
         if (nums.empty() || k<=0)
             return result;
-            
+
         vector<int> window(nums.begin(), nums.begin()+k-1);
         sort(window.begin(), window.end());
         for (int i = k-1; i < nums.size(); i++)
@@ -191,13 +188,9 @@ public:
 
 klog\(k\) + \(n-k\)\*k
 
-
-
 ### 解题分析 2:
 
 sliding window在siding排序的时候，用multiset大法好， multiset是binary search tree,且允许重复元素出现，这样既维持了顺序又维持了长度，且每次插入，删除的时间复杂度是log\(k\)。 比用两个q强。
-
-
 
 ### 代码：
 
@@ -236,4 +229,73 @@ public:
 ### 复杂度分析:
 
 klog\(k\) + \(n-k\)\*log\(k\)
+
+
+
+## 362 Sliding Window Maximum
+
+Given an array of n integer with duplicate number, and a moving window\(size k\), move the window at each iteration from the start of the array, find the maximum number inside the window at each moving.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For array`[1, 2, 7, 7, 8]`, moving window size`k = 3`. return`[7, 7, 8]`
+
+At first the window is at the start of the array like this
+
+`[|1, 2, 7| ,7, 8]`, return the maximum`7`;
+
+then the window move one step forward.
+
+`[1, |2, 7 ,7|, 8]`, return the maximum`7`;
+
+then the window move one step forward again.
+
+`[1, 2, |7, 7, 8|]`, return the maximum`8`;
+
+http://www.lintcode.com/en/problem/sliding-window-maximum/
+
+
+
+### 解题分析:
+
+滑动窗口问题，还是multiset大法好
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param nums: A list of integers
+     * @param k: An integer
+     * @return: The maximum number inside the window at each moving
+     */
+    vector<int> maxSlidingWindow(vector<int> nums, int k) {
+        // write your code here
+        vector<int> res;
+        if (nums.empty() || k <= 0)
+            return res;
+        multiset<int> window(nums.begin(), nums.begin()+k);
+        auto it_max = window.rbegin();
+        res.push_back(*it_max);
+        for (int i = k; i < nums.size(); i++)
+        {
+            window.insert(nums[i]);
+            window.erase(window.lower_bound(nums[i-k]));
+            res.push_back(*window.rbegin());
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+klog\(k\) + \(n-k\)\*log\(k\)
+
+
 
