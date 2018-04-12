@@ -6,7 +6,7 @@
 
 Given an array of integers, find two numbers such that they add up to a specific target number.
 
-The function`twoSum`should return_indices_of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers \(both index1 and index2\) are zero-based.
+The function`twoSum`should return\_indices\_of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers \(both index1 and index2\) are zero-based.
 
 ##### Notice
 
@@ -27,8 +27,6 @@ return`[0, 1]`
 ### 解题分析:
 
 当年被问烂了的题， 直接写吧
-
-
 
 ### 代码：
 
@@ -57,7 +55,7 @@ public:
 
 ### 复杂度分析:
 
-nlog\(n\)
+o\(n\)
 
 ## 数组去重问题
 
