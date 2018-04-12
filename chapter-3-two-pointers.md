@@ -360,8 +360,6 @@ klog\(k\) + \(n-k\)\*log\(k\)
 
 multiset最大数可直接从window.rbegin\(\)得到， 不需要移动iterator
 
-
-
 ## 610 Two Sum - Difference equals to target
 
 Given an array of integers, find two numbers that their`difference`equals to a target value.  
@@ -380,7 +378,7 @@ Yes
 Given nums =`[2, 7, 15, 24]`, target =`5`  
 return`[1, 2]`\(7 - 2 = 5\)
 
-http://www.lintcode.com/en/problem/two-sum-difference-equals-to-target/
+[http://www.lintcode.com/en/problem/two-sum-difference-equals-to-target/](http://www.lintcode.com/en/problem/two-sum-difference-equals-to-target/)
 
 ### 解题分析:
 
@@ -434,7 +432,73 @@ o\(nlog\(n\)\)
 
 #### 笔记
 
-这里target&lt;0的时候稍微纠结了一下， 因为sorted， 所以我们只关心abs\(target\)， 因为可以a-b也可以b-a 。 另外一个纠结了以下的地方是++beg == end的时候，其实end应该向前移动，举个反例就是如果输入时0，we are fucked. 
+这里target&lt;0的时候稍微纠结了一下， 因为sorted， 所以我们只关心abs\(target\)， 因为可以a-b也可以b-a 。 另外一个纠结了以下的地方是++beg == end的时候，其实end应该向前移动，举个反例就是如果输入时0，we are fucked.
 
 
+
+## 链表中点问题
+
+## 228 . Middle of Linked List
+
+Find the middle node of a linked list.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`1->2->3`, return the node with value 2.
+
+Given`1->2`, return the node with value 1.
+
+http://www.lintcode.com/en/problem/middle-of-linked-list/
+
+### 解题分析:
+
+基本功题目， 可惜我基本功太差，记得快指针初始位置要在慢指针后面，画画图就知道了。 
+
+条件为while\(fast && fast-&gt;next\)
+
+### 代码：
+
+```cpp
+/**
+ * Definition of ListNode
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *         this->val = val;
+ *         this->next = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param head: the head of linked list.
+     * @return: a middle node of the linked list
+     */
+    ListNode * middleNode(ListNode * head) {
+        // write your code here
+        if (!head)
+            return head;
+        ListNode *first = head, *second = head->next;
+        while(second && second->next)
+        {
+            first=first->next;
+            second = second->next->next;
+        }
+        return first;
+    }
+};复杂度分析:
+```
+
+#### 复杂度
+
+o\(n\).
 
