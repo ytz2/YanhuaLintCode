@@ -360,3 +360,81 @@ klog\(k\) + \(n-k\)\*log\(k\)
 
 multiset最大数可直接从window.rbegin\(\)得到， 不需要移动iterator
 
+
+
+## 610 Two Sum - Difference equals to target
+
+Given an array of integers, find two numbers that their`difference`equals to a target value.  
+where index1 must be less than index2. Please note that your returned answers \(both index1 and index2\) are NOT zero-based.
+
+##### Notice
+
+It's guaranteed there is only one available solution
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given nums =`[2, 7, 15, 24]`, target =`5`  
+return`[1, 2]`\(7 - 2 = 5\)
+
+http://www.lintcode.com/en/problem/two-sum-difference-equals-to-target/
+
+### 解题分析:
+
+用hashtable滑动的去做还是o\(n\), 这个题用双指针做一下：）
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an array of Integer
+     * @param target: an integer
+     * @return: [index1 + 1, index2 + 1] (index1 < index2)
+     */
+    vector<int> twoSum7(vector<int> &nums, int target) {
+        // write your code here.
+        if (nums.size() < 2)
+            return vector<int>(2,-1);
+        vector<pair<int, int>> sorted;
+        for(int i = 0; i < nums.size(); ++i)
+            sorted.push_back(make_pair(nums[i],i+1));
+        sort(sorted.begin(), sorted.end());
+        int beg = 0, end = 1;
+        while(end < nums.size())
+        {
+            int sum = sorted[beg].first + abs(target);
+            if (sum == sorted[end].first)
+            { 
+                int ind1 = sorted[beg].second, ind2 = sorted[end].second;
+                if (ind1 < ind2)
+                    return vector<int>{ind1, ind2};
+                return vector<int>{ind2, ind1};
+            }
+            else if (sum > sorted[end].first)
+                end++;
+            else
+            {
+                beg++;
+                if (beg == end)
+                    end++;
+            }
+        }
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(nlog\(n\)\)
+
+#### 笔记
+
+这里target&lt;0的时候稍微纠结了一下， 因为sorted， 所以我们只关心abs\(target\)， 因为可以a-b也可以b-a 。 另外一个纠结了以下的地方是++beg == end的时候，其实end应该向前移动，举个反例就是如果输入时0，we are fucked. 
+
+
+
