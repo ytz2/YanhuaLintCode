@@ -1,3 +1,64 @@
+## 
+
+## 两数之和（相向）
+
+## 56 Two Sum
+
+Given an array of integers, find two numbers such that they add up to a specific target number.
+
+The function`twoSum`should return_indices_of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers \(both index1 and index2\) are zero-based.
+
+##### Notice
+
+You may assume that each input would have exactly one solution
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+numbers=`[2, 7, 11, 15]`, target=`9`
+
+return`[0, 1]`
+
+[http://www.lintcode.com/en/problem/remove-duplicate-numbers-in-array/](http://www.lintcode.com/en/problem/remove-duplicate-numbers-in-array/)
+
+### 解题分析:
+
+当年被问烂了的题， 直接写吧
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param numbers: An array of Integer
+     * @param target: target = numbers[index1] + numbers[index2]
+     * @return: [index1 + 1, index2 + 1] (index1 < index2)
+     */
+    vector<int> twoSum(vector<int> &numbers, int target) {
+        // write your code here
+        unordered_map<int,int> tbl;
+        for(int i = 0; i < numbers.size(); i++)
+        {
+            if (tbl.find(target-numbers[i]) != tbl.end())
+                return vector<int>{tbl[target-numbers[i]],i};
+            else
+                tbl[numbers[i]] = i;
+        }
+        return vector<int>(2,-1);
+    }
+};
+```
+
+### 复杂度分析:
+
+nlog\(n\)
+
 ## 数组去重问题
 
 ## 521 Remove Duplicate Numbers in Array
@@ -296,8 +357,6 @@ public:
 ### 复杂度分析:
 
 klog\(k\) + \(n-k\)\*log\(k\)
-
-
 
 #### 笔记：
 
