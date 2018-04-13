@@ -434,8 +434,6 @@ o\(nlog\(n\)\)
 
 这里target&lt;0的时候稍微纠结了一下， 因为sorted， 所以我们只关心abs\(target\)， 因为可以a-b也可以b-a 。 另外一个纠结了以下的地方是++beg == end的时候，其实end应该向前移动，举个反例就是如果输入时0，we are fucked.
 
-
-
 ## 链表中点问题
 
 ## 228 . Middle of Linked List
@@ -452,11 +450,11 @@ Given`1->2->3`, return the node with value 2.
 
 Given`1->2`, return the node with value 1.
 
-http://www.lintcode.com/en/problem/middle-of-linked-list/
+[http://www.lintcode.com/en/problem/middle-of-linked-list/](http://www.lintcode.com/en/problem/middle-of-linked-list/)
 
 ### 解题分析:
 
-基本功题目， 可惜我基本功太差，记得快指针初始位置要在慢指针后面，画画图就知道了。 
+基本功题目， 可惜我基本功太差，记得快指针初始位置要在慢指针后面，画画图就知道了。
 
 条件为while\(fast && fast-&gt;next\)
 
@@ -501,4 +499,79 @@ public:
 #### 复杂度
 
 o\(n\).
+
+## 81. Data Stream Median
+
+Numbers keep coming, return the median of numbers at every time a new number added.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Clarification**
+
+What's the definition of Median?  
+- Median is the number that in the middle of a sorted array. If there are n numbers in a sorted array A, the median is`A[(n - 1) / 2]`. For example, if`A=[1,2,3]`, median is`2`. If`A=[1,19]`, median is`1`.
+
+**Example**
+
+For numbers coming list:`[1, 2, 3, 4, 5]`, return`[1, 1, 2, 2, 3]`.
+
+For numbers coming list:`[4, 5, 1, 3, 2, 6, 0]`, return`[4, 4, 4, 3, 3, 3, 3]`.
+
+For numbers coming list:`[2, 20, 100]`, return`[2, 2, 20]`.
+
+### 解题分析:
+
+第一招用multiset大法，维护一个左边界的median , 所以考虑这个问题的时候：我们已经在median的最左面了，现在我们是偶数的时候， 如果比他大，则向右移动这样可以指在中间，如果我们是奇数，那么比他小的时候左移，比他大不需要移动，因为我们要指在左边界。 
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @return: the median of numbers
+     */
+    vector<int> medianII(vector<int> &nums) {
+        // write your code here
+        vector<int> res;
+        if (nums.empty())
+            return res;
+        multiset<int> container;
+        container.insert(nums[0]);
+        auto it = container.find(nums[0]);
+        res.push_back(*it);
+        for (int i = 1; i< nums.size(); i++)
+        {
+            auto n = container.size();
+            container.insert(nums[i]);
+            // even number
+            if (n%2 ==0)
+            {
+                // we always sit on the left median
+                if (nums[i] >= *it)
+                    it++;
+            }
+            else // odd
+            {
+                // we are in the middle
+                if (nums[i] < *it)
+                    it--;
+            }
+            res.push_back(*it);
+        }
+        return res;
+    }
+};
+```
+
+#### 复杂度
+
+插入是log\(n!\)
+
+
+
+
 
