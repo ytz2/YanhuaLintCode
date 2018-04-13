@@ -510,8 +510,9 @@ Yes
 
 **Clarification**
 
-What's the definition of Median?  
-- Median is the number that in the middle of a sorted array. If there are n numbers in a sorted array A, the median is`A[(n - 1) / 2]`. For example, if`A=[1,2,3]`, median is`2`. If`A=[1,19]`, median is`1`.
+What's the definition of Median?
+
+* Median is the number that in the middle of a sorted array. If there are n numbers in a sorted array A, the median is`A[(n - 1) / 2]`. For example, if`A=[1,2,3]`, median is`2`. If`A=[1,19]`, median is`1`.
 
 **Example**
 
@@ -523,7 +524,7 @@ For numbers coming list:`[2, 20, 100]`, return`[2, 2, 20]`.
 
 ### 解题分析:
 
-第一招用multiset大法，维护一个左边界的median , 所以考虑这个问题的时候：我们已经在median的最左面了，现在我们是偶数的时候， 如果比他大，则向右移动这样可以指在中间，如果我们是奇数，那么比他小的时候左移，比他大不需要移动，因为我们要指在左边界。 
+第一招用multiset大法，维护一个左边界的median , 所以考虑这个问题的时候：我们已经在median的最左面了，现在我们是偶数的时候， 如果比他大，则向右移动这样可以指在中间，如果我们是奇数，那么比他小的时候左移，比他大不需要移动，因为我们要指在左边界。
 
 ### 代码：
 
@@ -573,5 +574,57 @@ public:
 
 
 
+### 解题分析 2:
 
+第二个办法是priority\_queue, 左边一个最大pq,右面一个最小pq 只要保证leftq.size\(\) - rightq.size\(\) &lt;=1就可以始终从leftq.top\(\)找到median,其实这是用两个q来模拟multiset的中间节点
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @return: the median of numbers
+     */
+    vector<int> medianII(vector<int> &nums) {
+        // write your code here
+        priority_queue<int, vector<int>> leftq;
+        priority_queue<int, vector<int>, greater<int>> rightq;
+        vector<int> res;
+        if (nums.size() <= 1)
+            return nums;
+        leftq.push(nums[0]);
+        res.push_back(nums[0]);
+        for(int i=1; i<nums.size(); ++i)
+        {
+            int num = nums[i];
+            if (num < leftq.top())
+                leftq.push(num);
+            else
+                rightq.push(num);
+            int left_n = leftq.size();
+            int right_n = rightq.size();
+            if (left_n + 1 == right_n)
+            {
+                auto tmp = rightq.top();
+                rightq.pop();
+                leftq.push(tmp);
+            }
+            if (left_n -2 == right_n)
+            {
+                auto tmp = leftq.top();
+                leftq.pop();
+                rightq.push(tmp);
+            }
+            res.push_back(leftq.top());
+        }
+        return res;
+    }
+};
+```
+
+#### 复杂度
+
+插入是log\(n!\)
 
