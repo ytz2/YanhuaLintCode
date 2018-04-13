@@ -626,8 +626,6 @@ public:
 
 插入是log\(n\)
 
-
-
 ## 545. Top k Largest Numbers II
 
 Implement a data structure, provide two interfaces:
@@ -782,7 +780,7 @@ public:
             res.push_back(q_.top());
             q_.pop();
         }
-        
+
         for(const auto& each:res)
             q_.push(each);
         sort(res.begin(), res.end(), greater<int>());
@@ -798,5 +796,5 @@ private:
 
 #### 复杂度
 
-插入是log\(n\)
+插入是nlog\(k\) , klog\(k\)
 
