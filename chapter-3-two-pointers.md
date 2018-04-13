@@ -570,9 +570,7 @@ public:
 
 #### 复杂度
 
-插入是log\(n!\)
-
-
+插入是log\(n\)
 
 ### 解题分析 2:
 
@@ -626,5 +624,179 @@ public:
 
 #### 复杂度
 
-插入是log\(n!\)
+插入是log\(n\)
+
+
+
+## 545. Top k Largest Numbers II
+
+Implement a data structure, provide two interfaces:
+
+1. `add(number)`
+   . Add a new number in the data structure.
+2. `topk()`
+   . Return the top
+   _k_
+   largest numbers in this data structure.
+   _k_
+   is given when we create the data structure.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+```
+s = new Solution(3);
+
+>
+>
+ create a new data structure.
+s.add(3)
+s.add(10)
+s.topk()
+
+>
+>
+ return [10, 3]
+s.add(1000)
+s.add(-99)
+s.topk()
+
+>
+>
+ return [1000, 10, 3]
+s.add(4)
+s.topk()
+
+>
+>
+ return [1000, 10, 4]
+s.add(100)
+s.topk()
+
+>
+>
+ return [1000, 100, 10]
+```
+
+### 解题分析:
+
+写复杂了，刚开始觉得开一个最小q， 然后以为另外放一个list， 和LRU cache一样。。。其实太天真了， get的时候还是要sort, 第一版代码
+
+### 代码：
+
+```cpp
+#include <list>
+class Solution {
+public:
+    /*
+    * @param k: An integer
+    */Solution(int k) {
+        // do intialization if necessary
+        n_ = k;
+    }
+
+    /*
+     * @param num: Number to be added
+     * @return: nothing
+     */
+    void add(int num) {
+        // write your code here
+        container_.push_back(num);
+        auto it = prev(container_.end(), 1);
+        q_.push(make_pair(num, it));
+        if (q_.size() > n_)
+        {
+            auto t = q_.top();
+            q_.pop();
+            auto it = t.second;
+            container_.erase(it);
+        }
+    }
+
+    /*
+     * @return: Top k element
+     */
+    vector<int> topk() {
+        // write your code here
+        vector<int> res(container_.begin(), container_.end());
+        std::sort(res.begin(), res.end(), std::greater<int>());
+        return res;
+    }
+private:
+    int n_;
+    list<int> container_;
+    typedef pair<int, std::list<int>::iterator> PairT;
+    struct myCompare
+    {
+        bool operator() (const PairT& left, const PairT& right)
+        {
+            return left.first > right.first;
+        }
+    };
+    priority_queue< PairT, vector<PairT>, myCompare > q_;
+};
+```
+
+#### 
+
+```
+#include <list>
+class Solution {
+public:
+    /*
+    * @param k: An integer
+    */Solution(int k) {
+        // do intialization if necessary
+        n_ = k;
+    }
+
+    /*
+     * @param num: Number to be added
+     * @return: nothing
+     */
+    void add(int num) {
+        // write your code here
+        if (q_.size() < n_)
+            q_.push(num);
+        else
+        {
+            if (q_.top() < num )
+            {
+                q_.pop();
+                q_.push(num);
+            }
+        }
+    }
+
+    /*
+     * @return: Top k element
+     */
+    vector<int> topk() {
+        // write your code here
+        vector<int> res;
+        while(!q_.empty())
+        {
+            res.push_back(q_.top());
+            q_.pop();
+        }
+        
+        for(const auto& each:res)
+            q_.push(each);
+        sort(res.begin(), res.end(), greater<int>());
+        return res;
+    }
+private:
+    int n_;
+    priority_queue<int, vector<int>, greater<int>> q_;
+};
+```
+
+#### 
+
+#### 复杂度
+
+插入是log\(n\)
 
