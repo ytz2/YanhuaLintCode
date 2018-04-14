@@ -798,3 +798,126 @@ private:
 
 插入是nlog\(k\) , klog\(k\)
 
+
+
+## 550. Top K Frequent Words II
+
+Find top_k_frequent words in realtime data stream.
+
+Implement three methods for_Topk_Class:
+
+1. `TopK(k)`
+   . The constructor.
+2. `add(word)`
+   . Add a new word.
+3. `topk()`
+   . Get the current top
+   _k_
+   frequent words.
+
+##### Notice
+
+If two words have the same frequency, rank them by alphabet.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+```
+TopK(2)
+add("lint")
+add("code")
+add("code")
+topk()
+
+>
+>
+ ["code", "lint"]
+
+```
+
+
+
+### 解题分析:
+
+这道题是看了答案写的，考察的是算法+数据结构+语言feature
+
+其中注意set的alloc定义，是先比的key对应的value,如果value相等再做string的比较。 之所以要处理相等的情况是因为search的时候如果相等就会被返回，如果只定义key-value search,返回的不是我们想要的。
+
+
+
+维护一个小于等于k的set, 和一个unordered\_map, 用map来计数， 用set来控制最频繁的k个数字，因为set是基于frequency来比较的，所以每次有新来的时候先不要更新map，而是移掉set中的记录，更新map重新插入以不影响alloc的算法。 如果大小超过k就把最不频繁的那个去掉
+
+### 代码：
+
+```cpp
+
+unordered_map<string, int> counter_;
+class TopK {
+public:
+    /*
+    * @param k: An integer
+    */TopK(int k) {
+        // do intialization if necessary
+        k_ = k;
+    }
+
+    /*
+     * @param word: A string
+     * @return: nothing
+     */
+    void add(string &word) {
+        // write your code here
+        if (counter_.find(word) == counter_.end())
+            counter_[word] = 1;
+        else
+        {
+            auto it = recorder_.find(word);
+            if (it != recorder_.end())
+            {
+                recorder_.erase(it);
+            }
+            counter_[word]++;
+        }
+    
+        recorder_.insert(word);
+        
+        if (recorder_.size() > k_)
+            recorder_.erase(prev(recorder_.end(),1));
+    }
+
+    /*
+     * @return: the current top k frequent words.
+     */
+    vector<string> topk() {
+        // write your code here
+        vector<string> res(recorder_.begin(), recorder_.end());
+        return res;
+    }
+    
+ 
+    int k_;
+    
+    struct MyCompare
+    {
+        bool operator() (const string& left, const string& right)
+        {
+            int leftn = counter_[left];
+            int rightn = counter_[right];
+            if (leftn != rightn)
+                return leftn > rightn;
+            return left < right;
+        }
+    };
+    set<string, MyCompare> recorder_;
+};
+```
+
+
+
+
+
+
+
