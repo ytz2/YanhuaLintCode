@@ -116,9 +116,7 @@ public:
 
 nlog\(n\)
 
-
-
-## 5 Kth Largest Elemen
+## \*\*\*\*\*\*\*5 Kth Largest Elemen
 
 Find K-th largest element in an array.
 
@@ -140,13 +138,11 @@ In array`[1,2,3,4,5]`, the 1st largest element is`5`, 2nd largest element is`4`,
 
 O\(n\) time, O\(1\) extra memory.
 
-http://www.lintcode.com/en/problem/kth-largest-element/
+[http://www.lintcode.com/en/problem/kth-largest-element/](http://www.lintcode.com/en/problem/kth-largest-element/)
 
 ### 解题分析:
 
 这个是快排的一个变种题目， 用的思想是，每次partition ， 从大到小， 如果 第k个数字在左边从左边搜，如果在右面从右边搜，否则就是在中间位置。
-
-
 
 ### 代码：
 
@@ -164,7 +160,7 @@ public:
             return -1;
         return quickSelect(n, nums, 0, nums.size()-1);
     }
-    
+
     int quickSelect(int k,  vector<int>& A, int left, int right)
     {
         int pivot = A[left + (right-left)/2];
@@ -189,4 +185,63 @@ public:
 o\(n\)
 
 
+
+## 148 Sort Colors
+
+Given an array with_n_objects colored_red_,_white_or_blue_, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.
+
+Here, we will use the integers`0`,`1`, and`2`to represent the color red, white, and blue respectively.
+
+##### Notice
+
+You are not suppose to use the library's sort function for this problem.  
+You should do it in-place \(sort numbers in the original array\).
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[1, 0, 1, 2]`, sort it in-place to`[0, 1, 1, 2]`.
+
+http://www.lintcode.com/en/problem/sort-colors/\#
+
+
+
+### 解题分析:
+
+两次partition , 或者需要enumerate 的来分几种case都用这种方法， 传个functor进去就好
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integer which is 0, 1 or 2 
+     * @return: nothing
+     */
+    void sortColors(vector<int> &nums) {
+        // write your code here
+        int start = partition(nums, 0, nums.size()-1, 1);
+        start = partition(nums, start, nums.size()-1, 2);
+    }
+    
+    int partition(vector<int>& nums, int beg, int end, int piv)
+    {
+        while(beg <= end)
+        {
+            while(beg<=end && nums[beg] < piv) beg++;
+            while(beg<=end && nums[end] >= piv) end--;
+            if (beg<=end) swap(nums[beg++], nums[end--]);
+        }
+        return beg;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
 
