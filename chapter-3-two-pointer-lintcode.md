@@ -168,8 +168,6 @@ public:
 
 o\(n\)
 
-
-
 #### 608. Two Sum - Input array is sorted
 
 Given an array of integers that is already_sorted in ascending order_, find two numbers such that they add up to a specific target number.
@@ -189,7 +187,7 @@ Yes
 Given nums =`[2, 7, 11, 15]`, target =`9`  
 return`[1, 2]`
 
-http://www.lintcode.com/en/problem/two-sum-input-array-is-sorted/
+[http://www.lintcode.com/en/problem/two-sum-input-array-is-sorted/](http://www.lintcode.com/en/problem/two-sum-input-array-is-sorted/)
 
 ### 解题分析:
 
@@ -234,11 +232,9 @@ public:
 
 o\(n\)
 
-
-
 #### 57. 3Sum
 
-Given an array_S_of n integers, are there elements_a_,_b_,_c_in_S_such that`a + b + c = 0`? Find all unique triplets in the array which gives the sum of zero.
+Given an array_S\_of n integers, are there elements\_a_,_b_,\_c\_in\_S\_such that`a + b + c = 0`? Find all unique triplets in the array which gives the sum of zero.
 
 ##### Notice
 
@@ -259,19 +255,18 @@ For example, given array S =`{-1 0 1 2 -1 -4}`, A solution set is:
 (-1, -1, 2)
 ```
 
-http://www.lintcode.com/en/problem/3sum/\#
+[http://www.lintcode.com/en/problem/3sum/\#](http://www.lintcode.com/en/problem/3sum/#)
 
 ### 解题分析:
 
 去重的金句，只允许第一次出现被搜索
 
-                if \(beg &gt; i+1 && numbers\[beg-1\] == numbers\[beg\]\)
-
+```cpp
+                if (beg > i+1 && numbers[beg-1] == numbers[beg])
                 {
-
                     beg++; continue;
-
                 }
+```
 
 ### 代码：
 
@@ -327,8 +322,4 @@ public:
 ### 复杂度分析:
 
 o\(n^2\)
-
-
-
-
 
