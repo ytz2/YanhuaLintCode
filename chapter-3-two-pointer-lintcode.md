@@ -389,8 +389,6 @@ public:
 
 o\(n\)
 
-
-
 #### 609. Two Sum - Less than or equal to target
 
 Given an array of integers, find how many pairs in the array such that their sum is`less than or equal to`a specific target number. Please return the number of pairs.
@@ -409,7 +407,7 @@ Return`5`.
 7 + 11 &lt; 24  
 7 + 15 &lt; 25
 
-http://www.lintcode.com/en/problem/two-sum-less-than-or-equal-to-target/\#
+[http://www.lintcode.com/en/problem/two-sum-less-than-or-equal-to-target/\#](http://www.lintcode.com/en/problem/two-sum-less-than-or-equal-to-target/#)
 
 解题分析:
 
@@ -455,4 +453,70 @@ public:
 ### 复杂度分析:
 
 nlog\(n\)
+
+
+
+#### 587. Two Sum - Unique pairs
+
+Given an array of integers, find how many`unique pairs`in the array such that their sum is equal to a specific target number. Please return the number of pairs.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given nums =`[1,1,2,45,46,46]`, target =`47`  
+return`2`
+
+1 + 46 = 47  
+2 + 45 = 47
+
+http://www.lintcode.com/en/problem/two-sum-unique-pairs/
+
+### 解题分析:
+
+换了一个思路，用map来做， 和经典的two sum一个思路， 一遍找一遍插。 但是因为要找unique的，加一个flag,只要用过了就不再用了， 所以：
+
+找到pair, 把两个都设为用过了，下次这两个数都不会被用到
+
+找不到， 如果这个数已经有了且被用过了，不做任何处理，否则加一个新的并mark为可以被用到。 O（n\)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an array of integer
+     * @param target: An integer
+     * @return: An integer
+     */
+    int twoSum6(vector<int> &nums, int target) {
+        // write your code here
+        int res = 0;
+        unordered_map<int, bool /*not used*/> counter;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            auto it = counter.find(target-nums[i]);
+            if ( it != counter.end() && it->second)
+            {
+                res++;
+                it->second = false;
+                counter[nums[i]] = false;
+                continue;
+            }
+            
+            if (counter.find(nums[i]) != counter.end() && !counter[nums[i]])
+                continue;
+            counter[nums[i]] = true;
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
 
