@@ -323,8 +323,6 @@ public:
 
 o\(n^2\)
 
-
-
 #### 31. Partition Array
 
 Given an array`nums`of integers and an int`k`, partition the array \(i.e move the elements in "nums"\) such that:
@@ -341,13 +339,13 @@ Given an array`nums`of integers and an int`k`, partition the array \(i.e move th
   are moved to the
   _right_
 
-Return the partitioning index, i.e the first index_i_nums\[_i_\] &gt;=_k_.
+Return the partitioning index, i.e the first index_i\_nums\[\_i_\] &gt;=_k_.
 
 ##### Notice
 
-You should do really partition in array_nums_instead of just counting the numbers of integers smaller than k.
+You should do really partition in array\_nums\_instead of just counting the numbers of integers smaller than k.
 
-If all elements in_nums_are smaller than_k_, then return_nums.length_
+If all elements in_nums\_are smaller than\_k_, then return_nums.length_
 
 Have you met this question in a real interview?
 
@@ -357,7 +355,7 @@ Yes
 
 If nums =`[3,2,2,1]`and`k=2`, a valid answer is`1`.
 
-http://www.lintcode.com/en/problem/partition-array/\#
+[http://www.lintcode.com/en/problem/partition-array/\#](http://www.lintcode.com/en/problem/partition-array/#)
 
 ### 解题分析:
 
@@ -392,4 +390,69 @@ public:
 o\(n\)
 
 
+
+#### 609. Two Sum - Less than or equal to target
+
+Given an array of integers, find how many pairs in the array such that their sum is`less than or equal to`a specific target number. Please return the number of pairs.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given nums =`[2, 7, 11, 15]`, target =`24`.  
+Return`5`.  
+2 + 7 &lt; 24  
+2 + 11 &lt; 24  
+2 + 15 &lt; 24  
+7 + 11 &lt; 24  
+7 + 15 &lt; 25
+
+http://www.lintcode.com/en/problem/two-sum-less-than-or-equal-to-target/\#
+
+解题分析:
+
+nlog\(n\)
+
+用了一个逻辑：
+
+beg最小，end最大， 如果 sum&gt;target,那么end--直到找到第一个 nums\[beg\]+nums\[end\] &lt;= target. 这个时候end不会变了， 因为下一个beg要++,结果只会变大，我们只需要从上次的end开始继续搜索即可。
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an array of integer
+     * @param target: an integer
+     * @return: an integer
+     */
+    int twoSum5(vector<int> &nums, int target) {
+        // write your code here
+        if (nums.empty())
+            return 0;
+        sort(nums.begin(), nums.end());
+        int res = 0;
+        int beg = 0, end = nums.size()-1;
+        while(beg < end)
+        {
+            int sum = nums[beg]+nums[end];
+            if (sum > target)
+                end--;
+            else
+            {
+                res += end-beg;
+                beg++;
+            }
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+nlog\(n\)
 
