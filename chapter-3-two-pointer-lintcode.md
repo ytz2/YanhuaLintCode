@@ -127,7 +127,7 @@ Yes
 
 Given`nums = [0, 1, 0, 3, 12]`, after calling your function,`nums`should be`[1, 3, 12, 0, 0]`.
 
-http://www.lintcode.com/en/problem/move-zeroes/\#
+[http://www.lintcode.com/en/problem/move-zeroes/\#](http://www.lintcode.com/en/problem/move-zeroes/#)
 
 ### 解题分析:
 
@@ -154,7 +154,7 @@ public:
                 fast++;
                 continue;
             }
-            
+
             while(slow<fast && nums[slow]!=0)
                 slow++;
             swap(nums[slow],nums[fast]);
@@ -166,5 +166,169 @@ public:
 
 ### 复杂度分析:
 
- o\(n\)
+o\(n\)
+
+
+
+#### 608. Two Sum - Input array is sorted
+
+Given an array of integers that is already_sorted in ascending order_, find two numbers such that they add up to a specific target number.
+
+The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers \(both index1 and index2\) are not zero-based.
+
+##### Notice
+
+You may assume that each input would have exactly one solution.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given nums =`[2, 7, 11, 15]`, target =`9`  
+return`[1, 2]`
+
+http://www.lintcode.com/en/problem/two-sum-input-array-is-sorted/
+
+### 解题分析:
+
+相向指针
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an array of Integer
+     * @param target: target = nums[index1] + nums[index2]
+     * @return: [index1 + 1, index2 + 1] (index1 < index2)
+     */
+    vector<int> twoSum(vector<int> &nums, int target) {
+        // write your code here
+        vector<int> res(2,-1);
+        if (nums.empty())
+            return res;
+        int beg =0, end = nums.size()-1;
+        while(beg != end)
+        {
+            int sum = nums[beg] + nums[end];
+            if (sum == target)
+            {
+                res[0] = beg+1;
+                res[1] = end+1;
+                return res;
+            }
+            else if (sum < target)
+                beg++;
+            else
+                end--;
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+#### 57. 3Sum
+
+Given an array_S_of n integers, are there elements_a_,_b_,_c_in_S_such that`a + b + c = 0`? Find all unique triplets in the array which gives the sum of zero.
+
+##### Notice
+
+Elements in a triplet \(a,b,c\) must be in non-descending order. \(ie, a ≤ b ≤ c\)
+
+The solution set must not contain duplicate triplets.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For example, given array S =`{-1 0 1 2 -1 -4}`, A solution set is:
+
+```
+(-1, 0, 1)
+(-1, -1, 2)
+```
+
+http://www.lintcode.com/en/problem/3sum/\#
+
+### 解题分析:
+
+去重的金句，只允许第一次出现被搜索
+
+                if \(beg &gt; i+1 && numbers\[beg-1\] == numbers\[beg\]\)
+
+                {
+
+                    beg++; continue;
+
+                }
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param numbers: Give an array numbers of n integer
+     * @return: Find all unique triplets in the array which gives the sum of zero.
+     */
+    vector<vector<int>> threeSum(vector<int> &numbers) {
+        // write your code here
+        vector<vector<int>> res;
+        if (numbers.size() < 3)
+            return res;
+        sort(numbers.begin(), numbers.end());
+        int i = 0;
+        while( i < numbers.size() - 2)
+        {
+            if (i>0 && numbers[i] == numbers[i-1])
+            {
+                i++;
+                continue;
+            }
+            int beg = i+1, end =numbers.size()-1;
+            int target = - numbers[i];
+            while(beg < end)
+            {
+                if (beg > i+1 && numbers[beg-1] == numbers[beg])
+                {
+                    beg++; continue;
+                }
+                int sum = numbers[beg] + numbers[end];
+                if (sum == target)
+                {
+                    res.push_back(vector<int>{numbers[i], numbers[beg], numbers[end]});
+                    beg++; end--;
+                }
+                else if (sum < target)
+                    beg++;
+                else
+                    end--;
+            }
+            while(i+1 <numbers.size()-2 && numbers[i] == numbers[i+1])
+                i++;
+            i++;
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n^2\)
+
+
+
+
 
