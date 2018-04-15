@@ -17,13 +17,13 @@ find(4) // return true
 find(7) // return false
 ```
 
-http://www.lintcode.com/en/problem/two-sum-data-structure-design/
+[http://www.lintcode.com/en/problem/two-sum-data-structure-design/](http://www.lintcode.com/en/problem/two-sum-data-structure-design/)
 
 ### 解题分析:
 
-挺好玩的一个题目， two sum算是经典题了，但这道题是让选数据结构。 什么样的数据结构插入简单搜索也简单？  
+挺好玩的一个题目， two sum算是经典题了，但这道题是让选数据结构。 什么样的数据结构插入简单搜索也简单？
 
-如果从two sum那道题过来，要求storage是排好的， 且允许重复出现。（multiset\) . 而且搜索的最优定为 o\(n\) 两根指针 
+如果从two sum那道题过来，要求storage是排好的， 且允许重复出现。（multiset\) . 而且搜索的最优定为 o\(n\) 两根指针
 
 ### 代码：
 
@@ -59,7 +59,7 @@ public:
         }
         return false;
     }
-    
+
     multiset<int> store;
 };
 ```
@@ -97,16 +97,74 @@ public:
                     return true;
                 continue;
             }
-                
+
             if (store.find(expected) !=store.end())
                 return true;
         }
         return false;
     }
-    
+
     unordered_map<int, int> store;
 };
 ```
 
+## 539 Move Zeroes
 
+Given an array`nums`, write a function to move all`0`'s to the end of it while maintaining the relative order of the non-zero elements.
+
+##### Notice
+
+1. You must do this
+   **in-place**
+   without making a copy of the array.
+2. Minimize the total number of operations.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`nums = [0, 1, 0, 3, 12]`, after calling your function,`nums`should be`[1, 3, 12, 0, 0]`.
+
+http://www.lintcode.com/en/problem/move-zeroes/\#
+
+### 解题分析:
+
+快慢指针
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an integer array
+     * @return: nothing
+     */
+    void moveZeroes(vector<int> &nums) {
+        // write your code here
+        if (nums.empty())
+            return;
+        int slow = 0, fast =0;
+        while(fast < nums.size())
+        {
+            if (nums[fast] ==0 )
+            {
+                fast++;
+                continue;
+            }
+            
+            while(slow<fast && nums[slow]!=0)
+                slow++;
+            swap(nums[slow],nums[fast]);
+            fast++;
+        }
+    }
+};
+```
+
+### 复杂度分析:
+
+ o\(n\)
 
