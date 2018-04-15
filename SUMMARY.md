@@ -7,4 +7,5 @@
 * [Chapter 2.2 Binary Search](chapter-22.md)
 * [Chapter 2.3 Binary Search](chapter-23.md)
 * [Chapter 3 Two Pointers 1](chapter-3-two-pointers.md)
+* [Chapter 3 Two Pointer\(sort\)](chapter-3-two-pointersort.md)
 

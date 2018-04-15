@@ -798,13 +798,11 @@ private:
 
 插入是nlog\(k\) , klog\(k\)
 
-
-
 ## 550. Top K Frequent Words II
 
-Find top_k_frequent words in realtime data stream.
+Find top\_k\_frequent words in realtime data stream.
 
-Implement three methods for_Topk_Class:
+Implement three methods for\_Topk\_Class:
 
 1. `TopK(k)`
    . The constructor.
@@ -835,10 +833,7 @@ topk()
 >
 >
  ["code", "lint"]
-
 ```
-
-
 
 ### 解题分析:
 
@@ -846,14 +841,11 @@ topk()
 
 其中注意set的alloc定义，是先比的key对应的value,如果value相等再做string的比较。 之所以要处理相等的情况是因为search的时候如果相等就会被返回，如果只定义key-value search,返回的不是我们想要的。
 
-
-
 维护一个小于等于k的set, 和一个unordered\_map, 用map来计数， 用set来控制最频繁的k个数字，因为set是基于frequency来比较的，所以每次有新来的时候先不要更新map，而是移掉set中的记录，更新map重新插入以不影响alloc的算法。 如果大小超过k就把最不频繁的那个去掉
 
 ### 代码：
 
 ```cpp
-
 unordered_map<string, int> counter_;
 class TopK {
 public:
@@ -881,9 +873,9 @@ public:
             }
             counter_[word]++;
         }
-    
+
         recorder_.insert(word);
-        
+
         if (recorder_.size() > k_)
             recorder_.erase(prev(recorder_.end(),1));
     }
@@ -896,10 +888,10 @@ public:
         vector<string> res(recorder_.begin(), recorder_.end());
         return res;
     }
-    
- 
+
+
     int k_;
-    
+
     struct MyCompare
     {
         bool operator() (const string& left, const string& right)
@@ -914,10 +906,6 @@ public:
     set<string, MyCompare> recorder_;
 };
 ```
-
-
-
-
 
 
 
