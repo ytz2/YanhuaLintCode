@@ -323,3 +323,73 @@ public:
 
 o\(n^2\)
 
+
+
+#### 31. Partition Array
+
+Given an array`nums`of integers and an int`k`, partition the array \(i.e move the elements in "nums"\) such that:
+
+* All elements 
+  &lt;
+  _k_
+  are moved to the
+  _left_
+* All elements 
+  &gt;
+  =
+  _k_
+  are moved to the
+  _right_
+
+Return the partitioning index, i.e the first index_i_nums\[_i_\] &gt;=_k_.
+
+##### Notice
+
+You should do really partition in array_nums_instead of just counting the numbers of integers smaller than k.
+
+If all elements in_nums_are smaller than_k_, then return_nums.length_
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+If nums =`[3,2,2,1]`and`k=2`, a valid answer is`1`.
+
+http://www.lintcode.com/en/problem/partition-array/\#
+
+### 解题分析:
+
+相向指针， 基本功题目
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: The integer array you should partition
+     * @param k: An integer
+     * @return: The index after partition
+     */
+    int partitionArray(vector<int> &nums, int k) {
+        // write your code here
+        int beg = 0, end = nums.size()-1;
+        while( beg <= end)
+        {
+            while(beg <= end && nums[beg] < k) beg++;
+            while(beg <= end && nums[end] >=k) end--;
+            if (beg<=end) swap(nums[beg++], nums[end--]);
+        }
+        return beg;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
