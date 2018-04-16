@@ -454,8 +454,6 @@ public:
 
 nlog\(n\)
 
-
-
 #### 587. Two Sum - Unique pairs
 
 Given an array of integers, find how many`unique pairs`in the array such that their sum is equal to a specific target number. Please return the number of pairs.
@@ -472,7 +470,7 @@ return`2`
 1 + 46 = 47  
 2 + 45 = 47
 
-http://www.lintcode.com/en/problem/two-sum-unique-pairs/
+[http://www.lintcode.com/en/problem/two-sum-unique-pairs/](http://www.lintcode.com/en/problem/two-sum-unique-pairs/)
 
 ### 解题分析:
 
@@ -506,7 +504,7 @@ public:
                 counter[nums[i]] = false;
                 continue;
             }
-            
+
             if (counter.find(nums[i]) != counter.end() && !counter[nums[i]])
                 continue;
             counter[nums[i]] = true;
@@ -519,4 +517,53 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+当然nlog\(n\)的解法也可以
+
+
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an array of integer
+     * @param target: An integer
+     * @return: An integer
+     */
+    int twoSum6(vector<int> &nums, int target) {
+        // write your code here
+        if (nums.empty())
+            return 0;
+        sort(nums.begin(), nums.end());
+        int beg = 0, end = nums.size()-1;
+        int res=0;
+        while(beg < end)
+        {
+            if (beg != 0 & nums[beg-1] == nums[beg])
+            {
+                beg++;
+                continue;
+            }
+            int sum = nums[beg] + nums[end];
+            if (sum == target)
+            {
+                res++;
+                beg++;
+            }
+            else if (sum < target)
+            {
+                beg++;
+            }
+            else
+            {
+                end--;
+            }
+            
+        }
+        return res;
+    }
+};
+```
+
+
 
