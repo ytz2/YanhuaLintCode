@@ -9,4 +9,5 @@
 * [Chapter 3 Two Pointers 1](chapter-3-two-pointers.md)
 * [Chapter 3 Two Pointer\(sort\)](chapter-3-two-pointersort.md)
 * [Chapter 3 Two Pointer \(LintCode\)](chapter-3-two-pointer-lintcode.md)
+* 1.10 Chapter 3 Two Pointers \(LintCode2\)
 
