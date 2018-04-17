@@ -563,13 +563,9 @@ public:
 };
 ```
 
-
-
-
-
 #### 533. Two Sum - Closest to target
 
-Given an array`nums`of_n_integers, find two integers in_nums_such that the sum is closest to a given number,_target_.
+Given an array`nums`of_n\_integers, find two integers in\_nums\_such that the sum is closest to a given number,\_target_.
 
 Return the difference between the sum of the two integers and the target.
 
@@ -583,7 +579,7 @@ Given array`nums`=`[-1, 2, 1, -4]`, and_target_=`4`.
 
 The minimum difference is`1`. \(4 - \(2 + 1\) = 1\).
 
-http://www.lintcode.com/en/problem/two-sum-closest-to-target/
+[http://www.lintcode.com/en/problem/two-sum-closest-to-target/](http://www.lintcode.com/en/problem/two-sum-closest-to-target/)
 
 ### 解题分析:
 
@@ -622,7 +618,5 @@ public:
 
 ### 复杂度分析:
 
-o\(n\)
-
-当然nlog\(n\)的解法也可以
+nlog\(n\)
 
