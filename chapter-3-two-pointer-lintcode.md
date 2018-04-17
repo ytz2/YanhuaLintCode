@@ -520,8 +520,6 @@ o\(n\)
 
 当然nlog\(n\)的解法也可以
 
-
-
 ```cpp
 class Solution {
 public:
@@ -558,7 +556,7 @@ public:
             {
                 end--;
             }
-            
+
         }
         return res;
     }
@@ -566,4 +564,65 @@ public:
 ```
 
 
+
+
+
+#### 533. Two Sum - Closest to target
+
+Given an array`nums`of_n_integers, find two integers in_nums_such that the sum is closest to a given number,_target_.
+
+Return the difference between the sum of the two integers and the target.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given array`nums`=`[-1, 2, 1, -4]`, and_target_=`4`.
+
+The minimum difference is`1`. \(4 - \(2 + 1\) = 1\).
+
+http://www.lintcode.com/en/problem/two-sum-closest-to-target/
+
+### 解题分析:
+
+逼近法， 排序后逼近， 如果diff &lt;0 那么就要往diff&gt;0走， 反之亦依然，这样保证我们始终在0附近徘徊
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an integer array
+     * @param target: An integer
+     * @return: the difference between the sum and the target
+     */
+    int twoSumClosest(vector<int> &nums, int target) {
+        // write your code here
+        if (nums.size() < 2)
+            return INT_MAX;
+        sort(nums.begin(), nums.end());
+        int beg = 0, end = nums.size()-1;
+        int res = INT_MAX;
+        while(beg < end)
+        {
+            int val = target - (nums[beg]+ nums[end]);
+            res = min(res, abs(val));
+            if (val > 0)
+                beg++;
+            else 
+                end--;
+        }
+        return res; 
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+当然nlog\(n\)的解法也可以
 
