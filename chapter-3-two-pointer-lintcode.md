@@ -620,3 +620,62 @@ public:
 
 nlog\(n\)
 
+
+
+#### 443. Two Sum - Greater than target
+
+Given an array of integers, find how many pairs in the array such that their sum is bigger than a specific target number. Please return the number of pairs.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given numbers =`[2, 7, 11, 15]`, target =`24`. Return`1`. \(11 + 15 is the only pair\)
+
+http://www.lintcode.com/en/problem/two-sum-greater-than-target/\#
+
+
+
+### 解题分析:
+
+还是求pair得问题， 左右移动搜索咯。。。greater, less total, 固定一个统计，更新下一个指针使得和变化继续搜索。
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an integer array
+     * @param target: An integer
+     * @return: the difference between the sum and the target
+     */
+    int twoSumClosest(vector<int> &nums, int target) {
+        // write your code here
+        if (nums.size() < 2)
+            return INT_MAX;
+        sort(nums.begin(), nums.end());
+        int beg = 0, end = nums.size()-1;
+        int res = INT_MAX;
+        while(beg < end)
+        {
+            int val = target - (nums[beg]+ nums[end]);
+            res = min(res, abs(val));
+            if (val > 0)
+                beg++;
+            else 
+                end--;
+        }
+        return res; 
+    }
+};
+```
+
+### 复杂度分析:
+
+nlog\(n\)
+
