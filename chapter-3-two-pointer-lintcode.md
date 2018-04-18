@@ -737,8 +737,6 @@ public:
 
 o\(n\)
 
-
-
 #### 382. Triangle Count
 
 Given an array of integers, how many three numbers can be found in the array, so that we can build an triangle whose three edges length is the three numbers that we find?
@@ -755,7 +753,6 @@ Given array S =`[3,4,6,7]`, return`3`. They are:
 [3,4,6]
 [3,6,7]
 [4,6,7]
-
 ```
 
 Given array S =`[4,4,4,4]`, return`4`. They are:
@@ -765,14 +762,9 @@ Given array S =`[4,4,4,4]`, return`4`. They are:
 [4(1),4(2),4(4)]
 [4(1),4(3),4(4)]
 [4(2),4(3),4(4)]
-
 ```
 
-
-
-http://www.lintcode.com/en/problem/triangle-count/\#
-
-
+[http://www.lintcode.com/en/problem/triangle-count/\#](http://www.lintcode.com/en/problem/triangle-count/#)
 
 ### 解题分析:
 
@@ -784,38 +776,33 @@ http://www.lintcode.com/en/problem/triangle-count/\#
 class Solution {
 public:
     /**
-     * @param k: An integer
-     * @param nums: An integer array
-     * @return: kth smallest element
+     * @param S: A list of integers
+     * @return: An integer
      */
-    int kthSmallest(int k, vector<int> &nums) {
+    int triangleCount(vector<int> &S) {
         // write your code here
-        if (nums.size() < k || k <= 0)
-            return INT_MAX;
-        return quickSelect(nums,0, nums.size()-1, k);
-    }
-
-    int quickSelect(vector<int>& nums, int beg, int end, int k)
-    {
-        if (end <= beg)
-            return nums[end];
-        int pivot = nums[beg + (end - beg) /2] ;
-        int i = beg, j = end;
-        while(i <= j)
+        if (S.size() < 3)
+            return 0;
+        sort(S.begin(), S.end());
+        int end = S.size()-1;
+        int count = 0;
+        while(end >= 2)
         {
-            while(i<=j && nums[i] < pivot)
-                i++;
-            while(i<=j && nums[j] > pivot)
-                j--;
-            if (i <= j)
-                swap(nums[i++], nums[j--]);
+            int i = 0, j=end-1;
+            while(i < j)
+            {
+                int val = S[i] + S[j];
+                if (val <= S[end])
+                    i++;
+                else
+                {
+                    count += j-i;
+                    j--;
+                }
+            }
+            end--;
         }
-        // compare k 
-        if (beg + k - 1 <= j)
-            return quickSelect(nums, beg, j, k);
-        if (beg + k - 1 >= i)
-            return quickSelect(nums, i, end, k-i + beg);
-        return nums[j+1];
+        return count;
     }
 };
 ```
