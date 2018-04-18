@@ -77,8 +77,6 @@ public:
 
 o\(n^2\)
 
-
-
 #### 625. Partition Array II
 
 Partition an unsorted integer array into three parts:
@@ -122,7 +120,9 @@ Change to`[1,1,2,3,2,3,4,4]`.
 
 AAAAAAAAAABBBBBBBBBCCCCCCCC
 
-                       L                    I R
+```
+                   L                    I R
+```
 
 维护三根指针， i为动态指针，L维护比L小， R比H大， 那么比L小的时候swap , i, L, 两个指针一起走， 比H大， swap i , r, r左移。 i不能动，因为我们只知道他比H小但是不知道他比L大，所以让他停在那里等下次循环判断。 如果在中间，只需要移动I，从图上看，I=R是终止条件
 
@@ -142,7 +142,7 @@ public:
         if (nums.size() <=1)
             return;
         int l = 0, r = nums.size()-1, i =0;
-        
+
         while(i < r)
         {
             if (nums[i] < low)
@@ -162,5 +162,117 @@ o\(n\)
 
 
 
+#### 380. Intersection of Two Linked Lists
 
+Write a program to find the node at which the intersection of two singly linked lists begins.
+
+##### Notice
+
+* If the two linked lists have no intersection at all, return
+  `null`
+  .
+* The linked lists must retain their original structure after the function returns.
+* You may assume there are no cycles anywhere in the entire linked structure.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+The following two linked lists:
+
+```
+A:          a1 → a2
+                   ↘
+                     c1 → c2 → c3
+                   ↗            
+B:     b1 → b2 → b3
+
+```
+
+begin to intersect at node c1.
+
+[**Challenge**](http://www.lintcode.com/en/problem/intersection-of-two-linked-lists/#challenge)
+
+Your code should preferably run in O\(_n_\) time and use only O\(_1_\) memory.
+
+http://www.lintcode.com/en/problem/intersection-of-two-linked-lists/
+
+http://www.lintcode.com/en/problem/intersection-of-two-linked-lists/
+
+### 解题分析:
+
+画个图就看出来了，还是两根指针
+
+代码：
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param headA: the first list
+     * @param headB: the second list
+     * @return: a ListNode
+     */
+    ListNode * getIntersectionNode(ListNode * headA, ListNode * headB) {
+        // write your code here
+    
+        if (!headA || !headB)
+            return nullptr;
+        int lenA = len(headA);
+        int lenB = len(headB);
+        int diff = abs(lenA-lenB);
+        if (lenA > lenB)
+            headA = march(headA, diff);
+        else if (lenA < lenB)
+            headB = march(headB, diff);
+        while(headA && headB)
+        {
+            if (headA == headB)
+                return headA;
+            headA= headA->next;
+            headB = headB->next;
+        }
+        return nullptr;
+    }
+    
+    ListNode* march(ListNode* ptr, int n)
+    {
+        if (!ptr)
+            return nullptr;
+        for (int i = 0; i < n ; i++)
+            if (ptr->next)
+                ptr = ptr->next;
+        return ptr; 
+    }
+    int len(ListNode* ptr)
+    {
+        int count = 1;
+        if(!ptr)
+            return count;
+        while(ptr->next)
+        {
+            ptr= ptr->next;
+            count++;
+        }
+        return count;
+    }
+    
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
 
