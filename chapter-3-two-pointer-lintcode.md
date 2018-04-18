@@ -620,8 +620,6 @@ public:
 
 nlog\(n\)
 
-
-
 #### 443. Two Sum - Greater than target
 
 Given an array of integers, find how many pairs in the array such that their sum is bigger than a specific target number. Please return the number of pairs.
@@ -634,15 +632,11 @@ Yes
 
 Given numbers =`[2, 7, 11, 15]`, target =`24`. Return`1`. \(11 + 15 is the only pair\)
 
-http://www.lintcode.com/en/problem/two-sum-greater-than-target/\#
-
-
+[http://www.lintcode.com/en/problem/two-sum-greater-than-target/\#](http://www.lintcode.com/en/problem/two-sum-greater-than-target/#)
 
 ### 解题分析:
 
 还是求pair得问题， 左右移动搜索咯。。。greater, less total, 固定一个统计，更新下一个指针使得和变化继续搜索。
-
-
 
 ### 代码：
 
@@ -678,4 +672,72 @@ public:
 ### 复杂度分析:
 
 nlog\(n\)
+
+
+
+#### 461. Kth Smallest Numbers in Unsorted Array
+
+Find the kth smallest numbers in an unsorted integer array.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`[3, 4, 1, 2, 5]`, k =`3`, the 3rd smallest numbers are`[1, 2, 3]`.
+
+http://www.lintcode.com/en/problem/kth-smallest-numbers-in-unsorted-array/
+
+### 解题分析:
+
+quick select, 花O\(n\)的时间把问题变成T（n/2）, o\(n\)
+
+
+
+代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param k: An integer
+     * @param nums: An integer array
+     * @return: kth smallest element
+     */
+    int kthSmallest(int k, vector<int> &nums) {
+        // write your code here
+        if (nums.size() < k || k <= 0)
+            return INT_MAX;
+        return quickSelect(nums,0, nums.size()-1, k);
+    }
+    
+    int quickSelect(vector<int>& nums, int beg, int end, int k)
+    {
+        if (end <= beg)
+            return nums[end];
+        int pivot = nums[beg + (end - beg) /2] ;
+        int i = beg, j = end;
+        while(i <= j)
+        {
+            while(i<=j && nums[i] < pivot)
+                i++;
+            while(i<=j && nums[j] > pivot)
+                j--;
+            if (i <= j)
+                swap(nums[i++], nums[j--]);
+        }
+        // compare k 
+        if (beg + k - 1 <= j)
+            return quickSelect(nums, beg, j, k);
+        if (beg + k - 1 >= i)
+            return quickSelect(nums, i, end, k-i + beg);
+        return nums[j+1];
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
 
