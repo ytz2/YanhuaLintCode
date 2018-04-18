@@ -673,8 +673,6 @@ public:
 
 nlog\(n\)
 
-
-
 #### 461. Kth Smallest Numbers in Unsorted Array
 
 Find the kth smallest numbers in an unsorted integer array.
@@ -687,13 +685,11 @@ Yes
 
 Given`[3, 4, 1, 2, 5]`, k =`3`, the 3rd smallest numbers are`[1, 2, 3]`.
 
-http://www.lintcode.com/en/problem/kth-smallest-numbers-in-unsorted-array/
+[http://www.lintcode.com/en/problem/kth-smallest-numbers-in-unsorted-array/](http://www.lintcode.com/en/problem/kth-smallest-numbers-in-unsorted-array/)
 
 ### 解题分析:
 
 quick select, 花O\(n\)的时间把问题变成T（n/2）, o\(n\)
-
-
 
 代码：
 
@@ -711,7 +707,7 @@ public:
             return INT_MAX;
         return quickSelect(nums,0, nums.size()-1, k);
     }
-    
+
     int quickSelect(vector<int>& nums, int beg, int end, int k)
     {
         if (end <= beg)
@@ -740,4 +736,91 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+
+
+#### 382. Triangle Count
+
+Given an array of integers, how many three numbers can be found in the array, so that we can build an triangle whose three edges length is the three numbers that we find?
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given array S =`[3,4,6,7]`, return`3`. They are:
+
+```
+[3,4,6]
+[3,6,7]
+[4,6,7]
+
+```
+
+Given array S =`[4,4,4,4]`, return`4`. They are:
+
+```
+[4(1),4(2),4(3)]
+[4(1),4(2),4(4)]
+[4(1),4(3),4(4)]
+[4(2),4(3),4(4)]
+
+```
+
+
+
+http://www.lintcode.com/en/problem/triangle-count/\#
+
+
+
+### 解题分析:
+
+求A+B&gt;c的组合， 用上面一道题的结论，只是固定最大端，扫完一次后，移动最大端，再次扫描
+
+代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param k: An integer
+     * @param nums: An integer array
+     * @return: kth smallest element
+     */
+    int kthSmallest(int k, vector<int> &nums) {
+        // write your code here
+        if (nums.size() < k || k <= 0)
+            return INT_MAX;
+        return quickSelect(nums,0, nums.size()-1, k);
+    }
+
+    int quickSelect(vector<int>& nums, int beg, int end, int k)
+    {
+        if (end <= beg)
+            return nums[end];
+        int pivot = nums[beg + (end - beg) /2] ;
+        int i = beg, j = end;
+        while(i <= j)
+        {
+            while(i<=j && nums[i] < pivot)
+                i++;
+            while(i<=j && nums[j] > pivot)
+                j--;
+            if (i <= j)
+                swap(nums[i++], nums[j--]);
+        }
+        // compare k 
+        if (beg + k - 1 <= j)
+            return quickSelect(nums, beg, j, k);
+        if (beg + k - 1 >= i)
+            return quickSelect(nums, i, end, k-i + beg);
+        return nums[j+1];
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n^2\)
 
