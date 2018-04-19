@@ -4,7 +4,6 @@ Given an an`unsorted array`, sort the given array. You are allowed to do only fo
 
 ```
 flip(arr, i): Reverse array from 0 to i
-
 ```
 
 Unlike a traditional sorting algorithm, which attempts to sort with the fewest comparisons possible, the goal is to sort the sequence in as few reversals as possible.
@@ -33,8 +32,6 @@ Use`flip(arr, i)`function to sort the array.
 
 Youtube上看一个视频， 先找最大的，翻到顶上去，然后再全翻，这样最大的就在下面了，然后再找从0到倒数第二的最大，重复上面的操作
 
-
-
 代码：
 
 ```
@@ -62,7 +59,7 @@ public:
             FlipTool::flip(array, --last);
         }
     }
-    
+
     int findMax(vector<int>& array, int end)
     {
         int m = 0;
@@ -119,8 +116,6 @@ Change to`[1,1,2,3,2,3,4,4]`.
 
 ### 解题分析:
 
-
-
 代码：
 
 ```
@@ -137,7 +132,7 @@ public:
         if (nums.size() <=1)
             return;
         int l = 0, r = nums.size()-1, i =0;
-        
+
         while(i < r)
         {
             if (nums[i] < low)
@@ -159,17 +154,13 @@ o\(n\)
 
 Given a linked list, determine if it has a cycle in it.
 
-
-
 **Example**
 
 Given -21-&gt;10-&gt;4-&gt;5, tail connects to node index 1, return true
 
 ### 解题分析:
 
-Youtube上看一个视频， 先找最大的，翻到顶上去，然后再全翻，这样最大的就在下面了，然后再找从0到倒数第二的最大，重复上面的操作
-
-
+快慢指针
 
 代码：
 
@@ -207,8 +198,6 @@ public:
             fast = fast->next->next;
         }
         return false;
-    }
-};
 ```
 
 ### 复杂度分析:
@@ -216,4 +205,100 @@ public:
 o\(n\)
 
 
+
+#### 58. 4Sum
+
+Given an array_S_of_n_integers, are there elements_a_,_b_,_c_, and_d_in_S_such that_a + b + c + d = target_?
+
+Find all unique quadruplets in the array which gives the sum of target.
+
+##### Notice
+
+Elements in a quadruplet \(_a,b,c,d_\) must be in non-descending order. \(ie,_a ≤ b ≤ c ≤ d_\)  
+The solution set must not contain duplicate quadruplets.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given array S =`{1 0 -1 0 -2 2}`, and target =`0`. A solution set is:
+
+```
+(-1, 0, 0, 1)
+(-2, -1, 1, 2)
+(-2, 0, 0, 2)
+
+```
+
+### 解题分析:
+
+无聊，堆代码
+
+快慢指针
+
+### 代码：
+
+```
+class Solution {
+public:
+    /**
+     * @param numbers: Give an array
+     * @param target: An integer
+     * @return: Find all unique quadruplets in the array which gives the sum of zero
+     */
+    vector<vector<int>> fourSum(vector<int> &numbers, int target) {
+        // write your code here
+        vector<vector<int>> res;
+        int n = numbers.size();
+        if (n < 4)
+            return res;
+        sort(numbers.begin(), numbers.end());
+        for (int i = 0; i < n - 3; i++)
+        {
+            // skip duplicates
+            if (i!=0 && numbers[i-1] == numbers[i])
+                continue;
+            for (int j = i + 1; j < n -2; j++)
+            {
+                // skip duplicates
+                if (j != i + 1 && numbers[j - 1] == numbers[j])
+                    continue;
+                int beg = j + 1, end = n - 1;
+                int targetVal = target - numbers[i] - numbers[j];
+                while(beg < end)
+                {
+                    if (beg != j + 1 && numbers[beg - 1] == numbers[beg])
+                    {
+                        beg++;
+                        continue;
+                    }
+                    if (end != n - 1 && numbers[end+1] == numbers[end])
+                    {
+                        end--;
+                        continue;
+                    }
+                    int val = numbers[beg] + numbers[end];
+                    if (val > targetVal)
+                        end--;
+                    else if (val < targetVal)
+                        beg++;
+                    else
+                    {
+                        res.push_back(vector<int>{numbers[i], numbers[j], numbers[beg], numbers[end]});
+                        beg++;
+                        end--;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n^3\)
 
