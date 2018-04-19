@@ -6,8 +6,8 @@
 * [Chapter 2.1 Binary Search](chapter-21.md)
 * [Chapter 2.2 Binary Search](chapter-22.md)
 * [Chapter 2.3 Binary Search](chapter-23.md)
-* [Chapter 3 Two Pointers 1](chapter-3-two-pointers.md)
-* [Chapter 3 Two Pointer\(sort\)](chapter-3-two-pointersort.md)
-* [Chapter 3 Two Pointer \(LintCode\)](chapter-3-two-pointer-lintcode.md)
-* [Chapter 3 Two Pointers \(LintCode2\)](chapter-3-two-pointers-lintcode2.md)
+* [Chapter 3.1 Two Pointers](chapter-3-two-pointers.md)
+* [Chapter 3.2 Two Pointers](chapter-3-two-pointersort.md)
+* [Chapter 3.3 Two Pointers](chapter-3-two-pointer-lintcode.md)
+* [Chapter 3.3 Two Pointers](chapter-3-two-pointers-lintcode2.md)
 
