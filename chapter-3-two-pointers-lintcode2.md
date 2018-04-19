@@ -204,11 +204,9 @@ public:
 
 o\(n\)
 
-
-
 #### 58. 4Sum
 
-Given an array_S_of_n_integers, are there elements_a_,_b_,_c_, and_d_in_S_such that_a + b + c + d = target_?
+Given an array_S\_of\_n\_integers, are there elements\_a_,_b_,_c_, and_d\_in\_S\_such that\_a + b + c + d = target_?
 
 Find all unique quadruplets in the array which gives the sum of target.
 
@@ -229,7 +227,6 @@ Given array S =`{1 0 -1 0 -2 2}`, and target =`0`. A solution set is:
 (-1, 0, 0, 1)
 (-2, -1, 1, 2)
 (-2, 0, 0, 2)
-
 ```
 
 ### 解题分析:
@@ -301,4 +298,40 @@ public:
 ### 复杂度分析:
 
 o\(n^3\)
+
+
+
+#### 103. Linked List Cycle II
+
+Given a linked list, return the node where the cycle begins.
+
+If there is no cycle, return`null`.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`-21->10->4->5`, tail connects to node index 1，return`10`
+
+### 解题分析:
+
+快慢指针，先让快慢指针相遇，然后从头和相遇点同时走，遇到的位置就是了。有数学证明，懒得记，画图总结一下也能知道
+
+### 代码：
+
+```
+Given a linked list, return the node where the cycle begins.
+
+If there is no cycle, return null.
+
+Have you met this question in a real interview? Yes
+Example
+Given -21->10->4->5, tail connects to node index 1，return 10
+```
+
+### 复杂度分析:
+
+NA
 
