@@ -11,4 +11,5 @@
 * [Chapter 3.3 Two Pointers](chapter-3-two-pointer-lintcode.md)
 * [Chapter 3.3 Two Pointers](chapter-3-two-pointers-lintcode2.md)
 * [Chapter 3.4 Two Pointers Conlusions](chapter-34-two-pointers-conlusions.md)
+* [Chapter 4 BFS](chapter-4-bfs.md)
 
