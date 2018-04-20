@@ -1,7 +1,5 @@
 # LintCode Problems
 
-
-
 ## 433. Number of Islands
 
 Given a boolean 2D matrix,`0`is represented as the sea,`1`is represented as the island. If two 1 is adjacent, we consider them in the same island. We only consider up/down/left/right adjacent.
@@ -24,14 +22,11 @@ Given graph:
   [0, 0, 0, 0, 0],
   [0, 0, 0, 0, 1]
 ]
-
 ```
 
 return`3`.
 
-http://www.lintcode.com/en/problem/number-of-islands/\#
-
-
+[http://www.lintcode.com/en/problem/number-of-islands/\#](http://www.lintcode.com/en/problem/number-of-islands/#)
 
 ### 解题分析:
 
@@ -87,11 +82,9 @@ public:
 
 o\(n\)
 
-
-
 ## 69. Binary Tree Level Order Traversal
 
-Given a binary tree, return the level order traversal of its nodes' values. \(ie, from left to right, level by level\).
+Given a binary tree, return the level order traversal of its nodes' values. \(ie, from left to right, level by level\).
 
 Have you met this question in a real interview?
 
@@ -99,7 +92,7 @@ Yes
 
 **Example**
 
-Given binary tree `{3,9,20,#,#,15,7}`,
+Given binary tree `{3,9,20,#,#,15,7}`,
 
 ```
     3
@@ -107,10 +100,7 @@ Given binary tree `{3,9,20,#,#,15,7}`,
   9  20
     /  \
    15   7
-
 ```
-
-
 
 return its level order traversal as:
 
@@ -122,9 +112,7 @@ return its level order traversal as:
 ]
 ```
 
-http://www.lintcode.com/en/problem/binary-tree-level-order-traversal/\#
-
-
+[http://www.lintcode.com/en/problem/binary-tree-level-order-traversal/\#](http://www.lintcode.com/en/problem/binary-tree-level-order-traversal/#)
 
 ### 解题分析:
 
@@ -176,6 +164,100 @@ public:
             res.push_back(level);
         }
         return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 615. Course Schedule
+
+There are a total of n courses you have to take, labeled from`0`to`n - 1`.
+
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: \[0,1\]
+
+Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given n =`2`, prerequisites =`[[1,0]]`  
+Return`true`
+
+Given n =`2`, prerequisites =`[[1,0],[0,1]]`  
+Return`false`
+
+http://www.lintcode.com/en/problem/course-schedule/\#
+
+
+
+### 解题分析:
+
+依赖关系， schedule, workflow 都是用的拓扑排序， 并行计算里面的lazy compute也是用的这个方法。 
+
+基本套路： 
+
+optional: build graph with node based instead of side based
+
+1. build indegrees table 依赖度
+2. 遍历所有没有依赖度的放到Q里
+3. BFS 并且降低被拿走的依赖度，如果为0继续遍历
+
+这道题有个坑，就是找依赖度为0的时候不要用 graph的node， 而是用n来遍历， 因为有的node就是独立的点，谁也不依赖。
+
+### 代码：
+
+```
+class Solution {
+public:
+    /*
+     * @param numCourses: a total of n courses
+     * @param prerequisites: a list of prerequisite pairs
+     * @return: true if can finish all courses or false
+     */
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        // write your code here
+        
+        // transform graph representation
+        unordered_map<int, unordered_set<int>> graph;
+        for (const auto& each : prerequisites)
+            graph[each.second].insert(each.first);
+        // get indegreees, statistics of neighbor of parents
+        unordered_map<int, int> degrees;
+        for (const auto& each : graph)
+            for (const auto& neighbor : each.second)
+                degrees[neighbor]++;
+        // topological sort
+        vector<int> res;
+        queue<int> q;
+        // get those without degrees and dump into q
+        for (int i = 0; i < numCourses; i++)
+            if (degrees.find(i) == degrees.end())
+                q.push(i);
+        // bfs with a q, search neighbors to deduct their degree, if 0 push to q        
+        while(!q.empty())
+        {
+            auto outq = q.front();
+            q.pop();
+            res.push_back(outq);
+            const auto& neighbors = graph[outq];
+            for (const auto& neighbor : neighbors)
+            {
+                if (degrees.find(neighbor) != degrees.end() && --degrees[neighbor] == 0)
+                {
+                    degrees.erase(neighbor);
+                    q.push(neighbor);
+                }
+            }
+        }
+        return res.size() == numCourses; 
     }
 };
 ```
