@@ -262,10 +262,6 @@ public:
 
 o\(n\)
 
-
-
-
-
 ## 616. Course Schedule II
 
 There are a total of n courses you have to take, labeled from`0`to`n - 1`.  
@@ -287,7 +283,7 @@ Return`[0,1]`
 Given n = 4, prerequisites =`[1,0],[2,0],[3,1],[3,2]]`  
 Return`[0,1,2,3]`or`[0,2,1,3]`
 
-http://www.lintcode.com/en/problem/course-schedule-ii/\#
+[http://www.lintcode.com/en/problem/course-schedule-ii/\#](http://www.lintcode.com/en/problem/course-schedule-ii/#)
 
 ### 解题分析:
 
@@ -343,7 +339,132 @@ public:
             return vector<int>();
         return res;
     }           
-    
+
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 611. Knight Shortest Path
+
+Given a knight in a chessboard \(a binary matrix with`0`as empty and`1`as barrier\) with a`source`position, find the shortest path to a`destination`position, return the length of the route.  
+Return`-1`if knight can not reached.
+
+##### Notice
+
+source and destination must be empty.  
+Knight can not enter the barrier.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Clarification**
+
+If the knight is at \(_x_,_y_\), he can get to the following positions in one step:
+
+```
+(x + 1, y + 2)
+(x + 1, y - 2)
+(x - 1, y + 2)
+(x - 1, y - 2)
+(x + 2, y + 1)
+(x + 2, y - 1)
+(x - 2, y + 1)
+(x - 2, y - 1)
+
+```
+
+**Example**
+
+```
+[[0,0,0],
+ [0,0,0],
+ [0,0,0]]
+source = [2, 0] destination = [2, 2] return 2
+
+[[0,1,0],
+ [0,0,0],
+ [0,0,0]]
+source = [2, 0] destination = [2, 2] return 6
+
+[[0,1,0],
+ [0,0,1],
+ [0,0,0]]
+source = [2, 0] destination = [2, 2] return -1
+```
+
+http://www.lintcode.com/en/problem/knight-shortest-path/\#
+
+### 解题分析:
+
+由点及面最短路径问题。
+
+### 代码：
+
+```
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+
+class Solution {
+public:
+    /**
+     * @param grid: a chessboard included 0 (false) and 1 (true)
+     * @param source: a point
+     * @param destination: a point
+     * @return: the shortest path 
+     */
+    int shortestPath(vector<vector<bool>> &grid, Point &source, Point &destination) {
+        // write your code here
+        int m = grid.size();
+        if ( m == 0)
+            return -1;
+        int n = grid[0].size();
+        if (n == 0)
+            return -1;
+        if (grid[source.x][source.y] == 1)
+            return -1;
+        queue<Point> q;
+        q.push(source);
+        grid[source.x][source.y] = 1; 
+        int res = -1;
+        vector<int> dx{ 1, 1, -1, -1, 2, 2, -2, -2};
+        vector<int> dy{ 2,-2,  2, -2, 1,-1,  1, -1};
+        while(!q.empty())
+        {
+            res++;
+            int size = q.size();
+            for (int i = 0; i < size; i++)
+            {
+                auto p = q.front();
+                q.pop();
+                if (p.x == destination.x && p.y == destination.y)
+                    return res;
+                for (int k = 0; k < dx.size(); k++)
+                {
+                    auto next_x = p.x + dx[k];
+                    auto next_y = p.y + dy[k];
+                    if (next_x >= 0 && next_x < m && next_y >= 0 && next_y < n && grid[next_x][next_y] == 0)
+                    {
+                        q.emplace(next_x, next_y);
+                        grid[next_x][next_y] = 1;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
 };
 ```
 
