@@ -614,8 +614,6 @@ public:
 
 o\(n\)
 
-
-
 ## 137. Clone Graph
 
 Clone an undirected graph. Each node in the graph contains a`label`and a list of its`neighbors`.
@@ -645,60 +643,81 @@ Visually, the graph looks like the following:
 0 --- 2
      / \
      \_/
-
 ```
-
-
 
 **Example**
 
 return a deep copied graph.
 
-http://www.lintcode.com/en/problem/clone-graph/\#
+[http://www.lintcode.com/en/problem/clone-graph/\#](http://www.lintcode.com/en/problem/clone-graph/#)
 
 ### 解题分析:
 
-这是一个拓扑排序可以解决的问题，当然不是唯一解
+分步走的问题：
 
-要求： 给定的seq 可以重构org 且仅存在唯一重构方案
+1. Clone 点
+2. Clone 线
+3. 返回面
 
-分析： seq本质上是依赖问题，所以使用图来解决这个问题， 那么重构则是拓扑排序的过程，唯一解则是要求每次拓扑排序中只有唯一一个元素可以被采用，且位置对应org。
-
-![](/assets/ts.png)
-
-比如上图， 0， 1,  2， 3 ， 4 ，5 是一个seq, 0, 3, 2, 1, 5, 4 也是一个seq
-
-限制只有唯一方案：  0， 1， 4
-
-首位数字0， 入度为0， 拓扑排序中 不存在 2， 3， 且1对应0， 1， 4的1， 之后就是4.
-
-难点在： 把seq理解为边的关系，并且把唯一方案理解为拓扑排序且对排序加限制
-
-在这个地方错了好几次，build graph的时候别掉坑里去。。。一个只有一个数的情况， 再一个是空的时候，再一个是考虑最后一位是没有出度的
+### 代码：
 
 ```
-        unordered_map<int, unordered_set<int>> graph;
-        for (const auto& seq : seqs)
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param node: A undirected graph node
+     * @return: A undirected graph node
+     */
+    UndirectedGraphNode* cloneGraph(UndirectedGraphNode* node) {
+        // write your code here
+        if (!node)
+            return node;
+        // Clone point
+        unordered_map<UndirectedGraphNode*, UndirectedGraphNode*> points;
+        queue<UndirectedGraphNode*> q; // bfs helper
+        q.push(node);
+        points[node] = new UndirectedGraphNode(node->label); // p2p tracker
+        while(!q.empty())
         {
-            //空
-            if (seq.empty())
-                continue;
-            // 不空， 建立图
-            for (int i = 0; i < seq.size()-1; i++)
+            auto nd = q.front();
+            q.pop();
+            for (const auto& neighbor : nd->neighbors)
             {
-                graph[seq[i]].insert(seq[i+1]);
+                if (points.find(neighbor) == points.end())
+                {
+                    points[neighbor] = new UndirectedGraphNode(neighbor->label);
+                    q.push(neighbor);
+                }
             }
-            //不要忘记最后一个
-            int last = seq[seq.size()-1]; 
-            if (graph.find(last) == graph.end()) //这个地方不能直接放unordered_set<int>， 如果这个数字在出现多次，则依赖关系坏掉
-                graph[seq[seq.size()-1]] = unordered_set<代码：
+        }
+        
+        // clone neighbor relation
+        for (const auto& each : points)
+        {
+            auto orig =  each.first;
+            auto image = each.second;
+            for(const auto& neighbor : orig->neighbors)
+                image->neighbors.push_back(points[neighbor]);
+        }
+        // return the image node
+        return points[node];
+    }
+};
 ```
 
-```
-想
-```
-
-### 复杂度分析:
+### 复杂度：
 
 o\(n\)
+
+
 
