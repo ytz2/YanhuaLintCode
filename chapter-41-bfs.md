@@ -700,7 +700,7 @@ public:
                 }
             }
         }
-        
+
         // clone neighbor relation
         for (const auto& each : points)
         {
@@ -715,9 +715,98 @@ public:
 };
 ```
 
-### 复杂度：
+### 复杂度分析：
 
 o\(n\)
 
 
+
+## 127. Topological Sorting
+
+Given an directed graph, a topological order of the graph nodes is defined as follow:
+
+* For each directed edge `A -> B`in graph, A must before B in the order list.
+* The first node in the order can be any node in the graph with no nodes direct to it.
+
+Find any topological order for the given graph.
+
+##### Notice
+
+You can assume that there is at least one topological order in the graph.
+
+**Example**
+
+For graph as follow:
+
+![](/assets/imp00ort.png)
+
+The topological order can be:
+
+```
+[0, 1, 2, 3, 4, 5]
+[0, 2, 3, 1, 5, 4]
+...
+```
+
+http://www.lintcode.com/en/problem/topological-sorting/\#
+
+### 解题分析:
+
+course sechedule 里面已经写烂了
+
+### 代码：
+
+```
+/**
+ * Definition for Directed graph.
+ * struct DirectedGraphNode {
+ *     int label;
+ *     vector<DirectedGraphNode *> neighbors;
+ *     DirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+
+class Solution {
+public:
+    /*
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */
+    vector<DirectedGraphNode*> topSort(vector<DirectedGraphNode*>& graph) {
+        // write your code here
+        typedef DirectedGraphNode* NodePtr;
+        
+        // build indegrees;
+        unordered_map<NodePtr, int> indegrees;
+        for (const auto& each : graph)
+            for (const auto& neighbor : each->neighbors)
+                indegrees[neighbor]++;
+        // top sort
+        queue<NodePtr> q;
+        for (const auto& each : graph)
+            if (indegrees.find(each) == indegrees.end())
+                q.push(each);
+        vector<NodePtr> res;
+        while(!q.empty())
+        {
+            auto node = q.front();
+            q.pop();
+            res.push_back(node);
+            for (const auto& neighbor : node->neighbors)
+            {
+                if (indegrees.find(neighbor) != indegrees.end() && --indegrees[neighbor] == 0)
+                {
+                    indegrees.erase(neighbor);
+                    q.push(neighbor);
+                }
+            }
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析：
+
+o\(n\)
 
