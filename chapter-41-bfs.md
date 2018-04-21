@@ -172,8 +172,6 @@ public:
 
 o\(n\)
 
-
-
 ## 615. Course Schedule
 
 There are a total of n courses you have to take, labeled from`0`to`n - 1`.
@@ -194,15 +192,13 @@ Return`true`
 Given n =`2`, prerequisites =`[[1,0],[0,1]]`  
 Return`false`
 
-http://www.lintcode.com/en/problem/course-schedule/\#
-
-
+[http://www.lintcode.com/en/problem/course-schedule/\#](http://www.lintcode.com/en/problem/course-schedule/#)
 
 ### 解题分析:
 
-依赖关系， schedule, workflow 都是用的拓扑排序， 并行计算里面的lazy compute也是用的这个方法。 
+依赖关系， schedule, workflow 都是用的拓扑排序， 并行计算里面的lazy compute也是用的这个方法。
 
-基本套路： 
+基本套路：
 
 optional: build graph with node based instead of side based
 
@@ -224,7 +220,7 @@ public:
      */
     bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
         // write your code here
-        
+
         // transform graph representation
         unordered_map<int, unordered_set<int>> graph;
         for (const auto& each : prerequisites)
@@ -259,6 +255,95 @@ public:
         }
         return res.size() == numCourses; 
     }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+
+
+## 616. Course Schedule II
+
+There are a total of n courses you have to take, labeled from`0`to`n - 1`.  
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair:`[0,1]`
+
+Given the total number of courses and a list of prerequisite pairs, return the ordering of courses you should take to finish all courses.
+
+There may be multiple correct orders, you just need to return one of them. If it is impossible to finish all courses, return an empty array.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given n =`2`, prerequisites =`[[1,0]]`  
+Return`[0,1]`
+
+Given n = 4, prerequisites =`[1,0],[2,0],[3,1],[3,2]]`  
+Return`[0,1,2,3]`or`[0,2,1,3]`
+
+http://www.lintcode.com/en/problem/course-schedule-ii/\#
+
+### 解题分析:
+
+依赖关系， schedule, workflow 都是用的拓扑排序， 并行计算里面的lazy compute也是用的这个方法。
+
+和615是一样的
+
+### 代码：
+
+```
+class Solution {
+public:
+    /*
+     * @param numCourses: a total of n courses
+     * @param prerequisites: a list of prerequisite pairs
+     * @return: the course order
+     */
+    vector<int> findOrder(int numCourses, vector<pair<int, int>> &prerequisites) {
+        // write your code here
+        // build graph
+        unordered_map<int, unordered_set<int>> graph;
+        for (const auto& required : prerequisites)
+            graph[required.second].insert(required.first);
+        // build indegrees
+        unordered_map<int, int> indegrees;
+        for (const auto& node : graph)
+            for (const auto& neighbor : node.second)
+                indegrees[neighbor]++;
+        // prepare q;
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++)
+            if (indegrees.find(i) == indegrees.end())
+                q.push(i);
+        vector<int> res;
+        while(!q.empty())
+        {
+            auto v = q.front();
+            q.pop();
+            res.push_back(v);
+            if (graph.find(v) != graph.end())
+            {
+                for (const auto& neighbor : graph[v])
+                {
+                    if (indegrees.find(neighbor) != indegrees.end() && --indegrees[neighbor] == 0)
+                    {
+                        indegrees.erase(neighbor);
+                        q.push(neighbor);
+                    }
+                }
+            }
+        }
+        if (res.size() != numCourses)
+            return vector<int>();
+        return res;
+    }           
+    
 };
 ```
 
