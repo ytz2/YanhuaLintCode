@@ -469,8 +469,6 @@ public:
 
 o\(n\)
 
-
-
 ## 605. Sequence Reconstruction
 
 Check whether the original sequence`org`can be uniquely reconstructed from the sequences in`seqs`. The org sequence is a permutation of the integers from 1 to n, with 1 ≤ n ≤ 10^4. Reconstruction means building a shortest common supersequence of the sequences in`seqs`\(i.e., a shortest sequence so that all sequences in`seqs`are subsequences of it\). Determine whether there is only one sequence that can be reconstructed from`seqs`and it is the`org`sequence.
@@ -501,7 +499,7 @@ Given org = [4,1,5,2,6,3], seqs = [[5,2,6,3],[4,1,5,2]]
 Return true
 ```
 
-http://www.lintcode.com/en/problem/sequence-reconstruction/\#
+[http://www.lintcode.com/en/problem/sequence-reconstruction/\#](http://www.lintcode.com/en/problem/sequence-reconstruction/#)
 
 ### 解题分析:
 
@@ -509,23 +507,19 @@ http://www.lintcode.com/en/problem/sequence-reconstruction/\#
 
 要求： 给定的seq 可以重构org 且仅存在唯一重构方案
 
-分析： seq本质上是依赖问题，所以使用图来解决这个问题， 那么重构则是拓扑排序的过程，唯一解则是要求每次拓扑排序中只有唯一一个元素可以被采用，且位置对应org。 
+分析： seq本质上是依赖问题，所以使用图来解决这个问题， 那么重构则是拓扑排序的过程，唯一解则是要求每次拓扑排序中只有唯一一个元素可以被采用，且位置对应org。
 
 ![](/assets/ts.png)
-
-
 
 比如上图， 0， 1,  2， 3 ， 4 ，5 是一个seq, 0, 3, 2, 1, 5, 4 也是一个seq
 
 限制只有唯一方案：  0， 1， 4
 
-首位数字0， 入度为0， 拓扑排序中 不存在 2， 3， 且1对应0， 1， 4的1， 之后就是4. 
+首位数字0， 入度为0， 拓扑排序中 不存在 2， 3， 且1对应0， 1， 4的1， 之后就是4.
 
 难点在： 把seq理解为边的关系，并且把唯一方案理解为拓扑排序且对排序加限制
 
 在这个地方错了好几次，build graph的时候别掉坑里去。。。一个只有一个数的情况， 再一个是空的时候，再一个是考虑最后一位是没有出度的
-
-
 
 ```
         unordered_map<int, unordered_set<int>> graph;
@@ -578,7 +572,7 @@ public:
             for (const auto& neighbor: node.second)
                 indegrees[neighbor]++;
         // make sure the indegree of first one is 0
-        
+
         queue<int> q;
         vector<int> solution;
         int ind = 0; 
@@ -589,7 +583,7 @@ public:
                 q.push(each.first);
             }
         }
-        
+
         while(!q.empty())
         {
             int n = q.size();
@@ -601,7 +595,7 @@ public:
                 return false;
             solution.push_back(node);
             ind++;
-            
+
             for (const auto& neighbor : graph[node])
             {
                 if (indegrees.find(neighbor) != indegrees.end() && --indegrees[neighbor] == 0)
@@ -614,6 +608,94 @@ public:
         return solution.size() == org.size();
     }
 };
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 137. Clone Graph
+
+Clone an undirected graph. Each node in the graph contains a`label`and a list of its`neighbors`.
+
+How we serialize an undirected graph:
+
+Nodes are labeled uniquely.
+
+We use`#`as a separator for each node, and`,`as a separator for node label and each neighbor of the node.
+
+As an example, consider the serialized graph`{0,1,2#1,2#2,2}`.
+
+The graph has a total of three nodes, and therefore contains three parts as separated by`#`.
+
+First node is labeled as
+
+1. `0` Connect node`0`to both nodes`1`and`2`.
+2. Second node is labeled as`1`. Connect node`1`to node`2`
+3. Third node is labeled as`2`. Connect node`2`to node`2`\(itself\), thus forming a self-cycle.
+
+Visually, the graph looks like the following:
+
+```
+   1
+  / \
+ /   \
+0 --- 2
+     / \
+     \_/
+
+```
+
+
+
+**Example**
+
+return a deep copied graph.
+
+http://www.lintcode.com/en/problem/clone-graph/\#
+
+### 解题分析:
+
+这是一个拓扑排序可以解决的问题，当然不是唯一解
+
+要求： 给定的seq 可以重构org 且仅存在唯一重构方案
+
+分析： seq本质上是依赖问题，所以使用图来解决这个问题， 那么重构则是拓扑排序的过程，唯一解则是要求每次拓扑排序中只有唯一一个元素可以被采用，且位置对应org。
+
+![](/assets/ts.png)
+
+比如上图， 0， 1,  2， 3 ， 4 ，5 是一个seq, 0, 3, 2, 1, 5, 4 也是一个seq
+
+限制只有唯一方案：  0， 1， 4
+
+首位数字0， 入度为0， 拓扑排序中 不存在 2， 3， 且1对应0， 1， 4的1， 之后就是4.
+
+难点在： 把seq理解为边的关系，并且把唯一方案理解为拓扑排序且对排序加限制
+
+在这个地方错了好几次，build graph的时候别掉坑里去。。。一个只有一个数的情况， 再一个是空的时候，再一个是考虑最后一位是没有出度的
+
+```
+        unordered_map<int, unordered_set<int>> graph;
+        for (const auto& seq : seqs)
+        {
+            //空
+            if (seq.empty())
+                continue;
+            // 不空， 建立图
+            for (int i = 0; i < seq.size()-1; i++)
+            {
+                graph[seq[i]].insert(seq[i+1]);
+            }
+            //不要忘记最后一个
+            int last = seq[seq.size()-1]; 
+            if (graph.find(last) == graph.end()) //这个地方不能直接放unordered_set<int>， 如果这个数字在出现多次，则依赖关系坏掉
+                graph[seq[seq.size()-1]] = unordered_set<代码：
+```
+
+```
+想
 ```
 
 ### 复杂度分析:
