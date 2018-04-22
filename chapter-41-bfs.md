@@ -808,8 +808,6 @@ public:
 
 o\(n\)
 
-
-
 ## 120. Word Ladder
 
 Given two words \(startandend\), and a dictionary, find the length of shortest transformation sequence fromstarttoend, such that:
@@ -832,13 +830,12 @@ Yes
 Given:  
 start=`"hit"`  
 end=`"cog"`  
-dict=`["hot","dot","dog","lot","log"]`  
-
+dict=`["hot","dot","dog","lot","log"]`
 
 As one shortest transformation is`"hit" -> "hot" -> "dot" -> "dog" -> "cog"`,  
 return its length`5`.
 
-http://www.lintcode.com/en/problem/word-ladder/\#
+[http://www.lintcode.com/en/problem/word-ladder/\#](http://www.lintcode.com/en/problem/word-ladder/#)
 
 ### 解题分析:
 
@@ -902,11 +899,9 @@ public:
 };
 ```
 
-第二轮： 过了， 因为如果dict太大， 那么会超时。 那么用26个字母， 每次编辑一个字母， 那么可以把o\(dict size\) \* o\(s size）- 》 
+第二轮： 过了， 因为如果dict太大， 那么会超时。 那么用26个字母， 每次编辑一个字母， 那么可以把o\(dict size\) \* o\(s size）- 》
 
-o\(26 s\(size\)\) 变为常数耗时。 
-
-
+o\(26 s\(size\)\) 变为常数耗时。
 
 ```
 class Solution {
@@ -920,13 +915,12 @@ public:
     int ladderLength(string &start, string &end, unordered_set<string> &dict) {
         // write your code here
         // corner
-        if ( dict.empty())
-            return 0;
         dict.insert(end);
         queue<string> q;
         q.push(start);
         int steps = 0;
         unordered_set<string> visited;
+        visited.insert(start);
         while(!q.empty())
         {
             steps++;
@@ -937,23 +931,19 @@ public:
                 q.pop();
                 if (node == end)
                     return steps;
-                for (const auto& each : dict)
+                for (int k = 0; k<start.size(); k++)
                 {
-                    if (visited.find(each) !=visited.end())
-                        continue;
-                    // decide whether it is one char edit
-                    int nedit = 0;
-                    for (int k = 0; k < each.size(); k++)
+                    char orig = node[k];
+                    for (char c='a'; c<='z';c++)
                     {
-                        nedit += each[k]!=node[k];
-                        if (nedit >= 2)
-                            break;
+                        node[k] = c;
+                        if (visited.find(node) == visited.end() && dict.find(node) != visited.end())
+                        {
+                            visited.insert(node);
+                            q.push(node);
+                        }
                     }
-                    if (nedit == 1)
-                    {
-                        visited.insert(each);
-                        q.push(each);
-                    }
+                    node[k] = orig;
                 }
             }
         }
