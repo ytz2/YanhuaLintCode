@@ -13,4 +13,5 @@
 * [Chapter 3.4 Two Pointers Conlusions](chapter-34-two-pointers-conlusions.md)
 * [Chapter 4 BFS](chapter-4-bfs.md)
 * [Chapter 4.1 BFS](chapter-41-bfs.md)
+* [Chapter 4.2 BFS](chapter-42-bfs.md)
 
