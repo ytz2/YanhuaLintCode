@@ -221,7 +221,7 @@ public:
         // write your code here
         if (grid.empty() || grid[0].empty())
             return -1;
-        
+
         int n_people = 0;
         int res = -1;
         queue<pair<int, int>> q;
@@ -267,6 +267,109 @@ public:
         if (n_people != 0)
             return -1;
         return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 531. Six Degrees
+
+Six degrees of separation is the theory that everyone and everything is six or fewer steps away, by way of introduction, from any other person in the world, so that a chain of "a friend of a friend" statements can be made to connect any two people in a maximum of six steps.
+
+Given a friendship relations, find the degrees of two people, return`-1`if they can not been connected by friends of friends.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Gien a graph:
+
+```
+1------2-----4
+ \          /
+  \        /
+   \--3--/
+
+```
+
+`{1,2,3#2,1,4#3,1,4#4,2,3}`and s =`1`, t =`4`return`2`
+
+Gien a graph:
+
+```
+1      2-----4
+             /
+           /
+          3
+
+```
+
+`{1#2,4#3,4#4,2,3}`and s =`1`, t =`4`return`-1`
+
+http://www.lintcode.com/en/problem/six-degrees/\#
+
+### 解题分析:
+
+图里面的最短路径问题，BFS
+
+### 代码：
+
+```
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param graph: a list of Undirected graph node
+     * @param s: Undirected graph node
+     * @param t: Undirected graph nodes
+     * @return: an integer
+     */
+    int sixDegrees(vector<UndirectedGraphNode*> graph, UndirectedGraphNode* s, UndirectedGraphNode* t) {
+        // write your code here
+        if (graph.empty() || !s || !t)
+            return -1;
+        queue<UndirectedGraphNode*> q;
+        int degrees = -1;
+        q.push(s);
+        unordered_set<int> visited;
+        visited.insert(s->label);
+        while(!q.empty())
+        {
+            degrees++;
+            int n = q.size();
+            for (int i = 0; i < n; i++)
+            {
+                auto node = q.front();
+                q.pop();
+                if (node->label == t->label )
+                    return degrees;
+                for (const auto& neighbor : node->neighbors)
+                {
+                    if (visited.find(neighbor->label) == visited.end())
+                    {
+                        visited.insert(neighbor->label);
+                        q.push(neighbor);
+                    }
+                }
+            }
+        }
+        return -1;
     }
 };
 ```
