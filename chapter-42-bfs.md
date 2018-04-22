@@ -1,7 +1,5 @@
 # BFS
 
-
-
 ## 242. Convert Binary Tree to Linked Lists by Depth
 
 Given a binary tree, design an algorithm which creates a linked list of all the nodes at each depth \(e.g., if you have a tree with depth D, you'll have D linked lists\).
@@ -20,7 +18,6 @@ Given binary tree:
   2   3
  /
 4
-
 ```
 
 return
@@ -33,7 +30,7 @@ return
 ]
 ```
 
-http://www.lintcode.com/en/problem/convert-binary-tree-to-linked-lists-by-depth/\#
+[http://www.lintcode.com/en/problem/convert-binary-tree-to-linked-lists-by-depth/\#](http://www.lintcode.com/en/problem/convert-binary-tree-to-linked-lists-by-depth/#)
 
 ### 解题分析:
 
@@ -101,8 +98,6 @@ public:
 
 o\(n\)
 
-
-
 ## \*\*\*\*624. Remove Substrings
 
 Given a string`s`and a set of`n`substrings. You are supposed to remove every instance of those n substrings from s so that s is of the minimum length and output this minimum length.
@@ -119,12 +114,11 @@ Return`2`
 Explanation:  
 `ccdaabcdbb`-&gt;`ccdacdbb`-&gt;`cabb`-&gt;`cb`\(length = 2\)
 
-  
-http://www.lintcode.com/en/problem/remove-substrings/\#
+[http://www.lintcode.com/en/problem/remove-substrings/\#](http://www.lintcode.com/en/problem/remove-substrings/#)
 
 ### 解题分析:
 
-这道题和shortest path edit那道题差不多， BFS搜索每一种可能。 
+这道题和shortest path edit那道题差不多， BFS搜索每一种可能。
 
 ### 代码：
 
@@ -192,5 +186,95 @@ find o\(n + s\) , 平均出现k次， 字典m个， O\(m\*k\(n+s\)\)
                 }
 ```
 
+## 598. Zombie in Matrix
 
+Given a 2D grid, each cell is either a wall`2`, a zombie`1`or people`0`\(the number zero, one, two\).Zombies can turn the nearest people\(up/down/left/right\) into zombies every day, but can not through wall. How long will it take to turn all people into zombies? Return`-1`if can not turn all people into zombies.
+
+
+
+**Example**
+
+Given a matrix:
+
+```
+0 1 2 0 0
+1 0 0 2 1
+0 1 0 0 0
+
+```
+
+return`2`
+
+http://www.lintcode.com/en/problem/zombie-in-matrix/\#
+
+### 解题分析:
+
+Flood Fill， 没啥悬念的感觉。。。直接写吧，以前做graphics model的时候天天写
+
+### 代码：
+
+```
+class Solution {
+public:
+    /**
+     * @param grid: a 2D integer grid
+     * @return: an integer
+     */
+    int zombie(vector<vector<int>> &grid) {
+        // write your code here
+        if (grid.empty() || grid[0].empty())
+            return -1;
+        
+        int n_people = 0;
+        int res = -1;
+        queue<pair<int, int>> q;
+        int m = grid.size();
+        int n = grid[0].size();
+        for (int i = 0; i < m; i++)
+        {
+            for (int j =0 ; j < n; j++)
+            {
+                int v = grid[i][j];
+                if (v == 0)
+                    n_people++;
+                else if (v == 1)
+                    q.push(make_pair(i, j));
+            }
+        }
+        vector<int> delta_x{ 0, 0, 1, -1};
+        vector<int> delta_y{ 1, -1,0,  0};
+        while(!q.empty())
+        {
+            res++;
+            int curS = q.size();
+            for (int i = 0; i <curS; i++)
+            {
+                auto p = q.front();
+                q.pop();
+                for (int k = 0; k < 4; k++)
+                {
+                    int next_i = p.first + delta_x[k];
+                    int next_j = p.second + delta_y[k];
+                    if (next_i >= 0 && next_i < m &&
+                        next_j >= 0 && next_j < n &&
+                        grid[next_i][next_j] == 0)
+                    {
+                        grid[next_i][next_j] = 1;
+                        q.push(make_pair(next_i, next_j));
+                        n_people -= 1;
+                    }
+                }
+            }
+        }
+
+        if (n_people != 0)
+            return -1;
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
 
