@@ -398,7 +398,7 @@ Given`n = 5`and`edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]]`, return false.
 
 #### 思路1:
 
-[https://zh.wikipedia.org/wiki/树\_\(图论\](https://zh.wikipedia.org/wiki/树_%28图论\)\)
+[https://zh.wikipedia.org/wiki/树\_\(图论\](https://zh.wikipedia.org/wiki/树_%28图论%29\)
 
 如果无向简单图G有有限个顶点（设为n个顶点），那么G是一棵**树**还等价于：
 
@@ -599,6 +599,110 @@ public:
                 return false;
         }
         return true;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 431. Connected Component in Undirected Graph
+
+Find the number connected component in the undirected graph. Each node in the graph contains a label and a list of its neighbors. \(a connected component \(or just component\) of an undirected graph is a subgraph in which any two vertices are connected to each other by paths, and which is connected to no additional vertices in the supergraph.\)
+
+##### Notice
+
+Each connected component should sort by label.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Clarification**
+
+[Learn more about representation of graphs](http://www.lintcode.com/help/graph)
+
+**Example**
+
+Given graph:
+
+```
+A------B  C
+ \     |  | 
+  \    |  |
+   \   |  |
+    \  |  |
+      D   E
+
+```
+
+Return`{A,B,D}, {C,E}`. Since there are two connected component which is`{A,B,D}, {C,E}`
+
+http://www.lintcode.com/en/problem/connected-component-in-undirected-graph/\#
+
+
+
+### 解题分析:
+
+每次做法都不一样， 放一个自己觉得confident的方法吧。
+
+### 代码：
+
+```
+/**
+ * Definition for Undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param nodes: a array of Undirected graph node
+     * @return: a connected set of a Undirected graph
+     */
+    vector<vector<int>> connectedSet(vector<UndirectedGraphNode*> nodes) {
+        // write your code here
+        vector<vector<int>> res;
+        if (nodes.empty())
+            return res;
+        unordered_set<UndirectedGraphNode*> graph;
+        for (auto each: nodes)
+            graph.insert(each);
+        queue<UndirectedGraphNode*> q;
+        unordered_set<UndirectedGraphNode*> visited;
+        while(!graph.empty())
+        {
+            vector<int> loop;
+            auto start = *graph.begin();
+            q.push(start);
+            visited.insert(start);
+            while(!q.empty())
+            {
+                auto node = q.front();
+                q.pop();
+                graph.erase(node);
+                loop.push_back(node->label);
+                for (const auto& each : node->neighbors)
+                {
+                    if (visited.find(each) == visited.end())
+                    {
+                        visited.insert(each);
+                        q.push(each);
+                    }
+                }
+            }
+            sort(loop.begin(), loop.end());
+            res.push_back(loop);
+        }
+        return res;
     }
 };
 ```
