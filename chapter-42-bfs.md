@@ -801,11 +801,9 @@ public:
 
 o\(n\)
 
-
-
 ## 70. Binary Tree Level Order Traversal II
 
-Given a binary tree, return the bottom-up level order traversal of its nodes' values. \(ie, from left to right, level by level from leaf to root\).
+Given a binary tree, return the bottom-up level order traversal of its nodes' values. \(ie, from left to right, level by level from leaf to root\).
 
 Have you met this question in a real interview?
 
@@ -813,7 +811,7 @@ Yes
 
 **Example**
 
-Given binary tree `{3,9,20,#,#,15,7}`,
+Given binary tree `{3,9,20,#,#,15,7}`,
 
 ```
     3
@@ -821,10 +819,7 @@ Given binary tree `{3,9,20,#,#,15,7}`,
   9  20
     /  \
    15   7
-
 ```
-
-
 
 return its bottom-up level order traversal as:
 
@@ -836,7 +831,7 @@ return its bottom-up level order traversal as:
 ]
 ```
 
-http://www.lintcode.com/en/problem/binary-tree-level-order-traversal-ii/\#
+[http://www.lintcode.com/en/problem/binary-tree-level-order-traversal-ii/\#](http://www.lintcode.com/en/problem/binary-tree-level-order-traversal-ii/#)
 
 ### 解题分析:
 
@@ -844,8 +839,55 @@ http://www.lintcode.com/en/problem/binary-tree-level-order-traversal-ii/\#
 
 ### 代码：
 
-```
-http://www.lintcode.com/en/problem/binary-tree-level-order-traversal-ii/#
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param root: A tree
+     * @return: buttom-up level order a list of lists of integer
+     */
+    vector<vector<int>> levelOrderBottom(TreeNode * root) {
+        // write your code here
+        vector<vector<int>> results;
+        if (!root)
+            return results;
+        
+        queue<TreeNode*> q;
+        q.push(root);
+        
+        while(!q.empty())
+        {
+            vector<int> result;
+            int n = q.size();
+            for (int i =0; i < n; i++)
+            {
+                auto node = q.front();
+                q.pop();
+                result.push_back(node->val);
+                if (node->left)
+                    q.push(node->left);
+                if (node->right)
+                    q.push(node->right);
+            }
+            results.insert(results.begin(), result);
+        }
+        return results;
+    }
+};
 ```
 
 ### 复杂度分析:
