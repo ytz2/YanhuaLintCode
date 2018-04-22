@@ -607,8 +607,6 @@ public:
 
 o\(n\)
 
-
-
 ## 431. Connected Component in Undirected Graph
 
 Find the number connected component in the undirected graph. Each node in the graph contains a label and a list of its neighbors. \(a connected component \(or just component\) of an undirected graph is a subgraph in which any two vertices are connected to each other by paths, and which is connected to no additional vertices in the supergraph.\)
@@ -636,14 +634,11 @@ A------B  C
    \   |  |
     \  |  |
       D   E
-
 ```
 
 Return`{A,B,D}, {C,E}`. Since there are two connected component which is`{A,B,D}, {C,E}`
 
-http://www.lintcode.com/en/problem/connected-component-in-undirected-graph/\#
-
-
+[http://www.lintcode.com/en/problem/connected-component-in-undirected-graph/\#](http://www.lintcode.com/en/problem/connected-component-in-undirected-graph/#)
 
 ### 解题分析:
 
@@ -701,6 +696,106 @@ public:
             }
             sort(loop.begin(), loop.end());
             res.push_back(loop);
+        }
+        return res;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 71. Binary Tree Zigzag Level Order Traversal
+
+Given a binary tree, return the zigzag level order traversal of its nodes' values. \(ie, from left to right, then right to left for the next level and alternate between\).
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given binary tree `{3,9,20,#,#,15,7}`,
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+```
+
+
+
+return its zigzag level order traversal as:
+
+```
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+```
+
+http://www.lintcode.com/en/problem/binary-tree-zigzag-level-order-traversal/\#
+
+### 解题分析:
+
+无聊类题目，直接写代码了
+
+### 代码：
+
+```
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: A Tree
+     * @return: A list of lists of integer include the zigzag level order traversal of its nodes' values.
+     */
+    vector<vector<int>> zigzagLevelOrder(TreeNode * root) {
+        // write your code here
+        vector<vector<int>> res;
+        if (!root)
+            return res;
+        queue<TreeNode*> q;
+        q.push(root);
+        bool reverse = false;
+        while(!q.empty())
+        {
+            vector<int> loop;
+            int n = q.size();
+            for (int i = 0; i<n; i++)
+            {
+                auto node = q.front();
+                q.pop();
+                if (reverse)
+                    loop.insert(loop.begin(), node->val);
+                else
+                    loop.push_back(node->val);
+                if (node->left)
+                    q.push(node->left);
+                if (node->right)
+                    q.push(node->right);
+            }
+            res.push_back(loop);
+            reverse = !reverse;
         }
         return res;
     }
