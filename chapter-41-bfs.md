@@ -719,8 +719,6 @@ public:
 
 o\(n\)
 
-
-
 ## 127. Topological Sorting
 
 Given an directed graph, a topological order of the graph nodes is defined as follow:
@@ -748,7 +746,7 @@ The topological order can be:
 ...
 ```
 
-http://www.lintcode.com/en/problem/topological-sorting/\#
+[http://www.lintcode.com/en/problem/topological-sorting/\#](http://www.lintcode.com/en/problem/topological-sorting/#)
 
 ### 解题分析:
 
@@ -775,7 +773,7 @@ public:
     vector<DirectedGraphNode*> topSort(vector<DirectedGraphNode*>& graph) {
         // write your code here
         typedef DirectedGraphNode* NodePtr;
-        
+
         // build indegrees;
         unordered_map<NodePtr, int> indegrees;
         for (const auto& each : graph)
@@ -805,6 +803,166 @@ public:
     }
 };
 ```
+
+### 复杂度分析：
+
+o\(n\)
+
+
+
+## 120. Word Ladder
+
+Given two words \(startandend\), and a dictionary, find the length of shortest transformation sequence fromstarttoend, such that:
+
+1. Only one letter can be changed at a time
+2. Each intermediate word must exist in the dictionary
+
+##### Notice
+
+* Return 0 if there is no such transformation sequence.
+* All words have the same length.
+* All words contain only lowercase alphabetic characters.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given:  
+start=`"hit"`  
+end=`"cog"`  
+dict=`["hot","dot","dog","lot","log"]`  
+
+
+As one shortest transformation is`"hit" -> "hot" -> "dot" -> "dog" -> "cog"`,  
+return its length`5`.
+
+http://www.lintcode.com/en/problem/word-ladder/\#
+
+### 解题分析:
+
+shortest path, BFS 上了。 有道类似的题叫word edit,用的DP， 都可以。
+
+### 代码：
+
+第一轮： TLE
+
+```
+class Solution {
+public:
+    /*
+     * @param start: a string
+     * @param end: a string
+     * @param dict: a set of string
+     * @return: An integer
+     */
+    int ladderLength(string &start, string &end, unordered_set<string> &dict) {
+        // write your code here
+        // corner
+        if ( dict.empty())
+            return 0;
+        dict.insert(end);
+        queue<string> q;
+        q.push(start);
+        int steps = 0;
+        unordered_set<string> visited;
+        while(!q.empty())
+        {
+            steps++;
+            int n = q.size();
+            for (int i = 0; i < n; i++)
+            {
+                string node = q.front();
+                q.pop();
+                if (node == end)
+                    return steps;
+                for (const auto& each : dict)
+                {
+                    if (visited.find(each) !=visited.end())
+                        continue;
+                    // decide whether it is one char edit
+                    int nedit = 0;
+                    for (int k = 0; k < each.size(); k++)
+                    {
+                        nedit += each[k]!=node[k];
+                        if (nedit >= 2)
+                            break;
+                    }
+                    if (nedit == 1)
+                    {
+                        visited.insert(each);
+                        q.push(each);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
+```
+
+第二轮： 过了， 因为如果dict太大， 那么会超时。 那么用26个字母， 每次编辑一个字母， 那么可以把o\(dict size\) \* o\(s size）- 》 
+
+o\(26 s\(size\)\) 变为常数耗时。 
+
+
+
+```
+class Solution {
+public:
+    /*
+     * @param start: a string
+     * @param end: a string
+     * @param dict: a set of string
+     * @return: An integer
+     */
+    int ladderLength(string &start, string &end, unordered_set<string> &dict) {
+        // write your code here
+        // corner
+        if ( dict.empty())
+            return 0;
+        dict.insert(end);
+        queue<string> q;
+        q.push(start);
+        int steps = 0;
+        unordered_set<string> visited;
+        while(!q.empty())
+        {
+            steps++;
+            int n = q.size();
+            for (int i = 0; i < n; i++)
+            {
+                string node = q.front();
+                q.pop();
+                if (node == end)
+                    return steps;
+                for (const auto& each : dict)
+                {
+                    if (visited.find(each) !=visited.end())
+                        continue;
+                    // decide whether it is one char edit
+                    int nedit = 0;
+                    for (int k = 0; k < each.size(); k++)
+                    {
+                        nedit += each[k]!=node[k];
+                        if (nedit >= 2)
+                            break;
+                    }
+                    if (nedit == 1)
+                    {
+                        visited.insert(each);
+                        q.push(each);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
+```
+
+### 
 
 ### 复杂度分析：
 
