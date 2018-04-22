@@ -374,9 +374,7 @@ public:
 
 o\(n\)
 
-
-
-## 178. Graph Valid Tree
+## \*\*\*\*178. Graph Valid Tree
 
 Given`n`nodes labeled from`0`to`n - 1`and a list of`undirected`edges \(each edge is a pair of nodes\), write a function to check whether these edges make up a valid tree.
 
@@ -394,13 +392,13 @@ Given`n = 5`and`edges = [[0, 1], [0, 2], [0, 3], [1, 4]]`, return true.
 
 Given`n = 5`and`edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]]`, return false.
 
-http://www.lintcode.com/en/problem/graph-valid-tree/\#
+[http://www.lintcode.com/en/problem/graph-valid-tree/\#](http://www.lintcode.com/en/problem/graph-valid-tree/#)
 
 ### 解题分析:
 
 #### 思路1:
 
-https://zh.wikipedia.org/wiki/%E6%A0%91\_\(%E5%9B%BE%E8%AE%BA\)
+[https://zh.wikipedia.org/wiki/树\_\(图论\](https://zh.wikipedia.org/wiki/树_%28图论\)\)
 
 如果无向简单图G有有限个顶点（设为n个顶点），那么G是一棵**树**还等价于：
 
@@ -426,7 +424,7 @@ public:
         // write your code here
         if (edges.size() != n-1)
             return false;
-        
+
         // rebuild graph
         unordered_map<int, unordered_set<int>> graph;
         for (const auto& edge : edges)
@@ -434,7 +432,7 @@ public:
             graph[edge[0]].insert(edge[1]);
             graph[edge[1]].insert(edge[0]);
         }
-        
+
         queue<int> q;
         unordered_set<int> visited;
         visited.insert(0);
@@ -461,13 +459,11 @@ public:
 
 o\(n\)
 
-
-
 #### 思路2:
 
-思路一种，检查是不是有简单环用了一个逻辑递推： 如果在有 n-1条边和n个节点的前提下，从任意一点开始不能遍历所有点，则不是树。 
+思路一种，检查是不是有简单环用了一个逻辑递推： 如果在有 n-1条边和n个节点的前提下，从任意一点开始不能遍历所有点，则不是树。
 
-但是有一个检查图的公共祖先或者环的有一个万能大法： 并查集。 这是个小众数据结构但是在解决BFS闭环问题中很常见。 
+但是有一个检查图的公共祖先或者环的有一个万能大法： 并查集。 这是个小众数据结构但是在解决BFS闭环问题中很常见。
 
 并查集有两个接口：
 
@@ -477,11 +473,7 @@ Union\(x,y\) 把x, y 归一到同一个root.
 
 那么在处理边的时候不停的union nodes, 如果发现边的两端已经属于同一个root，那么则已经联通，这条边为构成环的条件。
 
-
-
 两个优化过程： 搜索中压缩和low rank merge to high rank, 这样amortized complexity： O\(1\)
-
-
 
 ![](/assets/uf1.png)
 
@@ -533,15 +525,11 @@ Union\(x,y\) 把x, y 归一到同一个root.
         }
         return true;
     }
-
 ```
-
-
 
 ### 代码：
 
 ```
-
 class UnionFind
 {
 public:
@@ -552,7 +540,7 @@ public:
         for (int i = 0; i<n; i++)
             parent_[i] = i;
     }
-    
+
     int Find( int v)
     {
         // compression
@@ -560,7 +548,7 @@ public:
             parent_[v] = Find(parent_[v]);
         return parent_[v];
     }
-    
+
     bool Union(int x, int y)
     {
         int rx = Find(x);
@@ -618,8 +606,4 @@ public:
 ### 复杂度分析:
 
 o\(n\)
-
-
-
-
 
