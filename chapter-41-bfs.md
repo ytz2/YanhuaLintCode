@@ -956,5 +956,152 @@ public:
 
 ### 复杂度分析：
 
-O\( 26 \*size of \(start\) \* visited time of \(nodes\)\) 
+O\( 26 \*size of \(start\) \* visited time of \(nodes\)\)
+
+
+
+## 7. Serialize and Deserialize Binary Tree
+
+Design an algorithm and write code to serialize and deserialize a binary tree. Writing the tree to a file is called 'serialization' and reading back from the file to reconstruct the exact same binary tree is 'deserialization'.
+
+##### Notice
+
+There is no limit of how you deserialize or serialize a binary tree, LintCode will take your output of`serialize`as the input of`deserialize`, it won't check the result of serialize.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+An example of testdata: Binary tree`{3,9,20,#,#,15,7}`, denote the following structure:
+
+```
+  3
+ / \
+9  20
+  /  \
+ 15   7
+
+```
+
+Our data serialization use bfs traversal. This is just for when you got wrong answer and want to debug the input.
+
+You can use other method to do serializaiton and deserialization.
+
+http://www.lintcode.com/en/problem/serialize-and-deserialize-binary-tree/\#
+
+### 解题分析:
+
+Serialize: 层级遍历 每一层的node要包括null, 如果是null输出'\#'
+
+Deserialize: 记住上一层，按层级回填回去。
+
+### 代码：
+
+```
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /**
+     * This method will be invoked first, you should design your own algorithm 
+     * to serialize a binary tree which denote by a root node to a string which
+     * can be easily deserialized by your own "deserialize" method later.
+     */
+    string serialize(TreeNode * root) {
+        // write your code here
+        if (!root)
+            return "";
+        stringstream ss;
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty())
+        {
+            int n = q.size();
+            for (int i = 0; i < n; i++)
+            {
+                auto node = q.front();
+                q.pop();
+                if (!node)
+                {
+                    ss << "# ";
+                }
+                else
+                {
+                    ss << node->val<<" ";
+                    q.push(node->left);
+                    q.push(node->right);
+                }
+            }
+        }
+        return ss.str();
+    }
+
+    /**
+     * This method will be invoked second, the argument data is what exactly
+     * you serialized at method "serialize", that means the data is not given by
+     * system, it's given by your own serialize method. So the format of data is
+     * designed by yourself, and deserialize it here as you serialize it in 
+     * "serialize" method.
+     */
+    TreeNode * deserialize(string &data) {
+        // write your code here
+        if (data.empty())
+            return nullptr;
+        stringstream ss(data);
+        string node;
+        ss >> node;
+        TreeNode* head = new TreeNode(stoi(node));
+        queue<TreeNode*> q;
+        q.push(head);
+        while(!q.empty())
+        {
+            int n = q.size();
+            for (int i = 0; i < n; i++)
+            {
+                auto ptr = q.front();
+                q.pop();
+                string left, right;
+                ss>>left >> right;
+                if (left == "#")
+                {
+                    ptr->left = nullptr;
+                }
+                else
+                {
+                    ptr->left = new TreeNode(stoi(left));
+                    q.push(ptr->left);
+                }
+                if (right == "#")
+                {
+                    ptr->right = nullptr;
+                }
+                else
+                {
+                    ptr->right = new TreeNode(stoi(right));
+                    q.push(ptr->right);
+                }
+            }
+        }
+        return head;
+    }
+};
+```
+
+### 复杂度分析：
+
+o\(n\)
 
