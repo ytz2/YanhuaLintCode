@@ -706,11 +706,9 @@ public:
 
 o\(n\)
 
-
-
 ## 71. Binary Tree Zigzag Level Order Traversal
 
-Given a binary tree, return the zigzag level order traversal of its nodes' values. \(ie, from left to right, then right to left for the next level and alternate between\).
+Given a binary tree, return the zigzag level order traversal of its nodes' values. \(ie, from left to right, then right to left for the next level and alternate between\).
 
 Have you met this question in a real interview?
 
@@ -718,7 +716,7 @@ Yes
 
 **Example**
 
-Given binary tree `{3,9,20,#,#,15,7}`,
+Given binary tree `{3,9,20,#,#,15,7}`,
 
 ```
     3
@@ -726,10 +724,7 @@ Given binary tree `{3,9,20,#,#,15,7}`,
   9  20
     /  \
    15   7
-
 ```
-
-
 
 return its zigzag level order traversal as:
 
@@ -741,7 +736,7 @@ return its zigzag level order traversal as:
 ]
 ```
 
-http://www.lintcode.com/en/problem/binary-tree-zigzag-level-order-traversal/\#
+[http://www.lintcode.com/en/problem/binary-tree-zigzag-level-order-traversal/\#](http://www.lintcode.com/en/problem/binary-tree-zigzag-level-order-traversal/#)
 
 ### 解题分析:
 
@@ -800,6 +795,57 @@ public:
         return res;
     }
 };
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 70. Binary Tree Level Order Traversal II
+
+Given a binary tree, return the bottom-up level order traversal of its nodes' values. \(ie, from left to right, level by level from leaf to root\).
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given binary tree `{3,9,20,#,#,15,7}`,
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+```
+
+
+
+return its bottom-up level order traversal as:
+
+```
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+```
+
+http://www.lintcode.com/en/problem/binary-tree-level-order-traversal-ii/\#
+
+### 解题分析:
+
+无脑套模板了。
+
+### 代码：
+
+```
+http://www.lintcode.com/en/problem/binary-tree-level-order-traversal-ii/#
 ```
 
 ### 复杂度分析:
