@@ -31,7 +31,7 @@ return`6`. \(Placing a post office at \(1,1\), the distance that post office to 
 
 ### 代码：
 
-```
+```cpp
 class Solution {
 public:
     /**
@@ -79,8 +79,6 @@ public:
 
 o\(\(m+n\)\*mn\) better than o\(m^2n^2\)
 
-
-
 ## \*\*\*\*573. Build Post Office II
 
 Given a 2D grid, each cell is either a wall`2`, an house`1`or empty`0`\(the number zero, one, two\), find a place to build a post office so that the sum of the distance from the post office to all the houses is smallest.
@@ -104,12 +102,11 @@ Given a grid:
 0 1 0 0 0
 1 0 0 2 1
 0 1 0 0 0
-
 ```
 
 return`8`, You can build at`(1,1)`. \(Placing a post office at \(1,1\), the distance that post office to all the house sum is smallest.\)
 
-http://www.lintcode.com/en/problem/build-post-office-ii/\#
+[http://www.lintcode.com/en/problem/build-post-office-ii/\#](http://www.lintcode.com/en/problem/build-post-office-ii/#)
 
 ### 解题分析:
 
@@ -147,36 +144,87 @@ public:
         int n = grid[0].size();
         if (n == 0)
             return -1;
-        vector<int> xaxis(m, 0);
-        for (int i = 0; i<m; i++)
-            for (int j = 0; j < n; j++)
-                xaxis[i] += grid[i][j];
-        vector<int> yaxis(n, 0);
-        for (int j = 0; j < n; j++)
-            for (int i = 0; i < m; i++)
-                yaxis[j]+= grid[i][j];
-        int res = INT_MAX;
-
+        int count = 0;
+        vector<Point> candidates;
         for (int i = 0; i < m; i++)
         {
             for (int j = 0; j < n; j++)
             {
-                if (grid[i][j] != 0)
-                    continue;
-                int val = 0;
-                for (int k = 0; k < m; k++)
-                    val += abs(i-k)*xaxis[k];
-                for (int k = 0; k < n; k++)
-                    val += abs(j-k)*yaxis[k];
-                res = min(val, res);
+                if (grid[i][j] == 0)
+                    candidates.emplace_back(i,j);
+                else if (grid[i][j] == 1)
+                    count++;
+            }
+        }
+        if (candidates.empty() || count == 0)
+            return -1;
+   
+        int res = INT_MAX;
+        for (const auto& each : candidates)
+        {
+            int distance = 0;
+            if (BFS(grid, each, count, distance))
+            {
+                res = min(res, distance);
             }
         }
         return res == INT_MAX? -1 : res;
+    }
+    
+    bool BFS(vector<vector<int>> grid, Point start, int count, int& distance)
+    {
+        int m = grid.size();
+        int n = grid[0].size();
+        cout <<m<<","<<n<<endl;
+        vector<int> dx{ 0 , 0, 1 , -1};
+        vector<int> dy{-1 , 1, 0 ,  0};
+        queue<Point> q;
+        q.push(start);
+        grid[start.x][start.y] = 2;
+        int step = -1;
+        while(!q.empty())
+        {
+            step++;
+            int size = q.size();
+            for (int i=0; i<size; i++)
+            {
+                auto point = q.front();
+                q.pop();
+                for (int j = 0; j < 4; j++)
+                {
+                    int next_x = point.x + dx[j];
+                    int next_y = point.y + dy[j];
+                    if (next_x < 0 || next_x >= m || next_y < 0 || next_y >=n)
+                        continue;
+                    
+                    int v = grid[next_x][next_y];
+                    if (v == 2)
+                        continue;
+                    else if (v == 0)
+                    {
+                        grid[next_x][next_y] = 2;
+                        q.push(Point(next_x, next_y));
+                    }
+                    else
+                    {
+                        count--;
+                        grid[next_x][next_y] = 2;
+                        distance += step + 1;
+                    }
+                }
+            }
+        }
+        if (count > 0)
+        {
+            distance = INT_MAX;
+            return false;
+        }
+        return true;
     }
 };
 ```
 
 ### 复杂度分析:
 
-
+O（kn\)
 
