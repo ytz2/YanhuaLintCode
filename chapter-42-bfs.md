@@ -865,10 +865,10 @@ public:
         vector<vector<int>> results;
         if (!root)
             return results;
-        
+
         queue<TreeNode*> q;
         q.push(root);
-        
+
         while(!q.empty())
         {
             vector<int> result;
@@ -886,6 +886,114 @@ public:
             results.insert(results.begin(), result);
         }
         return results;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 794. Sliding Puzzle II
+
+On a 3x3 board, there are 8 tiles represented by the integers 1 through 8, and an empty square represented by 0.
+
+A move consists of choosing 0 and a 4-directionally adjacent number and swapping it.
+
+Given an initial state of the puzzle board and final state, return the least number of moves required so that the initial state to final state.
+
+If it is impossible to move from initial state to final state, return -1.
+
+https://www.lintcode.com/en/problem/sliding-puzzle-ii/
+
+### 解题分析:
+
+由点及面的最短路径问题，BFS
+
+但是要解决几个技术问题：
+
+1. 如何记录state, unordered\_set 需要自己写hash function来hash二维矩阵。 刚开始自己写了一个customized，但是蛋疼无比，索性放弃，把二维矩阵转为一维string,当然也可以转Long , 但是做状态转换的时候蛋疼，string最好
+2. 要记录一个zero的位置，否则每次都要重新找一遍， 因为是一维矩阵，所以设计到1D, 2D中间的转换，这个驾轻就熟。我是放在一个associated q里面，当然也可以放pair&lt;string, size\_t&gt; ,个人喜好
+3. 中间还有一个swap两次的小trick，这个倒是很容易想到 
+
+一旦把问题转为一维string的编辑搜索之后，其他的都是和BFS的套路一样了。
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param init_state: the initial state of chessboard
+     * @param final_state: the final state of chessboard
+     * @return: return an integer, denote the number of minimum moving
+     */
+    int minMoveStep(vector<vector<int>> &init_state, vector<vector<int>> &final_state) {
+        // # write your code here
+        // flatten to string 
+        string init = flatten(init_state);
+        string final = flatten(final_state);
+        size_t zero = init.find("0");
+        queue<string> q;
+        queue<size_t> zeroQ;
+        unordered_set<string> visited;
+        q.push(init);
+        visited.insert(init);
+        zeroQ.push(zero);
+        int step = -1;
+        vector<int> dx{0,0, 1, -1};
+        vector<int> dy{-1,1, 0, 0};
+        while(!q.empty())
+        {
+            int n = q.size();
+            step++;
+            for (int i = 0; i < n; i++)
+            {
+                auto s = q.front();
+                q.pop();
+                if (s == final)
+                    return step;
+                auto zero = zeroQ.front();
+                zeroQ.pop();
+                int x = zero/3;
+                int y = zero%3;
+                for (int j = 0; j < 4; j++)
+                {
+                    int next_x = x + dx[j];
+                    int next_y = y + dy[j];
+                    if (next_x >= 0 && next_x <3 && next_y >=0 && next_y <3)
+                    {
+                        size_t next_zero = next_x*3+next_y;
+                        swap(s[zero], s[next_zero]);
+                        if (visited.find(s) == visited.end())
+                        {
+                            visited.insert(s);
+                            q.push(s);
+                            zeroQ.push(next_zero);
+                        }
+                        swap(s[zero], s[next_zero]);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    
+    string flatten(const vector<vector<int>>& input)
+    {
+        string res;
+        for (int i = 0; i<input.size(); i++)
+        {
+            for (int j = 0; j< input[0].size(); j++)
+            {
+                res.push_back('0'+input[i][j]);
+            }
+        }
+        return res;
     }
 };
 ```
