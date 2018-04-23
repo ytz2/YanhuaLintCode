@@ -228,8 +228,6 @@ public:
 
 O（kn\)
 
-
-
 ## 600. Smallest Rectangle Enclosing Black Pixels
 
 An image is represented by a binary matrix with`0`as a white pixel and`1`as a black pixel. The black pixels are connected, i.e., there is only one black region. Pixels are connected horizontally and vertically. Given the location`(x, y)`of one of the black pixels, return the area of the smallest \(axis-aligned\) rectangle that encloses all black pixels.
@@ -248,13 +246,12 @@ For example, given the following image:
   "0110",
   "0100"
 ]
-
 ```
 
 and x =`0`, y =`2`,  
 Return`6`.
 
-https://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/\#
+[https://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/\#](https://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/#)
 
 ### 解题分析:
 
@@ -282,7 +279,7 @@ public:
             return 0;
         if (x < 0 || x >=m || y < 0 || y>= n || image[x][y] == '0')
             return 0;
-        
+
         queue<Point> q;
         q.push(Point(x,y));
         image[x][y] = '0';
@@ -307,6 +304,154 @@ public:
             }
         }
         return (top-down+1)*(right-left+1);
+    }
+};
+```
+
+### 复杂度分析:
+
+O（kn\)
+
+
+
+## \*\*\*\*434. Number of Islands II
+
+Given a n,m which means the row and column of the 2D matrix and an array of pair A\( size k\). Originally, the 2D matrix is all 0 which means there is only sea in the matrix. The list pair has k operator and each operator has two integer A\[i\].x, A\[i\].y means that you can change the grid matrix\[A\[i\].x\]\[A\[i\].y\] from sea to island. Return how many island are there in the matrix after each operator.
+
+##### Notice
+
+0 is represented as the sea, 1 is represented as the island. If two 1 is adjacent, we consider them in the same island. We only consider up/down/left/right adjacent.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`n`=`3`,`m`=`3`, array of pair A =`[(0,0),(0,1),(2,2),(2,1)]`.
+
+return`[1,1,2,2]`.
+
+https://www.lintcode.com/en/problem/number-of-islands-ii/\#
+
+### 解题分析:
+
+联通不连通， UNION FIND大法好。。。
+
+有下面逻辑问题需要解决:
+
+1. UnionFind大法对于一维比较方便，所以需要把island 变化到一维去。
+
+   2. 如何更新岛： 
+
+      a. 如果有一个新的进来， cache i, j 为岛，且增加技术
+
+      b. 遍历四周，如果周围有岛， 每次如果他们没有共同的root via find ,那么因为这次插入，他们联通了 via union， 且count要减一
+
+  3. corner case : 会有重复的op出现，所以加一个cache, 过滤掉一些操作，同时要保持count update.  
+
+### 代码：
+
+```cpp
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+ 
+class UnionFind{
+public:
+    UnionFind(int n)
+    {
+        parent_ = vector<int>(n, 0);
+        rank_ = vector<int>(n, 0);
+        for (int i = 0; i < n; i++)
+            parent_[i] = i;
+    }
+    
+    int Find(int x)
+    {
+        if (parent_[x] != x)
+            parent_[x] = Find(parent_[x]);
+        return parent_[x];
+    }
+    
+    bool Union(int x, int y)
+    {
+        int rx = Find(x);
+        int ry = Find(y);
+        if (rx == ry)
+            return false;
+        int rankx = rank_[rx];
+        int ranky = rank_[ry];
+        if (rankx < ranky)
+        {
+            parent_[rx] = ry;
+        }
+        else if (rankx > ranky)
+        {
+            parent_[ry] = rx;
+        }
+        else
+        {
+            parent_[rx] = ry;
+            rank_[ry]++;
+        }
+        return true;
+    }
+private:
+    vector<int> parent_;
+    vector<int> rank_;
+};
+
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @param m: An integer
+     * @param operators: an array of point
+     * @return: an integer array
+     */
+    vector<int> numIslands2(int n, int m, vector<Point> &operators) {
+        // write your code here
+        UnionFind uf(n*m);
+        vector<int> res;
+        vector<vector<bool>> islands(n, vector<bool>(m, false));
+        unordered_set<int> done;
+        int count = 0;
+        vector<int> dx{0, 0 , 1, -1};
+        vector<int> dy{-1,1,  0, 0};
+        for (const auto& op : operators)
+        {
+            int ind = op.x*m+op.y;
+            if (done.find(ind) != done.end())
+            {
+                res.push_back(count);
+                continue;
+            }
+            islands[op.x][op.y] = true;
+            done.insert(ind);
+            count++;
+            for(int i = 0; i<4; i++)
+            {
+                int next_x = op.x+dx[i];
+                int next_y = op.y+dy[i];
+                if (next_x < 0 || next_x >= n || next_y < 0 || next_y >=m || !islands[next_x][next_y])
+                    continue;
+                int next_ind = next_x*m+next_y;
+                if (uf.Find(next_ind) != uf.Find(ind))
+                {
+                    count--;
+                    uf.Union(next_ind, ind);
+                }
+            }
+            res.push_back(count);
+        }
+        return res;
     }
 };
 ```
