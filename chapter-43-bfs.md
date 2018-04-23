@@ -158,7 +158,7 @@ public:
         }
         if (candidates.empty() || count == 0)
             return -1;
-   
+
         int res = INT_MAX;
         for (const auto& each : candidates)
         {
@@ -170,7 +170,7 @@ public:
         }
         return res == INT_MAX? -1 : res;
     }
-    
+
     bool BFS(vector<vector<int>> grid, Point start, int count, int& distance)
     {
         int m = grid.size();
@@ -196,7 +196,7 @@ public:
                     int next_y = point.y + dy[j];
                     if (next_x < 0 || next_x >= m || next_y < 0 || next_y >=n)
                         continue;
-                    
+
                     int v = grid[next_x][next_y];
                     if (v == 2)
                         continue;
@@ -220,6 +220,93 @@ public:
             return false;
         }
         return true;
+    }
+};
+```
+
+### 复杂度分析:
+
+O（kn\)
+
+
+
+## 600. Smallest Rectangle Enclosing Black Pixels
+
+An image is represented by a binary matrix with`0`as a white pixel and`1`as a black pixel. The black pixels are connected, i.e., there is only one black region. Pixels are connected horizontally and vertically. Given the location`(x, y)`of one of the black pixels, return the area of the smallest \(axis-aligned\) rectangle that encloses all black pixels.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For example, given the following image:
+
+```
+[
+  "0010",
+  "0110",
+  "0100"
+]
+
+```
+
+and x =`0`, y =`2`,  
+Return`6`.
+
+https://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/\#
+
+### 解题分析:
+
+一边BFS， 一边找最左边最右边最上边最下边
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param image: a binary matrix with '0' and '1'
+     * @param x: the location of one of the black pixels
+     * @param y: the location of one of the black pixels
+     * @return: an integer
+     */
+    int minArea(vector<vector<char>> &image, int x, int y) {
+        // write your code here
+        int top = INT_MIN, down = INT_MAX, left = INT_MAX, right = INT_MIN;
+        int m = image.size();
+        if (m == 0)
+            return 0;
+        int n = image[0].size();
+        if (n == 0)
+            return 0;
+        if (x < 0 || x >=m || y < 0 || y>= n || image[x][y] == '0')
+            return 0;
+        
+        queue<Point> q;
+        q.push(Point(x,y));
+        image[x][y] = '0';
+        vector<int> dx{ 0, 0 , -1, 1};
+        vector<int> dy{-1, 1,  0,  0};
+        while(!q.empty())
+        {
+            auto p = q.front();
+            q.pop();
+            top = max( p.x, top);
+            down = min(p.x, down);
+            left = min(p.y, left);
+            right = max(p.y, right);
+            for (int i = 0; i < 4; i++)
+            {
+                int next_x = p.x + dx[i];
+                int next_y = p.y + dy[i];
+                if (next_x < 0 || next_x >= m || next_y < 0 || next_y>=n || image[next_x][next_y] == '0')
+                    continue;
+                q.push(Point(next_x, next_y));
+                image[next_x][next_y] = '0';
+            }
+        }
+        return (top-down+1)*(right-left+1);
     }
 };
 ```
