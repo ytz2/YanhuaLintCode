@@ -15,4 +15,5 @@
 * [Chapter 4.1 BFS](chapter-41-bfs.md)
 * [Chapter 4.2 BFS](chapter-42-bfs.md)
 * [Chapter 4.3 BFS](chapter-43-bfs.md)
+* [Chapter 4.4 BFS](chapter-44-bfs.md)
 
