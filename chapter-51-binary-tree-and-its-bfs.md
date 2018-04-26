@@ -469,8 +469,6 @@ o\(n\)
 
 ![](/assets/BSTchar.png)
 
-
-
 ## 902. Flatten Binary Tree to Linked List
 
 Given a binary search tree, write a function`kthSmallest`to find the kth smallest element in it.
@@ -491,7 +489,7 @@ Given root =`{1,#,2}`, k =`2`, return`2`.
 
 What if the BST is modified \(insert/delete operations\) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine?
 
-https://www.lintcode.com/en/problem/kth-smallest-element-in-a-bst/
+[https://www.lintcode.com/en/problem/kth-smallest-element-in-a-bst/](https://www.lintcode.com/en/problem/kth-smallest-element-in-a-bst/)
 
 ### 解题分析:
 
@@ -507,17 +505,14 @@ https://www.lintcode.com/en/problem/kth-smallest-element-in-a-bst/
 
 如果小于k-1, 则在右边找第k-left-1个数
 
-
-
 看了一眼别人的答案，觉得自己真傻， inorder加一个计数器，到第k个停下好了。
-
-
 
 challenge 很有意思， 可能我的解法就有用了，增减删太频繁之后需要维护第k个，那么o\(h+k\)可能不太够，如果要尽量优化的话就是把count 维护在node中，或者建立一个hashmap计数， 每次修改都去维护hashtable的计数器。然后用我第一版答案来解，会是O\(k）的速度。
 
-### 代码：
+### 代码:
 
-1. 
+1.
+
 ```cpp
 /**
  * Definition of TreeNode:
@@ -564,9 +559,9 @@ public:
 };
 ```
 
+
+
 ### 2
-
-
 
 ```cpp
 /**
@@ -595,7 +590,7 @@ public:
         helper(root, k);
         return val;
     }
-    
+
     void helper(TreeNode* root, int k)
     {
         if (!root)
@@ -609,8 +604,8 @@ public:
         }
         helper(root->right, k);
     }
-    
-    
+
+
     int ind;
     int val;
 };
