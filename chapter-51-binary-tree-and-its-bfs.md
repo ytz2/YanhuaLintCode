@@ -467,3 +467,7 @@ public:
 
 o\(n\)
 
+
+
+![](/assets/BSTchar.png)
+
