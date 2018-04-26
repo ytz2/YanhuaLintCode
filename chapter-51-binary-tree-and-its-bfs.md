@@ -148,8 +148,6 @@ public:
 
 o\(n\)
 
-
-
 ## 数的形态
 
 ## 480. Binary Tree Paths
@@ -170,7 +168,6 @@ Given the following binary tree:
 2     3
  \
   5
-
 ```
 
 All root-to-leaf paths are:
@@ -188,7 +185,7 @@ All root-to-leaf paths are:
 ]
 ```
 
-https://www.lintcode.com/en/problem/binary-tree-paths/\#
+[https://www.lintcode.com/en/problem/binary-tree-paths/\#](https://www.lintcode.com/en/problem/binary-tree-paths/#)
 
 ### 解题分析:
 
@@ -225,7 +222,7 @@ public:
         helper(root, res, s);
         return res;
     }
-    
+
     void helper(TreeNode* root, vector<string>& vec, string& s)
     {
         static string delim = "->";
@@ -242,7 +239,122 @@ public:
 };
 ```
 
+### 复杂度分析:
 
+o\(n\)
+
+
+
+## 88. Lowest Common Ancestor
+
+Given the root and two nodes in a Binary Tree. Find the lowest common ancestor\(LCA\) of the two nodes.
+
+The lowest common ancestor is the node with largest depth which is the ancestor of both nodes.
+
+##### Notice
+
+Assume two nodes are exist in tree.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For the following binary tree:
+
+```
+  4
+ / \
+3   7
+   / \
+  5   6
+
+```
+
+LCA\(3, 5\) =`4`
+
+LCA\(5, 6\) =`7`
+
+LCA\(6, 7\) =`7`
+
+https://www.lintcode.com/en/problem/lowest-common-ancestor/\#
+
+### 解题分析:
+
+祖先问题， 一般都是先左右后中间，所以模式上是一个后序遍历，但是有个tricky的地方就是递归的退出不再是root== null，而是root == null or root==A or root==B, 这样保证了递归总是从最底部返回一个指向至少一个的位置，如果子树不存在A,B则返回null...
+
+算是非典型的树的题目，但是有共同原理，
+
+if root == null or root ==A or root ==B  
+
+    return root;
+
+visit left
+
+visit right
+
+if left and right ne null
+
+    return root;
+
+if left
+
+   return left
+
+if right
+
+    return right
+
+return null
+
+代码：
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: the root of the binary tree
+     * @return: all root-to-leaf paths
+     */
+    vector<string> binaryTreePaths(TreeNode * root) {
+        // write your code here
+        vector<string> res;
+        if (!root)
+            return res;
+        string s;
+        helper(root, res, s);
+        return res;
+    }
+
+    void helper(TreeNode* root, vector<string>& vec, string& s)
+    {
+        static string delim = "->";
+        auto val= to_string(root->val) +delim; 
+        s += val;
+        if (!root->left && !root->right)
+            vec.push_back(s.substr(0, s.size() - 2));
+        if (root->left)
+            helper(root->left, vec, s);
+        if (root->right)
+            helper(root->right, vec, s);
+        s = s.substr(0, s.size()-val.size());
+    }
+};
+```
 
 ### 复杂度分析:
 
