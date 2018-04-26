@@ -357,8 +357,6 @@ public:
 
 o\(n\)
 
-
-
 ## 小结
 
 树的最大最小求和，divide & conquere 或者遍历打擂台
@@ -369,5 +367,109 @@ o\(n\)
 
 
 
+## 453. Flatten Binary Tree to Linked List
 
+Flatten a binary tree to a fake "linked list" in pre-order traversal.
+
+Here we use the_right_pointer in TreeNode as the_next_pointer in ListNode.
+
+##### Notice
+
+Don't forget to mark the left child of each node to null. Or you will get Time Limit Exceeded or Memory Limit Exceeded.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+```
+              1
+               \
+     1          2
+    / \          \
+   2   5    =
+>
+    3
+  / \   \          \
+ 3   4   6          4
+                     \
+                      5
+                       \
+                        6
+```
+
+https://www.lintcode.com/en/problem/flatten-binary-tree-to-linked-list/\#
+
+### 解题分析:
+
+前序遍历可以求得路径，那么一般情况下就是把左面指空，右面指向左面，左面的最右面指向右面
+
+所以以上分析可知：
+
+1.需要知道最右的叶子节点
+
+2.左右变形后需要执行分析步骤
+
+3. corner: 左面没有，不需要变，只需要返回右面的最右叶子
+
+                 右面没有， 左面换到右面，返回左面的最右叶子
+
+
+
+### 代码：
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: a TreeNode, the root of the binary tree
+     * @return: nothing
+     */
+    void flatten(TreeNode * root) {
+        // write your code here
+        auto tmp =helper(root);
+    }
+    
+    TreeNode* helper(TreeNode* root)
+    {
+        if (!root || !root->left && !root->right)
+            return root;
+        auto left = helper(root->left);
+        auto right = helper(root->right);
+        
+        if (!left)
+            return right;
+        if (!right)
+        {
+            root->right = root->left;
+            root->left = nullptr;
+            return left;
+        }
+        auto tmp = root->right;
+        root->right = root->left;
+        root->left = nullptr;
+        left->left = nullptr;
+        left->right = tmp;
+        return right;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
 
