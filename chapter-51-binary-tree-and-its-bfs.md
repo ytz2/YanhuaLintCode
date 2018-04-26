@@ -365,13 +365,11 @@ o\(n\)
 
 树的祖先后续遍历， 共同祖先有个小技巧，只能记住了。。。
 
-
-
 ## 453. Flatten Binary Tree to Linked List
 
 Flatten a binary tree to a fake "linked list" in pre-order traversal.
 
-Here we use the_right_pointer in TreeNode as the_next_pointer in ListNode.
+Here we use the\_right\_pointer in TreeNode as the\_next\_pointer in ListNode.
 
 ##### Notice
 
@@ -399,7 +397,7 @@ Yes
                         6
 ```
 
-https://www.lintcode.com/en/problem/flatten-binary-tree-to-linked-list/\#
+[https://www.lintcode.com/en/problem/flatten-binary-tree-to-linked-list/\#](https://www.lintcode.com/en/problem/flatten-binary-tree-to-linked-list/#)
 
 ### 解题分析:
 
@@ -411,11 +409,7 @@ https://www.lintcode.com/en/problem/flatten-binary-tree-to-linked-list/\#
 
 2.左右变形后需要执行分析步骤
 
-3. corner: 左面没有，不需要变，只需要返回右面的最右叶子
-
-                 右面没有， 左面换到右面，返回左面的最右叶子
-
-
+1. corner: 左面没有，不需要变，只需要返回右面的最右叶子 2右面没有， 左面换到右面，返回左面的最右叶子
 
 ### 代码：
 
@@ -443,14 +437,14 @@ public:
         // write your code here
         auto tmp =helper(root);
     }
-    
+
     TreeNode* helper(TreeNode* root)
     {
         if (!root || !root->left && !root->right)
             return root;
         auto left = helper(root->left);
         auto right = helper(root->right);
-        
+
         if (!left)
             return right;
         if (!right)
