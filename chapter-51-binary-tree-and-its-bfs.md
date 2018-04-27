@@ -540,7 +540,7 @@ public:
         auto res = helper(root, k, count);
         return res->val;
     }
-    
+
     TreeNode* helper(TreeNode* root, int k, int& count)
     {
         if (!root)
@@ -558,8 +558,6 @@ public:
     }
 };
 ```
-
-
 
 ### 2
 
@@ -614,4 +612,128 @@ public:
 ### 复杂度分析:
 
 o\(k+h\)
+
+
+
+## 86. Binary Search Tree Iterator
+
+Design an iterator over a binary search tree with the following rules:
+
+* Elements are visited in ascending order \(i.e. an in-order traversal\)
+* `next()`
+  and
+  `hasNext()`
+  queries run in O\(
+  _1_
+  \) time in
+  **average**
+  .
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For the following binary search tree, in-order traversal by using iterator is`[1, 6, 10, 11, 12]`
+
+```
+   10
+ /    \
+1      11
+ \       \
+  6       12
+```
+
+https://www.lintcode.com/en/problem/binary-search-tree-iterator/\#
+
+### 解题分析:
+
+用一个stack一直存到最左边
+
+下一个：
+
+top为下一个返回值， 但是每次返回后：
+
+1.如果cur有右面，一直走到右面的最左边
+
+2 如果cur没右面， 一直走到第一个左拐点 ： while\(!stk.empty\(\) && stk.top\(\)-&gt;right == node\) node = stk.top\(\), stk.pop\(\)
+
+### 代码:
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ * Example of iterate a tree:
+ * BSTIterator iterator = BSTIterator(root);
+ * while (iterator.hasNext()) {
+ *    TreeNode * node = iterator.next();
+ *    do something for node
+ */
+
+
+class BSTIterator {
+public:
+    /*
+    * @param root: The root of binary tree.
+    */BSTIterator(TreeNode * root) {
+        // do intialization if necessary
+        while(root)
+        {
+            stk.push(root);
+            root=root->left;
+        }
+    }
+
+    /*
+     * @return: True if there has next node, or false
+     */
+    bool hasNext() {
+        // write your code here
+        return !stk.empty();
+    }
+
+    /*
+     * @return: return next node
+     */
+    TreeNode * next() {
+        // write your code here
+        auto cur = stk.top();
+        stk.pop();
+        if (cur->right)
+        {
+            auto node = cur->right;
+            while(node)
+            {
+                stk.push(node);
+                node = node->left;
+            }
+        }
+        else
+        {
+            auto node = cur;
+            while(!stk.empty() && stk.top()->right == node)
+            {
+                node = stk.top();
+                stk.pop();
+            }
+        }
+        return cur;
+    }
+    
+private:
+    stack<TreeNode*> stk;
+};
+```
+
+amortized o\(1\)
 
