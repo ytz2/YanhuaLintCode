@@ -873,8 +873,6 @@ public:
 };
 ```
 
-
-
 ## 93. Balanced Binary Tree
 
 Given a binary tree, determine if it is height-balanced.
@@ -895,12 +893,11 @@ A)  3            B)    3
   9  20                 20
     /  \                / \
    15   7              15  7
-
 ```
 
 The binary tree A is a height-balanced binary tree, but B is not.
 
-https://www.lintcode.com/en/problem/balanced-binary-tree/\#
+[https://www.lintcode.com/en/problem/balanced-binary-tree/\#](https://www.lintcode.com/en/problem/balanced-binary-tree/#)
 
 ### 解题分析:
 
@@ -941,7 +938,7 @@ public:
         // write your code here
         return helper(root).isBalanced;
     }
-    
+
     ReturnType helper(TreeNode* root)
     {
         if (!root)
@@ -956,8 +953,6 @@ public:
 ```
 
 o\(n\) worst
-
-
 
 ## 901. Closest Binary Search Tree Value II
 
@@ -987,11 +982,13 @@ Given root =`{1}`, target =`0.000000`, k =`1`, return`[1]`.
 
 Assume that the BST is balanced, could you solve it in less than O\(n\) runtime \(where n = total nodes\)?
 
-https://www.lintcode.com/en/problem/closest-binary-search-tree-value-ii/
+[https://www.lintcode.com/en/problem/closest-binary-search-tree-value-ii/](https://www.lintcode.com/en/problem/closest-binary-search-tree-value-ii/)
 
 ### 解题分析:
 
 因为已经排好序了，转成vec然后二分搜索找到后向两边衍射。。。可惜肯定不是这么解的，先写一个解，然后优化空间复杂度
+
+当然也可以在中序遍历中维护一个排好序的list,如果新的candidate好于当前任意一个数值则插入，且删除最大diff
 
 ### 代码:
 
@@ -1035,7 +1032,7 @@ public:
             else
                 end = mid;
         }
-        
+
         while(res.size() <k )
         {
             while(beg >= 0 && end < vec.size() && res.size() <k)
@@ -1052,7 +1049,7 @@ public:
         }
         return res;
     }
-    
+
     void ToVec(TreeNode* root, vector<int>& vec)
     {
         if (!root)
@@ -1065,4 +1062,91 @@ public:
 ```
 
 O\(n\)空间+O\(n\)时间复杂度
+
+
+
+第二版
+
+牺牲了时间复杂度，把空间复杂度降到o\(k\) 时间复杂度变成O\(KN\) ， 还是不是很划算
+
+这个解法里面我终于搞懂了怎么往PQ里传带第三个参数的comparator。 算是个好的practice... 当然，一般在很大序列中维护一个最小pq， 也是解决这这种问题的最好的思路， 如果这个不是BFS 而是一般的tree, NLOG\(N\) vs O\(KN\) 也还好， 而且空间上占优。 但是比起网上log\(n\) 空间的不好，可惜我没看懂
+
+
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
+struct cmp{
+    
+    cmp(double t = 0)
+        :target(t)
+        {}
+    double target;
+    bool operator()(TreeNode* left, TreeNode* right)
+    {
+        return abs(left->val - target) < abs(right->val-target);
+    }
+};
+
+class Solution {
+public:
+    /**
+     * @param root: the given BST
+     * @param target: the given target
+     * @param k: the given k
+     * @return: k values in the BST that are closest to the target
+     */
+
+    typedef priority_queue<TreeNode*, vector<TreeNode*>, cmp> PQ;
+    PQ pq;
+    vector<int> closestKValues(TreeNode * root, double target, int k) {
+        // write your code here
+        pq = PQ(cmp(target));
+        helper(root, target, k);
+        vector<int> res;
+        while(!pq.empty())
+        {
+            auto node = pq.top();
+            pq.pop();
+            res.push_back(node->val);
+        }
+        return res;
+    }
+    
+    void helper(TreeNode* root, double target, int k)
+    {
+        if (!root)
+            return;
+        helper(root->left, target, k);
+        
+        if (pq.size() < k)
+        {
+            pq.push(root);
+        }
+        else
+        {
+            if (fabs(pq.top()->val - target) > fabs(root->val - target))
+            {
+                pq.pop();
+                pq.push(root);
+            }
+        }
+        helper(root->right, target, k);
+    }
+};
+```
+
+
 
