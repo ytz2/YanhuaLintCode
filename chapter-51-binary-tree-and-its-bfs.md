@@ -875,3 +875,194 @@ public:
 
 
 
+## 93. Balanced Binary Tree
+
+Given a binary tree, determine if it is height-balanced.
+
+For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given binary tree A =`{3,9,20,#,#,15,7}`, B =`{3,#,20,15,7}`
+
+```
+A)  3            B)    3 
+   / \                  \
+  9  20                 20
+    /  \                / \
+   15   7              15  7
+
+```
+
+The binary tree A is a height-balanced binary tree, but B is not.
+
+https://www.lintcode.com/en/problem/balanced-binary-tree/\#
+
+### 解题分析:
+
+左右两边的，D&Q。。。
+
+### 代码:
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
+struct ReturnType{
+    bool isBalanced;
+    int depth;
+    ReturnType(bool isB, int d)
+        : isBalanced(isB), depth(d)
+        {}
+};
+
+class Solution {
+public:
+    /**
+     * @param root: The root of binary tree.
+     * @return: True if this Binary tree is Balanced, or false.
+     */
+    bool isBalanced(TreeNode * root) {
+        // write your code here
+        return helper(root).isBalanced;
+    }
+    
+    ReturnType helper(TreeNode* root)
+    {
+        if (!root)
+            return ReturnType(true, 0);
+        auto left = helper(root->left);
+        auto right = helper(root->right);
+        if (!left.isBalanced || !right.isBalanced)
+            return ReturnType(false, 0);
+        return ReturnType(abs(left.depth-right.depth)<=1, 1+max(left.depth, right.depth));
+    }
+};
+```
+
+o\(n\) worst
+
+
+
+## 901. Closest Binary Search Tree Value II
+
+Given a non-empty binary search tree and a target value, find`k`values in the BST that are closest to the target.
+
+##### Notice
+
+* Given target value is a floating point.
+* You may assume
+  `k`
+  is always valid, that is:
+  `k ≤ total`
+  nodes.
+* You are guaranteed to have only one
+  `unique`
+  set of k values in the BST that are closest to the target.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given root =`{1}`, target =`0.000000`, k =`1`, return`[1]`.
+
+[**Challenge**](https://www.lintcode.com/en/problem/closest-binary-search-tree-value-ii/#challenge)
+
+Assume that the BST is balanced, could you solve it in less than O\(n\) runtime \(where n = total nodes\)?
+
+https://www.lintcode.com/en/problem/closest-binary-search-tree-value-ii/
+
+### 解题分析:
+
+因为已经排好序了，转成vec然后二分搜索找到后向两边衍射。。。可惜肯定不是这么解的，先写一个解，然后优化空间复杂度
+
+### 代码:
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: the given BST
+     * @param target: the given target
+     * @param k: the given k
+     * @return: k values in the BST that are closest to the target
+     */
+    vector<int> closestKValues(TreeNode * root, double target, int k) {
+        // write your code here
+        vector<int> res; 
+        if (!root || k<=0)
+            return res;
+        vector<int> vec;
+        ToVec(root, vec);
+        if (vec.size() <=1)
+            return vec;
+        int beg = 0, end =vec.size()-1;
+        while(beg + 1 < end)
+        {
+            int mid = beg + (end-beg)/2;
+            if (vec[mid]< target)
+                beg = mid;
+            else
+                end = mid;
+        }
+        
+        while(res.size() <k )
+        {
+            while(beg >= 0 && end < vec.size() && res.size() <k)
+            {
+                if (abs(vec[beg] - target) < abs(vec[end]-target))
+                    res.push_back(vec[beg--]);
+                else
+                    res.push_back(vec[end++]);
+            }
+            while(beg >=0 && res.size() < k)
+                res.push_back(vec[beg--]);
+            while(end < vec.size() && res.size() <k)
+                res.push_back(vec[end++]);
+        }
+        return res;
+    }
+    
+    void ToVec(TreeNode* root, vector<int>& vec)
+    {
+        if (!root)
+            return;
+        ToVec(root->left, vec);
+        vec.push_back(root->val);
+        ToVec(root->right, vec );
+    }
+};
+```
+
+O\(n\)空间+O\(n\)时间复杂度
+
