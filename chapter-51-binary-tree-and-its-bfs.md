@@ -613,8 +613,6 @@ public:
 
 o\(k+h\)
 
-
-
 ## 86. Binary Search Tree Iterator
 
 Design an iterator over a binary search tree with the following rules:
@@ -645,7 +643,7 @@ For the following binary search tree, in-order traversal by using iterator is`[1
   6       12
 ```
 
-https://www.lintcode.com/en/problem/binary-search-tree-iterator/\#
+[https://www.lintcode.com/en/problem/binary-search-tree-iterator/\#](https://www.lintcode.com/en/problem/binary-search-tree-iterator/#)
 
 ### 解题分析:
 
@@ -729,11 +727,155 @@ public:
         }
         return cur;
     }
-    
+
 private:
     stack<TreeNode*> stk;
 };
 ```
 
 amortized o\(1\)
+
+
+
+## \*\*\*\*\*900. Closest Binary Search Tree Value
+
+Given a non-empty binary search tree and a target value, find the value in the BST that is closest to the target.
+
+##### Notice
+
+* Given target value is a floating point.
+* You are guaranteed to have only one unique value in the BST that is closest to the target.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given root =`{1}`, target =`4.428571`, return`1`.
+
+https://www.lintcode.com/en/problem/closest-binary-search-tree-value/
+
+### 解题分析:
+
+第一版，用了遍历打擂台， o\(n\)的办法， 肯定不是最优,第二版用的上下边界求，写了好久不AC， 妈的。 只能熟记了。。。STL里mutltiset用的就是这个玩意
+
+### 代码:
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: the given BST
+     * @param target: the given target
+     * @return: the value in the BST that is closest to the target
+     */
+    int closestValue(TreeNode * root, double target) {
+        // write your code here
+        val = 0;
+        minDiff =  std::numeric_limits<double>::max();
+        helper(root, target);
+        return val;
+    }
+    
+    void helper(TreeNode* root, double target)
+    {
+        if (!root)
+            return;
+        double diff = fabs((double)root->val-target);
+        if (diff < minDiff)
+        {
+            minDiff = diff;
+            val = root->val;
+        }
+        helper(root->left, target);
+        helper(root->right, target);
+    }
+    
+    int val;
+    double minDiff;
+};
+```
+
+o\(n\)
+
+
+
+第二版，上边界，下边界，两边比一下，这样就是o\(log\(n\)\)
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: the given BST
+     * @param target: the given target
+     * @return: the value in the BST that is closest to the target
+     */
+    int closestValue(TreeNode * root, double target) {
+        // write your code here
+        if (!root)
+            return INT_MAX;
+        auto lower = lower_bound(root, target);
+        auto upper = upper_bound(root, target);
+        if (!lower)
+            return upper->val;
+        if (!upper)
+            return lower->val;
+        return target-lower->val < upper->val-target? lower->val : upper->val;
+    }
+    
+    TreeNode* lower_bound(TreeNode* root, double target)
+    {
+        if (!root)
+            return root;
+        if (root->val > target)
+            return lower_bound(root->left, target);
+        // root->val <= target
+        auto node = lower_bound(root->right, target);
+        if (node)
+            return node;
+        return root;
+    }
+    
+    TreeNode* upper_bound(TreeNode* root, double target)
+    {
+        if (!root)
+            return nullptr;
+        if (root->val <= target)
+            return upper_bound(root->right, target);
+        auto node = upper_bound(root->left, target);
+        if (node)
+            return node;
+        return root;
+    }
+};
+```
+
+
 
