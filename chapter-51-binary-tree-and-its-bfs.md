@@ -954,7 +954,7 @@ public:
 
 o\(n\) worst
 
-## 901. Closest Binary Search Tree Value II
+## \*\*\*\*901. Closest Binary Search Tree Value II
 
 Given a non-empty binary search tree and a target value, find`k`values in the BST that are closest to the target.
 
@@ -1063,15 +1063,11 @@ public:
 
 O\(n\)空间+O\(n\)时间复杂度
 
-
-
 第二版
 
 牺牲了时间复杂度，把空间复杂度降到o\(k\) 时间复杂度变成O\(KN\) ， 还是不是很划算
 
 这个解法里面我终于搞懂了怎么往PQ里传带第三个参数的comparator。 算是个好的practice... 当然，一般在很大序列中维护一个最小pq， 也是解决这这种问题的最好的思路， 如果这个不是BFS 而是一般的tree, NLOG\(N\) vs O\(KN\) 也还好， 而且空间上占优。 但是比起网上log\(n\) 空间的不好，可惜我没看懂
-
-
 
 ```cpp
 /**
@@ -1089,7 +1085,7 @@ O\(n\)空间+O\(n\)时间复杂度
 
 
 struct cmp{
-    
+
     cmp(double t = 0)
         :target(t)
         {}
@@ -1124,13 +1120,13 @@ public:
         }
         return res;
     }
-    
+
     void helper(TreeNode* root, double target, int k)
     {
         if (!root)
             return;
         helper(root->left, target, k);
-        
+
         if (pq.size() < k)
         {
             pq.push(root);
