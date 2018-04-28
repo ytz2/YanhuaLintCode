@@ -735,8 +735,6 @@ private:
 
 amortized o\(1\)
 
-
-
 ## \*\*\*\*\*900. Closest Binary Search Tree Value
 
 Given a non-empty binary search tree and a target value, find the value in the BST that is closest to the target.
@@ -754,7 +752,7 @@ Yes
 
 Given root =`{1}`, target =`4.428571`, return`1`.
 
-https://www.lintcode.com/en/problem/closest-binary-search-tree-value/
+[https://www.lintcode.com/en/problem/closest-binary-search-tree-value/](https://www.lintcode.com/en/problem/closest-binary-search-tree-value/)
 
 ### 解题分析:
 
@@ -790,7 +788,7 @@ public:
         helper(root, target);
         return val;
     }
-    
+
     void helper(TreeNode* root, double target)
     {
         if (!root)
@@ -804,15 +802,13 @@ public:
         helper(root->left, target);
         helper(root->right, target);
     }
-    
+
     int val;
     double minDiff;
 };
 ```
 
 o\(n\)
-
-
 
 第二版，上边界，下边界，两边比一下，这样就是o\(log\(n\)\)
 
@@ -849,7 +845,7 @@ public:
             return lower->val;
         return target-lower->val < upper->val-target? lower->val : upper->val;
     }
-    
+
     TreeNode* lower_bound(TreeNode* root, double target)
     {
         if (!root)
@@ -862,7 +858,7 @@ public:
             return node;
         return root;
     }
-    
+
     TreeNode* upper_bound(TreeNode* root, double target)
     {
         if (!root)
