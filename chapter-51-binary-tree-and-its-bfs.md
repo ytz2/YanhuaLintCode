@@ -357,6 +357,112 @@ public:
 
 o\(n\)
 
+
+
+
+
+## 578. Lowest Common Ancestor III
+
+Given the root and two nodes in a Binary Tree. Find the lowest common ancestor\(LCA\) of the two nodes.  
+The lowest common ancestor is the node with largest depth which is the ancestor of both nodes.  
+Return`null`if LCA does not exist.
+
+##### Notice
+
+node A or node B may not exist in tree.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For the following binary tree:
+
+```
+  4
+ / \
+3   7
+   / \
+  5   6
+
+```
+
+LCA\(3, 5\) =`4`
+
+LCA\(5, 6\) =`7`
+
+LCA\(6, 7\) =`7`
+
+### 解题分析:
+
+和上题不一样， A,B不一定存在，所以不能着急退出， 而是在遍历完左右孩子后，判断A,B是否为root,只有两个都有且则由上个题目衍生出来的结论才成立
+
+
+
+### 代码：
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param root: The root of the binary tree.
+     * @param A: A TreeNode
+     * @param B: A TreeNode
+     * @return: Return the LCA of the two nodes.
+     */
+    TreeNode * lowestCommonAncestor3(TreeNode * root, TreeNode * A, TreeNode * B) {
+        // write your code here
+        hasA= false; hasB=false;
+        auto v = helper(root, A,B);
+        return hasA && hasB? v:nullptr;
+    }
+    
+    TreeNode* helper(TreeNode* root, TreeNode* A, TreeNode* B)
+    {
+        if (!root )
+            return root;
+        auto left =helper(root->left, A, B);
+        auto right = helper(root->right, A, B);
+        if (root == A)
+            hasA = true;
+        if (root == B)
+            hasB = true;
+        if (root == A || root == B)
+            return root;
+        if (left && right)
+            return root;
+        if (left)
+            return left;
+        if (right)
+            return right;
+        return nullptr;
+    }
+    
+    bool hasA;
+    bool hasB;
+    
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
 ## 小结
 
 树的最大最小求和，divide & conquere 或者遍历打擂台
