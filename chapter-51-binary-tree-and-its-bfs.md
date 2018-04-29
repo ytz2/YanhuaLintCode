@@ -357,10 +357,6 @@ public:
 
 o\(n\)
 
-
-
-
-
 ## 578. Lowest Common Ancestor III
 
 Given the root and two nodes in a Binary Tree. Find the lowest common ancestor\(LCA\) of the two nodes.  
@@ -385,7 +381,6 @@ For the following binary tree:
 3   7
    / \
   5   6
-
 ```
 
 LCA\(3, 5\) =`4`
@@ -397,8 +392,6 @@ LCA\(6, 7\) =`7`
 ### 解题分析:
 
 和上题不一样， A,B不一定存在，所以不能着急退出， 而是在遍历完左右孩子后，判断A,B是否为root,只有两个都有且则由上个题目衍生出来的结论才成立
-
-
 
 ### 代码：
 
@@ -431,7 +424,7 @@ public:
         auto v = helper(root, A,B);
         return hasA && hasB? v:nullptr;
     }
-    
+
     TreeNode* helper(TreeNode* root, TreeNode* A, TreeNode* B)
     {
         if (!root )
@@ -452,10 +445,10 @@ public:
             return right;
         return nullptr;
     }
-    
+
     bool hasA;
     bool hasB;
-    
+
 };
 ```
 
@@ -1054,6 +1047,121 @@ public:
         if (!left.isBalanced || !right.isBalanced)
             return ReturnType(false, 0);
         return ReturnType(abs(left.depth-right.depth)<=1, 1+max(left.depth, right.depth));
+    }
+};
+```
+
+o\(n\) worst
+
+
+
+## 95. Validate Binary Search Tree
+
+Given a binary tree, determine if it is a valid binary search tree \(BST\).
+
+Assume a BST is defined as follows:
+
+* The left subtree of a node contains only nodes with keys
+  **less than**
+  the node's key.
+* The right subtree of a node contains only nodes with keys
+  **greater than**
+  the node's key.
+* Both the left and right subtrees must also be binary search trees.
+* A single node tree is a BST
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+An example:
+
+```
+  2
+ / \
+1   4
+   / \
+  3   5
+
+```
+
+The above binary tree is serialized as`{2,1,4,#,#,3,5}`\(in level order\).
+
+https://www.lintcode.com/en/problem/validate-binary-search-tree/
+
+### 解题分析:
+
+写的漂亮挺难
+
+### 代码:
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+struct ReturnType
+{
+    ReturnType(bool isbst, int minval, int maxval)
+        :isBST(isbst), minVal(minval), maxVal(maxval){}
+    bool isBST;
+    int minVal;
+    int maxVal;
+};
+
+class Solution {
+public:
+    /**
+     * @param root: The root of binary tree.
+     * @return: True if the binary tree is BST, or false
+     */
+    bool isValidBST(TreeNode * root) {
+        // write your code here
+        return helper(root).isBST;
+    }
+    
+    ReturnType helper(TreeNode* root){
+        
+        // local
+        if (!root)
+            return ReturnType(true, INT_MAX, INT_MIN);
+        
+        ReturnType res(true, root->val, root->val);
+        if (root->left)
+        {
+            auto left = helper(root->left);
+            if (!left.isBST || left.maxVal >= root->val)
+            {
+                res.isBST = false;
+                return res;
+            }
+            res.minVal = min(res.minVal, left.minVal);
+        }
+        
+        if (root->right)
+        {
+            auto right = helper(root->right);
+            if (!right.isBST || right.minVal <= root->val)
+            {
+                res.isBST = false;
+                return res;
+            }
+            res.maxVal = max(res.maxVal, right.maxVal);
+        }
+        
+        return res;
+        
     }
 };
 ```
