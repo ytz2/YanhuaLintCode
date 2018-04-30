@@ -19,4 +19,5 @@
 * [Chapter 5 Binary Tree and Its DFS](chapter-5-binary-tree-and-its-dfs.md)
 * [Chapter 5.1 Binary Tree and Its DFS](chapter-51-binary-tree-and-its-bfs.md)
 * [Chapter 5.2 Binary Tree and Its DFS](chapter-52-binary-tree-and-its-bfs.md)
+* [Chapter 5.3 Binary Tree and Its DFS](chapter-53-binary-tree-and-its-dfs.md)
 
