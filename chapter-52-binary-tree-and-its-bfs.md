@@ -467,7 +467,7 @@ Given root =`{2,1,3}`, p = 1, return`null`.
 
 ### 解题分析:
 
-BST lower\_bound问题， 重复了 
+BST lower\_bound问题， 重复了
 
 ### 代码：
 
@@ -512,11 +512,7 @@ public:
 
 log\(n\)
 
-
-
 ## 448. Inorder Successor in BST
-
-
 
 Given a binary search tree \([See Definition](https://www.lintcode.com/problem/validate-binary-search-tree/)\) and a node in it, find the in-order successor of that node in the BST.
 
@@ -524,7 +520,7 @@ If the given node has no in-order successor in the tree, return`null`.
 
 ##### Notice
 
-It's guaranteed_p_is one node in the given tree. \(You can directly compare the memory address to find p\)
+It's guaranteed\_p\_is one node in the given tree. \(You can directly compare the memory address to find p\)
 
 Have you met this question in a real interview?
 
@@ -538,7 +534,6 @@ Given tree =`[2,1]`and node =`1`:
   2
  /
 1
-
 ```
 
 return node`2`.
@@ -549,12 +544,11 @@ Given tree =`[2,1,3]`and node =`2`:
   2
  / \
 1   3
-
 ```
 
 return node`3`.
 
-https://www.lintcode.com/en/problem/inorder-successor-in-bst/
+[https://www.lintcode.com/en/problem/inorder-successor-in-bst/](https://www.lintcode.com/en/problem/inorder-successor-in-bst/)
 
 ### 解题分析:
 
@@ -597,4 +591,58 @@ public:
 ### 复杂度分析:
 
 log\(n\)
+
+
+
+## 472. Binary Tree Path Sum III
+
+Give a binary tree, and a target number, find all path that the sum of nodes equal to target, the path could be start and end at any node in the tree.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given binary tree:
+
+```
+    1
+   / \
+  2   3
+ /
+4
+
+```
+
+and target =`6`. Return :
+
+```
+[
+  [2, 4],
+  [2, 1, 3],
+  [3, 1, 2],
+  [4, 2]
+]
+```
+
+https://www.lintcode.com/en/problem/binary-tree-path-sum-iii/
+
+### 解题分析:
+
+
+
+### 代码：
+
+```cpp
+
+```
+
+### 复杂度分析:
+
+log\(n\)
+
+
+
+
 
