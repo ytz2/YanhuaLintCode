@@ -644,17 +644,73 @@ and target =`6`. Return :
 
 前序遍历
 
-   从每一个点开始，向上，向左，向右搜索sum
+从每一个点开始，向上，向左，向右搜索sum
 
-   因为要向上搜索，所以要避免递归的时候回到起点，保证只往上或者往下走，所以要加一个from作为阻止点。
+因为要向上搜索，所以要避免递归的时候回到起点，保证只往上或者往下走，所以要加一个from作为阻止点。
 
 ### 代码：
 
 ```cpp
+/**
+ * Definition of ParentTreeNode:
+ * class ParentTreeNode {
+ * public:
+ *     int val;
+ *     ParentTreeNode *parent, *left, *right;
+ * }
+ */
 
+
+class Solution {
+public:
+    /*
+     * @param root: the root of binary tree
+     * @param target: An integer
+     * @return: all valid paths
+     */
+    vector<vector<int>> binaryTreePathSum3(ParentTreeNode * root, int target) {
+        // write your code here
+        vector<vector<int>> res;
+        if (!root)
+            return res;
+        inOrder(root, target, res);
+        return res;
+    }
+    
+    void inOrder(ParentTreeNode* root, int target, vector<vector<int>>& res)
+    {
+        if (!root)
+            return;
+        vector<int> solution;
+        findSum(root, target, nullptr, res, solution);
+        inOrder(root->left, target, res);
+        inOrder(root->right, target, res);
+    }
+    
+    void findSum(ParentTreeNode* root, int target, ParentTreeNode* from, vector<vector<int>>& res, vector<int>& solution)
+    {
+        if (!root)
+            return;
+        target-=root->val;
+        solution.push_back(root->val);
+        if (target == 0)
+            res.push_back(solution);
+        // dfs p, l, r
+        // but should avoid going back
+        if (root->parent && root->parent != from)
+            findSum(root->parent, target, root, res, solution);
+        if (root->left && root->left != from)
+            findSum(root->left, target, root, res, solution);
+        if (root->right && root->right != from)
+            findSum(root->right, target, root, res, solution);
+
+        solution.pop_back();
+    }
+    
+};
 ```
 
 ### 复杂度分析:
 
-log\(n\)
+o\(nlog\(n\)\)
 
