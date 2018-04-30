@@ -498,7 +498,7 @@ public:
         // write your code here
         if (!root || !p )
             return nullptr;
-        
+
         if (root->val == p->val && root != p)
         {
             while(root->right && root->right->val == p->val && root->right!=p)
@@ -507,7 +507,7 @@ public:
             }
             return root;
         }
-        
+
         if (root->val >= p->val)
             return inorderPredecessor(root->left, p);
         // root->val < p->val
@@ -563,7 +563,7 @@ return node`3`.
 
 ### 解题分析:
 
-BST upper\_bound问题， 重复了
+BST upper\_bound问题， 这个比前序简单点， 因为当p-&gt;right-val == p-&gt;val的时候，必定是他的后序。 否则必然是p的upper bound
 
 ### 代码：
 
@@ -590,6 +590,8 @@ public:
         // write your code here
         if (!root || !p)
             return nullptr;
+        if (p->right && p->right->val == p->val)
+            return p->right;
         if (root->val <= p->val)
             return inorderSuccessor(root->right, p);
         // root->val >= p->val
