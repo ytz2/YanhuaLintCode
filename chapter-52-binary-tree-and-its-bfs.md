@@ -443,17 +443,74 @@ public:
 
 O（N\)
 
-
-
 #### Binary Tree Inorder Traversal & Binary Tree Preorder Traversal & Inorder Predecessor in BST
 
 非递归版本，网上找下吧。。。没有意义
 
 
 
+## 915. Inorder Predecessor in BST
 
+Given a binary search tree and a node in it, find the in-order predecessor of that node in the BST.
 
+##### Notice
 
+If the given node has no in-order predecessor in the tree, return`null`
 
+Have you met this question in a real interview?
 
+Yes
+
+**Example**
+
+Given root =`{2,1,3}`, p = 1, return`null`.
+
+https://www.lintcode.com/en/problem/inorder-predecessor-in-bst/
+
+### 解题分析:
+
+BST lower\_bound问题， 重复了
+
+### 代码：
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: the given BST
+     * @param p: the given node
+     * @return: the in-order predecessor of the given node in the BST
+     */
+    TreeNode * inorderPredecessor(TreeNode * root, TreeNode * p) {
+        // write your code here
+        if (!root || !p )
+            return nullptr;
+        
+        if (root->val >= p->val)
+            return inorderPredecessor(root->left, p);
+        // root->val < p->val
+        auto node = inorderPredecessor(root->right, p);
+        if (node)
+            return node;
+        return root;
+    }
+};
+```
+
+### 复杂度分析:
+
+log\(n\)
 
