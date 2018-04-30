@@ -467,7 +467,9 @@ Given root =`{2,1,3}`, p = 1, return`null`.
 
 ### 解题分析:
 
-BST lower\_bound问题， 重复了
+BST lower\_bound问题， 重复了, 发现OJ的BST无重复元素， 要处理一下重复，比如有好多2， 2， 2,2 p指到中间， 那么当 root和p不是同一个node的时候，要往右一直走到root-right = p为止。 否则，root=p，则认为p是第一个元素，我们要从左面找一个比他小的。
+
+这个是和lower-bound 不一样的地方
 
 ### 代码：
 
@@ -496,7 +498,16 @@ public:
         // write your code here
         if (!root || !p )
             return nullptr;
-
+        
+        if (root->val == p->val && root != p)
+        {
+            while(root->right && root->right->val == p->val && root->right!=p)
+            {
+                root = root->right;
+            }
+            return root;
+        }
+        
         if (root->val >= p->val)
             return inorderPredecessor(root->left, p);
         // root->val < p->val
@@ -592,8 +603,6 @@ public:
 
 log\(n\)
 
-
-
 ## 472. Binary Tree Path Sum III
 
 Give a binary tree, and a target number, find all path that the sum of nodes equal to target, the path could be start and end at any node in the tree.
@@ -612,7 +621,6 @@ Given binary tree:
   2   3
  /
 4
-
 ```
 
 and target =`6`. Return :
@@ -626,11 +634,9 @@ and target =`6`. Return :
 ]
 ```
 
-https://www.lintcode.com/en/problem/binary-tree-path-sum-iii/
+[https://www.lintcode.com/en/problem/binary-tree-path-sum-iii/](https://www.lintcode.com/en/problem/binary-tree-path-sum-iii/)
 
 ### 解题分析:
-
-
 
 ### 代码：
 
@@ -641,8 +647,4 @@ https://www.lintcode.com/en/problem/binary-tree-path-sum-iii/
 ### 复杂度分析:
 
 log\(n\)
-
-
-
-
 
