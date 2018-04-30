@@ -605,7 +605,7 @@ public:
 
 log\(n\)
 
-## 472. Binary Tree Path Sum III
+## \*\*\*\*472. Binary Tree Path Sum III
 
 Give a binary tree, and a target number, find all path that the sum of nodes equal to target, the path could be start and end at any node in the tree.
 
@@ -639,6 +639,14 @@ and target =`6`. Return :
 [https://www.lintcode.com/en/problem/binary-tree-path-sum-iii/](https://www.lintcode.com/en/problem/binary-tree-path-sum-iii/)
 
 ### 解题分析:
+
+这道题只能暴力上了， 别想什么套路或者tricky的解法了。
+
+前序遍历
+
+   从每一个点开始，向上，向左，向右搜索sum
+
+   因为要向上搜索，所以要避免递归的时候回到起点，保证只往上或者往下走，所以要加一个from作为阻止点。
 
 ### 代码：
 
