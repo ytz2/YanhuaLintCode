@@ -97,8 +97,6 @@ public:
 
 o\(n\)
 
-
-
 ## 614. Binary Tree Longest Consecutive Sequence II
 
 Given a binary tree, find the length of the longest consecutive sequence path.  
@@ -116,12 +114,11 @@ Yes
   2   0
  /
 3
-
 ```
 
 Return`4`//`0-1-2-3`
 
-https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-ii/
+[https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-ii/](https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-ii/)
 
 ### 解题分析:
 
@@ -171,7 +168,7 @@ public:
         auto res = helper(root);
         return maxLen;
     }
-    
+
     ReturnType helper(TreeNode * root)
     {
         if (!root)
@@ -179,7 +176,7 @@ public:
         ReturnType res(1, 1);
         if (!root->left && !root->right)
             return res;
-    
+
         int lIncrease = 0, lDecrease = 0;
         if (root->left)
         {
@@ -200,13 +197,107 @@ public:
         }
         res.inc = max(lIncrease, rIncrease)+1;
         res.dec = max(lDecrease, rDecrease)+1; 
-        
+
         maxLen = max(maxLen, max(lIncrease + rDecrease, lDecrease + rIncrease) +1);
         return res;
     }
-    
+
     int maxLen;
+
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 619. Binary Tree Longest Consecutive Sequence III
+
+It's follow up problem for[`Binary Tree Longest Consecutive Sequence II`](https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-ii/)
+
+Given a`k-ary tree`, find the length of the longest consecutive sequence path.  
+The path could be start and end at any node in the tree
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+An example of test data: k-ary tree`5<6<7<>,5<>,8<>>,4<3<>,5<>,3<>>>`, denote the following structure:
+
+```
+
+     5
+   /   \
+  6     4
+ /|\   /|\
+7 5 8 3 5 3
+
+Return 5, // 3-4-5-6-7
+```
+
+https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-iii/
+
+### 解题分析:
+
+其实follow up 更简单
+
+### 代码：
+
+```cpp
+/**
+ * Definition for a multi tree node.
+ * struct MultiTreeNode {
+ *     int val;
+ *     vector<MultiTreeNode*> children;
+ *     MultiTreeNode(int x) : val(x) {}
+ * };
+ */
+
+class Solution {
+public:
+    /**
+     * @param root the root of k-ary tree
+     * @return the length of the longest consecutive sequence path
+     */
+    int longestConsecutive3(MultiTreeNode* root) {
+        // Write your code here
+        if (!root)
+            return 0;
+        m_max = INT_MIN;
+        auto res = helper(root);
+        return m_max;
+    }
     
+    struct ReturnType{
+      ReturnType(int i, int d)
+        : inc(i), dec(d)
+        {};
+      int inc;
+      int dec;
+    };
+    
+    ReturnType helper(MultiTreeNode* root)
+    {
+        if (!root)
+            return ReturnType(0, 0);
+        int inc = 0, dec = 0;
+        for (auto each : root->children)
+        {
+            auto res = helper(each);
+            if (root->val+1 == each->val)
+                inc = max(inc, res.inc);
+            if (root->val-1 == each->val)
+                dec = max(dec, res.dec);
+        }
+        m_max = max(m_max, inc+dec+1);
+        return ReturnType(inc+1, dec+1);
+    }
+    
+    int m_max;
 };
 ```
 
