@@ -211,8 +211,6 @@ public:
 
 o\(n\)
 
-
-
 ## 619. Binary Tree Longest Consecutive Sequence III
 
 It's follow up problem for[`Binary Tree Longest Consecutive Sequence II`](https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-ii/)
@@ -229,7 +227,6 @@ Yes
 An example of test data: k-ary tree`5<6<7<>,5<>,8<>>,4<3<>,5<>,3<>>>`, denote the following structure:
 
 ```
-
      5
    /   \
   6     4
@@ -239,7 +236,7 @@ An example of test data: k-ary tree`5<6<7<>,5<>,8<>>,4<3<>,5<>,3<>>>`, denote th
 Return 5, // 3-4-5-6-7
 ```
 
-https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-iii/
+[https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-iii/](https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-iii/)
 
 ### 解题分析:
 
@@ -271,7 +268,7 @@ public:
         auto res = helper(root);
         return m_max;
     }
-    
+
     struct ReturnType{
       ReturnType(int i, int d)
         : inc(i), dec(d)
@@ -279,7 +276,7 @@ public:
       int inc;
       int dec;
     };
-    
+
     ReturnType helper(MultiTreeNode* root)
     {
         if (!root)
@@ -295,6 +292,89 @@ public:
         }
         m_max = max(m_max, inc+dec+1);
         return ReturnType(inc+1, dec+1);
+    }
+
+    int m_max;
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 94. Binary Tree Maximum Path Sum
+
+Given a binary tree, find the maximum path sum.
+
+The path may start and end at any node in the tree.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given the below binary tree:
+
+```
+  1
+ / \
+2   3
+
+```
+
+return`6`.
+
+https://www.lintcode.com/en/problem/binary-tree-maximum-path-sum/\#
+
+### 解题分析:
+
+左边最大和右边最大求得后，要做选择， root-&gt;val, left+root-&gt;val, right+root-&gt;val 返回最大，因为 返回的可能是负数。 
+
+max就是打一个擂台就好了
+
+### 代码：
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: The root of binary tree.
+     * @return: An integer
+     */
+    int maxPathSum(TreeNode * root) {
+        // write your code here
+        if (!root)
+            return 0;
+        m_max = INT_MIN;
+        auto s = helper(root);
+        return m_max;
+    }
+    
+    int helper(TreeNode* root)
+    {
+        if (!root)
+            return 0;
+        int left = helper(root->left);
+        int right = helper(root->right);
+        int ret = max(root->val, max(root->val+left, root->val+right));
+        m_max = max(m_max, max(ret, root->val + left+right));
+        return ret;
     }
     
     int m_max;
