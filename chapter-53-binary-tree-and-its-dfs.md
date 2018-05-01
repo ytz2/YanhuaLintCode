@@ -302,8 +302,6 @@ public:
 
 o\(n\)
 
-
-
 ## 94. Binary Tree Maximum Path Sum
 
 Given a binary tree, find the maximum path sum.
@@ -322,16 +320,15 @@ Given the below binary tree:
   1
  / \
 2   3
-
 ```
 
 return`6`.
 
-https://www.lintcode.com/en/problem/binary-tree-maximum-path-sum/\#
+[https://www.lintcode.com/en/problem/binary-tree-maximum-path-sum/\#](https://www.lintcode.com/en/problem/binary-tree-maximum-path-sum/#)
 
 ### 解题分析:
 
-左边最大和右边最大求得后，要做选择， root-&gt;val, left+root-&gt;val, right+root-&gt;val 返回最大，因为 返回的可能是负数。 
+左边最大和右边最大求得后，要做选择， root-&gt;val, left+root-&gt;val, right+root-&gt;val 返回最大，因为 返回的可能是负数。
 
 max就是打一个擂台就好了
 
@@ -365,7 +362,7 @@ public:
         auto s = helper(root);
         return m_max;
     }
-    
+
     int helper(TreeNode* root)
     {
         if (!root)
@@ -375,6 +372,88 @@ public:
         int ret = max(root->val, max(root->val+left, root->val+right));
         m_max = max(m_max, max(ret, root->val + left+right));
         return ret;
+    }
+
+    int m_max;
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
+
+
+
+## 475. Binary Tree Maximum Path Sum II
+
+Given a binary tree, find the maximum path sum from root.
+
+The path may end at any node in the tree and contain at least one node in it.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given the below binary tree:
+
+```
+  1
+ / \
+2   3
+
+```
+
+return`4`. \(1-&gt;3\)
+
+https://www.lintcode.com/en/problem/binary-tree-maximum-path-sum-ii/\#
+
+### 解题分析:
+
+从根节点，沿着路径走，无脑preorder+回溯就好了
+
+### 代码：
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: the root of binary tree.
+     * @return: An integer
+     */
+    int maxPathSum2(TreeNode * root) {
+        // write your code here
+        if (!root)
+            return 0;
+        m_max = INT_MIN;
+        int sum = 0;
+        preorder(root, sum);
+        return m_max;
+    }
+    
+    void preorder(TreeNode* root, int& sum)
+    {
+        if (!root)
+            return;
+         sum += root->val;
+         m_max = max(m_max, sum);
+         preorder(root->left,sum);
+         preorder(root->right,sum);
+         sum -= root->val;
     }
     
     int m_max;
