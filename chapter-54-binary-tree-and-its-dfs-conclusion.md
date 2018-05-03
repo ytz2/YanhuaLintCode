@@ -73,13 +73,9 @@ BST Iterator: 妈的，熟读并背诵。。。。无聊。 维护一个stack, c
 
 Inorder Predecessor/succesor in BST:  这个是lower bound /upper bound的问题，不过要考虑有重复元素的问题， 这个好解决因为二分搜索里的重复问题本来就是恶心的事情
 
-
-
 ## 二叉树上求值
 
 这个算是有固定套路的东西了
-
-
 
 #### 子树求值问题
 
@@ -87,13 +83,9 @@ Inorder Predecessor/succesor in BST:  这个是lower bound /upper bound的问题
 
 Minimum subtree, subtree with maximum avg \(除了求和还要数数， 思路一样）
 
-
-
 #### 路径求值问题
 
-
-
-路径问题一般都是前序遍历+回溯 
+路径问题一般都是前序遍历+回溯
 
 最基本的一个问题，Binary Tree Paths 打印所有从root出发的路径， 就是前序 push root, left, right, pop root  从理解了这个思路的基础上，一般路径问题都是可以解决的
 
@@ -105,11 +97,7 @@ Binary Tree Path Sum ， 这道题也是异类， 属于放弃治疗类型的。
 
 Binary tree max path sum ii: 这是从root开始，任意截止的。 模板可以解决。 前序回溯
 
-
-
 ## 二叉树结构
-
-
 
 比较杂乱，直接列题目了
 
@@ -121,15 +109,33 @@ min depth of b tree , max depth of btree min这个有个坑，就是写顺手min
 
 
 
+Lowest Common Ancestor : 这是一组题目，讨巧的是如果是A, B 返回A, B， 否则是null
 
-
- 
-
-
-
+左边， 右边，如果都不是null root是，否则返回不是null的或者null， 前提是A,B肯定存在
 
 
 
+LCA II 是带parent的， 带上parent 更简单了，就是裸找， 从A,B各搜索他们下面有没有，没有就来自两边，然后从A开始找他的sibling, 如果sibling找不到，再从A 网上，一直到root. 
+
+LCA III, 就是AB不一定有， 还是老办法，但是遍历的时候要记录有没有AB， 就这么简单
+
+
+
+Binary tree longest consecutive sequence  求连续， 是一个前序遍历问题，但是要记住他们的parent是谁，有一个from 这样就可以和前面比较是不是连续，如果连续+1否则重设，打一个擂台就好了
+
+LCS II D&Q， 返回最大增长和递减长度， 左增右减，左减右增是否连续，连续加起来， 然后打一个擂台后返回最长的增和最长的减
+
+LCS III， 更简单一些， 是multi tree, 所以就是打一圈擂台
+
+
+
+### Consistent hashing II
+
+将 360° 的区间分得更细。从 0~359 变为一个 0 ~ n-1 的区间，将这个区间首尾相接，连成一个圆。
+
+1. 当加入一台新的机器的时候，随机选择在圆周中撒 k 个点，代表这台机器的 k 个 micro-shards。
+2. 每个数据在圆周上也对应一个点，这个点通过一个 hash function 来计算。
+3. 一个数据该属于那台机器负责管理，是按照该数据对应的圆周上的点在圆上顺时针碰到的第一个 micro-shard 点所属的机器来决定。
 
 
 
