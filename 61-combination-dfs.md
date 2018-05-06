@@ -46,8 +46,6 @@ If S =`[1,2,3]`, a solution is:
 
 去重： 在two sum两根指针里用过了, i!= beg && nums\[i\] == nums\[i-1\] continue
 
-
-
 ![](/assets/backtrack.png)
 
 ### 代码：
@@ -62,24 +60,26 @@ public:
     vector<vector<int>> subsets(vector<int> &nums) {
         // write your code here
         vector<vector<int>> res; 
-        res.push_back(vector<int>());
         if (nums.empty())
+        {
+            res.push_back(vector<int>());
             return res;
-
+        }    
+        
         sort(nums.begin(), nums.end());
         vector<int> solution;
         helper(nums, 0 , solution, res);
         return res;
     }
-
+    
     void helper(vector<int>& nums, int ind, vector<int>& solution, vector<vector<int>>& res)
     {
+        res.push_back(solution);
         for (int i = ind; i < nums.size(); i++)
         {
             if (i != ind && nums[i] == nums[i-1])
                 continue;
             solution.push_back(nums[i]);
-            res.push_back(solution);
             helper(nums, i+1, solution, res);
             solution.pop_back();
         }
