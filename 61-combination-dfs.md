@@ -46,6 +46,10 @@ If S =`[1,2,3]`, a solution is:
 
 去重： 在two sum两根指针里用过了, i!= beg && nums\[i\] == nums\[i-1\] continue
 
+
+
+![](/assets/backtrack.png)
+
 ### 代码：
 
 ```
