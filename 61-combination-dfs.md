@@ -30,7 +30,7 @@ If S =`[1,2,3]`, a solution is:
 ]
 ```
 
-https://www.lintcode.com/en/old/problem/subsets/\#
+[https://www.lintcode.com/en/old/problem/subsets/\#](https://www.lintcode.com/en/old/problem/subsets/#)
 
 ### 解题分析:
 
@@ -61,13 +61,13 @@ public:
         res.push_back(vector<int>());
         if (nums.empty())
             return res;
-        
+
         sort(nums.begin(), nums.end());
         vector<int> solution;
         helper(nums, 0 , solution, res);
         return res;
     }
-    
+
     void helper(vector<int>& nums, int ind, vector<int>& solution, vector<vector<int>>& res)
     {
         for (int i = ind; i < nums.size(); i++)
@@ -85,5 +85,5 @@ public:
 
 ### 复杂度分析:
 
-o\(n!\)
+o\(2^n\)
 
