@@ -91,8 +91,6 @@ public:
 
 o\(2^n\)
 
-
-
 ## 680. Split String
 
 Give a string, you can choose to split the string after one character or two adjacent characters, and make the string to be composed of only one character or two characters. Output all possible results.
@@ -106,7 +104,7 @@ Yes
 Given the string`"123"`  
 return`[["1","2","3"],["12","3"],["1","23"]]`
 
-https://www.lintcode.com/en/old/problem/split-string/
+[https://www.lintcode.com/en/old/problem/split-string/](https://www.lintcode.com/en/old/problem/split-string/)
 
 ### 解题分析:
 
@@ -133,7 +131,7 @@ public:
         dfs(s, 0, subset, res);
         return res;
     }
-    
+
     void dfs(const string& s, int startIndex, vector<string>& subset, vector<vector<string>>& result)
     {
         // exit
@@ -158,8 +156,6 @@ public:
 
 o\(2^n\)
 
-
-
 ## 570. Find the Missing Number II
 
 Giving a string with number from 1-`n`in random order, but miss`1`number.Find that number.
@@ -178,7 +174,7 @@ Given n =`20`, str =`19201234567891011121314151618`
 
 return`17`
 
-https://www.lintcode.com/en/old/problem/find-the-missing-number-ii/
+[https://www.lintcode.com/en/old/problem/find-the-missing-number-ii/](https://www.lintcode.com/en/old/problem/find-the-missing-number-ii/)
 
 ### 解题分析:
 
@@ -192,13 +188,9 @@ https://www.lintcode.com/en/old/problem/find-the-missing-number-ii/
 
 后面如何剪枝？ visited, 为什么要剪枝？  11， 已经理解为1了，则不需要第二个1， 应该第二个为1x
 
-
-
-那么最后应该是有一个解使得这个字符串一直到最后一位可以被理解，那么这个也应该是递归的出口。 
+那么最后应该是有一个解使得这个字符串一直到最后一位可以被理解，那么这个也应该是递归的出口。
 
 递归过程中，应该有其他的出口: 搜索失败
-
-
 
 ### 代码：
 
@@ -219,7 +211,7 @@ public:
         dfs(n, str, 0, visited, result);
         return result;
     }
-    
+
     void dfs(int n, const string& str, int startIndex, unordered_set<int>& visited, int& result)
     {
         if (startIndex >= str.size() )
@@ -231,14 +223,14 @@ public:
         int oneNum = stoi(str.substr(startIndex, 1));
         if (oneNum  == 0 || oneNum > n)
             return;
-        
+
         if (visited.find(oneNum) == visited.end())
         {
             visited.insert(oneNum);
             dfs(n, str, startIndex+1, visited, result);
             visited.erase(oneNum);
         }
-        
+
         if (startIndex == str.size()-1)
             return;
         int twoNum = stoi(str.substr(startIndex,2));
@@ -248,7 +240,7 @@ public:
         dfs(n, str, startIndex+2, visited, result);
         visited.erase(twoNum);
     }
-    
+
     int getMissed(unordered_set<int>& dict, int n)
     {
         // look for the missted one
@@ -267,6 +259,57 @@ public:
 ### 复杂度分析:
 
 o\(2^n\)
+
+写的有点恶心， 看了一眼别人的答案，感觉写的简洁多了，而且还是套路方法，重写一遍：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @param str: a string with number from 1-n in random order and miss one number
+     * @return: An integer
+     */
+    int findMissing2(int n, string &str) {
+        // write your code here
+        if (n == 0 || str.empty())
+            return -1;
+        vector<bool> visited(n+1, false);
+        return find(n, str, 0, visited);
+    }
+    
+    int find(int n, const string& str, int startIndex, vector<bool>& visited)
+    {
+        if (startIndex >= str.size())
+        {
+            vector<int> res;
+            for (int i =1 ; i <= n; i++)
+            {
+                if (!visited[i])
+                    res.push_back(i);
+            }
+            if (res.size() == 1)
+                return res[0];
+            return -1;
+        }
+        if (str[startIndex] == '0')
+            return -1;
+        for (int len = 1; len < 3; len++)
+        {
+            int num = stoi(str.substr(startIndex, len));
+            if (num >=1 && num <=n && !visited[num])
+            {
+                visited[num] = true;
+                int res = find(n, str, startIndex+len, visited);
+                visited[num] = false;
+                if (res != -1)
+                    return res;
+            }
+        }
+        return -1;
+    }
+};
+```
 
 
 
