@@ -323,13 +323,11 @@ public:
 };
 ```
 
-
-
 ## 153. Combination Sum II
 
-Given a collection of candidate numbers \(_C_\) and a target number \(_T_\), find all unique combinations in_C_where the candidate numbers sums to_T_.
+Given a collection of candidate numbers \(_C_\) and a target number \(_T_\), find all unique combinations in_C\_where the candidate numbers sums to\_T_.
 
-Each number in_C_may only be used once in the combination.
+Each number in\_C\_may only be used once in the combination.
 
 ##### Notice
 
@@ -356,7 +354,7 @@ A solution set is:
 ]
 ```
 
-https://www.lintcode.com/en/old/problem/combination-sum-ii/\#
+[https://www.lintcode.com/en/old/problem/combination-sum-ii/\#](https://www.lintcode.com/en/old/problem/combination-sum-ii/#)
 
 ### 解题分析:
 
@@ -386,10 +384,10 @@ public:
         dfs(num, subset,0, target, 0, res);
         return res;
     }
-    
+
     void dfs(vector<int>& num, vector<int>& subset, int total, int target, int startIndex, vector<vector<int>>& result)
     {
-        
+
         if (!subset.empty() && total == target)
         {
             result.push_back(subset);
@@ -406,6 +404,88 @@ public:
             subset.pop_back();
         }
     }
+};
+```
+
+### 复杂度分析:
+
+o\(2^n\)
+
+
+
+## 152. Combinations
+
+Given two integers_n_and_k_, return all possible combinations of_k_numbers out of 1 ..._n_.
+
+##### Notice
+
+You don't need to care the order of combinations, but you should make sure the numbers in a combination are sorted.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`n = 4`and`k = 2`, a solution is:
+
+```
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4]
+]
+```
+
+https://www.lintcode.com/en/old/problem/combinations/\#
+
+### 解题分析:
+
+记得剪枝
+
+### 代码：
+
+```
+class Solution {
+public:
+    /**
+     * @param n: Given the range of numbers
+     * @param k: Given the numbers of combinations
+     * @return: All the combinations of k numbers out of 1..n
+     */
+    vector<vector<int>> combine(int n, int k) {
+        // write your code here
+        vector<vector<int>> result;
+        if ( n == 0 || k == 0)
+            return result;
+        vector<int> subset;
+        dfs(n, k, 1, subset, result);
+        return result;
+    }
+    
+    void dfs(int n, int k, int startIndex, vector<int>& subset, vector<vector<int>>& result)
+    {
+        
+        if (subset.size() == k)
+        {
+            result.push_back(subset);
+            return;
+        }
+        if (startIndex > n)
+            return;
+        if (n - startIndex + 1 < k - subset.size())
+            return;
+        for (int i = startIndex; i <=n; i++)
+        {
+            subset.push_back(i);
+            dfs(n, k, i+1, subset, result);
+            subset.pop_back();
+        }
+    }
+    
 };
 ```
 
