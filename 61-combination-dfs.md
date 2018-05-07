@@ -262,6 +262,18 @@ o\(2^n\)
 
 写的有点恶心， 看了一眼别人的答案，感觉写的简洁多了，而且还是套路方法，重写一遍：
 
+其实这个给了一个启迪就是visited不一定要用unordered\_set，用vector&lt;bool&gt;反而效率更高，空间更优
+
+第二个启迪是就算只有两个选择也用个循环可以套路
+
+第三个启迪是不一定非要是排列组合才要回溯套路，这种选方案A还是方案B的问题，一样讨论，即使求一个唯一解
+
+可以
+
+递归的出口： 返回答案
+
+递归的定义:  搜索如果不是default,返回答案。
+
 ```cpp
 class Solution {
 public:
@@ -277,7 +289,7 @@ public:
         vector<bool> visited(n+1, false);
         return find(n, str, 0, visited);
     }
-    
+
     int find(int n, const string& str, int startIndex, vector<bool>& visited)
     {
         if (startIndex >= str.size())
