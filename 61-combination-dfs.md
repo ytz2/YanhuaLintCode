@@ -325,3 +325,91 @@ public:
 
 
 
+## 153. Combination Sum II
+
+Given a collection of candidate numbers \(_C_\) and a target number \(_T_\), find all unique combinations in_C_where the candidate numbers sums to_T_.
+
+Each number in_C_may only be used once in the combination.
+
+##### Notice
+
+* All numbers \(including target\) will be positive integers.
+* Elements in a combination \(a1, a2, … , ak\) must be in non-descending order. \(ie, a1 ≤ a2 ≤ … ≤ ak\).
+* The solution set must not contain duplicate combinations.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given candidate set`[10,1,6,7,2,1,5]`and target`8`,
+
+A solution set is:
+
+```
+[
+  [1,7],
+  [1,2,5],
+  [2,6],
+  [1,1,6]
+]
+```
+
+https://www.lintcode.com/en/old/problem/combination-sum-ii/\#
+
+### 解题分析:
+
+其实可以理解成subsets里面找和为target的，就可以直接无脑上套路了
+
+记得剪枝
+
+if \(total + num\[i\] &gt; target\) break;
+
+### 代码：
+
+```
+class Solution {
+public:
+    /**
+     * @param num: Given the candidate numbers
+     * @param target: Given the target number
+     * @return: All the combinations that sum to target
+     */
+    vector<vector<int>> combinationSum2(vector<int> &num, int target) {
+        // write your code here
+        vector<vector<int>> res;
+        if (num.empty())
+            return res;
+        sort(num.begin(), num.end());
+        vector<int> subset;
+        dfs(num, subset,0, target, 0, res);
+        return res;
+    }
+    
+    void dfs(vector<int>& num, vector<int>& subset, int total, int target, int startIndex, vector<vector<int>>& result)
+    {
+        
+        if (!subset.empty() && total == target)
+        {
+            result.push_back(subset);
+            return;
+        }
+        for (int i = startIndex; i < num.size(); i++)
+        {
+            if (num[i] == num[i-1] && i!=startIndex)
+                continue;
+            if (total + num[i] > target)
+                break;
+            subset.push_back(num[i]);
+            dfs(num, subset, total + num[i], target, i+1, result);
+            subset.pop_back();
+        }
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(2^n\)
+
