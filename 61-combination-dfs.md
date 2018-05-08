@@ -413,9 +413,77 @@ o\(2^n\)
 
 
 
+## 135. Combination Sum
+
+Given a set of candidate numbers \(_**C**_\) and a target number \(_**T**_\), find all unique combinations in_**C**_where the candidate numbers sums to_**T**_.
+
+
+
+**Example**
+
+Given candidate set`[2,3,6,7]`and target`7`, a solution set is:
+
+```
+[7]
+[2, 2, 3]
+```
+
+https://www.lintcode.com/en/old/problem/combination-sum/\#
+
+### 解题分析:
+
+方案取还是不取，无脑上DFS
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param candidates: A list of integers
+     * @param target: An integer
+     * @return: A list of lists of integers
+     */
+    vector<vector<int>> combinationSum(vector<int> &candidates, int target) {
+        // write your code here
+        vector<vector<int>> result;
+        if (candidates.empty())
+            return result;
+        sort(candidates.begin(), candidates.end());
+        vector<int> subset;
+        dfs(candidates, result, subset, 0, target, 0);
+    }
+    
+    void dfs(vector<int>& candidates, vector<vector<int>>& result, vector<int>& subset, int total, int target, int startIndex)
+    {
+        if (total > target)
+            return;
+        if (total == target)
+        {
+            result.push_back(subset);
+            return;
+        }
+        if (startIndex >= candidates.size())
+            return;
+        for (int i = startIndex; i < candidates.size(); i++)
+        {
+            if (candidates[i] == candidates[i-1] && i!=startIndex)
+                continue;
+            subset.push_back(candidates[i]);
+            dfs(candidates,result, subset, total+candidates[i], target, i);
+            subset.pop_back();
+        }
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(2^n\)
+
 ## 152. Combinations
 
-Given two integers_n_and_k_, return all possible combinations of_k_numbers out of 1 ..._n_.
+Given two integers_n\_and\_k_, return all possible combinations of_k\_numbers out of 1 ...\_n_.
 
 ##### Notice
 
@@ -440,7 +508,7 @@ Given`n = 4`and`k = 2`, a solution is:
 ]
 ```
 
-https://www.lintcode.com/en/old/problem/combinations/\#
+[https://www.lintcode.com/en/old/problem/combinations/\#](https://www.lintcode.com/en/old/problem/combinations/#)
 
 ### 解题分析:
 
@@ -465,10 +533,10 @@ public:
         dfs(n, k, 1, subset, result);
         return result;
     }
-    
+
     void dfs(int n, int k, int startIndex, vector<int>& subset, vector<vector<int>>& result)
     {
-        
+
         if (subset.size() == k)
         {
             result.push_back(subset);
@@ -485,7 +553,7 @@ public:
             subset.pop_back();
         }
     }
-    
+
 };
 ```
 
