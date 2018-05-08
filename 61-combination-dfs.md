@@ -411,13 +411,9 @@ public:
 
 o\(2^n\)
 
-
-
 ## 135. Combination Sum
 
-Given a set of candidate numbers \(_**C**_\) and a target number \(_**T**_\), find all unique combinations in_**C**_where the candidate numbers sums to_**T**_.
-
-
+Given a set of candidate numbers \(_**C**_\) and a target number \(_**T**_\), find all unique combinations in_**C**\_where the candidate numbers sums to_**T**\_.
 
 **Example**
 
@@ -428,7 +424,7 @@ Given candidate set`[2,3,6,7]`and target`7`, a solution set is:
 [2, 2, 3]
 ```
 
-https://www.lintcode.com/en/old/problem/combination-sum/\#
+[https://www.lintcode.com/en/old/problem/combination-sum/\#](https://www.lintcode.com/en/old/problem/combination-sum/#)
 
 ### 解题分析:
 
@@ -453,7 +449,7 @@ public:
         vector<int> subset;
         dfs(candidates, result, subset, 0, target, 0);
     }
-    
+
     void dfs(vector<int>& candidates, vector<vector<int>>& result, vector<int>& subset, int total, int target, int startIndex)
     {
         if (total > target)
@@ -554,6 +550,87 @@ public:
         }
     }
 
+};
+```
+
+### 复杂度分析:
+
+o\(2^n\)
+
+
+
+## 18. Subsets II
+
+Given a list of numbers that may has duplicate numbers, return all possible subsets
+
+##### Notice
+
+* Each element in a subset must be in
+  _non-descending_
+  order.
+* The ordering between two subsets is free.
+* The solution set must not contain duplicate subsets.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+If S =`[1,2,2]`, a solution is:
+
+```
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+```
+
+https://www.lintcode.com/en/old/problem/subsets-ii/\#
+
+### 解题分析:
+
+DFS去重
+
+### 代码：
+
+```
+class Solution {
+public:
+    /**
+     * @param nums: A set of numbers.
+     * @return: A list of lists. All valid subsets.
+     */
+    vector<vector<int>> subsetsWithDup(vector<int> &nums) {
+        // write your code here
+        vector<vector<int>> results;
+        vector<int> subset;
+        if (nums.empty())
+        {
+            results.push_back(subset);
+            return results;
+        }
+        sort(nums.begin(), nums.end());
+        dfs(nums, subset, 0, results);
+        return results;
+    }
+    
+    void dfs(vector<int>& nums, vector<int>& subset, int startIndex, vector<vector<int>>& results)
+    {
+        results.push_back(subset);
+        for (int i = startIndex; i < nums.size(); i++)
+        {
+            if (nums[i] == nums[i-1] && i != startIndex)
+                continue;
+            subset.push_back(nums[i]);
+            dfs(nums, subset, i+1, results);
+            subset.pop_back();
+        }
+    }
 };
 ```
 
