@@ -636,8 +636,6 @@ public:
 
 o\(2^n\)
 
-
-
 ## 780. Remove Invalid Parentheses
 
 Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
@@ -664,7 +662,7 @@ Yes
  [""]
 ```
 
-https://www.lintcode.com/en/old/problem/remove-invalid-parentheses/\#
+[https://www.lintcode.com/en/old/problem/remove-invalid-parentheses/\#](https://www.lintcode.com/en/old/problem/remove-invalid-parentheses/#)
 
 ### 解题分析:
 
@@ -688,7 +686,7 @@ public:
      */
     vector<string> removeInvalidParentheses(string &s) {
         // Write your code here
-        
+
         unordered_set<string> visited;
         queue<string> q;
         q.push(s);
@@ -725,16 +723,16 @@ public:
 
         return candidates;
     }
-    
-    
-    
+
+
+
     // 0... n-1 
     // l = num of ( r = num of )
     // i !=n-1 l>=r and i==n-1 && l==r ==>valid
     bool isValid(const string& s)
     {
         int l = 0, r = 0;
-        
+
         for (int i = 0; i< s.size(); i++)
         {
             if (s[i] == '(') 
@@ -748,8 +746,8 @@ public:
         }
         return true;
     }
-    
-    
+
+
 };
 ```
 
@@ -758,6 +756,12 @@ public:
 o\(n CnK\) k为最后的长度
 
 
+
+### NOTE:
+
+看了别人DFS的解法，先数出左右括号数，然后找出要移除的左右数目，之后先移除右括号，然后再移除左括号最后的结果就是了
+
+我觉得不如BFS好理解。 
 
 
 
