@@ -755,13 +755,112 @@ public:
 
 o\(n CnK\) k为最后的长度
 
-
-
 ### NOTE:
 
 看了别人DFS的解法，先数出左右括号数，然后找出要移除的左右数目，之后先移除右括号，然后再移除左括号最后的结果就是了
 
-我觉得不如BFS好理解。 
+我觉得不如BFS好理解。
+
+另外还有一个更快的 http://www.cnblogs.com/grandyang/p/4944875.html
+
+两边sweep， 也是不太好理解
 
 
+
+## 582. Word Break II
+
+Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+
+Return all such possible sentences.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Gieve s =`lintcode`,  
+dict =`["de", "ding", "co", "code", "lint"]`.
+
+A solution is`["lint code", "lint co de"]`.
+
+https://www.lintcode.com/en/old/problem/word-break-ii/\#
+
+### 解题分析:
+
+套路题，BFS也可以做，但是BFS做剪枝有个套路， 就是从i开始往后如不可以break,都没有必要搜索，所以可以加个memorized search这样速度稍微快一些。字符串向下搜索常用技巧。。。。。
+
+```
+if (canBreak.find(startIndex) != canBreak.end() && !canBreak[startIndex])
+    return;
+for (int i = startIndex; i < s.size(); i++)
+{
+  ....
+  int n = results.size();
+  helper(s, wordDict, subset, results, i+1, canBreak);
+  canBreak[i+1] = results.size() != n;
+  ...
+}
+```
+
+### 代码：
+
+```
+class Solution {
+public:
+    /*
+     * @param s: A string
+     * @param wordDict: A set of words.
+     * @return: All possible sentences.
+     */
+    vector<string> wordBreak(string &s, unordered_set<string> &wordDict) {
+        // write your code here
+        vector<string> results;
+        if (s.empty() || wordDict.empty())
+            return results;
+        vector<string> subset;
+        unordered_map<int, bool> canBreak;
+        
+        helper(s, wordDict, subset, results, 0, canBreak );
+    }
+    
+    void helper(const string& s, const unordered_set<string>& wordDict, vector<string>& subset, vector<string>& results, int startIndex, unordered_map<int, bool>& canBreak)
+    {
+        if (startIndex >= s.size())
+        {
+            pushResult(results, subset);
+            return;
+        }
+        if (canBreak.find(startIndex) != canBreak.end() && !canBreak[startIndex])
+            return;
+        for (int i = startIndex; i < s.size(); i++)
+        {
+
+            auto str = s.substr(startIndex, i-startIndex+1);
+            if (wordDict.find(str) == wordDict.end())
+                continue;
+            subset.push_back(str);
+            int n = results.size();
+            helper(s, wordDict, subset, results, i+1, canBreak);
+            canBreak[i+1] = results.size() != n;
+            subset.pop_back();
+        }
+        
+    }
+    
+    void pushResult(vector<string>& results, const vector<string>& subset)
+    {
+        string res;
+        
+        for(const auto& each : subset)
+            res += each +" ";
+        res.pop_back();
+        results.push_back(res);
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n CnK\) k为最后的长度
 
