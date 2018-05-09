@@ -557,8 +557,6 @@ public:
 
 o\(2^n\)
 
-
-
 ## 18. Subsets II
 
 Given a list of numbers that may has duplicate numbers, return all possible subsets
@@ -590,7 +588,7 @@ If S =`[1,2,2]`, a solution is:
 ]
 ```
 
-https://www.lintcode.com/en/old/problem/subsets-ii/\#
+[https://www.lintcode.com/en/old/problem/subsets-ii/\#](https://www.lintcode.com/en/old/problem/subsets-ii/#)
 
 ### 解题分析:
 
@@ -618,7 +616,7 @@ public:
         dfs(nums, subset, 0, results);
         return results;
     }
-    
+
     void dfs(vector<int>& nums, vector<int>& subset, int startIndex, vector<vector<int>>& results)
     {
         results.push_back(subset);
@@ -637,4 +635,129 @@ public:
 ### 复杂度分析:
 
 o\(2^n\)
+
+
+
+## 780. Remove Invalid Parentheses
+
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+##### Notice
+
+The input string may contain letters other than the parentheses`(`and`)`.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+```
+"()())()" -
+>
+ ["()()()", "(())()"]
+"(a)())()" -
+>
+ ["(a)()()", "(a())()"]
+")(" -
+>
+ [""]
+```
+
+https://www.lintcode.com/en/old/problem/remove-invalid-parentheses/\#
+
+### 解题分析:
+
+这个完全是凭经验做第一次分析了。。。第一道坎就是判断是不是valid，经典的做法是放一个stack,放狗一搜满足以下条件即可
+
+1. 在到达最后一个之前 num of \) &lt;= num of \(
+2. 在到达最后一个之后 num of \( = num of \)
+
+所以要做就是从左到右扫，移除左右括号，放到里面扫
+
+BFS把最小edit转化为最大长度问题，因为是层级遍历，所以维护一个最大长度就好了。 或者干脆放个层级遍历也行。 都能干着活。
+
+### 代码：
+
+```
+class Solution {
+public:
+    /**
+     * @param s: The input string
+     * @return: Return all possible results
+     */
+    vector<string> removeInvalidParentheses(string &s) {
+        // Write your code here
+        
+        unordered_set<string> visited;
+        queue<string> q;
+        q.push(s);
+        visited.insert(s);
+        vector<string> candidates;
+        int maxLen = 0;
+        while(!q.empty())
+        {
+            auto str = q.front();
+            q.pop();
+
+            if (str.size() < maxLen)
+                continue;
+
+            if (isValid(str))
+            {
+                maxLen = max(maxLen, (int)str.size());
+                candidates.push_back(str);
+                continue;
+            }
+            for (int i = 0; i < str.size(); i++)
+            {
+                if (s[i] != '(' && s[i] != ')')
+                {
+                    continue;
+                }
+                auto newStr = str.substr(0, i)+str.substr(i+1);
+                if (visited.find(newStr) != visited.end())
+                    continue;
+                visited.insert(newStr);
+                q.push(newStr);
+            }
+        }
+
+        return candidates;
+    }
+    
+    
+    
+    // 0... n-1 
+    // l = num of ( r = num of )
+    // i !=n-1 l>=r and i==n-1 && l==r ==>valid
+    bool isValid(const string& s)
+    {
+        int l = 0, r = 0;
+        
+        for (int i = 0; i< s.size(); i++)
+        {
+            if (s[i] == '(') 
+                l++;
+            else if (s[i] == ')')
+                r++;
+            if (i != s.size()-1 && r > l)
+                return false;
+            else if (i == s.size()-1 && r!=l)
+                return false;
+        }
+        return true;
+    }
+    
+    
+};
+```
+
+### 复杂度分析:
+
+o\(n CnK\) k为最后的长度
+
+
+
+
 
