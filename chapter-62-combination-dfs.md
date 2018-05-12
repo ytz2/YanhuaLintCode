@@ -134,3 +134,104 @@ public:
 
 ?
 
+## 426. Restore IP Addresses
+
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`"25525511135"`, return
+
+```
+[
+  "255.255.11.135",
+  "255.255.111.35"
+]
+
+```
+
+Order does not matter.
+
+https://www.lintcode.com/en/old/problem/restore-ip-addresses/
+
+
+
+### 解题分析:
+
+一个有效的IP地址由四个数字组成 xxx.xxx.xxx.xxx每一个xxx在0-255之间那么就是看是不是最后有四个0-255的数字组成。那么这道题还是一个选还是不选的问题
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param s: the IP string
+     * @return: All possible valid IP addresses
+     */
+    vector<string> restoreIpAddresses(string &s) {
+        // write your code here
+        vector<string> results;
+        if (s.empty())
+            return results;
+        vector<int> subset;
+        dfs(s, 0, results, subset);
+        return results;
+    }
+    
+    void dfs(const string&s, int startIndex, vector<string>& results, vector<int>& subset)
+    {
+        if (startIndex >= s.size() )
+        {
+            if (subset.size() == 4)
+            {
+                string res;
+                for(int i = 0; i < 4; i++)
+                    res += to_string(subset[i])+".";
+                res.pop_back();
+                results.push_back(res);
+            }
+            return;
+        }
+        
+        if (subset.size() >= 4)
+            return;
+            
+        for (int i = 1; i <= 3; i++)
+        {
+            if (startIndex+i > s.size())
+                break;
+            auto str = s.substr(startIndex, i);
+            int n = stoi(str);
+            if (n == 0 && i == 1)
+            {
+                subset.push_back(n);
+                dfs(s, startIndex+1, results, subset);
+                subset.pop_back();
+                break;
+            }
+            if (n>255)
+                break;
+            subset.push_back(n);
+            dfs(s, startIndex+i, results, subset);
+            subset.pop_back();
+        }
+        
+    }
+};
+```
+
+### 复杂度分析:
+
+2^n
+
+
+
+
+
+
+
