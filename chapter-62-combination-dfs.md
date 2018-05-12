@@ -24,7 +24,7 @@ return`[]`
 Given n =`12`  
 return`[[2,6],[2,2,3],[3,4]]`
 
-https://www.lintcode.com/en/old/problem/factorization/
+[https://www.lintcode.com/en/old/problem/factorization/](https://www.lintcode.com/en/old/problem/factorization/)
 
 ### 解题分析:
 
@@ -44,7 +44,7 @@ https://www.lintcode.com/en/old/problem/factorization/
 
 2    。。。。
 
-3  4     
+3  4
 
 ~~4  3， 去掉重复 非升序~~
 
@@ -56,27 +56,27 @@ https://www.lintcode.com/en/old/problem/factorization/
 
 以2开头 可以继续我 **2,2，3 **或者 **2， 6**
 
-
-
 通过观察发现: 如果要保证 升序， 则因子要在 2 - sqrt\(12\)中间找， 比如， 4， 就不可以 因为 12/4 &lt; 4,所以就会被去掉
 
 因为要保证下一个升序，则 当前以x开头， 则下一次分解因子应该以x开始
 
-递归的出口n &lt;=1 
+递归的出口n &lt;=1
 
 递归的定义：
 
-  for（ start : sqrt\(n\)\)
+for（ start : sqrt\(n\)\)
 
-        sub.push\(i\)
+```
+    sub.push\(i\)
 
-        dfs
+    dfs
 
-        sub.pop\(\)
+    sub.pop\(\)
+```
 
 但是有一个问题就是
 
- 我们限定了只遍历到sqrt\(n\)  那么就有一个问题， 我们限定在start到sqrt\(n\)中间找 ， 比如12， 在\[2, 3\]找 然后余下6， 在\[2, 2\]找，我们就会漏掉6本身这个解，所以当范围限定在【x,x】的时候我们要看一下n&gt;= start的情况，把n也加到现有的subset中
+我们限定了只遍历到sqrt\(n\)  那么就有一个问题， 我们限定在start到sqrt\(n\)中间找 ， 比如12， 在\[2, 3\]找 然后余下6， 在\[2, 2\]找，我们就会漏掉6本身这个解，所以当范围限定在【x,x】的时候我们要看一下n&gt;= start的情况，把n也加到现有的subset中
 
 ```
 for (int i=2; i<=n;i++)
@@ -101,7 +101,7 @@ public:
         dfs( n, subset, 2, results);
         return results;
     }
-    
+
     void dfs(int n, vector<int>& subset, int start, vector<vector<int>>& results)
     {
         if (n <= 1)
@@ -110,7 +110,7 @@ public:
                 results.push_back(subset);
             return;
         }
-        
+
         for (int i = start; i <= sqrt(n); i++)
         {
             if (n % i != 0)
@@ -132,5 +132,5 @@ public:
 
 ### 复杂度分析:
 
-o\(n\)
+?
 
