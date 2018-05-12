@@ -1,4 +1,4 @@
-## 652. Factorization
+## \*\*\*\*652. Factorization
 
 A non-negative numbers can be regarded as product of its factors.  
 Write a function that takes an integer n and return all possible combinations of its factors.
