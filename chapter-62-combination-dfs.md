@@ -151,14 +151,11 @@ Given`"25525511135"`, return
   "255.255.11.135",
   "255.255.111.35"
 ]
-
 ```
 
 Order does not matter.
 
-https://www.lintcode.com/en/old/problem/restore-ip-addresses/
-
-
+[https://www.lintcode.com/en/old/problem/restore-ip-addresses/](https://www.lintcode.com/en/old/problem/restore-ip-addresses/)
 
 ### 解题分析:
 
@@ -182,7 +179,7 @@ public:
         dfs(s, 0, results, subset);
         return results;
     }
-    
+
     void dfs(const string&s, int startIndex, vector<string>& results, vector<int>& subset)
     {
         if (startIndex >= s.size() )
@@ -197,10 +194,10 @@ public:
             }
             return;
         }
-        
+
         if (subset.size() >= 4)
             return;
-            
+
         for (int i = 1; i <= 3; i++)
         {
             if (startIndex+i > s.size())
@@ -220,7 +217,7 @@ public:
             dfs(s, startIndex+i, results, subset);
             subset.pop_back();
         }
-        
+
     }
 };
 ```
@@ -229,9 +226,67 @@ public:
 
 2^n
 
+## 427. Generate Parentheses
 
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
 
+Have you met this question in a real interview?
 
+Yes
+
+**Example**
+
+Given`n = 3`, a solution set is:
+
+`"((()))", "(()())", "(())()", "()(())", "()()()"`
+
+https://www.lintcode.com/en/old/problem/generate-parentheses/
+
+### 解题分析:
+
+这道题考的不是写code,考的是是不是知道结论， i &lt;n-1 l&gt;= r i = n-1 l =r 才是valid
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: n pairs
+     * @return: All combinations of well-formed parentheses
+     */
+    vector<string> generateParenthesis(int n) {
+        // write your code here
+        vector<string> results;
+        string subset;
+        dfs(0, 2*n, 0, 0, subset, results );
+        return results;
+    }
+    
+    void dfs(int ind, int n, int l, int r, string& subset, vector<string>& results)
+    {
+        if ( ind == n || l < r  )
+        {
+            if (l == r)
+                results.push_back(subset);
+            return;
+        }
+        
+        subset.push_back('(');
+        dfs(ind+1, n, l+1, r, subset, results);
+        subset.pop_back();
+        
+        subset.push_back(')');
+        dfs(ind+1, n, l, r+1, subset, results);
+        subset.pop_back();
+    }
+    
+};
+```
+
+### 复杂度分析:
+
+2^n
 
 
 
