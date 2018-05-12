@@ -461,8 +461,6 @@ public:
 
 o\(n\)
 
-
-
 ## 520. Consistent Hashing II
 
 在 Consistent Hashing I 中我们介绍了一个比较简单的一致性哈希算法，这个简单的版本有两个缺陷：
@@ -491,7 +489,7 @@ n 和 k在真实的 NoSQL 数据库中一般是 2^64 和 1000。
 但是为了方便测试您程序的正确性，n 在数据中可能会比较小，所以你必须保证你生成的 k 个随机数不会出现重复。  
 LintCode并不会判断你addMachine的返回结果的正确性（因为是随机数），只会根据您返回的addMachine的结果判断你getMachineIdByHashCode结果的正确性。
 
-https://www.lintcode.com/en/problem/consistent-hashing-ii/
+[https://www.lintcode.com/en/problem/consistent-hashing-ii/](https://www.lintcode.com/en/problem/consistent-hashing-ii/)
 
 ### 解题分析:
 
@@ -536,7 +534,7 @@ public:
                     break;
                 }
             }
-            
+
         }
         return res;
     }
@@ -555,7 +553,7 @@ public:
             return shards_.begin()->second;
         return up->second;
     }
-    
+
     int n_;
     int k_;
     map<int, int> shards_;
