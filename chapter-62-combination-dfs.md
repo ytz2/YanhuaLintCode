@@ -240,7 +240,7 @@ Given`n = 3`, a solution set is:
 
 `"((()))", "(()())", "(())()", "()(())", "()()()"`
 
-https://www.lintcode.com/en/old/problem/generate-parentheses/
+[https://www.lintcode.com/en/old/problem/generate-parentheses/](https://www.lintcode.com/en/old/problem/generate-parentheses/)
 
 ### 解题分析:
 
@@ -262,7 +262,7 @@ public:
         dfs(0, 2*n, 0, 0, subset, results );
         return results;
     }
-    
+
     void dfs(int ind, int n, int l, int r, string& subset, vector<string>& results)
     {
         if ( ind == n || l < r  )
@@ -271,16 +271,16 @@ public:
                 results.push_back(subset);
             return;
         }
-        
+
         subset.push_back('(');
         dfs(ind+1, n, l+1, r, subset, results);
         subset.pop_back();
-        
+
         subset.push_back(')');
         dfs(ind+1, n, l, r+1, subset, results);
         subset.pop_back();
     }
-    
+
 };
 ```
 
@@ -289,4 +289,50 @@ public:
 2^n
 
 
+
+## 196. Missing Number
+
+Given an array contains_N_numbers of 0 .._N_, find which number doesn't exist in the array.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given_N_=`3`and the array`[0, 1, 3]`, return`2`.
+
+https://www.lintcode.com/en/old/problem/missing-number/
+
+
+
+### 解题分析:
+
+o\(n\)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: An array of integers
+     * @return: An integer
+     */
+    int findMissing(vector<int> &nums) {
+        // write your code here
+        if (nums.empty())
+            return 0;
+        int n = nums.size();
+        int sum = n*(n+1)/2;
+        for (const auto& each : nums)
+            sum -= each;
+        return sum;
+    }
+};
+```
+
+### 复杂度分析:
+
+o\(n\)
 
