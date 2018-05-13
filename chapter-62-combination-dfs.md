@@ -288,11 +288,9 @@ public:
 
 2^n
 
-
-
 ## 196. Missing Number
 
-Given an array contains_N_numbers of 0 .._N_, find which number doesn't exist in the array.
+Given an array contains_N\_numbers of 0 ..\_N_, find which number doesn't exist in the array.
 
 Have you met this question in a real interview?
 
@@ -302,9 +300,7 @@ Yes
 
 Given_N_=`3`and the array`[0, 1, 3]`, return`2`.
 
-https://www.lintcode.com/en/old/problem/missing-number/
-
-
+[https://www.lintcode.com/en/old/problem/missing-number/](https://www.lintcode.com/en/old/problem/missing-number/)
 
 ### 解题分析:
 
@@ -335,4 +331,76 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+
+
+## 107. Word Break
+
+Given a string s and a dictionary of words dict, determine if s can be break into a space-separated sequence of one or more dictionary words.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given s =`"lintcode"`, dict =`["lint", "code"]`.
+
+Return true because**"lintcode"**can be break as`"lint code"`.
+
+https://www.lintcode.com/en/old/problem/word-break/\#
+
+### 解题分析:
+
+
+
+是否可以，一般都是宽搜，深搜是求具体的所有方案的问题， 就这道题而言，宽搜好过深搜，没必要写深搜, 
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param s: A string
+     * @param dict: A dictionary of words dict
+     * @return: A boolean
+     */
+    bool wordBreak(string &s, unordered_set<string> &dict) {
+        // write your code here
+        if (s.empty() && dict.empty())
+            return true;
+        if (s.empty() || dict.empty())
+            return false;
+        set<int> lenSize;
+        for (const auto& each: dict)
+            lenSize.insert(each.size());
+        return dfs(s, 0, lenSize, dict);
+    }
+    
+    bool dfs(string& s, int startIndex, set<int>& lenSize, unordered_set<string>& dict)
+    {
+        if (startIndex >= s.size())
+            return true;
+        for (const auto& len : lenSize)
+        {
+            auto str = s.substr(startIndex, len );
+            if (dict.find(str) == dict.end())
+                continue;
+            if (dfs(s, startIndex+len, lenSize, dict))
+                return true;
+        }
+        return false;
+    }
+    
+};
+```
+
+### 复杂度分析:
+
+2^n
+
+
 
