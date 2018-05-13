@@ -332,8 +332,6 @@ public:
 
 o\(n\)
 
-
-
 ## 107. Word Break
 
 Given a string s and a dictionary of words dict, determine if s can be break into a space-separated sequence of one or more dictionary words.
@@ -348,15 +346,11 @@ Given s =`"lintcode"`, dict =`["lint", "code"]`.
 
 Return true because**"lintcode"**can be break as`"lint code"`.
 
-https://www.lintcode.com/en/old/problem/word-break/\#
+[https://www.lintcode.com/en/old/problem/word-break/\#](https://www.lintcode.com/en/old/problem/word-break/#)
 
 ### 解题分析:
 
-
-
-是否可以，一般都是宽搜，深搜是求具体的所有方案的问题， 就这道题而言，宽搜好过深搜，没必要写深搜, 
-
-
+是否可以，一般都是宽搜，深搜是求具体的所有方案的问题， 就这道题而言，宽搜好过深搜，没必要写深搜,
 
 ### 代码：
 
@@ -379,7 +373,7 @@ public:
             lenSize.insert(each.size());
         return dfs(s, 0, lenSize, dict);
     }
-    
+
     bool dfs(string& s, int startIndex, set<int>& lenSize, unordered_set<string>& dict)
     {
         if (startIndex >= s.size())
@@ -394,7 +388,7 @@ public:
         }
         return false;
     }
-    
+
 };
 ```
 
@@ -403,4 +397,103 @@ public:
 2^n
 
 
+
+## 683. Word Break III
+
+Give a dictionary of words and a sentence with all whitespace removed, return the number of sentences you can form by inserting whitespaces to the sentence so that each word can be found in the dictionary.
+
+##### Notice
+
+Ignore case
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given a String`CatMat`  
+Given a dictionary`["Cat", "Mat", "Ca", "tM", "at", "C", "Dog", "og", "Do"]`  
+return`3`
+
+we can form 3 sentences, as follows:  
+`CatMat = Cat Mat`  
+`CatMat = Ca tM at`  
+`CatMat = C at Mat`
+
+https://www.lintcode.com/en/old/problem/word-break-iii/
+
+
+
+### 解题分析:
+
+和上题不尽相同, 但是中间提交的时候evolve了两次
+
+1。 第一次是没有看到忽略大小写
+
+2。 第二次是超时了， 看了一眼可以用Memorized search来解决
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param : A string
+     * @param : A set of word
+     * @return: the number of possible sentences.
+     */
+    int wordBreak3(string& s, unordered_set<string>& dict) {
+        // Write your code here
+        if (s.empty() && dict.empty())
+            return 1;
+        if (s.empty() || dict.empty())
+            return 0;
+        toLower(s);
+        set<int> lenSize;
+        unordered_set<string> dup;
+        for (auto each : dict)
+            if (!each.empty())
+            {
+                lenSize.insert(each.size());
+                toLower(each);
+                dup.insert(each);
+            }
+        return dfs(s, 0, lenSize, dup);
+    }
+    
+private:
+    void toLower(string& s)
+    {
+        for (size_t i=0; i<s.size(); i++)
+            s[i] = tolower(s[i]);
+    }
+    
+    int dfs(string& s, int startIndex, set<int>& lenSize, unordered_set<string>& dict)
+    {
+        if (startIndex >= s.size())
+            return 1;
+        if (counts_.find(startIndex) != counts_.end())
+            return counts_[startIndex];
+        int res = 0;
+        for (const auto& len : lenSize)
+        {
+            if (startIndex + len > s.size() )
+                continue;
+            auto str = s.substr(startIndex, len);
+            if (dict.find(str) == dict.end())
+                continue;
+            res += dfs(s, startIndex + len, lenSize, dict);
+        }
+        counts_[startIndex] = res;
+        return res;
+    }
+    
+    unordered_map<int, int> counts_; 
+};
+```
+
+### 复杂度分析:
+
+n^2 懒得分析mem search, 如果是DP肯定是n^2 :\)
 
