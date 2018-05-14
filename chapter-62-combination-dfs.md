@@ -396,8 +396,6 @@ public:
 
 2^n
 
-
-
 ## 683. Word Break III
 
 Give a dictionary of words and a sentence with all whitespace removed, return the number of sentences you can form by inserting whitespaces to the sentence so that each word can be found in the dictionary.
@@ -421,9 +419,7 @@ we can form 3 sentences, as follows:
 `CatMat = Ca tM at`  
 `CatMat = C at Mat`
 
-https://www.lintcode.com/en/old/problem/word-break-iii/
-
-
+[https://www.lintcode.com/en/old/problem/word-break-iii/](https://www.lintcode.com/en/old/problem/word-break-iii/)
 
 ### 解题分析:
 
@@ -461,14 +457,14 @@ public:
             }
         return dfs(s, 0, lenSize, dup);
     }
-    
+
 private:
     void toLower(string& s)
     {
         for (size_t i=0; i<s.size(); i++)
             s[i] = tolower(s[i]);
     }
-    
+
     int dfs(string& s, int startIndex, set<int>& lenSize, unordered_set<string>& dict)
     {
         if (startIndex >= s.size())
@@ -488,7 +484,7 @@ private:
         counts_[startIndex] = res;
         return res;
     }
-    
+
     unordered_map<int, int> counts_; 
 };
 ```
@@ -496,4 +492,78 @@ private:
 ### 复杂度分析:
 
 n^2 懒得分析mem search, 如果是DP肯定是n^2 :\)
+
+
+
+## 108. Palindrome Partitioning II
+
+Given a string_s_, cut_s_into some substrings such that every substring is a palindrome.
+
+Return the**minimum**cuts needed for a palindrome partitioning of_s_.
+
+**Example**
+
+Given s =`"aab"`,
+
+Return`1`since the palindrome partitioning \["aa", "b"\] could be produced using_1_cut.
+
+https://www.lintcode.com/en/old/problem/palindrome-partitioning-ii/\#
+
+### 解题分析:
+
+这种题目一看就是DP问题， 放在DFS这里刷，就用DFS来解决吧
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param s: A string
+     * @return: An integer
+     */
+    int minCut(string &s) {
+        // write your code here
+        if (s.empty())
+            return 0;
+        return dfs(s, 0)-1;
+    }
+    
+    int dfs(string& s, int startIndex)
+    {
+        if (startIndex >= s.size())
+            return 0;
+        int res = INT_MAX;
+        for (int i = startIndex; i < s.size(); i++)
+        {
+            if (isValid(s, startIndex, i))
+            {
+                if (count_.find(i+1) == count_.end())
+                    res = min(res, 1+ dfs(s, i+1));
+                else
+                    res = min(res, 1+count_[i+1]);
+            }
+        }
+        
+        count_[startIndex] = res;
+        return res;
+    }
+    
+    bool isValid(const string& s, int beg, int end)
+    {
+        while(beg < end)
+        {
+            if (s[beg] != s[end])
+                return false;
+            beg++; end--;
+        }
+        return true;
+    }
+    unordered_map<int, int> count_;
+};
+```
+
+### 
+
+
 
