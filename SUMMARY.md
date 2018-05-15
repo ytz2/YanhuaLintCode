@@ -23,4 +23,5 @@
 * [Chapter 5.4 Binary Tree and Its DFS conclusion](chapter-54-binary-tree-and-its-dfs-conclusion.md)
 * [Chapter 6.1 Combination DFS](61-combination-dfs.md)
 * [Chapter 6.2 Combination DFS](chapter-62-combination-dfs.md)
+* [Chapter 6.3 Combination DFS summary](chapter-63-combination-dfs-summary.md)
 
