@@ -493,11 +493,9 @@ private:
 
 n^2 懒得分析mem search, 如果是DP肯定是n^2 :\)
 
-
-
 ## 108. Palindrome Partitioning II
 
-Given a string_s_, cut_s_into some substrings such that every substring is a palindrome.
+Given a string_s_, cut\_s\_into some substrings such that every substring is a palindrome.
 
 Return the**minimum**cuts needed for a palindrome partitioning of_s_.
 
@@ -505,9 +503,9 @@ Return the**minimum**cuts needed for a palindrome partitioning of_s_.
 
 Given s =`"aab"`,
 
-Return`1`since the palindrome partitioning \["aa", "b"\] could be produced using_1_cut.
+Return`1`since the palindrome partitioning \["aa", "b"\] could be produced using\_1\_cut.
 
-https://www.lintcode.com/en/old/problem/palindrome-partitioning-ii/\#
+[https://www.lintcode.com/en/old/problem/palindrome-partitioning-ii/\#](https://www.lintcode.com/en/old/problem/palindrome-partitioning-ii/#)
 
 ### 解题分析:
 
@@ -528,7 +526,7 @@ public:
             return 0;
         return dfs(s, 0)-1;
     }
-    
+
     int dfs(string& s, int startIndex)
     {
         if (startIndex >= s.size())
@@ -544,11 +542,11 @@ public:
                     res = min(res, 1+count_[i+1]);
             }
         }
-        
+
         count_[startIndex] = res;
         return res;
     }
-    
+
     bool isValid(const string& s, int beg, int end)
     {
         while(beg < end)
