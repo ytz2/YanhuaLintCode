@@ -143,7 +143,7 @@ public:
 };
 ```
 
-## 52. Next Permutation
+## \*\*\*\*\*52. Next Permutation 感觉只能靠背了。。。
 
 Given a list of integers, which denote a permutation.
 
@@ -163,7 +163,7 @@ For`[1,3,2,3]`, the next permutation is`[1,3,3,2]`
 
 For`[4,3,2,1]`, the next permutation is`[1,2,3,4]`time since it is smaller than the input time numerically.
 
-https://www.lintcode.com/en/old/problem/next-permutation/
+[https://www.lintcode.com/en/old/problem/next-permutation/](https://www.lintcode.com/en/old/problem/next-permutation/)
 
 ### 解题分析:
 
@@ -171,19 +171,15 @@ https://www.lintcode.com/en/old/problem/next-permutation/
 
 ![](/assets/demo.png)
 
-
-
 这个题目要明白是属于字典顺序
 
-1。 从后面往前找，找到a\[i\] &lt; a\[i+1\]的数字 
+1。 从后面往前找，找到a\[i\] &lt; a\[i+1\]的数字
 
-2.   从后面往前找找到第一个a\[j\] &gt; a\[i\]
+1. 从后面往前找找到第一个a\[j\] &gt; a\[i\]
 
-3. swap\(a\[i\], a\[j\] 
+2. swap\(a\[i\], a\[j\]
 
-4. reverse\(i+1, end\)
-
-
+3. reverse\(i+1, end\)
 
 原理：
 
@@ -195,9 +191,7 @@ https://www.lintcode.com/en/old/problem/next-permutation/
 
 如果上来想不出方法，可以试着找找规律，我们关注的重点应是原数组末尾。
 
-从末尾往左走，如果一直递增，例如`...9,7,5`，那么下一个排列一定会牵扯到左边更多的数，直到一个非递增数为止，例如`...6,9,7,5`。对于原数组的变化就只到`6`这里，和左侧其他数再无关系。`6`这个位置会变成`6`**右侧所有数中比`6`大的最小的数**，而`6`会进入最后3个数中，且后3个数必是**升序数组**。
-
-
+从末尾往左走，如果一直递增，例如`...9,7,5`，那么下一个排列一定会牵扯到左边更多的数，直到一个非递增数为止，例如`...6,9,7,5`。对于原数组的变化就只到`6`这里，和左侧其他数再无关系。`6`这个位置会变成`6`**右侧所有数中比**`6`**大的最小的数**，而`6`会进入最后3个数中，且后3个数必是**升序数组**。
 
 **Q：i为0怎么办？**  
 A：i为0说明整个数组是降序的，直接翻转整个数组即可。
