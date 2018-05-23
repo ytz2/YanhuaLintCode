@@ -360,3 +360,58 @@ public:
 
 
 
+## \*\*\*\*198 Permutation Index II
+
+Given a permutation which may contain repeated numbers, find its index in all the permutations of these numbers, which are ordered in lexicographical order. The index begins at 1.
+
+https://www.lintcode.com/en/old/problem/permutation-index-ii/
+
+
+
+### 解题分析:
+
+和上面一样， 但是因为有了重复，所以求完之后要除以重复数的阶乘。 
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: An array of integers
+     * @return: A long integer
+     */
+    long long permutationIndexII(vector<int> &A) {
+        // write your code here
+        int n = A.size();
+        if (n == 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        long long res = 0;
+        long long factor = 1;
+        long long multifact = 1;
+        unordered_map<int, int> counter;
+ 
+        for (int i = n-1; i >= 0; i--)
+        {
+            counter[A[i]]++;
+            multifact *= counter[A[i]];
+            int count = 0;
+            for (int j = i+1; j<n; j++)
+            {
+                if (A[j] < A[i])
+                    count++;
+            }
+            res += count*factor/multifact;
+            factor *= n - i;
+        }
+        return res+1;
+    }
+};
+```
+
+
+
