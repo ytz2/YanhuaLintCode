@@ -255,11 +255,76 @@ Here are some examples. Inputs are in the left-hand column and its corresponding
 
 `1,1,5`→`1,5,1`
 
-https://www.lintcode.com/en/old/problem/next-permutation-ii/
+[https://www.lintcode.com/en/old/problem/next-permutation-ii/](https://www.lintcode.com/en/old/problem/next-permutation-ii/)
 
 ### 解题分析:
 
 和上面一道题一样的。。。无聊
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: An array of integers
+     * @return: nothing
+     */
+    void nextPermutation(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        if (n <= 1)
+            return;
+        int i = n - 2;
+        while(i >=0 && nums[i] >= nums[i+1])
+            i--;
+        if (i>=0)
+        {
+            int j = n-1;
+            while(j>=0 && nums[j] <= nums[i])
+                j--;
+            swap(nums[i], nums[j]);
+        }
+        reverse(nums.begin()+i+1, nums.end());
+    }
+};
+```
+
+
+
+## 197. Permutation Index
+
+Given a permutation which contains no repeated number, find its index in all the permutations of these numbers, which are ordered in lexicographical order. The index begins at 1.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given \[1,2,4\], return 1.
+
+https://www.lintcode.com/en/old/problem/permutation-index/
+
+### 解题分析:
+
+3， 7， 4， 9， 1
+
+从倒数第二位开始， 比9小的 1，  3 7 4 9 1 -》 3 7 4 9 \* -》 1！
+
+从倒数第三位开始， 比4小的， 1   3 7 1 XX -&gt;  2!
+
+从倒数第四位开始    比7 小的        3 4/1 xxx  2\*3!
+
+从倒数第五位开始 比3 小的 1 xxxx  4! 
+
+4!+2\*3! +2! +1 = 39 , 前面有39 个， 加上1 第40个
+
+```
+用permutation表示当前阶乘，初始化为1,result表示最终结果，初始化为0。由于最终结果可能巨大，所以用long类型。
+i从右往左遍历A，循环中计算A[i]右侧有多少元素比A[i]小，计为smaller，result += smaller * permutation。之后permutation *= A.length - i，为下次循环i左移一位后的排列数。
+已算出多少字典序在A之前，返回result+1。
+```
 
 ### 代码：
 
