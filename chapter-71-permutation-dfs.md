@@ -290,9 +290,7 @@ public:
 };
 ```
 
-
-
-## 197. Permutation Index
+## \*\*\*\*197. Permutation Index
 
 Given a permutation which contains no repeated number, find its index in all the permutations of these numbers, which are ordered in lexicographical order. The index begins at 1.
 
@@ -304,7 +302,7 @@ Yes
 
 Given \[1,2,4\], return 1.
 
-https://www.lintcode.com/en/old/problem/permutation-index/
+[https://www.lintcode.com/en/old/problem/permutation-index/](https://www.lintcode.com/en/old/problem/permutation-index/)
 
 ### 解题分析:
 
@@ -316,7 +314,7 @@ https://www.lintcode.com/en/old/problem/permutation-index/
 
 从倒数第四位开始    比7 小的        3 4/1 xxx  2\*3!
 
-从倒数第五位开始 比3 小的 1 xxxx  4! 
+从倒数第五位开始 比3 小的 1 xxxx  4!
 
 4!+2\*3! +2! +1 = 39 , 前面有39 个， 加上1 第40个
 
@@ -332,25 +330,30 @@ i从右往左遍历A，循环中计算A[i]右侧有多少元素比A[i]小，计�
 class Solution {
 public:
     /**
-     * @param nums: An array of integers
-     * @return: nothing
+     * @param A: An array of integers
+     * @return: A long integer
      */
-    void nextPermutation(vector<int> &nums) {
+    long long permutationIndex(vector<int> &A) {
         // write your code here
-        int n = nums.size();
-        if (n <= 1)
-            return;
-        int i = n - 2;
-        while(i >=0 && nums[i] >= nums[i+1])
-            i--;
-        if (i>=0)
+        int n = A.size();
+        if (n == 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        long long result = 1;
+        long long factor = 1;
+        for (int i = n-2; i >= 0; i--)
         {
-            int j = n-1;
-            while(j>=0 && nums[j] <= nums[i])
-                j--;
-            swap(nums[i], nums[j]);
+            int count = 0;
+            for (int j = i+1; j < n; j++)
+            {
+                if (A[j] < A[i])
+                    count++;
+            }
+            result += count * factor;
+            factor *= n - i;
         }
-        reverse(nums.begin()+i+1, nums.end());
+        return result;
     }
 };
 ```
