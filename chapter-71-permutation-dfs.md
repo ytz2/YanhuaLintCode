@@ -358,21 +358,15 @@ public:
 };
 ```
 
-
-
 ## \*\*\*\*198 Permutation Index II
 
 Given a permutation which may contain repeated numbers, find its index in all the permutations of these numbers, which are ordered in lexicographical order. The index begins at 1.
 
-https://www.lintcode.com/en/old/problem/permutation-index-ii/
-
-
+[https://www.lintcode.com/en/old/problem/permutation-index-ii/](https://www.lintcode.com/en/old/problem/permutation-index-ii/)
 
 ### 解题分析:
 
-和上面一样， 但是因为有了重复，所以求完之后要除以重复数的阶乘。 
-
-
+和上面一样， 但是因为有了重复，所以求完之后要除以重复数的阶乘。
 
 ### 代码：
 
@@ -394,7 +388,7 @@ public:
         long long factor = 1;
         long long multifact = 1;
         unordered_map<int, int> counter;
- 
+
         for (int i = n-1; i >= 0; i--)
         {
             counter[A[i]]++;
@@ -410,6 +404,88 @@ public:
         }
         return res+1;
     }
+};
+```
+
+
+
+
+
+## 862 Next Closest Time
+
+Given a time represented in the format "HH:MM", form the next closest time by reusing the current digits. There is no limit on how many times a digit can be reused.
+
+You may assume the given input string is always valid. For example, "01:34", "12:09" are all valid. "1:34", "12:9" are all invalid.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given time =`"19:34"`, return`"19:39"`.
+
+```
+Explanation: 
+The next closest time choosing from digits 1, 9, 3, 4, is 19:39, which occurs 5 minutes later.  It is not 19:33, because this occurs 23 hours and 59 minutes later.
+
+```
+
+Given time =`"23:59"`, return`"22:22"`.
+
+```
+Explanation: 
+The next closest time choosing from digits 2, 3, 5, 9, is 22:22. It may be assumed that the returned time is next day's time since it is smaller than the input time numerically.
+```
+
+https://www.lintcode.com/en/old/problem/next-closest-time/\#
+
+### 解题分析:
+
+暴力
+
+DFS也可以，但是写的代码太多了
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param time: the given time
+     * @return: the next closest time
+     */
+     
+    
+    string nextClosestTime(string &time) {
+        unordered_set<char> store(time.begin(), time.end());
+        int hr = stoi(time.substr(0, 2));
+        int m = stoi(time.substr(3));
+        int tot = hr*60 + m;
+        
+        for (int i = 1; i < 24*60; i++)
+        {
+            tot++; 
+            char buffer[5];
+            sprintf(buffer, "%02d:%02d", tot/60%24, tot%60);
+            string res(buffer);
+            bool valid = true;
+            for (auto& each : res)
+                if (store.find(each) == store.end())
+                {
+                    valid = false;
+                    break;
+                }
+            if (valid)
+                return res;
+        }
+        return time;
+    }
+    
+
+
 };
 ```
 
