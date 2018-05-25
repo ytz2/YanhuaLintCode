@@ -100,5 +100,84 @@ public:
 
 ### 
 
+## 123. Word Search
+
+  
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+### Example
+
+Given board =
+
+```
+[
+  "ABCE",
+  "SFCS",
+  "ADEE"
+]
+
+```
+
+word = `"ABCCED"`, -&gt; returns `true`,  
+word = `"SEE"`, -&gt; returns `true`,  
+word = `"ABCB"`, -&gt; returns `false`.
+
+https://www.lintcode.com/problem/word-search/description
+
+### 解题分析:
+
+BFS/DFS all OK, use DFS here
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param board: A list of lists of character
+     * @param word: A string
+     * @return: A boolean
+     */
+    bool exist(vector<vector<char>> &board, string &word) {
+        // write your code here
+        if (word.empty() || board.empty())
+            return false;
+        int m = board.size();
+        int n = board[0].size();
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        auto leading = word[0];
+        for (int i =0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                if (dfs(board, visited, word, 0, i, j))
+                    return true;
+        return false;
+    }
+    
+    bool dfs(vector<vector<char>>& board, vector<vector<bool>>& visited, string& word, int current, int i, int j)
+    {
+        if (current>= word.size() || word[current]== board[i][j] && current == word.size()-1 )
+            return true;
+        if (word[current] != board[i][j])
+            return false;
+        static vector<int> dx={-1, 1, 0, 0};
+        static vector<int> dy={ 0, 0, 1, -1};
+        visited[i][j] = true;
+        for (int k =0; k < 4; k++)
+        {
+            int next_i = i + dx[k];
+            int next_j = j + dy[k];
+            if (next_i < 0 || next_i >=board.size()|| next_j < 0 || next_j >= board[0].size() || visited[next_i][next_j])
+                continue;
+            if (dfs(board, visited, word, current+1, next_i, next_j))
+                return true;
+        }
+        visited[i][j] = false;
+        return false;
+    }
+};
+```
+
 
 
