@@ -482,8 +482,6 @@ public:
 };
 ```
 
-
-
 ## 425 Letter Combinations of a Phone Number
 
 Given a digit string excluded`01`, return all possible letter combinations that the number could represent.
@@ -506,7 +504,7 @@ Given`"23"`
 
 Return`["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]` since it is smaller than the input time numerically.
 
-https://www.lintcode.com/en/old/problem/letter-combinations-of-a-phone-number/
+[https://www.lintcode.com/en/old/problem/letter-combinations-of-a-phone-number/](https://www.lintcode.com/en/old/problem/letter-combinations-of-a-phone-number/)
 
 ### 解题分析:
 
@@ -523,18 +521,18 @@ public:
      */
     vector<string> letterCombinations(string &digits) {
         // write your code here
-        
+
         vector<string> result;
         if (digits.empty())
             return result;
-        
+
         unordered_map<char, string> dict({{'2',"abc"},{'3',"def"},{'4',"ghi"},{'5',"jkl"},{'6',"mno"},{'7',"pqrs"},{'8', "tuv"},{'9',"wxyz"}});
 
         string subset;
         dfs(digits, dict, result, subset , 0);
         return result;
     }
-    
+
     void dfs(const string& digits, unordered_map<char, string>& dict, vector<string>& results, string& subset, int index)
     {
         if (index >= digits.size())
@@ -542,12 +540,77 @@ public:
             results.push_back(subset);
             return;
         }
-        
+
         const auto& str = dict[digits[index]];
         for (const auto c: str)
         {
             subset.push_back(c);
             dfs(digits, dict, results, subset, index+1);
+            subset.pop_back();
+        }
+    }
+};
+```
+
+
+
+## 10 String Permutation II
+
+Given a string, find all permutations of it without duplicates.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`"abb"`, return`["abb", "bab", "bba"]`.
+
+Given`"aabb"`, return`["aabb", "abab", "baba", "bbaa", "abba", "baab"]`.
+
+https://www.lintcode.com/en/old/problem/string-permutation-ii/\#
+
+### 解题分析:
+
+典型的permutation的题目
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param str: A string
+     * @return: all permutations
+     */
+    vector<string> stringPermutation2(string &str) {
+        // write your code here
+        vector<string> results;
+        sort(str.begin(), str.end());
+        vector<bool> visited(str.size(), false);
+        string subset;
+        dfs(str, visited, subset, results);
+        return results;
+    }
+    
+    void  dfs(string& str, vector<bool>& visited, string& subset, vector<string>& results)
+    {
+        if (subset.size() == str.size())
+        {
+            results.push_back(subset);
+            return;
+        }
+        
+        for (int i = 0; i < str.size(); i++)
+        {
+            if (i!=0 && str[i] == str[i-1] && !visited[i-1])
+                continue;
+            if (visited[i])
+                continue;
+            subset.push_back(str[i]);
+            visited[i] = true;
+            dfs(str, visited, subset, results);
+            visited[i] = false;
             subset.pop_back();
         }
     }
