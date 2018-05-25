@@ -65,8 +65,6 @@ public:
 };
 ```
 
-
-
 ## 211. String Permutation
 
 Given two strings, write a method to decide if one is a permutation of the other.
@@ -79,7 +77,7 @@ Given two strings, write a method to decide if one is a permutation of the other
 
 ### 解题分析:
 
-用两个hash table
+用个hash table
 
 ### 代码：
 
@@ -101,8 +99,6 @@ public:
 ```
 
 ### 
-
-
 
 
 
