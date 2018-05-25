@@ -407,10 +407,6 @@ public:
 };
 ```
 
-
-
-
-
 ## 862 Next Closest Time
 
 Given a time represented in the format "HH:MM", form the next closest time by reusing the current digits. There is no limit on how many times a digit can be reused.
@@ -428,7 +424,6 @@ Given time =`"19:34"`, return`"19:39"`.
 ```
 Explanation: 
 The next closest time choosing from digits 1, 9, 3, 4, is 19:39, which occurs 5 minutes later.  It is not 19:33, because this occurs 23 hours and 59 minutes later.
-
 ```
 
 Given time =`"23:59"`, return`"22:22"`.
@@ -438,15 +433,13 @@ Explanation:
 The next closest time choosing from digits 2, 3, 5, 9, is 22:22. It may be assumed that the returned time is next day's time since it is smaller than the input time numerically.
 ```
 
-https://www.lintcode.com/en/old/problem/next-closest-time/\#
+[https://www.lintcode.com/en/old/problem/next-closest-time/\#](https://www.lintcode.com/en/old/problem/next-closest-time/#)
 
 ### 解题分析:
 
 暴力
 
 DFS也可以，但是写的代码太多了
-
-
 
 ### 代码：
 
@@ -457,14 +450,14 @@ public:
      * @param time: the given time
      * @return: the next closest time
      */
-     
-    
+
+
     string nextClosestTime(string &time) {
         unordered_set<char> store(time.begin(), time.end());
         int hr = stoi(time.substr(0, 2));
         int m = stoi(time.substr(3));
         int tot = hr*60 + m;
-        
+
         for (int i = 1; i < 24*60; i++)
         {
             tot++; 
@@ -483,9 +476,81 @@ public:
         }
         return time;
     }
+
+
+
+};
+```
+
+
+
+## 425 Letter Combinations of a Phone Number
+
+Given a digit string excluded`01`, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters \(just like on the telephone buttons\) is given below.
+
+![](https://lintcode-media.s3.amazonaws.com/problem/200px-Telephone-keypad2.svg.png "Cellphone")
+
+##### Notice
+
+Although the above answer is in lexicographical order, your answer could be in any order you want.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+Given`"23"`
+
+Return`["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]` since it is smaller than the input time numerically.
+
+https://www.lintcode.com/en/old/problem/letter-combinations-of-a-phone-number/
+
+### 解题分析:
+
+好多年前做过的面试题。。。。
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param digits: A digital string
+     * @return: all posible letter combinations
+     */
+    vector<string> letterCombinations(string &digits) {
+        // write your code here
+        
+        vector<string> result;
+        if (digits.empty())
+            return result;
+        
+        unordered_map<char, string> dict({{'2',"abc"},{'3',"def"},{'4',"ghi"},{'5',"jkl"},{'6',"mno"},{'7',"pqrs"},{'8', "tuv"},{'9',"wxyz"}});
+
+        string subset;
+        dfs(digits, dict, result, subset , 0);
+        return result;
+    }
     
-
-
+    void dfs(const string& digits, unordered_map<char, string>& dict, vector<string>& results, string& subset, int index)
+    {
+        if (index >= digits.size())
+        {
+            results.push_back(subset);
+            return;
+        }
+        
+        const auto& str = dict[digits[index]];
+        for (const auto c: str)
+        {
+            subset.push_back(c);
+            dfs(digits, dict, results, subset, index+1);
+            subset.pop_back();
+        }
+    }
 };
 ```
 
