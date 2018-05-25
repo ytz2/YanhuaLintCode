@@ -552,8 +552,6 @@ public:
 };
 ```
 
-
-
 ## 10 String Permutation II
 
 Given a string, find all permutations of it without duplicates.
@@ -568,7 +566,7 @@ Given`"abb"`, return`["abb", "bab", "bba"]`.
 
 Given`"aabb"`, return`["aabb", "abab", "baba", "bbaa", "abba", "baab"]`.
 
-https://www.lintcode.com/en/old/problem/string-permutation-ii/\#
+[https://www.lintcode.com/en/old/problem/string-permutation-ii/\#](https://www.lintcode.com/en/old/problem/string-permutation-ii/#)
 
 ### 解题分析:
 
@@ -592,7 +590,7 @@ public:
         dfs(str, visited, subset, results);
         return results;
     }
-    
+
     void  dfs(string& str, vector<bool>& visited, string& subset, vector<string>& results)
     {
         if (subset.size() == str.size())
@@ -600,7 +598,7 @@ public:
             results.push_back(subset);
             return;
         }
-        
+
         for (int i = 0; i < str.size(); i++)
         {
             if (i!=0 && str[i] == str[i-1] && !visited[i-1])
@@ -614,6 +612,111 @@ public:
             subset.pop_back();
         }
     }
+};
+```
+
+
+
+## 33 N-Queens
+
+The n-queens puzzle is the problem of placing n queens on an`n×n`chessboard such that no two queens attack each other.
+
+Given an integer`n`, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where`'Q'`and`'.'`both indicate a queen and an empty space respectively.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+There exist two distinct solutions to the 4-queens puzzle:
+
+```
+[
+  // Solution 1
+  [".Q..",
+   "...Q",
+   "Q...",
+   "..Q."
+  ],
+  // Solution 2
+  ["..Q.",
+   "Q...",
+   "...Q",
+   ".Q.."
+  ]
+]
+
+
+```
+
+### 解题分析:
+
+典型的permutation的题目
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param n: The number of queens
+     * @return: All distinct solutions
+     */
+    vector<vector<string>> solveNQueens(int n) {
+        // write your code here
+        vector<string> board(n, string(n,'.'));
+        vector<vector<string>> results;
+        dfs(results, board, 0);
+        return results;
+    }
+    
+    void dfs(vector<vector<string>>& results, vector<string>& board, int index)
+    {
+        if (index >= board.size())
+        {
+            results.push_back(board);
+            return;
+        }
+        for (int i = 0; i < board.size(); i++)
+        {
+            if (!isValid(board, index, i))
+                continue;
+            board[index][i] = 'Q';
+            dfs(results, board, index+1);
+            board[index][i] = '.';
+        }
+    }
+    
+    bool isValid(vector<string>& board, int i, int j)
+    {
+        for (int k = 0; k < i; k++)
+        {
+            if (board[k][j] == 'Q')
+                return false;
+        }
+        
+        int m = i, n = j;
+        while(m>=0 && n>=0)
+        {
+            if (board[m][n] == 'Q')
+                return false;
+            m--;n--;
+        }
+        m = i;
+        n = j;
+        while(m>=0 && n<board.size())
+        {
+            if (board[m][n] == 'Q')
+                return false;
+            m--;
+            n++;
+        }
+        return true;
+    }
+    
 };
 ```
 
