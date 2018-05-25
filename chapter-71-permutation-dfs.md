@@ -615,8 +615,6 @@ public:
 };
 ```
 
-
-
 ## 33 N-Queens
 
 The n-queens puzzle is the problem of placing n queens on an`n×n`chessboard such that no two queens attack each other.
@@ -648,8 +646,6 @@ There exist two distinct solutions to the 4-queens puzzle:
    ".Q.."
   ]
 ]
-
-
 ```
 
 ### 解题分析:
@@ -672,7 +668,7 @@ public:
         dfs(results, board, 0);
         return results;
     }
-    
+
     void dfs(vector<vector<string>>& results, vector<string>& board, int index)
     {
         if (index >= board.size())
@@ -686,6 +682,88 @@ public:
                 continue;
             board[index][i] = 'Q';
             dfs(results, board, index+1);
+            board[index][i] = '.';
+        }
+    }
+
+    bool isValid(vector<string>& board, int i, int j)
+    {
+        for (int k = 0; k < i; k++)
+        {
+            if (board[k][j] == 'Q')
+                return false;
+        }
+
+        int m = i, n = j;
+        while(m>=0 && n>=0)
+        {
+            if (board[m][n] == 'Q')
+                return false;
+            m--;n--;
+        }
+        m = i;
+        n = j;
+        while(m>=0 && n<board.size())
+        {
+            if (board[m][n] == 'Q')
+                return false;
+            m--;
+            n++;
+        }
+        return true;
+    }
+
+};
+```
+
+## 34 N-Queens II
+
+Follow up for N-Queens problem.
+
+Now, instead outputting board configurations, return the total number of distinct solutions.
+
+Have you met this question in a real interview?
+
+Yes
+
+**Example**
+
+For n=4, there are 2 distinct solutions.
+
+### 解题分析:
+
+典型的permutation的题目
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: The number of queens.
+     * @return: The total number of distinct solutions.
+     */
+    int totalNQueens(int n) {
+        // write your code here
+        int res = 0;
+        vector<string> board(n, string(n,'.'));
+        dfs(res, board, 0);
+        return res;
+    }
+    
+    void dfs(int& res, vector<string>& board, int index)
+    {
+        if (index >= board.size())
+        {
+            res++;
+            return;
+        }
+        for (int i = 0; i < board.size(); i++)
+        {
+            if (!isValid(board, index, i))
+                continue;
+            board[index][i] = 'Q';
+            dfs(res, board, index+1);
             board[index][i] = '.';
         }
     }
