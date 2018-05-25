@@ -11,7 +11,7 @@ Given pattern =`"abba"`, str =`"dog cat cat fish"`, return`false`.
 Given pattern =`"aaaa"`, str =`"dog cat cat dog"`, return`false`.  
 Given pattern =`"abba"`, str =`"dog dog dog dog"`, return`false`.
 
-https://www.lintcode.com/problem/word-pattern/description
+[https://www.lintcode.com/problem/word-pattern/description](https://www.lintcode.com/problem/word-pattern/description)
 
 ### 解题分析:
 
@@ -42,7 +42,7 @@ public:
                 str = str.substr(pos+1);
             else
                 str = "";
-            
+
             auto cit = charStr.find(c);
             auto strit = strChar.find(token);
             if (cit == charStr.end() && strit == strChar.end())
@@ -65,7 +65,44 @@ public:
 };
 ```
 
+
+
+## 211. String Permutation
+
+Given two strings, write a method to decide if one is a permutation of the other.
+
+### Example
+
+`abcd`is a permutation of`bcad`, but`abbe`is not a permutation of`abe`
+
+[https://www.lintcode.com/problem/word-pattern/description](https://www.lintcode.com/problem/word-pattern/description)
+
+### 解题分析:
+
+用两个hash table
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    bool Permutation(string &A, string &B) {
+        if (A.size() != B.size() )
+            return false;
+        unordered_map<char, int> dict;
+        for (int i = 0; i < A.size(); i++){
+            dict[A[i]]++;dict[B[i]]--;
+        }
+        for (const auto& each : dict)
+            if (each.second != 0) return false;
+        return true;
+    }
+};
+```
+
 ### 
+
+
 
 
 
