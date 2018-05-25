@@ -750,7 +750,7 @@ public:
         dfs(res, board, 0);
         return res;
     }
-    
+
     void dfs(int& res, vector<string>& board, int index)
     {
         if (index >= board.size())
@@ -767,7 +767,7 @@ public:
             board[index][i] = '.';
         }
     }
-    
+
     bool isValid(vector<string>& board, int i, int j)
     {
         for (int k = 0; k < i; k++)
@@ -775,7 +775,7 @@ public:
             if (board[k][j] == 'Q')
                 return false;
         }
-        
+
         int m = i, n = j;
         while(m>=0 && n>=0)
         {
@@ -794,7 +794,7 @@ public:
         }
         return true;
     }
-    
+
 };
 ```
 

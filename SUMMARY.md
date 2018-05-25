@@ -25,4 +25,5 @@
 * [Chapter 6.2 Combination DFS](chapter-62-combination-dfs.md)
 * [Chapter 6.3 Combination DFS summary](chapter-63-combination-dfs-summary.md)
 * [Chapter 7.1 Permutation DFS](chapter-71-permutation-dfs.md)
+* [Chapter 7.2 Permutation DFS ](chapter-72-permutation-dfs.md)
 
