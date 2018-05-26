@@ -102,14 +102,13 @@ public:
 
 ## 123. Word Search
 
-  
 Given a 2D board and a word, find if the word exists in the grid.
 
 The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
 
 ### Example
 
-Given board =
+Given board =
 
 ```
 [
@@ -117,14 +116,13 @@ Given board =
   "SFCS",
   "ADEE"
 ]
-
 ```
 
-word = `"ABCCED"`, -&gt; returns `true`,  
-word = `"SEE"`, -&gt; returns `true`,  
-word = `"ABCB"`, -&gt; returns `false`.
+word = `"ABCCED"`, -&gt; returns `true`,  
+word = `"SEE"`, -&gt; returns `true`,  
+word = `"ABCB"`, -&gt; returns `false`.
 
-https://www.lintcode.com/problem/word-search/description
+[https://www.lintcode.com/problem/word-search/description](https://www.lintcode.com/problem/word-search/description)
 
 ### 解题分析:
 
@@ -154,7 +152,7 @@ public:
                     return true;
         return false;
     }
-    
+
     bool dfs(vector<vector<char>>& board, vector<vector<bool>>& visited, string& word, int current, int i, int j)
     {
         if (current>= word.size() || word[current]== board[i][j] && current == word.size()-1 )
@@ -178,6 +176,58 @@ public:
     }
 };
 ```
+
+
+
+## 51. Previous Permutation
+
+Given a list of integers, which denote a permutation.
+
+Find the previous permutation in ascending order.
+
+### Example
+
+For`[1,3,2,3]`, the previous permutation is`[1,2,3,3]`
+
+For`[1,2,3,4]`, the previous permutation is`[4,3,2,1]`
+
+https://www.lintcode.com/problem/previous-permutation/description
+
+### 解题分析:
+
+逆过程
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param nums: A list of integers
+     * @return: A list of integers that's previous permuation
+     */
+    vector<int> previousPermuation(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        if (n <= 1)
+            return nums;
+        int i = n-2;
+        while(i >= 0 && nums[i] <= nums[i+1])
+            i--;
+        if (i >= 0)
+        {
+            int  j = n-1;
+            while( j>=0 && nums[j] >= nums[i])
+                j--;
+            swap(nums[j], nums[i]);
+        }
+        reverse(nums.begin()+i+1, nums.end());
+        return nums;
+    }
+};
+```
+
+
 
 
 
