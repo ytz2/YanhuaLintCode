@@ -177,8 +177,6 @@ public:
 };
 ```
 
-
-
 ## 51. Previous Permutation
 
 Given a list of integers, which denote a permutation.
@@ -191,7 +189,7 @@ For`[1,3,2,3]`, the previous permutation is`[1,2,3,3]`
 
 For`[1,2,3,4]`, the previous permutation is`[4,3,2,1]`
 
-https://www.lintcode.com/problem/previous-permutation/description
+[https://www.lintcode.com/problem/previous-permutation/description](https://www.lintcode.com/problem/previous-permutation/description)
 
 ### 解题分析:
 
@@ -228,6 +226,143 @@ public:
 ```
 
 
+
+## 442. Implement Trie \(Prefix Tree\)
+
+Implement a trie with insert, search, and startsWith methods.
+
+### Example
+
+```
+insert("lintcode")
+search("code")
+
+>
+>
+>
+ false
+startsWith("lint")
+
+>
+>
+>
+ true
+startsWith("linterror")
+
+>
+>
+>
+ false
+insert("linterror")
+search("lintcode)
+
+>
+>
+>
+ true
+startsWith("linterror")
+
+>
+>
+>
+ true
+```
+
+https://www.lintcode.com/problem/implement-trie-prefix-tree/description
+
+### 解题分析:
+
+逆过程
+
+### 代码：
+
+```cpp
+class Trie {
+public:
+
+    class TrieNode{
+    public:
+        TrieNode()
+            : isWord(false),
+              children(vector<TrieNode*>(26, nullptr))
+        {}
+        
+        ~TrieNode(){
+            for (auto p : children)
+            {
+                if (p)
+                    delete p;
+            }
+            children.clear();
+        }
+        
+        bool isWord;
+        vector<TrieNode*> children;
+    };
+
+
+    Trie() {
+        // do intialization if necessary
+        root = new TrieNode();
+    }
+
+    ~Trie(){
+        if (root)
+            delete root;
+    }
+    /*
+     * @param word: a word
+     * @return: nothing
+     */
+    void insert(string &word) {
+        // write your code here
+        auto p = root;
+        for (auto c:word)
+        {
+            int ind = c-'a';
+            if (!p->children[ind])
+                p->children[ind] = new TrieNode();
+            p = p->children[ind];
+        }
+        p->isWord = true;
+    }
+
+    /*
+     * @param word: A string
+     * @return: if the word is in the trie.
+     */
+    bool search(string &word) {
+        // write your code here
+        auto p = find(word);
+        return p && p->isWord;
+    }
+
+    /*
+     * @param prefix: A string
+     * @return: if there is any word in the trie that starts with the given prefix.
+     */
+    bool startsWith(string &prefix) {
+        // write your code here
+        return find(prefix)!=nullptr;
+    }
+private:
+    TrieNode* find(const string& s)
+    {
+        auto p = root;
+        for (const auto c : s)
+        {
+            int ind = c-'a';
+            if (!p->children[ind])
+                return nullptr;
+            p = p->children[ind];
+        }
+        return p;
+    }
+
+private:
+    TrieNode* root;
+};
+```
 
 
 
