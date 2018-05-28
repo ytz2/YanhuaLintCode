@@ -225,8 +225,6 @@ public:
 };
 ```
 
-
-
 ## 442. Implement Trie \(Prefix Tree\)
 
 Implement a trie with insert, search, and startsWith methods.
@@ -268,11 +266,11 @@ startsWith("linterror")
  true
 ```
 
-https://www.lintcode.com/problem/implement-trie-prefix-tree/description
+[https://www.lintcode.com/problem/implement-trie-prefix-tree/description](https://www.lintcode.com/problem/implement-trie-prefix-tree/description)
 
 ### 解题分析:
 
-逆过程
+Trie的基本操作
 
 ### 代码：
 
@@ -286,7 +284,7 @@ public:
             : isWord(false),
               children(vector<TrieNode*>(26, nullptr))
         {}
-        
+
         ~TrieNode(){
             for (auto p : children)
             {
@@ -295,7 +293,7 @@ public:
             }
             children.clear();
         }
-        
+
         bool isWord;
         vector<TrieNode*> children;
     };
@@ -363,6 +361,156 @@ private:
     TrieNode* root;
 };
 ```
+
+
+
+## 634. Word Squares
+
+Given a set of words**without duplicates**, find all[`word squares`](https://en.wikipedia.org/wiki/Word_square)you can build from them.
+
+A sequence of words forms a valid word square if the kth row and column read the exact same string, where 0 ≤ k &lt; max\(numRows, numColumns\).
+
+For example, the word sequence`["ball","area","lead","lady"]`forms a word square because each word reads the same both horizontally and vertically.
+
+```
+b a l l
+a r e a
+l e a d
+l a d y
+
+```
+
+### Example
+
+```
+Given a set ["area","lead","wall","lady","ball"]
+return [["wall","area","lead","lady"],["ball","area","lead","lady"]]
+Explanation:
+The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
+
+Given a set ["abat","baba","atan","atal"]
+return [["baba","abat","baba","atan"],["baba","abat","baba","atal"]]
+Explanation:
+The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
+```
+
+https://www.lintcode.com/problem/word-squares/description
+
+### 解题分析:
+
+第一步上来就是用回溯法一个一个尝试，但是在build的过程中要验证是不是startwith 的问题， 比如 ball area, 第三个的时候要判断是不是lexx 如果words set太大的话就要一个一个过。所以要引入trie, 把每一个节点存入startswith的list，这样一下就可得了，算是剪枝。
+
+
+
+### 代码：
+
+```cpp
+class TrieNode{
+public:
+    vector<string> words;
+    vector<TrieNode*> children;
+    TrieNode()
+        : children(vector<TrieNode*>(26, nullptr))
+    {
+    }
+    ~TrieNode()
+    {
+        for (auto child : children)
+            if (child) delete child;
+    }
+};
+
+class Trie{
+public:
+    Trie(const vector<string>& words)
+    {
+        root = new TrieNode();
+        for ( const auto& word : words)
+        {
+            auto p = root;
+            for (int i = 0; i < word.size(); i++)
+            {
+                int ind = word[i] - 'a';
+                if (!p->children[ind])
+                {
+                    p->children[ind] = new TrieNode();
+                }
+                p->children[ind]->words.push_back(word);
+                p = p->children[ind];
+            }
+        }
+    }
+    
+    const vector<string>& startWith(const string& str)
+    {
+        static vector<string> dummy;
+        auto p = root;
+        for (int i = 0; i < str.size(); i++)
+        {
+            int ind = str[i]-'a';
+            if (!p->children[ind])
+                return dummy;
+            p = p->children[ind];
+        }
+        return p->words;
+    }
+    
+    ~Trie()
+    {
+        delete root;
+    }
+private:
+  TrieNode* root;  
+};
+
+
+class Solution {
+public:
+    /*
+     * @param words: a set of words without duplicates
+     * @return: all word squares
+     */
+    vector<vector<string>> wordSquares(vector<string> &words) {
+        Trie trie(words);
+        vector<vector<string>> results;
+        if (words.empty())
+            return results;
+        vector<string> subset;
+        for (auto word: words)
+        {
+            subset.push_back(word);
+            dfs(subset, results, trie);
+            subset.pop_back();
+        }
+        dfs( subset, results,trie);
+        return results;
+    }
+    
+    void dfs(vector<string>& subset, vector<vector<string>>& results, Trie& trie)
+    {
+        if (subset.size() == subset[0].size())
+        {
+            results.push_back(subset);
+            return;
+        }
+        int n = subset.size();
+        string str;
+        for (int i = 0; i < n; i++)
+        {
+            str.push_back(subset[i][n]);
+        }
+        const auto& words = trie.startWith(str);
+        for (const auto& word : words)
+        {
+            subset.push_back(word);
+            dfs(subset, results, trie);
+            subset.pop_back();
+        }
+    }
+};
+```
+
+
 
 
 
