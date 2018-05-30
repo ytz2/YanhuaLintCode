@@ -14,7 +14,7 @@ For numbers coming list:`[2, 20, 100]`, return`[2, 2, 20]`.
 
 Total run time in O\(_nlogn_\).
 
-https://www.lintcode.com/problem/find-median-from-data-stream/description
+[https://www.lintcode.com/problem/find-median-from-data-stream/description](https://www.lintcode.com/problem/find-median-from-data-stream/description)
 
 ### 代码：
 
@@ -33,7 +33,7 @@ public:
             return results;
         priority_queue<int> left; 
         priority_queue<int, vector<int>, std::greater<int>> right;
-        
+
         left.push(nums[0]);
         results.push_back(nums[0]);
         for (int i = 1; i < nums.size(); i++){
@@ -41,7 +41,7 @@ public:
                 left.push(nums[i]);
             else
                 right.push(nums[i]);
-            
+
             if (left.size() < right.size())
             {
                 left.push(right.top());
@@ -57,6 +57,97 @@ public:
         return results;
     }
 };
+```
+
+
+
+## Random Weighted 
+
+Design a data structure to hold objects with a corresponding integer weight. It should
+
+support:
+
+Obtain an object randomly with probability equal to
+
+\(weight of the element\) / \(sum of the weights\).
+
+Set an object-weight pair. If the object is already in the structure, its weight will
+
+be updated. Otherwise, the object will be inserted and set to its weight. If the weight
+
+is zero, the object can be removed.
+
+### 代码：
+
+```cpp
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include <stdlib.h>
+#include <unordered_map>
+using namespace std;
+
+template <class T>
+class Weighted{
+public:
+  Weighted(){
+      total = 0;
+  }  
+
+  T getRandom(){
+      int r = std::rand() % total;
+      for (const auto& pair : store)
+      {
+          r -= pair.second;
+          if (r < 0)
+            return pair.first;
+      }
+      return 0;
+  }
+  
+  void setRandom(T obj, int weight){
+    auto it = store.find(obj);
+    if (it == store.end())
+    {
+        total += weight;
+        store[obj] = weight;
+    }
+    else
+    {
+        total += weight - store[obj];
+        store[obj] = weight;
+    }
+  }
+  
+private:
+ int total;
+ unordered_map<int, T> store;
+};
+
+int main()
+{
+    Weighted<int> test;
+    test.setRandom(0, 3);
+    test.setRandom(1, 27);
+    double count = 0;
+    for (int i = 0; i < 10000; i++)
+    {
+        int res = test.getRandom();
+        if (res == 1)
+            count += 1;
+    }
+    
+    cout<<count/float(10000)<<endl;
+
+    return 0;
+}
+
 ```
 
 
