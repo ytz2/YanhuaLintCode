@@ -59,9 +59,7 @@ public:
 };
 ```
 
-
-
-## Random Weighted 
+## Random Weighted
 
 Design a data structure to hold objects with a corresponding integer weight. It should
 
@@ -110,7 +108,7 @@ public:
       }
       return 0;
   }
-  
+
   void setRandom(T obj, int weight){
     auto it = store.find(obj);
     if (it == store.end())
@@ -124,7 +122,7 @@ public:
         store[obj] = weight;
     }
   }
-  
+
 private:
  int total;
  unordered_map<int, T> store;
@@ -142,12 +140,40 @@ int main()
         if (res == 1)
             count += 1;
     }
-    
+
     cout<<count/float(10000)<<endl;
 
     return 0;
 }
+```
 
+
+
+## 342 Power of Four
+
+Given an integer \(signed 32 bits\), write a function to check whether it is a power of 4.
+
+**Example:**  
+Given num = 16, return true. Given num = 5, return false.
+
+**Follow up**: Could you solve it without loops/recursion?
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    bool isPowerOfFour(int num) {
+        if (num <= 0)
+            return false;
+        // p of two
+        if ((num & num-1) != 0)
+            return false;
+        // p of 4
+        // 10101010101 -> 0x55555555
+        return (num & 0x55555555) == num; 
+    }
+};
 ```
 
 
