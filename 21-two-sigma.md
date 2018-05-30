@@ -348,8 +348,6 @@ public:
 };
 ```
 
-
-
 ## LRU
 
 ```cpp
@@ -398,7 +396,7 @@ public:
             moveToHead(key);
             return;
         }
-        
+
         auto node = new Node(key, value);
         lru_.push_front(node);
         map_[key] = lru_.begin();
@@ -410,7 +408,7 @@ public:
             delete v;
         }
     }
-    
+
 private:
     int capacity_;
     list<Node*> lru_;
