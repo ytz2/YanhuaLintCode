@@ -290,8 +290,6 @@ int main()
 }
 ```
 
-
-
 ## 192 Wildcard Matching
 
 Implement wildcard pattern matching with support for`'?'`and`'*'`.
@@ -346,6 +344,86 @@ public:
             }
         }
         return dp[s.size()][p.size()];
+    }
+};
+```
+
+
+
+## LRU
+
+```cpp
+#include <list>
+class LRUCache {
+public:
+
+    struct Node{
+        int key;
+        int val;
+        Node( int k, int v)
+            : key(k), val(v)
+            {}
+    };
+    /*
+    * @param capacity: An integer
+    */LRUCache(int capacity) {
+        // do intialization if necessary
+        capacity_=capacity;
+    }
+
+    /*
+     * @param key: An integer
+     * @return: An integer
+     */
+    int get(int key) {
+        // write your code here
+        auto it = map_.find(key);
+        if (it == map_.end())
+            return -1;
+        int res = (*map_[key])->val;
+        moveToHead(key);
+        return res;
+    }
+
+    /*
+     * @param key: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    void set(int key, int value) {
+        // write your code here
+        if (map_.find(key) != map_.end())
+        {
+            (*map_[key])->val = value;
+            moveToHead(key);
+            return;
+        }
+        
+        auto node = new Node(key, value);
+        lru_.push_front(node);
+        map_[key] = lru_.begin();
+        if (lru_.size() > capacity_)
+        {
+            auto v = lru_.back();
+            lru_.pop_back();
+            map_.erase(v->key);
+            delete v;
+        }
+    }
+    
+private:
+    int capacity_;
+    list<Node*> lru_;
+    unordered_map<int, list<Node*>::iterator> map_;
+private:
+    void moveToHead(int key)
+    {
+        if (map_.find(key) == map_.end())
+            return;
+        auto val = *map_[key];
+        lru_.erase(map_[key]);
+        lru_.push_front(val);
+        map_[key] = lru_.begin();
     }
 };
 ```
