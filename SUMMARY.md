@@ -27,4 +27,5 @@
 * [Chapter 7.1 Permutation DFS](chapter-71-permutation-dfs.md)
 * [Chapter 7.2 Permutation DFS ](chapter-72-permutation-dfs.md)
 * [Chapter 7.3 Permutaion DFS \(Words 4 Brothers Problems\)](chapter-73-permutaion-dfs-words-4-brothers-problems.md)
+* [2.1 Two Sigma](21-two-sigma.md)
 
