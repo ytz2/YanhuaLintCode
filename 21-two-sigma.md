@@ -229,8 +229,6 @@ public:
 };
 ```
 
-
-
 ```
 // C/C++ program for maximum contiguous circular sum problem
 #include<stdio.h>
@@ -252,8 +250,8 @@ int max_kadane = kadane(a, n);
 int max_wrap = 0, i;
 for (i=0; i<n; i++)
 {
-		max_wrap += a[i]; // Calculate array-sum
-		a[i] = -a[i]; // invert the array (change sign)
+        max_wrap += a[i]; // Calculate array-sum
+        a[i] = -a[i]; // invert the array (change sign)
 }
 
 // max sum with corner elements will be:
@@ -268,29 +266,88 @@ return (max_wrap > max_kadane)? max_wrap: max_kadane;
 // See https://www.geeksforgeeks.org/archives/576 for details
 int kadane(int a[], int n)
 {
-	int max_so_far = 0, max_ending_here = 0;
-	int i;
-	for (i = 0; i < n; i++)
-	{
-		max_ending_here = max_ending_here + a[i];
-		if (max_ending_here < 0)
-			max_ending_here = 0;
-		if (max_so_far < max_ending_here)
-			max_so_far = max_ending_here;
-	}
-	return max_so_far;
+    int max_so_far = 0, max_ending_here = 0;
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        max_ending_here = max_ending_here + a[i];
+        if (max_ending_here < 0)
+            max_ending_here = 0;
+        if (max_so_far < max_ending_here)
+            max_so_far = max_ending_here;
+    }
+    return max_so_far;
 }
 
 /* Driver program to test maxCircularSum() */
 int main()
 {
-	int a[] = {11, 10, -20, 5, -3, -5, 8, -13, 10};
-	int n = sizeof(a)/sizeof(a[0]);
-	printf("Maximum circular sum is %dn",
-							maxCircularSum(a, n));
-	return 0;
+    int a[] = {11, 10, -20, 5, -3, -5, 8, -13, 10};
+    int n = sizeof(a)/sizeof(a[0]);
+    printf("Maximum circular sum is %dn",
+                            maxCircularSum(a, n));
+    return 0;
 }
+```
 
+
+
+## 192 Wildcard Matching
+
+Implement wildcard pattern matching with support for`'?'`and`'*'`.
+
+* `'?'`
+  Matches any single character.
+* `'*'`
+  Matches any sequence of characters \(including the empty sequence\).
+
+The matching should cover the entire input string \(not partial\).
+
+### Example
+
+```
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "*") → true
+isMatch("aa", "a*") → true
+isMatch("ab", "?*") → true
+isMatch("aab", "c*a*b") → false
+```
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param s: A string 
+     * @param p: A string includes "?" and "*"
+     * @return: is Match?
+     */
+    bool isMatch(string &s, string &p) {
+        // write your code here
+        if (p.empty())
+            return s.empty();
+        vector<vector<bool>> dp(s.size()+1, vector<bool>(p.size()+1, false));
+        dp[0][0] = true;
+        for (int j = 1; j <= p.size(); j++)
+            dp[0][j] = dp[0][j-1] && p[j-1] == '*';
+        for (int i = 1; i <= s.size(); i++)
+        {
+            for (int j = 1; j <= p.size(); j++)
+            {
+                if (p[j-1] == '*')
+                    dp[i][j] = dp[i][j-1] || dp[i-1][j]; // ignore i or ignore j
+                else if (p[j-1] == '?' || s[i-1] == p[j-1])
+                    dp[i][j] = dp[i-1][j-1];
+                else
+                    dp[i][j] = false;
+            }
+        }
+        return dp[s.size()][p.size()];
+    }
+};
 ```
 
 
