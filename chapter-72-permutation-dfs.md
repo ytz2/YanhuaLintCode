@@ -362,8 +362,6 @@ private:
 };
 ```
 
-
-
 ## 634. Word Squares
 
 Given a set of words**without duplicates**, find all[`word squares`](https://en.wikipedia.org/wiki/Word_square)you can build from them.
@@ -377,7 +375,6 @@ b a l l
 a r e a
 l e a d
 l a d y
-
 ```
 
 ### Example
@@ -394,13 +391,11 @@ Explanation:
 The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
 ```
 
-https://www.lintcode.com/problem/word-squares/description
+[https://www.lintcode.com/problem/word-squares/description](https://www.lintcode.com/problem/word-squares/description)
 
 ### 解题分析:
 
 第一步上来就是用回溯法一个一个尝试，但是在build的过程中要验证是不是startwith 的问题， 比如 ball area, 第三个的时候要判断是不是lexx 如果words set太大的话就要一个一个过。所以要引入trie, 把每一个节点存入startswith的list，这样一下就可得了，算是剪枝。
-
-
 
 ### 代码：
 
@@ -440,7 +435,7 @@ public:
             }
         }
     }
-    
+
     const vector<string>& startWith(const string& str)
     {
         static vector<string> dummy;
@@ -454,7 +449,7 @@ public:
         }
         return p->words;
     }
-    
+
     ~Trie()
     {
         delete root;
@@ -485,7 +480,7 @@ public:
         dfs( subset, results,trie);
         return results;
     }
-    
+
     void dfs(vector<string>& subset, vector<vector<string>>& results, Trie& trie)
     {
         if (subset.size() == subset[0].size())
@@ -509,8 +504,6 @@ public:
     }
 };
 ```
-
-
 
 
 
