@@ -237,6 +237,28 @@ public:
         return profit;
     }
 };
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        if (n<=1)
+            return 0;
+        int total=0;
+
+        
+        for (int i=0; i<n; i++){
+            int myMin=0; 
+            int myMax=0;
+            for (; i<n-1 && prices[i]>prices[i+1]; i++);
+            myMin=prices[i];
+            for (; i<n-1 && prices[i]<prices[i+1]; i++);
+            myMax=prices[i];
+            total+= myMax-myMin;
+        }
+        return total;
+    }
+};
 ```
 
 ```
