@@ -172,6 +172,16 @@ public:
         return (num & 0x55555555) == num; 
     }
 };
+
+class Solution {
+public:
+    bool isPowerOfFour(int num) {
+        while (num && (num % 4 == 0)) {
+            num /= 4;
+        }
+        return num == 1;
+    }
+};
 ```
 
 ## 121 Best Time to Buy and Sell Stock
