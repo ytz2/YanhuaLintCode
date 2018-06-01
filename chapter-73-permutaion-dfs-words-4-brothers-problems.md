@@ -71,13 +71,11 @@ public:
 };
 ```
 
-
-
 ## 829. Word Pattern II
 
 Given a`pattern`and a string`str`, find if`str`follows the same pattern.
 
-Here**follow**means a full match, such that there is a[bijection](https://baike.baidu.com/item/%E5%8F%8C%E5%B0%84/942799?fr=aladdin)between a letter in`pattern`and a**non-empty**substring in`str`.\(i.e if`a`corresponds to`s`, then`b`cannot correspond to`s`. For example, given pattern =`"ab"`, str =`"ss"`, return`false`.\)
+Here**follow**means a full match, such that there is a[bijection](https://baike.baidu.com/item/双射/942799?fr=aladdin)between a letter in`pattern`and a**non-empty**substring in`str`.\(i.e if`a`corresponds to`s`, then`b`cannot correspond to`s`. For example, given pattern =`"ab"`, str =`"ss"`, return`false`.\)
 
 ### Example
 
@@ -85,7 +83,7 @@ Given pattern =`"abab"`, str =`"redblueredblue"`, return`true`.
 Given pattern =`"aaaa"`, str =`"asdasdasdasd"`, return`true`.  
 Given pattern =`"aabb"`, str =`"xyzabcxzyabc"`, return`false`.
 
-https://www.lintcode.com/problem/word-pattern-ii/description
+[https://www.lintcode.com/problem/word-pattern-ii/description](https://www.lintcode.com/problem/word-pattern-ii/description)
 
 ### 解题分析:
 
@@ -105,7 +103,7 @@ public:
         // write your code here
         return dfs(pattern, str, 0, 0);
     }
-    
+
     bool dfs(const string& pattern, const string& str, int i, int j)
     {
         if (i == pattern.size() && j == str.size())
@@ -121,7 +119,7 @@ public:
             auto next_j = j + cache[p].size();
             return dfs(pattern, str, i+1, next_j);
         }
-        
+
         for (int jj = j; jj < str.size(); jj++)
         {
             auto substr = str.substr(j, jj-j + 1);
@@ -134,12 +132,233 @@ public:
             cache.erase(p);
             cacheImage.erase(substr);
         }
-        
+
         return false;
     }
-    
+
     unordered_map<char, string> cache;
     unordered_map<string, char> cacheImage;
+};
+```
+
+## 132. Word Search II
+
+Given a matrix of lower alphabets and a dictionary. Find all words in the dictionary that can be found in the matrix. A word can start from any position in the matrix and go left/right/up/down to the adjacent position. 
+
+  
+
+
+### Example
+
+Given matrix:
+
+```
+doaf
+
+
+agai
+
+
+dcan
+```
+
+and dictionary:
+
+```
+{"dog", "dad", "dgdg", "can", "again"}
+```
+
+  
+
+
+return {"dog", "dad", "can", "again"}
+
+  
+
+
+  
+
+
+dog:
+
+```
+do
+af
+
+
+a
+g
+ai
+
+
+dcan
+```
+
+dad:  
+
+
+```
+d
+oaf
+
+
+a
+gai
+
+
+d
+can
+```
+
+can:
+
+```
+doaf
+
+
+agai
+
+
+d
+can
+```
+
+again:
+
+```
+doaf
+
+
+agai
+
+
+dca
+n
+```
+
+### Challenge
+
+Using trie to implement your algorithm.
+
+### 
+
+### 代码：
+
+```cpp
+struct TrieNode{
+    TrieNode()
+        :children(vector<TrieNode*>(26, nullptr)),
+         isWord(false)
+        {}
+    ~TrieNode()
+    {
+        for (auto ptr : children)
+            if (ptr) delete ptr;
+    }
+    vector<TrieNode*> children;
+    bool isWord;
+};
+
+
+class Trie{
+ public:
+    Trie(const vector<string>& words)
+    {
+        root = new TrieNode();
+        for (const auto& word: words)
+        {
+            auto p = root;
+            for (char c : word)
+            {
+                int ind = c-'a';
+                if (!p->children[ind])
+                    p->children[ind] = new TrieNode();
+                p = p->children[ind];
+            }
+            p->isWord = true;
+        }
+    }
+    ~Trie()
+    {
+        delete root;
+    }
+    
+    bool startWith(const string& str, bool& isWord)
+    {
+        auto p = root;
+        isWord = false;
+        for ( const auto c : str)
+        {
+            int ind = c - 'a';
+            if (!p->children[ind])
+                return false;
+            p = p->children[ind];
+        }
+        isWord = p->isWord;
+
+        return true;
+    }
+    
+ private:
+    TrieNode* root;
+};
+
+class Solution {
+public:
+    /**
+     * @param board: A list of lists of character
+     * @param words: A list of string
+     * @return: A list of string
+     */
+    vector<string> wordSearchII(vector<vector<char>> &board, vector<string> &words) {
+        // write your code here
+        vector<string> results;
+        if (board.empty() || board[0].empty())
+            return results;
+        Trie trie(words);
+        int m = board.size(), n = board[0].size();
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                string sub(1, board[i][j]);
+                visited[i][j] = true;
+                dfs(board, visited, trie, i, j, sub, results);
+                visited[i][j] = false;
+            }
+        }
+        return results;
+    }
+    
+    void dfs(vector<vector<char>> &board, vector<vector<bool>>& visited,  Trie& trie, int i, int j, string& substr, vector<string> & results)
+    {
+        bool isWord=false;
+        if (!trie.startWith(substr, isWord))
+            return;
+        if (isWord && find(results.begin(), results.end(), substr) == results.end())
+            results.push_back(substr);
+        int m = board.size();
+        int n = board[0].size();
+        static vector<int> dx{ -1, 1, 0, 0};
+        static vector<int> dy{ 0,  0, -1, 1};
+        for (int k = 0; k < 4; k++)
+        {
+            int next_i = i + dx[k];
+            int next_j = j + dy[k];
+            
+            if (next_i < 0 || next_i >= m || next_j < 0 || next_j >= n || visited[next_i][next_j])
+                continue;
+            visited[next_i][next_j] = true;
+            substr.push_back(board[next_i][next_j]);
+            dfs(board, visited, trie, next_i, next_j, substr, results);
+            substr.pop_back();
+            visited[next_i][next_j] = false;
+        }
+        
+    }
+    
 };
 ```
 
