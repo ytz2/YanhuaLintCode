@@ -143,10 +143,7 @@ public:
 
 ## 132. Word Search II
 
-Given a matrix of lower alphabets and a dictionary. Find all words in the dictionary that can be found in the matrix. A word can start from any position in the matrix and go left/right/up/down to the adjacent position. 
-
-  
-
+Given a matrix of lower alphabets and a dictionary. Find all words in the dictionary that can be found in the matrix. A word can start from any position in the matrix and go left/right/up/down to the adjacent position.
 
 ### Example
 
@@ -168,16 +165,7 @@ and dictionary:
 {"dog", "dad", "dgdg", "can", "again"}
 ```
 
-  
-
-
 return {"dog", "dad", "can", "again"}
-
-  
-
-
-  
-
 
 dog:
 
@@ -194,8 +182,7 @@ ai
 dcan
 ```
 
-dad:  
-
+dad:
 
 ```
 d
@@ -282,7 +269,7 @@ class Trie{
     {
         delete root;
     }
-    
+
     bool startWith(const string& str, bool& isWord)
     {
         auto p = root;
@@ -298,7 +285,7 @@ class Trie{
 
         return true;
     }
-    
+
  private:
     TrieNode* root;
 };
@@ -318,7 +305,7 @@ public:
         Trie trie(words);
         int m = board.size(), n = board[0].size();
         vector<vector<bool>> visited(m, vector<bool>(n, false));
-        
+
         for (int i = 0; i < m; i++)
         {
             for (int j = 0; j < n; j++)
@@ -331,7 +318,7 @@ public:
         }
         return results;
     }
-    
+
     void dfs(vector<vector<char>> &board, vector<vector<bool>>& visited,  Trie& trie, int i, int j, string& substr, vector<string> & results)
     {
         bool isWord=false;
@@ -347,7 +334,7 @@ public:
         {
             int next_i = i + dx[k];
             int next_j = j + dy[k];
-            
+
             if (next_i < 0 || next_i >= m || next_j < 0 || next_j >= n || visited[next_i][next_j])
                 continue;
             visited[next_i][next_j] = true;
@@ -356,9 +343,150 @@ public:
             substr.pop_back();
             visited[next_i][next_j] = false;
         }
-        
+
+    }
+
+};
+```
+
+
+
+## 121. Word Ladder II
+
+Given two words \(startandend\), and a dictionary, find all shortest transformation sequence\(s\) fromstarttoend, such that:
+
+1. Only one letter can be changed at a time
+2. Each intermediate word must exist in the dictionary
+
+### Example
+
+Given:  
+start=`"hit"`  
+end=`"cog"`  
+dict=`["hot","dot","dog","lot","log"]`  
+
+
+Return  
+
+
+```
+  [
+    ["hit","hot","dot","dog","cog"],
+    ["hit","hot","lot","log","cog"]
+  ]
+```
+
+### Challenge
+
+这道题遇见过好多次了。。。。这算第一次动手做， 相比于word ladder I 应为是求所有解，所以会是一个建立隐式图，然后遍历隐式图生成解的过程。 
+
+
+
+中间很多不一样的处理方式可以从下面这个例子来引申开来
+
+![](/assets/wl2.png)
+
+Word Ladder I 里面我们如从rex-&gt;text  则标记tex为访问过了， 就不会再考虑ted-&gt;tex， 但是tex-&gt;tex是一个合法的路径。 所以说BFS只能保证我们层级遍历，但是保证不了node之间的关系。 
+
+为了建立图的关系， 每一个节点都要标记他从当前所引申出来的下一步
+
+unordered\_map&lt;string, vector&lt;string&gt; &gt; graph
+
+因为要做DFS最短路的遍历，所以还要标记出每一步的计数， 而不是用unordered\_set. 
+
+unordered\_map&lt;string, int&gt; counter;
+
+为了不抹去ted-&gt;text
+
+```
+if ( counter.find(str) == counter.end())
+{
+    q.push(str);
+    counter[str] = counter[parent]+1;
+}
+//还是要把他放到图的children节点之中，我们已经遍历过这个节点了，但是我们需要这个节点在生成答案中用到
+graph[original].push_back(str);
+```
+
+
+
+最后生成答案的时候就按图索骥， 根据步数， 图 来生成所有的路径。
+
+注意DFS的时候 要把下一步的步数不是 cur != last+1的滤掉。
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param start: a string
+     * @param end: a string
+     * @param dict: a set of string
+     * @return: a list of lists of string
+     */
+    vector<vector<string>> findLadders(string &start, string &end, unordered_set<string> &dict) {
+        // write your code here
+        dict.insert(end);
+        unordered_map<string, int> counter;
+        unordered_map<string, vector<string>> next;
+        queue<string> q;
+        q.push(start);
+        counter[start] = 0;
+        vector<vector<string>> results;
+        vector<string> subset;
+        while(!q.empty())
+        {
+            string word = q.front();
+            string original = word;
+            q.pop();
+            if (word == end)
+                break;
+            vector<string> snext;
+            for (int i = 0; i < word.size(); i++)
+            {
+                char c = word[i];
+                for (char ch = 'a'; ch <='z'; ch++)
+                {
+                    if (ch == c)
+                        continue;
+                    word[i] = ch;
+                    if (dict.find(word) == dict.end())
+                        continue;
+                    if (counter.find(word) == counter.end())
+                    {
+                        q.push(word);
+                        counter[word] = counter[original] + 1;
+                    }
+                    snext.push_back(word);
+                }
+                word[i] = c;
+            }
+            next[original] = snext;
+        }
+        subset.push_back(start);
+        dfs(start, end, counter, next, results, subset);
+        return results;
     }
     
+    void dfs(const string& now, const string& end, unordered_map<string, int>& counter, unordered_map<string, vector<string>>& next, vector<vector<string>>& results, vector<string>& subset )
+    {
+        if (now == end)
+        {
+            results.push_back(subset);
+            return;
+        }
+        
+        const auto& vec = next[now];
+        for (auto each : vec)
+        {
+            if (counter[now]+1 != counter[each])
+                continue;
+            subset.push_back(each);
+            dfs(each, end, counter, next, results, subset);
+            subset.pop_back();
+        }
+    }
 };
 ```
 
