@@ -349,8 +349,6 @@ public:
 };
 ```
 
-
-
 ## 121. Word Ladder II
 
 Given two words \(startandend\), and a dictionary, find all shortest transformation sequence\(s\) fromstarttoend, such that:
@@ -363,11 +361,9 @@ Given two words \(startandend\), and a dictionary, find all shortest transformat
 Given:  
 start=`"hit"`  
 end=`"cog"`  
-dict=`["hot","dot","dog","lot","log"]`  
+dict=`["hot","dot","dog","lot","log"]`
 
-
-Return  
-
+Return
 
 ```
   [
@@ -378,21 +374,19 @@ Return
 
 ### Challenge
 
-这道题遇见过好多次了。。。。这算第一次动手做， 相比于word ladder I 应为是求所有解，所以会是一个建立隐式图，然后遍历隐式图生成解的过程。 
-
-
+这道题遇见过好多次了。。。。这算第一次动手做， 相比于word ladder I 应为是求所有解，所以会是一个建立隐式图，然后遍历隐式图生成解的过程。
 
 中间很多不一样的处理方式可以从下面这个例子来引申开来
 
 ![](/assets/wl2.png)
 
-Word Ladder I 里面我们如从rex-&gt;text  则标记tex为访问过了， 就不会再考虑ted-&gt;tex， 但是tex-&gt;tex是一个合法的路径。 所以说BFS只能保证我们层级遍历，但是保证不了node之间的关系。 
+Word Ladder I 里面我们如从rex-&gt;text  则标记tex为访问过了， 就不会再考虑ted-&gt;tex， 但是tex-&gt;tex是一个合法的路径。 所以说BFS只能保证我们层级遍历，但是保证不了node之间的关系。
 
 为了建立图的关系， 每一个节点都要标记他从当前所引申出来的下一步
 
 unordered\_map&lt;string, vector&lt;string&gt; &gt; graph
 
-因为要做DFS最短路的遍历，所以还要标记出每一步的计数， 而不是用unordered\_set. 
+因为要做DFS最短路的遍历，所以还要标记出每一步的计数， 而不是用unordered\_set.
 
 unordered\_map&lt;string, int&gt; counter;
 
@@ -407,8 +401,6 @@ if ( counter.find(str) == counter.end())
 //还是要把他放到图的children节点之中，我们已经遍历过这个节点了，但是我们需要这个节点在生成答案中用到
 graph[original].push_back(str);
 ```
-
-
 
 最后生成答案的时候就按图索骥， 根据步数， 图 来生成所有的路径。
 
@@ -468,7 +460,7 @@ public:
         dfs(start, end, counter, next, results, subset);
         return results;
     }
-    
+
     void dfs(const string& now, const string& end, unordered_map<string, int>& counter, unordered_map<string, vector<string>>& next, vector<vector<string>>& results, vector<string>& subset )
     {
         if (now == end)
@@ -476,7 +468,7 @@ public:
             results.push_back(subset);
             return;
         }
-        
+
         const auto& vec = next[now];
         for (auto each : vec)
         {
