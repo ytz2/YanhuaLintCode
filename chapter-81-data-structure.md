@@ -253,8 +253,6 @@ private:
 };
 ```
 
-
-
 ## 494.Implement Stack by Two Queues
 
 Implement a stack by two queues. The queue is first in first out \(FIFO\). That means you can not directly pop the last element in a queue.
@@ -271,7 +269,7 @@ pop()
 isEmpty() // return true
 ```
 
-https://www.lintcode.com/problem/implement-stack-by-two-queues/description
+[https://www.lintcode.com/problem/implement-stack-by-two-queues/description](https://www.lintcode.com/problem/implement-stack-by-two-queues/description)
 
 ### 解题分析:
 
@@ -317,7 +315,7 @@ public:
         assert(!stk2_.empty());
         return stk2_.top();
     }
-    
+
 private:
     void flap()
     {
@@ -330,7 +328,188 @@ private:
 private:
     stack<int> stk1_, stk2_;
 };
+```
 
+
+
+## 494.Implement Stack by Two Queues
+
+Implement a stack by two queues. The queue is first in first out \(FIFO\). That means you can not directly pop the last element in a queue.
+
+### Example
+
+```
+push(1)
+pop()
+push(2)
+isEmpty() // return false
+top() // return 2
+pop()
+isEmpty() // return true
+```
+
+[https://www.lintcode.com/problem/implement-stack-by-two-queues/description](https://www.lintcode.com/problem/implement-stack-by-two-queues/description)
+
+### 解题分析:
+
+画一下图就可以了, sk2是从stk1 过去的，倒转的时候 stk2的最顶上就是q的top了。
+
+### 代码：
+
+```cpp
+class MyQueue {
+public:
+    MyQueue() {
+        // do intialization if necessary
+    }
+
+    /*
+     * @param element: An integer
+     * @return: nothing
+     */
+    void push(int element) {
+        // write your code here
+         stk1_.push(element);
+    }
+
+    /*
+     * @return: An integer
+     */
+    int pop() {
+        // write your code here
+        int res = top();
+        assert(!stk2_.empty());
+        stk2_.pop();
+        return res;
+    }
+
+    /*
+     * @return: An integer
+     */
+    int top() {
+        // write your code here
+        if (!stk2_.empty())
+            return stk2_.top();
+        flap();
+        assert(!stk2_.empty());
+        return stk2_.top();
+    }
+
+private:
+    void flap()
+    {
+        while(!stk1_.empty())
+        {
+            stk2_.push(stk1_.top());
+            stk1_.pop();
+        }
+    }
+private:
+    stack<int> stk1_, stk2_;
+};
+```
+
+
+
+## 955.Implement Queue by Circular Array
+
+IImplement queue by circulant array. You need to support the following methods:
+
+1. `CircularQueue(n):`
+   initialize a circular array with size n to store elements
+2. `boolean isFull():`
+   return
+   `true`
+   if the array is full
+3. `boolean isEmpty():`
+   return
+   `true`
+   if there is no element in the array
+4. `void enqueue(element):`
+   add an element to the queue
+5. `int dequeue():`
+   pop an element from the queue
+
+### Example
+
+```
+CircularQueue(5)
+isFull()   =
+>
+ false
+isEmpty() =
+>
+ true
+enqueue(1)
+dequeue()  =
+>
+ 1
+```
+
+https://www.lintcode.com/problem/implement-queue-by-circular-array/description
+
+### 解题分析:
+
+维护一个front指向当前头，一个rear，指向最后元素的下一位， 维护一个size \(因为是circular的，算不清楚size\)。 这样就可以用Mod来更新front, rear, ++/-- size了
+
+### 代码：
+
+```cpp
+class CircularQueue {
+public:
+    /**
+     * @return:  return true if the array is full
+     */
+    CircularQueue(int n) {
+        // do intialization if necessary
+        front = 0;
+        rear = 0;
+        size = 0;
+        buffer_ = vector<int>(n, 0);
+    }
+    bool isFull() {
+        // write your code here
+        return size == buffer_.size();
+    }
+
+    /**
+     * @return: return true if there is no element in the array
+     */
+    bool isEmpty() {
+        // write your code here
+        return size == 0;
+    }
+
+    /**
+     * @param element: the element given to be added
+     * @return: nothing
+     */
+    void enqueue(int element) {
+        // write your code here
+        assert(!isFull());
+        buffer_[rear] = element;
+        rear = ++rear % buffer_.size();
+        size++;
+    }
+
+    /**
+     * @return: pop an element from the queue
+     */
+    int dequeue() {
+        // write your code here
+        assert(!isEmpty());
+        auto val = buffer_[front];
+        front = ++front%buffer_.size();
+        size--;
+        return val;
+    }
+    
+private:
+    int front;
+    int rear;
+    int size;
+    vector<int> buffer_;
+};
 ```
 
 
