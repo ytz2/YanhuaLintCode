@@ -330,8 +330,6 @@ private:
 };
 ```
 
-
-
 ## 494.Implement Stack by Two Queues
 
 Implement a stack by two queues. The queue is first in first out \(FIFO\). That means you can not directly pop the last element in a queue.
@@ -409,8 +407,6 @@ private:
 };
 ```
 
-
-
 ## 955.Implement Queue by Circular Array
 
 IImplement queue by circulant array. You need to support the following methods:
@@ -446,7 +442,7 @@ dequeue()  =
  1
 ```
 
-https://www.lintcode.com/problem/implement-queue-by-circular-array/description
+[https://www.lintcode.com/problem/implement-queue-by-circular-array/description](https://www.lintcode.com/problem/implement-queue-by-circular-array/description)
 
 ### 解题分析:
 
@@ -503,7 +499,7 @@ public:
         size--;
         return val;
     }
-    
+
 private:
     int front;
     int rear;
