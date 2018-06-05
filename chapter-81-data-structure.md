@@ -71,8 +71,6 @@ private:
 };
 ```
 
-
-
 ## 494. Implement Stack by Two Queues
 
 Implement a stack by two queues. The queue is first in first out \(FIFO\). That means you can not directly pop the last element in a queue.
@@ -89,7 +87,7 @@ pop()
 isEmpty() // return true
 ```
 
-https://www.lintcode.com/problem/implement-stack-by-two-queues/description
+[https://www.lintcode.com/problem/implement-stack-by-two-queues/description](https://www.lintcode.com/problem/implement-stack-by-two-queues/description)
 
 ### 解题分析:
 
@@ -141,7 +139,7 @@ public:
         return q1.empty();
     }
 private:
-    
+
     void flapTillLast()
     {
         if (q1.empty())
@@ -152,13 +150,110 @@ private:
             q1.pop();
         }
     }
-    
+
     queue<int> q1;
     queue<int> q2;
 };
 ```
 
 
+
+## 224. Implement Three Stacks by Single Array
+
+IImplement three stacks by single array.
+
+You can assume the three stacks has the same size and big enough, you don't need to care about how to extend it if one of the stack is full.
+
+### Example
+
+```
+ThreeStacks(5)  // create 3 stacks with size 5 in single array. stack index from 0 to 2
+push(0, 10) // push 10 in the 1st stack.
+push(0, 11)
+push(1, 20) // push 20 in the 2nd stack.
+push(1, 21)
+pop(0) // return 11
+pop(1) // return 21
+peek(1) // return 20
+push(2, 30)  // push 30 in the 3rd stack.
+pop(2) // return 30
+isEmpty(2) // return true
+isEmpty(0) // return false
+```
+
+https://www.lintcode.com/problem/implement-three-stacks-by-single-array/description
+
+### 解题分析:
+
+网上有很fancy的动态内存， 实在是太复杂了， 写一个constant mem的版本
+
+### 代码：
+
+```cpp
+class ThreeStacks {
+public:
+    /*
+    * @param size: An integer
+    */ThreeStacks(int size) {
+        // do intialization if necessary
+        size_ = size;
+        for (int i = 0; i < 3; i++)
+            indices_.push_back(i*size_-1);
+        buffer_.reserve(3*size);
+    }
+
+    /*
+     * @param stackNum: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    void push(int stackNum, int value) {
+        // Push value into stackNum stack
+        int end = (stackNum+1) * size_ - 1;
+        if (indices_[stackNum] == end )
+            return; 
+        buffer_[++indices_[stackNum]] = value;
+    }
+
+    /*
+     * @param stackNum: An integer
+     * @return: the top element
+     */
+    int pop(int stackNum) {
+        // Pop and return the top element from stackNum stack
+        int beg = stackNum * size_ - 1;
+        if (indices_[stackNum] == beg)
+            return 0;
+        return buffer_[indices_[stackNum]--];
+    }
+
+    /*
+     * @param stackNum: An integer
+     * @return: the top element
+     */
+    int peek(int stackNum) {
+        // Return the top element
+        if (indices_[stackNum] == stackNum * size_ - 1)
+            return 0;
+        return buffer_[indices_[stackNum]];
+    }
+
+    /*
+     * @param stackNum: An integer
+     * @return: true if the stack is empty else false
+     */
+    bool isEmpty(int stackNum) {
+        // write your code here
+        
+        return indices_[stackNum] == stackNum * size_ -1;
+    }
+    
+private:
+    int size_;
+    vector<int> buffer_;
+    vector<int> indices_;
+};
+```
 
 
 
