@@ -156,8 +156,6 @@ private:
 };
 ```
 
-
-
 ## 224. Implement Three Stacks by Single Array
 
 IImplement three stacks by single array.
@@ -181,7 +179,7 @@ isEmpty(2) // return true
 isEmpty(0) // return false
 ```
 
-https://www.lintcode.com/problem/implement-three-stacks-by-single-array/description
+[https://www.lintcode.com/problem/implement-three-stacks-by-single-array/description](https://www.lintcode.com/problem/implement-three-stacks-by-single-array/description)
 
 ### 解题分析:
 
@@ -244,15 +242,95 @@ public:
      */
     bool isEmpty(int stackNum) {
         // write your code here
-        
+
         return indices_[stackNum] == stackNum * size_ -1;
     }
-    
+
 private:
     int size_;
     vector<int> buffer_;
     vector<int> indices_;
 };
+```
+
+
+
+## 494.Implement Stack by Two Queues
+
+Implement a stack by two queues. The queue is first in first out \(FIFO\). That means you can not directly pop the last element in a queue.
+
+### Example
+
+```
+push(1)
+pop()
+push(2)
+isEmpty() // return false
+top() // return 2
+pop()
+isEmpty() // return true
+```
+
+https://www.lintcode.com/problem/implement-stack-by-two-queues/description
+
+### 解题分析:
+
+画一下图就可以了, sk2是从stk1 过去的，倒转的时候 stk2的最顶上就是q的top了。
+
+### 代码：
+
+```cpp
+class MyQueue {
+public:
+    MyQueue() {
+        // do intialization if necessary
+    }
+
+    /*
+     * @param element: An integer
+     * @return: nothing
+     */
+    void push(int element) {
+        // write your code here
+         stk1_.push(element);
+    }
+
+    /*
+     * @return: An integer
+     */
+    int pop() {
+        // write your code here
+        int res = top();
+        assert(!stk2_.empty());
+        stk2_.pop();
+        return res;
+    }
+
+    /*
+     * @return: An integer
+     */
+    int top() {
+        // write your code here
+        if (!stk2_.empty())
+            return stk2_.top();
+        flap();
+        assert(!stk2_.empty());
+        return stk2_.top();
+    }
+    
+private:
+    void flap()
+    {
+        while(!stk1_.empty())
+        {
+            stk2_.push(stk1_.top());
+            stk1_.pop();
+        }
+    }
+private:
+    stack<int> stk1_, stk2_;
+};
+
 ```
 
 
