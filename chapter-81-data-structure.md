@@ -510,3 +510,81 @@ private:
 
 
 
+## 130.Heapify
+
+Given an integer array, heapify it into a min-heap array.
+
+For a heap array A, A\[0\] is the root of heap, and for each A\[i\], A\[i \* 2 + 1\] is the left child of A\[i\] and A\[i \* 2 + 2\] is the right child of A\[i\].
+
+
+
+### Example
+
+Given \[3,2,1,4,5\], return \[1,2,3,4,5\] or any legal heap array.
+
+### Challenge
+
+O\(n\) time complexity
+
+https://www.lintcode.com/problem/heapify/leaderboard
+
+[https://www.lintcode.com/problem/implement-queue-by-circular-array/description](https://www.lintcode.com/problem/implement-queue-by-circular-array/description)
+
+### 解题分析:
+
+heapfy用两种方法: siftup， 一直换到老子比儿子小  ， 因为从k只能反推一个爹出来，所以要从1 到 n遍历
+
+                                 siftdown,   一直换到老子比儿子小， 因为k可以搞两个出来，所以从n/2 到0反着搞一遍就好了 o\(n\)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param A: Given an integer array
+     * @return: nothing
+     */
+    void heapify(vector<int> &A) {
+        // write your code here
+        //for (int i = 1; i < A.size(); i++)
+        //    siftup(A,i);
+        for (int i = A.size()/2; i >=0; i--)
+            siftdown(A, i);
+    }
+    
+    void siftup(vector<int>& A, int k)
+    {
+        while(k > 0)
+        {
+            int father = (k - 1)/2;
+            if (A[father] < A[k])
+                break;
+            swap(A[father], A[k]);
+            k = father;
+        }
+    }
+    
+    void siftdown(vector<int>& A, int k)
+    {
+        while(k < A.size())
+        {
+            int child1 = 2 * k + 1;
+            int child2 = 2 * k + 2;
+            int smallest = k;
+            if (child1 < A.size() )
+                smallest = A[child1] < A[smallest] ? child1 : k;
+            if (child2 < A.size() )
+                smallest = A[child2] < A[smallest] ? child2 : smallest;
+            if (k == smallest)
+                break;
+            swap(A[smallest], A[k]);
+            k = smallest;
+        }
+    }
+    
+};
+```
+
+
+
