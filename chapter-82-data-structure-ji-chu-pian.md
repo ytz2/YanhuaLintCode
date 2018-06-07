@@ -12,7 +12,7 @@ m.next(3) = (1 + 10 + 3) / 3 // return 4.66667
 m.next(5) = (10 + 3 + 5) / 3 // return 6.00000
 ```
 
-https://www.lintcode.com/problem/moving-average-from-data-stream/description
+[https://www.lintcode.com/problem/moving-average-from-data-stream/description](https://www.lintcode.com/problem/moving-average-from-data-stream/description)
 
 ### 解题分析:
 
@@ -46,7 +46,7 @@ public:
         }
         return double(total)/q.size();
     }
-    
+
 private:
     int size; 
     long total;
@@ -58,6 +58,44 @@ private:
  * MovingAverage obj = new MovingAverage(size);
  * double param = obj.next(val);
  */
+```
+
+
+
+## 209. First Unique Character in a String
+
+Find the first unique character in a given string. You can assume that there is at least one unique character in the string.
+
+### Example
+
+For`"abaccdeff"`, return`'b'`.
+
+https://www.lintcode.com/problem/first-unique-character-in-a-string/description
+
+### 解题分析:
+
+hashtable
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param str: str: the given string
+     * @return: char: the first unique character in a given string
+     */
+    char firstUniqChar(string &str) {
+        // Write your code here
+        unordered_map<char, int> tbl;
+        for (auto c : str)
+            tbl[c]++;
+        for (auto c : str)
+            if (tbl[c] == 1)
+                return c;
+        return 0;
+    }
+};
 ```
 
 
