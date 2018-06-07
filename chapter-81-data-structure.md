@@ -508,15 +508,11 @@ private:
 };
 ```
 
-
-
 ## 130.Heapify
 
 Given an integer array, heapify it into a min-heap array.
 
 For a heap array A, A\[0\] is the root of heap, and for each A\[i\], A\[i \* 2 + 1\] is the left child of A\[i\] and A\[i \* 2 + 2\] is the right child of A\[i\].
-
-
 
 ### Example
 
@@ -526,7 +522,7 @@ Given \[3,2,1,4,5\], return \[1,2,3,4,5\] or any legal heap array.
 
 O\(n\) time complexity
 
-https://www.lintcode.com/problem/heapify/leaderboard
+[https://www.lintcode.com/problem/heapify/leaderboard](https://www.lintcode.com/problem/heapify/leaderboard)
 
 [https://www.lintcode.com/problem/implement-queue-by-circular-array/description](https://www.lintcode.com/problem/implement-queue-by-circular-array/description)
 
@@ -534,7 +530,9 @@ https://www.lintcode.com/problem/heapify/leaderboard
 
 heapfy用两种方法: siftup， 一直换到老子比儿子小  ， 因为从k只能反推一个爹出来，所以要从1 到 n遍历
 
-                                 siftdown,   一直换到老子比儿子小， 因为k可以搞两个出来，所以从n/2 到0反着搞一遍就好了 o\(n\)
+```
+                             siftdown,   一直换到老子比儿子小， 因为k可以搞两个出来，所以从n/2 到0反着搞一遍就好了 o\(n\)
+```
 
 ### 代码：
 
@@ -552,7 +550,7 @@ public:
         for (int i = A.size()/2; i >=0; i--)
             siftdown(A, i);
     }
-    
+
     void siftup(vector<int>& A, int k)
     {
         while(k > 0)
@@ -564,7 +562,7 @@ public:
             k = father;
         }
     }
-    
+
     void siftdown(vector<int>& A, int k)
     {
         while(k < A.size())
@@ -582,7 +580,7 @@ public:
             k = smallest;
         }
     }
-    
+
 };
 ```
 

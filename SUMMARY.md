@@ -29,4 +29,5 @@
 * [Chapter 7.3 Permutaion DFS \(Words 4 Brothers Problems\)](chapter-73-permutaion-dfs-words-4-brothers-problems.md)
 * [2.1 TS](21-two-sigma.md)
 * [Chapter 8.1 Data structure 基础篇](chapter-81-data-structure.md)
+* [Chapter 8.2 Data structure 基础篇 ](chapter-82-data-structure-ji-chu-pian.md)
 
