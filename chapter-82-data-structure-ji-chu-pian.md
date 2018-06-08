@@ -133,7 +133,6 @@ randomSet.insert(2);
 
 // Since 2 is the only number in the set, getRandom always return 2.
 randomSet.getRandom();
-
 ```
 
 Input test data
@@ -144,18 +143,14 @@ one parameter per line.
 
 \)
 
-[  
-](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)https://www.lintcode.com/problem/insert-delete-getrandom-o1/description
-
-
+[    
+](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
 
 维护一个hash table, key 是值，val是 vector的 index ， 维护一个vector, 存具体的值， 维护一个n存当前个数。
 
 n和 vector的关系是小于或者等于vec.size\(\), push 很简单， 要么push back,要么在n位置插入并更新n
-
-
 
 tricky的在delete:
 
@@ -209,7 +204,7 @@ public:
         // write your code here
         if (!tbl.count(val))
             return false;
-        
+
         store[tbl[val]] = store[n-1];
         tbl[store[n-1]] = tbl[val];
         tbl.erase(val);
@@ -239,6 +234,118 @@ private:
  * bool param = obj.remove(val);
  * int param = obj.getRandom();
  */
+```
+
+
+
+## 612.K Closest Points
+
+Given some`points`and a point`origin`in two dimensional space, find`k`points out of the some points which are nearest to`origin`.  
+Return these points sorted by distance, if they are same with distance, sorted by x-axis, otherwise sorted by y-axis.
+
+### Example
+
+Given points =`[[4,6],[4,7],[4,4],[2,5],[1,1]]`, origin =`[0, 0]`, k =`3`  
+return`[[1,1],[2,5],[4,4]]`
+
+https://www.lintcode.com/problem/k-closest-points/description
+
+### 解题分析:
+
+PRIORITY QUEUE
+
+### 代码：
+
+```cpp
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * }; * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+
+class CmpOp{
+    
+public:
+    CmpOp(const Point& origin)
+    {
+        origin_ = Point(origin.x, origin.y);
+    }
+    
+    
+    bool operator()(const Point& left, const Point& right)
+    {
+        return mincmp(left,right);
+    }
+private:
+    bool mincmp(const Point& left, const Point& right)
+    {
+        int distl = dist(left);
+        int dist2 = dist(right);
+        if (distl < dist2)
+            return true;
+        else if (distl > dist2)
+            return false;
+        else if (left.x < right.x)
+            return true;
+        else if (left.x > right.x)
+            return false;
+        return left.y<right.y;
+    }
+    int dist(const Point& p)
+    {
+        return (p.x-origin_.x)*(p.x-origin_.x) + (p.y-origin_.y)*(p.y-origin_.y);
+    }
+private:
+    Point origin_;    
+};
+
+
+class Solution {
+public:
+    /**
+     * @param points: a list of points
+     * @param origin: a point
+     * @param k: An integer
+     * @return: the k closest points
+     */
+    vector<Point> kClosest(vector<Point> &points, Point &origin, int k) {
+        // write your code here
+        CmpOp cmp(origin);
+        priority_queue<Point, vector<Point>,CmpOp> pq(cmp);
+        for (auto& p : points)
+        {
+            if (pq.size() < k)
+                pq.push(p);
+            else
+            {
+                auto& top = pq.top();
+                if (cmp(p, top))
+                {
+                    pq.pop();
+                    pq.push(p);
+                }
+            }
+        }
+        vector<Point> results;
+        while(!pq.empty())
+        {
+            results.push_back(pq.top());
+            pq.pop();
+        }
+        reverse(results.begin(), results.end());
+        return results;
+    }
+};
 ```
 
 
