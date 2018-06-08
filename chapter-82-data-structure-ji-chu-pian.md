@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[    
+[      
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -236,8 +236,6 @@ private:
  */
 ```
 
-
-
 ## 612.K Closest Points
 
 Given some`points`and a point`origin`in two dimensional space, find`k`points out of the some points which are nearest to`origin`.  
@@ -248,11 +246,15 @@ Return these points sorted by distance, if they are same with distance, sorted b
 Given points =`[[4,6],[4,7],[4,4],[2,5],[1,1]]`, origin =`[0, 0]`, k =`3`  
 return`[[1,1],[2,5],[4,4]]`
 
-https://www.lintcode.com/problem/k-closest-points/description
+[https://www.lintcode.com/problem/k-closest-points/description](https://www.lintcode.com/problem/k-closest-points/description)
 
 ### 解题分析:
 
 PRIORITY QUEUE
+
+第一种办法是维护一个size =k的最大堆， 打擂台的方式过一遍 nlogk
+
+第二种办法， heafy 一个最小堆 o\(n\) 然后不停的pop， klog\(n\) ,所以应该是o\(n+klog\(n\)\)
 
 ### 代码：
 
@@ -274,14 +276,14 @@ PRIORITY QUEUE
  */
 
 class CmpOp{
-    
+
 public:
     CmpOp(const Point& origin)
     {
         origin_ = Point(origin.x, origin.y);
     }
-    
-    
+
+
     bool operator()(const Point& left, const Point& right)
     {
         return mincmp(left,right);
@@ -343,6 +345,83 @@ public:
             pq.pop();
         }
         reverse(results.begin(), results.end());
+        return results;
+    }
+};
+
+
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * }; * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+
+class CmpOp{
+    
+public:
+    CmpOp(const Point& origin)
+    {
+        origin_ = Point(origin.x, origin.y);
+    }
+    
+    
+    bool operator()(const Point& left, const Point& right)
+    {
+        return !mincmp(left,right);
+    }
+private:
+    bool mincmp(const Point& left, const Point& right)
+    {
+        int distl = dist(left);
+        int dist2 = dist(right);
+        if (distl < dist2)
+            return true;
+        else if (distl > dist2)
+            return false;
+        else if (left.x < right.x)
+            return true;
+        else if (left.x > right.x)
+            return false;
+        return left.y<right.y;
+    }
+    int dist(const Point& p)
+    {
+        return (p.x-origin_.x)*(p.x-origin_.x) + (p.y-origin_.y)*(p.y-origin_.y);
+    }
+private:
+    Point origin_;    
+};
+
+
+class Solution {
+public:
+    /**
+     * @param points: a list of points
+     * @param origin: a point
+     * @param k: An integer
+     * @return: the k closest points
+     */
+    vector<Point> kClosest(vector<Point> &points, Point &origin, int k) {
+        // write your code here
+        CmpOp cmp(origin);
+        make_heap(points.begin(), points.end(), cmp);
+        vector<Point> results;
+        while(results.size() < k && !points.empty())
+        {
+            results.push_back(points.front());
+            pop_heap(points.begin(), points.end(), cmp);
+            points.pop_back();
+        }
         return results;
     }
 };
