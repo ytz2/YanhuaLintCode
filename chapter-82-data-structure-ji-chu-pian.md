@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[      
+[        
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -367,14 +367,14 @@ public:
  */
 
 class CmpOp{
-    
+
 public:
     CmpOp(const Point& origin)
     {
         origin_ = Point(origin.x, origin.y);
     }
-    
-    
+
+
     bool operator()(const Point& left, const Point& right)
     {
         return !mincmp(left,right);
@@ -423,6 +423,50 @@ public:
             points.pop_back();
         }
         return results;
+    }
+};
+```
+
+
+
+
+
+## 544. Top k Largest Numbers
+
+Given an integer array, find the top_k_largest numbers in it.
+
+### Example
+
+Given`[3,10,1000,-99,4,100]`and_k_=`3`.  
+Return`[1000, 100, 10]`.
+
+https://www.lintcode.com/problem/top-k-largest-numbers/description
+
+### 解题分析:
+
+和上面一样的技巧
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an integer array
+     * @param k: An integer
+     * @return: the top k largest numbers in array
+     */
+    vector<int> topk(vector<int> &nums, int k) {
+        // write your code here
+       make_heap(nums.begin(), nums.end());
+       vector<int> results;
+       while(!nums.empty() && results.size() < k )
+       {
+           results.push_back(nums.front());
+           pop_heap(nums.begin(), nums.end());
+           nums.pop_back();
+       }
+       return results;
     }
 };
 ```
