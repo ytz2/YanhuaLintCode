@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[        
+[          
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -427,20 +427,16 @@ public:
 };
 ```
 
-
-
-
-
 ## 544. Top k Largest Numbers
 
-Given an integer array, find the top_k_largest numbers in it.
+Given an integer array, find the top\_k\_largest numbers in it.
 
 ### Example
 
 Given`[3,10,1000,-99,4,100]`and_k_=`3`.  
 Return`[1000, 100, 10]`.
 
-https://www.lintcode.com/problem/top-k-largest-numbers/description
+[https://www.lintcode.com/problem/top-k-largest-numbers/description](https://www.lintcode.com/problem/top-k-largest-numbers/description)
 
 ### 解题分析:
 
@@ -469,6 +465,92 @@ public:
        return results;
     }
 };
+```
+
+
+
+## 104. Merge K Sorted Lists
+
+Merge_k_sorted linked lists and return it as one sorted list.
+
+Analyze and describe its complexity.
+
+### Example
+
+Given lists:
+
+```
+[
+  2-
+>
+4-
+>
+null,
+  null,
+  -1-
+>
+null
+],
+
+```
+
+return`-1->2->4->null`.
+
+### 解题分析:
+
+和上面一样的技巧
+
+### 代码：
+
+```cpp
+/**
+ * Definition of ListNode
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *         this->val = val;
+ *         this->next = NULL;
+ *     }
+ * }
+ */
+class Solution {
+public:
+    /**
+     * @param lists: a list of ListNode
+     * @return: The head of one sorted list.
+     */
+    struct Compare{
+        bool operator()(ListNode* left, ListNode* right){
+            return left->val > right->val;
+        }
+    };
+    ListNode *mergeKLists(vector<ListNode *> &lists) {
+        // write your code here
+        priority_queue<ListNode*, vector<ListNode*>,Compare> pq;
+        for (auto node : lists)
+        {
+            if (node)   
+                pq.push(node);
+        }
+        ListNode dummy; 
+        ListNode* head = &dummy;
+        while(!pq.empty())
+        {
+            auto node = pq.top();
+            pq.pop();
+            head->next = node;
+            head = head->next;
+            if (node->next)
+                pq.push(node->next);
+        }
+        return dummy.next;
+    }
+};
+
+
+
 ```
 
 
