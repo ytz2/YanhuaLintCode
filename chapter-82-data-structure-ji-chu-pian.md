@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[          
+[            
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -467,11 +467,9 @@ public:
 };
 ```
 
-
-
 ## 104. Merge K Sorted Lists
 
-Merge_k_sorted linked lists and return it as one sorted list.
+Merge\_k\_sorted linked lists and return it as one sorted list.
 
 Analyze and describe its complexity.
 
@@ -491,14 +489,15 @@ null,
 >
 null
 ],
-
 ```
 
 return`-1->2->4->null`.
 
 ### 解题分析:
 
-和上面一样的技巧
+两种思路，比较流行的思路是priority\_queue， 田忌赛马的故事， 放k个进去，优胜的出去，递补同组下一个，继续，复杂度为o\(nlogk\) k为单组平均长度
+
+第二种思路是用merge sort的思路，merge明白两个，剩下的就是用递归的思路来解决两两merge
 
 ### 代码：
 
@@ -545,6 +544,79 @@ public:
             if (node->next)
                 pq.push(node->next);
         }
+        return dummy.next;
+    }
+};
+
+
+/**
+ * Definition of ListNode
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *         this->val = val;
+ *         this->next = NULL;
+ *     }
+ * }
+ */
+class Solution {
+public:
+    /**
+     * @param lists: a list of ListNode
+     * @return: The head of one sorted list.
+     */
+    ListNode *mergeKLists(vector<ListNode *> &lists) {
+        // write your code here
+        return helper(lists, 0, lists.size()-1);
+    }
+    
+    ListNode* helper(vector<ListNode*>& lists, int beg, int end)
+    {
+        if (beg > end)
+            return nullptr;
+        if (beg == end)
+            return lists[beg];
+        if (beg+1 == end)
+            return mergeTwoList(lists[beg], lists[end]);
+        int mid = (beg + end)/2;
+        auto left = helper(lists, beg, mid);
+        auto right = helper(lists, mid+1, end);
+        return mergeTwoList(left, right);
+    }
+    
+    ListNode* mergeTwoList(ListNode* left, ListNode* right)
+    {
+        ListNode dummy;
+        ListNode* head = &dummy;
+        while(left && right)
+        {
+            if (left->val < right->val)
+            {
+                head->next = left;
+                left = left->next;
+            }
+            else
+            {
+                head->next = right;
+                right = right->next;
+            }
+            head = head->next;
+        }
+        while(left)
+        {
+            head->next = left;
+            head =head->next;
+            left = left->next;
+        }
+        while(right)
+        {
+            head->next = right;
+            head = head->next;
+            right = right->next;
+        }
+        head->next = nullptr;
         return dummy.next;
     }
 };
