@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[              
+[                
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -622,11 +622,11 @@ public:
 };
 ```
 
-## 4. Ugly Number II
+## \*\*\*\*4. Ugly Number II
 
 Ugly number is a number that only have factors`2`,`3`and`5`.
 
-Design an algorithm to find the_n_th ugly number. The first 10 ugly numbers are`1, 2, 3, 4, 5, 6, 8, 9, 10, 12...`
+Design an algorithm to find the\_n\_th ugly number. The first 10 ugly numbers are`1, 2, 3, 4, 5, 6, 8, 9, 10, 12...`
 
 ### Example
 
@@ -634,9 +634,9 @@ If`n=9`, return`10`.
 
 ### Challenge
 
-O\(_n_log_n_\) or O\(_n_\) time.
+O\(_n\_log\_n_\) or O\(_n_\) time.
 
-https://www.lintcode.com/problem/ugly-number-ii/description
+[https://www.lintcode.com/problem/ugly-number-ii/description](https://www.lintcode.com/problem/ugly-number-ii/description)
 
 ### 解题分析:
 
@@ -644,7 +644,9 @@ https://www.lintcode.com/problem/ugly-number-ii/description
 
 2。 用merge sort的方法，  2^i, 3^j, 5^k 三个list， 不停的merge，然后取到第n个。  其实写的时候可以简洁一点，  维护i2, i3,i5为
 
-      的index， 每次比较num\[i\]\*2, num\[j\]\*3, num\[k\]\*5大小, 取最小的放上去并且Index ++ . 可以理解成 i, j, k记录上一个最小的位置， 直到他们ready为止（比如5， 一直指到0， 然后1，过了好久才用第二个元素再乘以5, 因为之前的都被2 3 cover掉了）。
+```
+  的index， 每次比较num\[i\]\*2, num\[j\]\*3, num\[k\]\*5大小, 取最小的放上去并且Index ++ . 可以理解成 i, j, k记录上一个最小的位置， 直到他们ready为止（比如5， 一直指到0， 然后1，过了好久才用第二个元素再乘以5, 因为之前的都被2 3 cover掉了）。
+```
 
 ### 代码：
 
