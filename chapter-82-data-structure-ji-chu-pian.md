@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[            
+[              
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -571,7 +571,7 @@ public:
         // write your code here
         return helper(lists, 0, lists.size()-1);
     }
-    
+
     ListNode* helper(vector<ListNode*>& lists, int beg, int end)
     {
         if (beg > end)
@@ -585,7 +585,7 @@ public:
         auto right = helper(lists, mid+1, end);
         return mergeTwoList(left, right);
     }
-    
+
     ListNode* mergeTwoList(ListNode* left, ListNode* right)
     {
         ListNode dummy;
@@ -620,9 +620,83 @@ public:
         return dummy.next;
     }
 };
+```
 
+## 4. Ugly Number II
 
+Ugly number is a number that only have factors`2`,`3`and`5`.
 
+Design an algorithm to find the_n_th ugly number. The first 10 ugly numbers are`1, 2, 3, 4, 5, 6, 8, 9, 10, 12...`
+
+### Example
+
+If`n=9`, return`10`.
+
+### Challenge
+
+O\(_n_log_n_\) or O\(_n_\) time.
+
+https://www.lintcode.com/problem/ugly-number-ii/description
+
+### 解题分析:
+
+1 方法1， 暴力法，把所有的ugly number都生成出来 2^i \*3^j\*5^k &lt;INT\_MAX, 这个组合常数个，sort一下取第n个
+
+2。 用merge sort的方法，  2^i, 3^j, 5^k 三个list， 不停的merge，然后取到第n个。  其实写的时候可以简洁一点，  维护i2, i3,i5为
+
+      的index， 每次比较num\[i\]\*2, num\[j\]\*3, num\[k\]\*5大小, 取最小的放上去并且Index ++ . 可以理解成 i, j, k记录上一个最小的位置， 直到他们ready为止（比如5， 一直指到0， 然后1，过了好久才用第二个元素再乘以5, 因为之前的都被2 3 cover掉了）。
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @return: the nth prime number as description.
+     */
+    int nthUglyNumber(int n) {
+        // write your code here
+        static vector<int> table;
+        for (long i = 1; i <= INT_MAX; i*=2)
+            for(long j = i; j <= INT_MAX; j*=3)
+                for(long k = j; k <= INT_MAX; k*=5)
+                {
+                    table.push_back(k);
+                }
+        sort(table.begin(), table.end());
+        return table[n-1];
+    }
+};
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @return: the nth prime number as description.
+     */
+    int nthUglyNumber(int n) {
+        // write your code here
+        vector<int> table{1};
+        static int i2 = 0;
+        static int i3 = 0;
+        static int i5 = 0;
+        while(table.size() < n)
+        {
+            int nexti2 = table[i2] * 2;
+            int nexti3 = table[i3] * 3;
+            int nexti5 = table[i5] * 5;
+            int next = min(nexti2,min(nexti3, nexti5));
+            if ( next == nexti2) i2++;
+            if ( next == nexti3) i3++;
+            if ( next == nexti5) i5++;
+            table.push_back(next);
+        }
+        return table[n-1];
+    }
+};
 ```
 
 
