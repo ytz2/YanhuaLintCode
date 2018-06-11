@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[                
+[                  
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -700,6 +700,102 @@ public:
     }
 };
 ```
+
+
+
+## 134. LRU Cache
+
+Design and implement a data structure for Least Recently Used \(LRU\) cache. It should support the following operations: `get` and `set`.
+
+`get(key)` - Get the value \(will always be positive\) of the key if the key exists in the cache, otherwise return -1.  
+`set(key, value)` - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+
+https://www.lintcode.com/problem/lru-cache/description
+
+### 解题分析:
+
+做烂的题目没啥好说的了。。。。
+
+### 代码：
+
+```cpp
+#include <list>
+class LRUCache {
+public:
+
+    struct Node{
+      Node(int k, int v)
+        :key(k),val(v)
+        {}
+      int key;
+      int val;
+    };
+
+    /*
+    * @param capacity: An integer
+    */LRUCache(int capacity) {
+        // do intialization if necessary
+        capacity_ = capacity;
+    }
+
+    /*
+     * @param key: An integer
+     * @return: An integer
+     */
+    int get(int key) {
+        // write your code here
+        if (!map_.count(key))
+            return -1;
+        auto val = (*map_[key])->val;
+        move2head(key);
+        return val;
+    }
+
+    /*
+     * @param key: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    void set(int key, int value) {
+        // write your code here
+        if (map_.count(key))
+        {
+            (*map_[key])->val = value;
+            move2head(key);
+            return;
+        }
+        else
+        {
+            list_.push_front(new Node(key, value));
+            map_[key] = list_.begin();
+            if (list_.size() > capacity_)
+            {
+                auto node = list_.back();
+                list_.pop_back();
+                map_.erase(node->key);
+                delete node;
+            }
+        }
+    }
+private:
+    void move2head(int k)
+    {
+        if (!map_.count(k))
+            return; 
+        auto it = map_[k];
+        auto node = *it;
+        list_.erase(it);
+        list_.push_front(node);
+        map_[k] = list_.begin();
+    }
+private:
+    int capacity_;
+    unordered_map<int, list<Node*>::iterator> map_;
+    list<Node*> list_;
+};
+```
+
+
 
 
 
