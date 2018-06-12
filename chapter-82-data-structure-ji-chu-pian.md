@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[                      
+[                        
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -913,7 +913,7 @@ struct NodeType
         :key(k),val(v),freq(f),it(iter)
     {
     }
-    
+
     int key;
     int val;
     int freq;
@@ -944,7 +944,7 @@ public:
             touch(key);
             return;
         }
-        
+
         if (map_.size() == capacity_)
         {
             int k = freq_[minFreq_].back();
@@ -955,7 +955,7 @@ public:
             map_.erase(k);
             delete ptr;
         }
-        
+
         minFreq_ = 1;
         freq_[minFreq_].push_front(key);
         map_[key] = new NodeType(key, value, 1, freq_[minFreq_].begin());
@@ -979,7 +979,7 @@ private:
     {
         if (!map_.count(key))
             return;
-        
+
         auto nodeptr = map_[key];
         int freq = nodeptr->freq;
         nodeptr->freq++;
@@ -993,7 +993,7 @@ private:
         freq_[freq].push_front(key);
         nodeptr->it = freq_[freq].begin();
     }
-    
+
 private:
     int capacity_;
     int minFreq_;
