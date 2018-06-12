@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[                    
+[                      
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -793,8 +793,6 @@ private:
 };
 ```
 
-
-
 ## 24. LFU Cache
 
 LFU \(Least Frequently Used\) is a famous cache eviction algorithm.
@@ -803,23 +801,20 @@ For a cache with capacity_k_, if the cache is full and need to evict a key in it
 
 Implement`set`and`get`method for LFU cache.
 
-
-
 ### Example
 
 Given`capacity=3`
 
-https://www.lintcode.com/problem/lfu-cache/description
+[https://www.lintcode.com/problem/lfu-cache/description](https://www.lintcode.com/problem/lfu-cache/description)
 
 ### 解题分析:
 
 1. get, set 是log\(n\)的解法，维护一个set来查找freq,一个unordered map来维护存在不存在以及Node的快速access. 
-2. O\(1\)的办法。
+2. O\(1\)的办法, 为了实现O\(1\), node存 k, v, freq, iter, 用一个hash table来快速索引， 用一个freq vs list table 来维护最小频率。难点在于touch里的维护minFreq的方法，写着写着就糊涂了。
 
 ### 代码：
 
 ```cpp
-
 #include <set>
 class NodeType{
 public:
@@ -832,7 +827,7 @@ public:
     int val;
     int freq;
     int tick;
-    
+
     friend bool operator<( const NodeType& left, const NodeType& right)
     {
         if (left.freq < right.freq)
@@ -907,6 +902,103 @@ private:
     int capacity_;
     unordered_map<int, NodeType> map_;
     std::set<NodeType> freq_;
+};
+```
+
+```cpp
+#include <list>
+struct NodeType
+{
+    NodeType(int k, int v, int f, list<int>::iterator iter)
+        :key(k),val(v),freq(f),it(iter)
+    {
+    }
+    
+    int key;
+    int val;
+    int freq;
+    list<int>::iterator it;
+};
+
+class LFUCache {
+public:
+    /*
+    * @param capacity: An integer
+    */LFUCache(int capacity) {
+        // do intialization if necessary
+        capacity_ = capacity;
+        minFreq_ = 0;
+    }
+
+    /*
+     * @param key: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    void set(int key, int value) {
+        // write your code here
+        if (map_.count(key))
+        {
+            auto nodeptr = map_[key];
+            nodeptr->val = value;
+            touch(key);
+            return;
+        }
+        
+        if (map_.size() == capacity_)
+        {
+            int k = freq_[minFreq_].back();
+            freq_[minFreq_].pop_back();
+            if (freq_[minFreq_].empty())
+                freq_.erase(minFreq_);
+            auto ptr = map_[k];
+            map_.erase(k);
+            delete ptr;
+        }
+        
+        minFreq_ = 1;
+        freq_[minFreq_].push_front(key);
+        map_[key] = new NodeType(key, value, 1, freq_[minFreq_].begin());
+    }
+
+    /*
+     * @param key: An integer
+     * @return: An integer
+     */
+    int get(int key) {
+        // write your code here
+        if (!map_.count(key))
+            return -1;
+        auto nodeptr = map_[key];
+        touch(key);
+        return nodeptr->val;
+    }
+private:
+
+    void touch(int key)
+    {
+        if (!map_.count(key))
+            return;
+        
+        auto nodeptr = map_[key];
+        int freq = nodeptr->freq;
+        nodeptr->freq++;
+        freq_[freq].erase(nodeptr->it);
+        if (freq_[freq].empty() && minFreq_ == freq)
+        {
+            freq_.erase(freq);
+            minFreq_++;
+        }
+        freq++;
+        freq_[freq].push_front(key);
+        nodeptr->it = freq_[freq].begin();
+    }
+    
+private:
+    int capacity_;
+    int minFreq_;
+    unordered_map<int, NodeType*> map_;
+    unordered_map<int, list<int>> freq_;
 };
 ```
 
