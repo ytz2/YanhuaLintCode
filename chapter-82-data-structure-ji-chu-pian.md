@@ -143,7 +143,7 @@ one parameter per line.
 
 \)
 
-[                  
+[                    
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -701,16 +701,14 @@ public:
 };
 ```
 
-
-
 ## 134. LRU Cache
 
-Design and implement a data structure for Least Recently Used \(LRU\) cache. It should support the following operations: `get` and `set`.
+Design and implement a data structure for Least Recently Used \(LRU\) cache. It should support the following operations: `get` and `set`.
 
-`get(key)` - Get the value \(will always be positive\) of the key if the key exists in the cache, otherwise return -1.  
-`set(key, value)` - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+`get(key)` - Get the value \(will always be positive\) of the key if the key exists in the cache, otherwise return -1.  
+`set(key, value)` - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
 
-https://www.lintcode.com/problem/lru-cache/description
+[https://www.lintcode.com/problem/lru-cache/description](https://www.lintcode.com/problem/lru-cache/description)
 
 ### 解题分析:
 
@@ -796,6 +794,121 @@ private:
 ```
 
 
+
+## 24. LFU Cache
+
+LFU \(Least Frequently Used\) is a famous cache eviction algorithm.
+
+For a cache with capacity_k_, if the cache is full and need to evict a key in it, the key with the lease frequently used will be kicked out.
+
+Implement`set`and`get`method for LFU cache.
+
+
+
+### Example
+
+Given`capacity=3`
+
+https://www.lintcode.com/problem/lfu-cache/description
+
+### 解题分析:
+
+1. get, set 是log\(n\)的解法，维护一个set来查找freq,一个unordered map来维护存在不存在以及Node的快速access. 
+2. O\(1\)的办法。
+
+### 代码：
+
+```cpp
+
+#include <set>
+class NodeType{
+public:
+    NodeType(int k, int v, int f, int t)
+        : key(k), val(v),freq(f),tick(t)
+    {}
+    NodeType()
+    {}
+    int key;
+    int val;
+    int freq;
+    int tick;
+    
+    friend bool operator<( const NodeType& left, const NodeType& right)
+    {
+        if (left.freq < right.freq)
+            return true;
+        if (left.freq == right.freq)
+            return left.tick < right.tick;
+        return false;
+    }
+};
+
+class LFUCache {
+public:
+    /*
+    * @param capacity: An integer
+    */LFUCache(int capacity) {
+        // do intialization if necessary
+        capacity_ = capacity;
+        tick_ = 0;
+    }
+
+    /*
+     * @param key: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    void set(int key, int value) {
+        // write your code here
+        if (map_.count(key))
+        {
+            auto& node = map_[key];
+            node.val = value;
+            touch(key);
+            return;
+        }
+        NodeType node(key, value, 1, ++tick_);
+        if (map_.size() == capacity_)
+        {
+            auto it = freq_.begin();
+            int k = it->key;
+            freq_.erase(it);
+            map_.erase(k);
+        }
+        map_[key] = node;
+        freq_.insert(node);
+    }
+
+    /*
+     * @param key: An integer
+     * @return: An integer
+     */
+    int get(int key) {
+        // write your code here
+        if (!map_.count(key))
+            return -1;
+        int v = map_[key].val;
+        touch(key);
+        return v; 
+    }
+private:
+    void touch(int key)
+    {
+        if (!map_.count(key))
+            return;
+        auto& node = map_[key];
+        freq_.erase(node);
+        node.freq++;
+        node.tick = ++tick_;
+        freq_.insert(node);
+    }
+private:
+    int tick_;
+    int capacity_;
+    unordered_map<int, NodeType> map_;
+    std::set<NodeType> freq_;
+};
+```
 
 
 
