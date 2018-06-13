@@ -181,8 +181,6 @@ public:
 };
 ```
 
-
-
 ## 606. Kth Largest Element II
 
 Find K-th largest element in an array. and N is much larger than k.
@@ -193,7 +191,7 @@ In array`[9,3,2,4,8]`, the`3rd`largest element is`4`.
 
 In array`[1,2,3,4,5]`, the`1st`largest element is`5`,`2nd`largest element is`4`,`3rd`largest element is`3`and etc.
 
-https://www.lintcode.com/problem/kth-largest-element-ii/description
+[https://www.lintcode.com/problem/kth-largest-element-ii/description](https://www.lintcode.com/problem/kth-largest-element-ii/description)
 
 ### 解题分析：
 
@@ -213,7 +211,7 @@ public:
         // write your code here
         return helper(nums, 0, nums.size()-1, k);
     }
-    
+
     int helper(vector<int>& nums, int beg, int end, int k)
     {
         if (beg >= end)
@@ -236,6 +234,73 @@ public:
         return nums[e+1];
     }
 };
+```
+
+## 601. Flatten 2D Vector
+
+Implement an iterator to flatten a 2d vector.
+
+### Example
+
+Given 2d vector =
+
+```
+[
+  [1,2],
+  [3],
+  [4,5,6]
+]
+
+```
+
+By calling next repeatedly until hasNext returns false, the order of elements returned by next should be:`[1,2,3,4,5,6]`.
+
+https://www.lintcode.com/problem/flatten-2d-vector/description
+
+### 解题分析：
+
+维护i, j指针即可
+
+### 代码：
+
+```cpp
+class Vector2D {
+public:
+    Vector2D(vector<vector<int>>& vec2d)
+        : vect_(vec2d), i(0),j(0)
+    {
+        // Initialize your data structure here
+    }
+
+    int next() {
+        // Write your code here
+        int val = vect_[i][j];
+        if (j == vect_[i].size()-1)
+        {
+            i++;j=0;
+        }
+        else
+        {
+            j++;
+        }
+        return val;
+    }
+
+    bool hasNext() {
+
+        return (i<vect_.size()-1) || (i == vect_.size()-1 && j < vect_[i].size());
+    }
+    
+private:
+    vector<vector<int>>& vect_;
+    int i , j;
+};
+
+/**
+ * Your Vector2D object will be instantiated and called as such:
+ * Vector2D i(vec2d);
+ * while (i.hasNext()) cout << i.next();
+ */
 ```
 
 
