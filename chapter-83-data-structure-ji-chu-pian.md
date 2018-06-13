@@ -56,7 +56,7 @@ return`3`
 Given a stream`[1, 2, 2, 1, 3, 4, 4, 5, 6]`and a number`7`  
 return`-1`
 
-https://www.lintcode.com/problem/first-unique-number-in-stream/description
+[https://www.lintcode.com/problem/first-unique-number-in-stream/description](https://www.lintcode.com/problem/first-unique-number-in-stream/description)
 
 ### 解题分析:
 
@@ -78,7 +78,7 @@ public:
         list<int> l;
         unordered_map<int, list<int>::iterator> map_;
         unordered_set<int> dup_;
-        
+
         bool found = false;
         for (int i = 0; i <nums.size(); i++)
         {
@@ -102,6 +102,81 @@ public:
         if (l.empty() || !found)
             return -1;
         return l.front();
+    }
+};
+```
+
+## 613. High Five
+
+There are two properties in the node student`id`and`scores`, to ensure that each student will have at least 5 points, find the average of 5 highest scores for each person.
+
+### Example
+
+```
+Given results = [[1,91],[1,92],[2,93],[2,99],[2,98],[2,97],[1,60],[1,58],[2,100],[1,61]]
+
+Return 
+```
+
+https://www.lintcode.com/problem/high-five/description
+
+### 解题分析:
+
+top k 的一个复杂版。。。。
+
+### 代码：
+
+```cpp
+/**
+ * Definition for a Record
+ * class Record {
+ * public:
+ *   int id, score;
+ *   Record(int id, int score) {
+ *     this->id = id;
+ *     this->score = score;
+ *   }
+ * };
+ */
+class Solution {
+public:
+    /**
+     * @param results a list of <student_id, score>
+     * @return find the average of 5 highest scores for each person
+     * map<int, double> (student_id, average_score)
+     */
+    map<int, double> highFive(vector<Record>& results) {
+        // Write your code here
+        map<int, double> result;
+        typedef priority_queue<int, vector<int>, greater<int>> pqType;
+        unordered_map<int, pqType> tbl;
+        for (auto& each : results)
+        {
+            auto& pq = tbl[each.id];
+            if (pq.size() < 5)
+            {
+                pq.push(each.score);
+                continue;
+            }
+            
+            if (pq.top() >= each.score)
+                continue;
+            pq.pop();
+            pq.push(each.score);
+        }
+        for (auto& pair : tbl)
+        {
+            auto& id = pair.first;
+            auto& pq = pair.second;
+            double sum = 0;
+            while(!pq.empty())
+            {
+                sum += pq.top();
+                pq.pop();
+            }
+            result[id] = sum / 5;
+        }
+        return result; 
     }
 };
 ```
