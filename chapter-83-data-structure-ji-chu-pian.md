@@ -115,10 +115,10 @@ There are two properties in the node student`id`and`scores`, to ensure that each
 ```
 Given results = [[1,91],[1,92],[2,93],[2,99],[2,98],[2,97],[1,60],[1,58],[2,100],[1,61]]
 
-Return 
+Return
 ```
 
-https://www.lintcode.com/problem/high-five/description
+[https://www.lintcode.com/problem/high-five/description](https://www.lintcode.com/problem/high-five/description)
 
 ### 解题分析:
 
@@ -158,7 +158,7 @@ public:
                 pq.push(each.score);
                 continue;
             }
-            
+
             if (pq.top() >= each.score)
                 continue;
             pq.pop();
@@ -177,6 +177,63 @@ public:
             result[id] = sum / 5;
         }
         return result; 
+    }
+};
+```
+
+
+
+## 606. Kth Largest Element II
+
+Find K-th largest element in an array. and N is much larger than k.
+
+### Example
+
+In array`[9,3,2,4,8]`, the`3rd`largest element is`4`.
+
+In array`[1,2,3,4,5]`, the`1st`largest element is`5`,`2nd`largest element is`4`,`3rd`largest element is`3`and etc.
+
+https://www.lintcode.com/problem/kth-largest-element-ii/description
+
+### 解题分析：
+
+暗示用pq也可以过。。。写个quick select的版本算了
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an integer unsorted array
+     * @param k: an integer from 1 to n
+     * @return: the kth largest element
+     */
+    int kthLargestElement2(vector<int> &nums, int k) {
+        // write your code here
+        return helper(nums, 0, nums.size()-1, k);
+    }
+    
+    int helper(vector<int>& nums, int beg, int end, int k)
+    {
+        if (beg >= end)
+            return nums[end];
+        int mid = nums[(beg + end)/2];
+        int s = beg, e = end;
+        while ( s <= e)
+        {
+            while( s <= e && nums[s] > mid)
+                s++;
+            while( s <= e && nums[e] < mid)
+                e--;
+            if (s <= e )
+                swap(nums[s++], nums[e--]);
+        }
+        if (beg + k - 1 <= e )
+            return helper(nums, beg, e, k);
+        else if ( beg + k - 1 >= s)
+            return helper(nums, s, end, k - (s-beg));
+        return nums[e+1];
     }
 };
 ```
