@@ -44,5 +44,67 @@ public:
 };
 ```
 
+## 685. First Unique Number In Stream
+
+Given a continuous stream of numbers, write a function that returns the first unique number whenever terminating number is reached\(include terminating number\). If there no unique number before terminating number or you can't find this terminating number, return`-1`.
+
+### Example
+
+Given a stream`[1, 2, 2, 1, 3, 4, 4, 5, 6]`and a number`5`  
+return`3`
+
+Given a stream`[1, 2, 2, 1, 3, 4, 4, 5, 6]`and a number`7`  
+return`-1`
+
+https://www.lintcode.com/problem/first-unique-number-in-stream/description
+
+### 解题分析:
+
+这种类型的题目做多了就知道肯定是hash table + double linked list组合， 这个不新鲜，加了一个unordered\_set而已
+
+### 代码：
+
+```cpp
+#include <list>
+class Solution {
+public:
+    /**
+     * @param nums: a continuous stream of numbers
+     * @param number: a number
+     * @return: returns the first unique number
+     */
+    int firstUniqueNumber(vector<int> &nums, int number) {
+        // Write your code here
+        list<int> l;
+        unordered_map<int, list<int>::iterator> map_;
+        unordered_set<int> dup_;
+        
+        bool found = false;
+        for (int i = 0; i <nums.size(); i++)
+        {
+            int v = nums[i];
+            if (dup_.count(v))
+                continue;
+            if (map_.count(v))
+            {
+                l.erase(map_[v]);
+                dup_.insert(v);
+                continue;
+            }
+            l.push_back(v);
+            map_[v] = prev(l.end());
+            if (v == number)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (l.empty() || !found)
+            return -1;
+        return l.front();
+    }
+};
+```
+
 
 
