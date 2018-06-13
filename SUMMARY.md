@@ -30,4 +30,5 @@
 * [2.1 TS](21-two-sigma.md)
 * [Chapter 8.1 Data structure 基础篇](chapter-81-data-structure.md)
 * [Chapter 8.2 Data structure 基础篇 ](chapter-82-data-structure-ji-chu-pian.md)
+* [Chapter 8.3 Data structure 基础篇 ](chapter-83-data-structure-ji-chu-pian.md)
 
