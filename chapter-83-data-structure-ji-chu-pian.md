@@ -250,12 +250,11 @@ Given 2d vector =
   [3],
   [4,5,6]
 ]
-
 ```
 
 By calling next repeatedly until hasNext returns false, the order of elements returned by next should be:`[1,2,3,4,5,6]`.
 
-https://www.lintcode.com/problem/flatten-2d-vector/description
+[https://www.lintcode.com/problem/flatten-2d-vector/description](https://www.lintcode.com/problem/flatten-2d-vector/description)
 
 ### 解题分析：
 
@@ -290,7 +289,7 @@ public:
 
         return (i<vect_.size()-1) || (i == vect_.size()-1 && j < vect_[i].size());
     }
-    
+
 private:
     vector<vector<int>>& vect_;
     int i , j;
@@ -301,6 +300,109 @@ private:
  * Vector2D i(vec2d);
  * while (i.hasNext()) cout << i.next();
  */
+```
+
+## 545. Top k Largest Numbers II
+
+mplement a data structure, provide two interfaces:
+
+1. `add(number)`
+   . Add a new number in the data structure.
+2. `topk()`
+   . Return the top
+   _k_
+   largest numbers in this data structure.
+   _k_
+   is given when we create the data structure.
+
+### Example
+
+```
+s = new Solution(3);
+
+>
+>
+ create a new data structure.
+s.add(3)
+s.add(10)
+s.topk()
+
+>
+>
+ return [10, 3]
+s.add(1000)
+s.add(-99)
+s.topk()
+
+>
+>
+ return [1000, 10, 3]
+s.add(4)
+s.topk()
+
+>
+>
+ return [1000, 10, 4]
+s.add(100)
+s.topk()
+
+>
+>
+ return [1000, 100, 10]
+
+```
+
+https://www.lintcode.com/problem/top-k-largest-numbers-ii/description  
+
+
+### 解题分析：
+
+没新意
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+    * @param k: An integer
+    */Solution(int k) {
+        // do intialization if necessary
+        k_= k;
+    }
+
+    /*
+     * @param num: Number to be added
+     * @return: nothing
+     */
+    void add(int num) {
+        // write your code here
+        if (store.size() < k_)
+            store.insert(num);
+        else if (num > *store.begin())
+        {
+            store.erase(store.begin());
+            store.insert(num);
+        }
+            
+    }
+
+    /*
+     * @return: Top k element
+     */
+    vector<int> topk() {
+        // write your code here
+       vector<int> result;
+       int i = 0; 
+       for (auto it = store.rbegin(); it!=store.rend() && i < k_; i++, it++)
+       {
+           result.push_back(*it);
+       }
+       return result;
+    }
+    int k_;
+    multiset<int> store;
+};
 ```
 
 
