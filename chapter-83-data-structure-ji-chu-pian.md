@@ -349,11 +349,9 @@ s.topk()
 >
 >
  return [1000, 100, 10]
-
 ```
 
-https://www.lintcode.com/problem/top-k-largest-numbers-ii/description  
-
+[https://www.lintcode.com/problem/top-k-largest-numbers-ii/description](https://www.lintcode.com/problem/top-k-largest-numbers-ii/description)
 
 ### 解题分析：
 
@@ -384,7 +382,7 @@ public:
             store.erase(store.begin());
             store.insert(num);
         }
-            
+
     }
 
     /*
@@ -402,6 +400,132 @@ public:
     }
     int k_;
     multiset<int> store;
+};
+```
+
+## 526. Load Balancer
+
+Implement a load balancer for web servers. It provide the following functionality:
+
+1. Add a new server to the cluster =
+   &gt;
+   `add(server_id)`
+   .
+2. Remove a bad server from the cluster =
+   &gt;
+   `remove(server_id)`
+   .
+3. Pick a server in the cluster randomly with equal probability =
+   &gt;
+   `pick()`
+   .
+
+### Example
+
+At beginning, the cluster is empty =&gt;`{}`.
+
+```
+add(1)
+add(2)
+add(3)
+pick()
+
+>
+>
+ 1         // the return value is random, it can be either 1, 2, or 3.
+pick()
+
+>
+>
+ 2
+pick()
+
+>
+>
+ 1
+pick()
+
+>
+>
+ 3
+remove(1)
+pick()
+
+>
+>
+ 2
+pick()
+
+>
+>
+ 3
+pick()
+
+>
+>
+ 3
+
+```
+
+[  
+](https://www.lintcode.com/problem/load-balancer/description)https://www.lintcode.com/problem/load-balancer/description
+
+### 解题分析：
+
+和那个random的是一道题
+
+### 代码：
+
+```cpp
+class LoadBalancer {
+public:
+    LoadBalancer() {
+        // do intialization if necessary
+        srand(time(NULL));
+        n = 0;
+    }
+
+    /*
+     * @param server_id: add a new server to the cluster
+     * @return: nothing
+     */
+    void add(int server_id) {
+        // write your code here
+        if (indices_.count(server_id))
+            return;
+        indices_[server_id] = n;
+        if (n < store_.size())
+            store_[n] = server_id;
+        else
+            store_.push_back(server_id);
+        n++;
+    }
+
+    /*
+     * @param server_id: server_id remove a bad server from the cluster
+     * @return: nothing
+     */
+    void remove(int server_id) {
+        // write your code here
+        if (!indices_.count(server_id))
+            return;
+        store_[indices_[server_id]] = store_[n-1];
+        indices_[store_[n-1]] = indices_[server_id];
+        indices_.erase(server_id);
+        n--;
+    }
+
+    /*
+     * @return: pick a server in the cluster randomly with equal probability
+     */
+    int pick() {
+        // write your code here
+        return store_[rand()%n];
+    }
+    
+    unordered_map<int, int> indices_;
+    vector<int> store_;
+    int n;
 };
 ```
 
