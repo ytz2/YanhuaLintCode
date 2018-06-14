@@ -464,11 +464,10 @@ pick()
 >
 >
  3
-
 ```
 
-[  
-](https://www.lintcode.com/problem/load-balancer/description)https://www.lintcode.com/problem/load-balancer/description
+[    
+](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
 
@@ -488,7 +487,7 @@ public:
     /*
      * @param server_id: add a new server to the cluster
      * @return: nothing
-     */
+     */f
     void add(int server_id) {
         // write your code here
         if (indices_.count(server_id))
@@ -522,10 +521,89 @@ public:
         // write your code here
         return store_[rand()%n];
     }
-    
+
     unordered_map<int, int> indices_;
     vector<int> store_;
     int n;
+};
+```
+
+## 486. Merge K Sorted Arrays
+
+Given_k_sorted integer arrays, merge them into one sorted array.
+
+### Example
+
+Given 3 sorted arrays:
+
+```
+[
+  [1, 3, 5, 7],
+  [2, 4, 6],
+  [0, 8, 9, 10, 11]
+]
+
+```
+
+return`[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]`.
+
+### Challenge
+
+Do it in O\(N log k\).
+
+* _N_
+  is the total number of integers.
+* _k_
+  is the number of arrays.
+
+[    
+](https://www.lintcode.com/problem/load-balancer/description)https://www.lintcode.com/problem/merge-k-sorted-arrays/description
+
+### 解题分析：
+
+变种题
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param arrays: k sorted integer arrays
+     * @return: a sorted array
+     */
+    struct CmpOp{
+      bool operator()(const std::pair<int,int>& left, const std::pair<int,int>& right)
+      {
+          return left.first > right.first;
+      }
+    };
+    vector<int> mergekSortedArrays(vector<vector<int>> &arrays) {
+        // write your code here
+        vector<int> res;
+        vector<int> cur(arrays.size(), 0);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, CmpOp> pq;
+        for ( int i = 0; i < arrays.size(); i++)
+        {
+            if (cur[i] == arrays[i].size())
+                continue;
+            pq.push(make_pair(arrays[i][cur[i]], i));
+            cur[i]++;
+        }
+        
+        while(!pq.empty())
+        {
+            auto p = pq.top();
+            pq.pop();
+            res.push_back(p.first);
+            if (cur[p.second] == arrays[p.second].size())
+                continue;
+            pq.push(make_pair(arrays[p.second][cur[p.second]], p.second));
+            cur[p.second]++;
+        }
+        
+        return res;
+    }
 };
 ```
 
