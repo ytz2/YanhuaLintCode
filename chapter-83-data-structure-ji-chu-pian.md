@@ -466,7 +466,7 @@ pick()
  3
 ```
 
-[    
+[      
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -530,7 +530,7 @@ public:
 
 ## 486. Merge K Sorted Arrays
 
-Given_k_sorted integer arrays, merge them into one sorted array.
+Given\_k\_sorted integer arrays, merge them into one sorted array.
 
 ### Example
 
@@ -542,7 +542,6 @@ Given 3 sorted arrays:
   [2, 4, 6],
   [0, 8, 9, 10, 11]
 ]
-
 ```
 
 return`[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]`.
@@ -556,8 +555,8 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[    
-](https://www.lintcode.com/problem/load-balancer/description)https://www.lintcode.com/problem/merge-k-sorted-arrays/description
+[      
+](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
 
@@ -590,7 +589,7 @@ public:
             pq.push(make_pair(arrays[i][cur[i]], i));
             cur[i]++;
         }
-        
+
         while(!pq.empty())
         {
             auto p = pq.top();
@@ -601,10 +600,101 @@ public:
             pq.push(make_pair(arrays[p.second][cur[p.second]], p.second));
             cur[p.second]++;
         }
-        
+
         return res;
     }
 };
+```
+
+## 129. Rehashing
+
+The size of the hash table is not determinate at the very beginning. If the total size of keys is too large \(e.g. size &gt;= capacity / 10\), we should double the size of the hash table and rehash every keys. Say you have a hash table looks like below:
+
+`size=3`,`capacity=4`
+
+```
+[null, 21, 14, null]
+       ↓    ↓
+       9   null
+       ↓
+      null
+
+```
+
+The hash function is:
+
+```
+int hashcode(int key, int capacity) {
+    return key % capacity;
+}
+
+```
+
+here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position as they all have the same hashcode 1 \(21 % 4 = 9 % 4 = 1\). We store them in the hash table by linked list.
+
+rehashing this hash table, double the capacity, you will get:
+
+[   https://www.lintcode.com/problem/rehashing/description  
+](https://www.lintcode.com/problem/load-balancer/description)
+
+### 解题分析：
+
+1. hash ： \(k+size\)%size 负数 2. 放一个buffer存当前key的位置
+
+### 代码：
+
+```cpp
+/**
+ * Definition of ListNode
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *         this->val = val;
+ *         this->next = NULL;
+ *     }
+ * }
+ */
+class Solution {
+public:
+    /**
+     * @param hashTable: A list of The first node of linked list
+     * @return: A list of The first node of linked list which have twice size
+     */    
+    vector<ListNode*> rehashing(vector<ListNode*> hashTable) {
+        // write your code here
+        int size = hashTable.size()*2;
+        vector<ListNode*> res(size, nullptr);
+        vector<ListNode*> cur(size, nullptr);
+        for (auto ptr : hashTable)
+        {
+            if (!ptr)
+                continue;
+            while(ptr)
+            {
+                int k = (ptr->val+size) % size;
+                if (!cur[k])
+                {
+                    res[k] = ptr;
+                    cur[k] = ptr;
+                }
+                else
+                {
+                    cur[k]->next = ptr;
+                    cur[k] = ptr;
+                }
+                ptr = ptr->next;
+            }
+        }
+        for (auto ptr : cur)
+        {
+            if (ptr) ptr->next = nullptr;
+        }
+        return res;
+    }
+};
+
 ```
 
 
