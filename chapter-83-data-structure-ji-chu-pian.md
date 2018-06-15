@@ -466,7 +466,7 @@ pick()
  3
 ```
 
-[          
+[            
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -555,7 +555,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[          
+[            
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -632,7 +632,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description      
+[   https://www.lintcode.com/problem/rehashing/description        
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -703,7 +703,7 @@ Given an unsorted array of integers, find the length of the longest consecutive 
 Given`[100, 4, 200, 1, 3, 2]`,  
 The longest consecutive elements sequence is`[1, 2, 3, 4]`. Return its length:`4`.
 
-[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[](https://www.lintcode.com/problem/longest-consecutive-sequence/description[)  
+\[[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[](https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[)\)  
 \]\([https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)\)
 
 ### 解题分析
@@ -743,8 +743,6 @@ public:
 };
 ```
 
-
-
 ## 551. Nested List Weight Sum
 
 Given a nested list of integers, return the sum of all integers in the list weighted by their depth. Each element is either an integer, or a list -- whose elements may also be integers or other lists.
@@ -754,9 +752,7 @@ Given a nested list of integers, return the sum of all integers in the list weig
 Given the list`[[1,1],2,[1,1]]`, return`10`. \(four 1's at depth 2, one 2 at depth 1, 4 \* 1 \* 2 + 1 \* 2 \* 1 = 10\)  
 Given the list`[1,[4,[6]]]`, return`27`. \(one 1 at depth 1, one 4 at depth 2, and one 6 at depth 3; 1 + 4 \* 2 + 6 \* 3 = 27\)
 
-
-
-https://www.lintcode.com/problem/nested-list-weight-sum/description
+[https://www.lintcode.com/problem/nested-list-weight-sum/description](https://www.lintcode.com/problem/nested-list-weight-sum/description)
 
 ### 解题分析
 
@@ -791,7 +787,7 @@ public:
         // Write your code here
         return depthSum(1, nestedList);
     }
-    
+
     int depthSum(int depth, const vector<NestedInteger>& nestedList)
     {
         int sum = 0;
@@ -806,6 +802,87 @@ public:
             }
         }
         return sum;
+    }
+};
+```
+
+
+
+
+
+## 575. Decode String
+
+Given an expression`s`includes numbers, letters and brackets. Number represents the number of repetitions inside the brackets\(can be a string or another expression\)．Please expand expression to be a string.
+
+### Example
+
+s =`abc3[a]`return`abcaaa`  
+s =`3[abc]`return`abcabcabc`  
+s =`4[ac]dy`, return`acacacacdy`  
+s =`3[2[ad]3[pf]]xyz`, return`adadpfpfpfadadpfpfpfadadpfpfpfxyz`
+
+### Challenge
+
+Can you do it without recursion?
+
+https://www.lintcode.com/problem/decode-string/description
+
+### 解题分析
+
+这种带括号的就是无脑上stack， 碰到左括号push状态，右括号pop更新全局。 具体看代码。
+
+这道题用了两个stack,一个记录几个数，一个当前的partial string. 
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param s: an expression includes numbers, letters and brackets
+     * @return: a string
+     */
+    string expressionExpand(string &s) {
+        // write your code here
+        stack<int> countStk;
+        stack<string> partStk;
+        string result;
+        int number = 0;
+        
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (isdigit(s[i]))
+            {
+                number = number*10 + s[i] - '0';
+            }
+            else if (s[i] == '[')
+            {
+                countStk.push(number);
+                number = 0;
+                partStk.push("");
+            }
+            else if (s[i] == ']')
+            {
+                int n = countStk.top();
+                countStk.pop();
+                string tmp;
+                for (int i = 0; i < n; i++)
+                    tmp.append(partStk.top());
+                partStk.pop();
+                if (partStk.empty())
+                    result.append(tmp);
+                else
+                    partStk.top().append(tmp);
+            }
+            else
+            {
+                if (partStk.empty())
+                    result.push_back(s[i]);
+                else
+                    partStk.top().push_back(s[i]);
+            }
+        }
+        return result;
     }
 };
 ```
