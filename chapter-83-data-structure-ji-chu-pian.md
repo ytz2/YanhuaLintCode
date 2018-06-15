@@ -466,7 +466,7 @@ pick()
  3
 ```
 
-[      
+[        
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -555,7 +555,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[      
+[        
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -618,7 +618,6 @@ The size of the hash table is not determinate at the very beginning. If the tota
        9   null
        ↓
       null
-
 ```
 
 The hash function is:
@@ -627,14 +626,13 @@ The hash function is:
 int hashcode(int key, int capacity) {
     return key % capacity;
 }
-
 ```
 
 here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position as they all have the same hashcode 1 \(21 % 4 = 9 % 4 = 1\). We store them in the hash table by linked list.
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description  
+[   https://www.lintcode.com/problem/rehashing/description    
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -694,7 +692,59 @@ public:
         return res;
     }
 };
+```
 
+
+
+## 124. Longest Consecutive Sequence
+
+Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+### Example
+
+Given`[100, 4, 200, 1, 3, 2]`,  
+The longest consecutive elements sequence is`[1, 2, 3, 4]`. Return its length:`4`.
+
+https://www.lintcode.com/problem/longest-consecutive-sequence/description[  
+](https://www.lintcode.com/problem/load-balancer/description)
+
+### 解题分析
+
+这个题目要求O\(n\)的解，非人力所能及。。。。背诵类题目了。。。
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param num: A list of integers
+     * @return: An integer
+     */
+    int longestConsecutive(vector<int> &num) {
+        // write your code here
+        unordered_set<int> store(num.begin(), num.end());
+        int longest = 0;
+        for (int i = 0; i < num.size(); i++)
+        {
+            int down = num[i]-1, up = num[i]+1;
+            while(store.count(down))
+            {
+                store.erase(down);
+                down--;
+            }
+            while(store.count(up))
+            {
+                store.erase(up);
+                up++;
+            }
+            longest = max(longest, up - down - 1);
+        }
+        return longest;
+    }
+};
 ```
 
 
