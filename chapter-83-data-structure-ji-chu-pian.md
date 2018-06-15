@@ -466,7 +466,7 @@ pick()
  3
 ```
 
-[            
+[              
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -555,7 +555,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[            
+[              
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -632,7 +632,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description        
+[   https://www.lintcode.com/problem/rehashing/description          
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -703,7 +703,7 @@ Given an unsorted array of integers, find the length of the longest consecutive 
 Given`[100, 4, 200, 1, 3, 2]`,  
 The longest consecutive elements sequence is`[1, 2, 3, 4]`. Return its length:`4`.
 
-\[[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[](https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[)\)  
+\[\[[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\](https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29\)\)  
 \]\([https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)\)
 
 ### 解题分析
@@ -806,10 +806,6 @@ public:
 };
 ```
 
-
-
-
-
 ## 575. Decode String
 
 Given an expression`s`includes numbers, letters and brackets. Number represents the number of repetitions inside the brackets\(can be a string or another expression\)．Please expand expression to be a string.
@@ -825,13 +821,13 @@ s =`3[2[ad]3[pf]]xyz`, return`adadpfpfpfadadpfpfpfadadpfpfpfxyz`
 
 Can you do it without recursion?
 
-https://www.lintcode.com/problem/decode-string/description
+[https://www.lintcode.com/problem/decode-string/description](https://www.lintcode.com/problem/decode-string/description)
 
 ### 解题分析
 
 这种带括号的就是无脑上stack， 碰到左括号push状态，右括号pop更新全局。 具体看代码。
 
-这道题用了两个stack,一个记录几个数，一个当前的partial string. 
+这道题用了两个stack,一个记录几个数，一个当前的partial string.
 
 ### 代码：
 
@@ -848,7 +844,7 @@ public:
         stack<string> partStk;
         string result;
         int number = 0;
-        
+
         for (int i = 0; i < s.size(); i++)
         {
             if (isdigit(s[i]))
@@ -885,6 +881,87 @@ public:
         return result;
     }
 };
+```
+
+## 540. Zigzag Iterator
+
+Given two**1d**vectors, implement an iterator to return their elements alternately.
+
+### Example
+
+Given two 1d vectors:
+
+```
+v1 = [1, 2]
+v2 = [3, 4, 5, 6]
+
+```
+
+By calling next repeatedly until hasNext returns`false`, the order of elements returned by next should be:`[1, 3, 2, 4, 5, 6]`.
+
+https://www.lintcode.com/problem/zigzag-iterator/description
+
+### 解题分析
+
+.就是 ++cur\_%2来回捯饬
+
+### 代码：
+
+```cpp
+class ZigzagIterator {
+public:
+    /*
+    * @param v1: A 1d vector
+    * @param v2: A 1d vector
+    */
+    ZigzagIterator(vector<int>& v1, vector<int>& v2) 
+        : cur_(0), indices_(vector<int>{0, 0}), array_(vector<vector<int>*>{&v1, &v2})
+    {
+        // do intialization if necessary
+    }
+
+    /*
+     * @return: An integer
+     */
+    int next() {
+        // write your code here
+        if (!hasNext())
+            return -1;
+        int v;
+        if (indices_[cur_] != array_[cur_]->size())
+        {
+            v = array_[cur_]->at(indices_[cur_]);
+            indices_[cur_]++;
+            cur_ = ++cur_%2;
+        }
+        else
+        {
+            cur_ = ++cur_%2;
+            return next();
+        }
+        return v;
+    }
+
+    /*
+     * @return: True if has next
+     */
+    bool hasNext() {
+        // write your code here
+        int next = (cur_+1)%2;
+        return !(array_[cur_]->size() == indices_[cur_] && array_[next]->size() == indices_[next]);
+    }
+    
+    int cur_;
+    vector<int> indices_;
+    vector<vector<int>*> array_;
+};
+
+/**
+ * Your ZigzagIterator object will be instantiated and called as such:
+ * ZigzagIterator solution(v1, v2);
+ * while (solution.hasNext()) result.push_back(solution.next());
+ * Ouptut result
+ */
 ```
 
 
