@@ -466,7 +466,7 @@ pick()
  3
 ```
 
-[        
+[          
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -555,7 +555,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[        
+[          
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -632,7 +632,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description    
+[   https://www.lintcode.com/problem/rehashing/description      
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -694,8 +694,6 @@ public:
 };
 ```
 
-
-
 ## 124. Longest Consecutive Sequence
 
 Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
@@ -705,14 +703,12 @@ Given an unsorted array of integers, find the length of the longest consecutive 
 Given`[100, 4, 200, 1, 3, 2]`,  
 The longest consecutive elements sequence is`[1, 2, 3, 4]`. Return its length:`4`.
 
-https://www.lintcode.com/problem/longest-consecutive-sequence/description[  
-](https://www.lintcode.com/problem/load-balancer/description)
+[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[](https://www.lintcode.com/problem/longest-consecutive-sequence/description[)  
+\]\([https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)\)
 
 ### 解题分析
 
 这个题目要求O\(n\)的解，非人力所能及。。。。背诵类题目了。。。
-
-
 
 ### 代码：
 
@@ -743,6 +739,73 @@ public:
             longest = max(longest, up - down - 1);
         }
         return longest;
+    }
+};
+```
+
+
+
+## 551. Nested List Weight Sum
+
+Given a nested list of integers, return the sum of all integers in the list weighted by their depth. Each element is either an integer, or a list -- whose elements may also be integers or other lists.
+
+### Example
+
+Given the list`[[1,1],2,[1,1]]`, return`10`. \(four 1's at depth 2, one 2 at depth 1, 4 \* 1 \* 2 + 1 \* 2 \* 1 = 10\)  
+Given the list`[1,[4,[6]]]`, return`27`. \(one 1 at depth 1, one 4 at depth 2, and one 6 at depth 3; 1 + 4 \* 2 + 6 \* 3 = 27\)
+
+
+
+https://www.lintcode.com/problem/nested-list-weight-sum/description
+
+### 解题分析
+
+Easy 的题目， 简单递归就好了
+
+### 代码：
+
+```cpp
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Return true if this NestedInteger holds a single integer,
+ *     // rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds,
+ *     // if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Return the nested list that this NestedInteger holds,
+ *     // if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+class Solution {
+public:
+    int depthSum(const vector<NestedInteger>& nestedList) {
+        // Write your code here
+        return depthSum(1, nestedList);
+    }
+    
+    int depthSum(int depth, const vector<NestedInteger>& nestedList)
+    {
+        int sum = 0;
+        for (const auto& each : nestedList){
+            if (each.isInteger())
+            {
+                sum += depth * each.getInteger();
+            }
+            else
+            {
+                sum += depthSum(depth+1, each.getList());
+            }
+        }
+        return sum;
     }
 };
 ```
