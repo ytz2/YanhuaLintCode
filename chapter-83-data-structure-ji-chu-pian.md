@@ -466,7 +466,7 @@ pick()
  3
 ```
 
-[                
+[                  
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -555,7 +555,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                
+[                  
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -632,7 +632,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description            
+[   https://www.lintcode.com/problem/rehashing/description              
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -703,7 +703,7 @@ Given an unsorted array of integers, find the length of the longest consecutive 
 Given`[100, 4, 200, 1, 3, 2]`,  
 The longest consecutive elements sequence is`[1, 2, 3, 4]`. Return its length:`4`.
 
-\[\[\[[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\](https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29\)\)  
+\[\[\[\[[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\)\](https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29%29\)\)  
 \]\([https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)\)
 
 ### 解题分析
@@ -975,12 +975,11 @@ Given`k = 3`1d vectors:
 [1,2,3]
 [4,5,6,7]
 [8,9]
-
 ```
 
 Return`[1,4,8,2,5,9,3,6,7]`.
 
-https://www.lintcode.com/problem/zigzag-iterator-ii/description
+[https://www.lintcode.com/problem/zigzag-iterator-ii/description](https://www.lintcode.com/problem/zigzag-iterator-ii/description)
 
 ### 解题分析
 
@@ -1040,7 +1039,7 @@ public:
         // write your code here
         return cur != indices_.end();
     }
-    
+
 private:
     vector<vector<int>>& vectors;
     list<pair<int, int>> indices_;
@@ -1052,6 +1051,113 @@ private:
  * ZigzagIterator2 solution(vecs);
  * while (solution.hasNext()) result.push_back(solution.next());
  * Ouptut result
+ */
+```
+
+## 528. Flatten Nested List Iterator
+
+Given a nested list of integers, implement an iterator to flatten it.
+
+Each element is either an integer, or a list -- whose elements may also be integers or other lists.
+
+### Example
+
+* Given the list`[[1,1],2,[1,1]]`, By calling next repeatedly until hasNext returns false, the order of elements returned by next should be:`[1,1,2,1,1]`.
+
+* Given the list`[1,[4,[6]]]`, By calling next repeatedly until hasNext returns false, the order of elements returned by next should be:`[1,4,6]`.
+
+https://www.lintcode.com/problem/flatten-nested-list-iterator/description
+
+### 解题分析
+
+这个挺好玩的，自己包含自己，维护一个cur index和cur index对应的iter,剩下的全是递归了。。。
+
+### 代码：
+
+```cpp
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Return true if this NestedInteger holds a single integer,
+ *     // rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds,
+ *     // if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Return the nested list that this NestedInteger holds,
+ *     // if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+class NestedIterator {
+public:
+    NestedIterator(const vector<NestedInteger> &nestedList) 
+        : nested(nestedList)
+    {
+        // Initialize your data structure here.
+        cur = 0;
+        iter = nullptr;
+    }
+
+    // @return {int} the next element in the iteration
+    int next() {
+        // Write your code here
+        auto& node = nested[cur];
+        int v;
+        if (node.isInteger())
+        {
+            cur++;
+            v = node.getInteger();
+        }
+        else
+        {
+            v = iter->next();
+            if (!iter->hasNext())
+            {
+                delete iter;
+                iter = nullptr;
+                cur++;
+            }
+        }
+        return v;
+    }
+
+    // @return {boolean} true if the iteration has more element or false
+    bool hasNext() {
+        // Write your code here
+        if (cur == nested.size())
+            return false;
+        while(cur < nested.size())
+        {
+            auto& node = nested[cur];
+            if (node.isInteger())
+                return true;
+            if (!iter)
+                iter = new NestedIterator(node.getList());
+            if (iter->hasNext())
+                return true;
+            delete iter;
+            iter = nullptr;
+            cur++;
+        }
+        return cur !=nested.size();
+    }
+    
+    const vector<NestedInteger>& nested;
+    int cur;
+    NestedIterator* iter;
+};
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i(nestedList);
+ * while (i.hasNext()) v.push_back(i.next());
  */
 ```
 
