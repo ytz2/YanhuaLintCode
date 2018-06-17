@@ -466,7 +466,7 @@ pick()
  3
 ```
 
-[                  
+[                    
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -555,7 +555,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                  
+[                    
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -632,7 +632,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description              
+[   https://www.lintcode.com/problem/rehashing/description                
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -703,7 +703,7 @@ Given an unsorted array of integers, find the length of the longest consecutive 
 Given`[100, 4, 200, 1, 3, 2]`,  
 The longest consecutive elements sequence is`[1, 2, 3, 4]`. Return its length:`4`.
 
-\[\[\[\[[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\)\](https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29%29\)\)  
+\[\[\[\[\[[https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\]\(https://www.lintcode.com/problem/longest-consecutive-sequence/description\[\)\)\)\)\](https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[]%28https://www.lintcode.com/problem/longest-consecutive-sequence/description[%29%29%29%29\)\)  
 \]\([https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)\)
 
 ### 解题分析
@@ -1066,7 +1066,7 @@ Each element is either an integer, or a list -- whose elements may also be integ
 
 * Given the list`[1,[4,[6]]]`, By calling next repeatedly until hasNext returns false, the order of elements returned by next should be:`[1,4,6]`.
 
-https://www.lintcode.com/problem/flatten-nested-list-iterator/description
+[https://www.lintcode.com/problem/flatten-nested-list-iterator/description](https://www.lintcode.com/problem/flatten-nested-list-iterator/description)
 
 ### 解题分析
 
@@ -1148,7 +1148,7 @@ public:
         }
         return cur !=nested.size();
     }
-    
+
     const vector<NestedInteger>& nested;
     int cur;
     NestedIterator* iter;
@@ -1159,6 +1159,97 @@ public:
  * NestedIterator i(nestedList);
  * while (i.hasNext()) v.push_back(i.next());
  */
+```
+
+## \*\*\*\*471. Top K Frequent Words
+
+Given a list of words and an integer k, return the top k frequent words in the list.
+
+### Example
+
+Given
+
+```
+[
+    "yes", "lint", "code",
+    "yes", "code", "baby",
+    "you", "baby", "chrome",
+    "safari", "lint", "code",
+    "body", "lint", "code"
+]
+
+```
+
+for k =`3`, return`["code", "lint", "baby"]`.
+
+for k =`4`, return`["code", "lint", "baby", "yes"]`,
+
+### Challenge
+
+Do it in O\(nlogk\) time and O\(n\) extra space.
+
+https://www.lintcode.com/problem/top-k-frequent-words/description
+
+
+
+### 解题分析
+
+不难，但是有一个和C++相关的lambda表示cmp的方法，最好学会， 还有记住pq default left  &lt; right给出来的是 max heap。 
+
+要用min heap, 要反过来一下逻辑。这里面string order坑死人 
+
+### 代码：
+
+```cpp
+#include <list>
+
+class Solution {
+public:
+    /**
+     * @param words: an array of string
+     * @param k: An integer
+     * @return: an array of string
+     */
+    vector<string> topKFrequentWords(vector<string> &words, int k) {
+        if (k == 0)
+            return vector<string>();
+
+        unordered_map<string, int> tbl;
+        
+        auto cmp = [&](const string& left, const string& right){
+          if (tbl[left] == tbl[right])
+            return left < right;
+          return tbl[left] > tbl[right];
+        };
+        for (auto& word : words)
+            tbl[word]++;
+        priority_queue<string, vector<string>, decltype(cmp)> pq(cmp);
+        for (auto& elem : tbl)
+        {
+            if (pq.size() != k)
+                pq.push(elem.first);
+            else
+            {
+                auto& t = pq.top();
+                if (tbl[t] < tbl[elem.first] || tbl[t] == tbl[elem.first] && elem.first < t )
+                {
+                    pq.pop();
+                    pq.push(elem.first);
+                }
+            }
+        }
+        vector<string> res;
+        while(!pq.empty())
+        {
+            res.push_back(pq.top());
+            pq.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+    
+
+};
 ```
 
 
