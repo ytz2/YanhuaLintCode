@@ -62,5 +62,34 @@ struct SegmentTreeNode{
 };
 ```
 
+## 线段树的构建
+
+根据线段树的定义， 树的构建是beg, end, arr，左右切一下，一直切到一个一个的元素为止
+
+```
+struct SegmentTreeNode{
+```
+
+```cpp
+    void build(const std::vector<int>& arr)
+    {
+        root = buildHelper(0, arr.size()-1, arr);
+    }
+    
+    SegmentTreeNode* buildHelper(int beg, int end, const std::vector<int>& arr)
+    {
+        if (beg > end)
+            return nullptr;
+        SegmentTreeNode* node = new SegmentTreeNode(beg, end, arr[beg]);
+        if (beg == end)
+            return node;
+        int mid = ( beg + end ) / 2;
+        node->left = buildHelper(beg, mid, arr);
+        node->right = buildHelper(mid+1, end, arr);
+        node->val = std::max(node->left?node->left->val:INT_MIN, node->right? node->right->val : INT_MIN);
+        return node;
+    }
+```
+
 
 
