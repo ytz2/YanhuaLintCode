@@ -66,16 +66,14 @@ struct SegmentTreeNode{
 
 根据线段树的定义， 树的构建是beg, end, arr，左右切一下，一直切到一个一个的元素为止
 
-```
-struct SegmentTreeNode{
-```
+
 
 ```cpp
     void build(const std::vector<int>& arr)
     {
         root = buildHelper(0, arr.size()-1, arr);
     }
-    
+
     SegmentTreeNode* buildHelper(int beg, int end, const std::vector<int>& arr)
     {
         if (beg > end)
@@ -89,6 +87,42 @@ struct SegmentTreeNode{
         node->val = std::max(node->left?node->left->val:INT_MIN, node->right? node->right->val : INT_MIN);
         return node;
     }
+```
+
+## 线段树的查询
+
+![](/assets/segtree.png)
+
+第一层会查询试图查询\[1, 7\], 发现区间不存在，然后根据mid位置拆分\[1, 4\]和\[5, 7\]  
+第二层会查询\[1, 4\],\[5, 7\], 发现\[1, 4\]已经存在，返回即可，\[5, 7\]仍旧需要继续拆分  
+第三层会查询\[5, 6\],\[7, 7\], 发现\[5, 6\]已经存在，返回即可，\[7, 7\]仍旧需要继续拆分  
+第四层会查询\[7, 7\]
+
+任意长度的线段，最多被拆分成logn条线段树上存在的线段，所以查询的时间复杂度为O\(log\(n\)\)
+
+```cpp
+    int query(int beg, int end)
+    {
+        return queryHelper(root, beg, end);
+    }
+    
+        
+    int queryHelper(SegmentTreeNode* node, int start, int end)
+    {
+        if (!node)
+            return INT_MIN;
+            
+        if (start <= node->start && node->end <= end) //如果全部在范围之内， 则取root
+            return node->val;
+        int mid = (node->start + node->end) /2; // 找到两个儿子的分界点
+        int ans = INT_MIN;
+        if (node->left && mid >= start) //左儿子的查找条件， 和左儿子有交集
+            ans = std::max(ans, queryHelper(node->left, start, end));
+        if (node->right && mid + 1 <= end)//和右儿子有交集
+            ans = std::max(ans, queryHelper(node->right, start, end));
+        return ans;
+    }
+    
 ```
 
 
