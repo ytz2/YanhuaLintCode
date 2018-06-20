@@ -31,4 +31,5 @@
 * [Chapter 8.1 Data structure 基础篇](chapter-81-data-structure.md)
 * [Chapter 8.2 Data structure 基础篇 ](chapter-82-data-structure-ji-chu-pian.md)
 * [Chapter 8.3 Data structure 基础篇 ](chapter-83-data-structure-ji-chu-pian.md)
+* [Chapter 9.1 Data Structure 线段树](chapter-91-data-structure-xian-duan-shu.md)
 
