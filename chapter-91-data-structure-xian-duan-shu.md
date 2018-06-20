@@ -293,15 +293,11 @@ int main()
 }
 ```
 
-
-
-
-
 ## 201. Segment Tree Build
 
 The structure of Segment Tree is a binary tree which each node has two attributes`start`and`end`denote an segment / interval.
 
-_start_and_end_are both integers, they should be assigned in following rules:
+\_start\_and\_end\_are both integers, they should be assigned in following rules:
 
 * The root's
   _start_
@@ -322,7 +318,7 @@ _start_and_end_are both integers, they should be assigned in following rules:
   _end_
   , there will be no children for this node.
 
-Implement a`build`method with two parameters_start_and_end_, so that we can create a corresponding segment tree with every node has the correct_start_and_end_value, return the root of this segment tree.
+Implement a`build`method with two parameters_start\_and\_end_, so that we can create a corresponding segment tree with every node has the correct\_start\_and\_end\_value, return the root of this segment tree.
 
 ### Example
 
@@ -334,7 +330,6 @@ Given`start=0, end=3`. The segment tree will be:
       [0,  1]           [2, 3]
       /     \           /     \
    [0, 0]  [1, 1]     [2, 2]  [3, 3]
-
 ```
 
 Given`start=1, end=6`. The segment tree will be:
@@ -349,8 +344,7 @@ Given`start=1, end=6`. The segment tree will be:
 [1,1]   [2,2]     [4,4]   [5,5]
 ```
 
-https://www.lintcode.com/problem/segment-tree-build/description  
-
+[https://www.lintcode.com/problem/segment-tree-build/description](https://www.lintcode.com/problem/segment-tree-build/description)
 
 ### 解题分析:
 
@@ -392,8 +386,84 @@ public:
         node->right = build(mid+1, end);
         return node;
     }
-    
-    
+
+
+};
+```
+
+## 202. Segment Tree Query
+
+For an integer array \(index from 0 to n-1, where n is the size of this array\), in the corresponding SegmentTree, each node stores an extra attribute`max`to denote the maximum number in the interval of the array \(index from start to end\).
+
+Design a`query`method with three parameters`root`,`start`and`end`, find the maximum number in the interval \[start, end\] by the given root of segment tree.
+
+### Example
+
+For array`[1, 4, 2, 3]`, the corresponding Segment Tree is:
+
+```
+                  [0, 3, max=4]
+                 /             \
+          [0,1,max=4]        [2,3,max=3]
+          /         \        /         \
+   [0,0,max=1] [1,1,max=4] [2,2,max=2], [3,3,max=3]
+
+```
+
+query\(root, 1, 1\), return`4`
+
+query\(root, 1, 2\), return`4`
+
+query\(root, 2, 3\), return`3`
+
+query\(root, 0, 2\), return`4`
+
+https://www.lintcode.com/problem/segment-tree-query/description
+
+### 解题分析:
+
+O\(log\(n\)\)
+
+### 代码：
+
+```cpp
+/**
+ * Definition of SegmentTreeNode:
+ * class SegmentTreeNode {
+ * public:
+ *     int start, end, max;
+ *     SegmentTreeNode *left, *right;
+ *     SegmentTreeNode(int start, int end, int max) {
+ *         this->start = start;
+ *         this->end = end;
+ *         this->max = max;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: The root of segment tree.
+     * @param start: start value.
+     * @param end: end value.
+     * @return: The maximum number in the interval [start, end]
+     */
+    int query(SegmentTreeNode * root, int start, int end) {
+        // write your code here
+        if (!root)
+            return INT_MIN;
+        if (start <= root->start && root->end <= end)
+            return root->max;
+        int mid = (root->start + root->end) / 2;
+        int ans = INT_MIN;
+        if (start <= mid && root->left)
+            ans = max(ans, query(root->left, start, end));
+        if (mid+1 <= end && root->right)
+            ans = max(ans, query(root->right, start, end));
+        return ans;
+    }
 };
 ```
 
