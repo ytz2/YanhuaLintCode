@@ -122,11 +122,7 @@ struct SegmentTreeNode{
     }
 ```
 
-
-
 ## 线段树的修改
-
-
 
 ```
             [0,3]
@@ -146,7 +142,120 @@ struct SegmentTreeNode{
     {
         modifyHelper(root, ind, val);
     }
+
+
+    void modifyHelper(SegmentTreeNode* node, int i, int v)
+    {
+        if (!node)
+            return;
+        // leaf node
+        if (i== node->start && i== node->end)
+        {
+            node->val = v;
+            return;
+        }
+        int mid = (node->start + node->end)/2;
+        if (i <= mid )
+        {
+            modifyHelper(node->left, i, v);
+            node->val = std::max(node->left? node->left->val: INT_MIN, node->val);
+        }
+        else
+        {
+            modifyHelper(node->right, i, v);
+            node->val = std::max(node->right? node->right->val: INT_MIN, node->val);
+        }
+    }
+```
+
+
+
+# 区间最大线段树完整代码
+
+```cpp
+// Example program
+#include <iostream>
+#include <string>
+#include <vector>
+#include <climits>
+struct SegmentTreeNode{
+
+    SegmentTreeNode(int s, int e, int v)
+        : start(s), end(e), val(v), left(nullptr), right(nullptr)
+    {
+    }
+    ~SegmentTreeNode()
+    {
+        if (left)
+            delete left;
+        if (right)
+            delete right;
+    }
+    int start;
+    int end;
+    int val;
+    SegmentTreeNode* left;
+    SegmentTreeNode* right;
+
+};
+
+class SegmentTree{
+public:
+    SegmentTree()
+    {
+        root = nullptr;
+    }
+    ~SegmentTree()
+    {
+        if (!root)
+            delete root;
+    }
     
+    void build(const std::vector<int>& arr)
+    {
+        root = buildHelper(0, arr.size()-1, arr);
+    }
+    
+    int query(int beg, int end)
+    {
+        return queryHelper(root, beg, end);
+    }
+    
+    void modify(int ind, int val)
+    {
+        modifyHelper(root, ind, val);
+    }
+    
+private:
+    SegmentTreeNode* buildHelper(int beg, int end, const std::vector<int>& arr)
+    {
+        if (beg > end)
+            return nullptr;
+        SegmentTreeNode* node = new SegmentTreeNode(beg, end, arr[beg]);
+        if (beg == end)
+            return node;
+        int mid = ( beg + end ) / 2;
+        node->left = buildHelper(beg, mid, arr);
+        node->right = buildHelper(mid+1, end, arr);
+        node->val = std::max(node->left?node->left->val:INT_MIN, node->right? node->right->val : INT_MIN);
+        return node;
+    }
+    
+    int queryHelper(SegmentTreeNode* node, int start, int end)
+    {
+        if (!node)
+            return INT_MIN;
+            
+        if (start <= node->start && node->end <= end)
+            return node->val;
+        int mid = (node->start + node->end) /2;
+        int ans = INT_MIN;
+        if (node->left && mid >= start)
+            ans = std::max(ans, queryHelper(node->left, start, end));
+        if (node->right && mid + 1 <= end)
+            ans = std::max(ans, queryHelper(node->right, start, end));
+        return ans;
+    }
     
     void modifyHelper(SegmentTreeNode* node, int i, int v)
     {
@@ -170,7 +279,21 @@ struct SegmentTreeNode{
             node->val = std::max(node->right? node->right->val: INT_MIN, node->val);
         }
     }
-        
+    
+private:
+    SegmentTreeNode* root;
+};
+
+int main()
+{
+  std::vector<int> test{1,2, 3,4,5,6};
+  SegmentTree st;
+  st.build(test);
+  std::cout<<st.query(2,4)<<std::endl;
+  st.modify(3, 11);
+  std::cout<<st.query(2,4)<<std::endl;
+}
+
 ```
 
 
