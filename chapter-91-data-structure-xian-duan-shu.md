@@ -66,8 +66,6 @@ struct SegmentTreeNode{
 
 根据线段树的定义， 树的构建是beg, end, arr，左右切一下，一直切到一个一个的元素为止
 
-
-
 ```cpp
     void build(const std::vector<int>& arr)
     {
@@ -105,13 +103,13 @@ struct SegmentTreeNode{
     {
         return queryHelper(root, beg, end);
     }
-    
-        
+
+
     int queryHelper(SegmentTreeNode* node, int start, int end)
     {
         if (!node)
             return INT_MIN;
-            
+
         if (start <= node->start && node->end <= end) //如果全部在范围之内， 则取root
             return node->val;
         int mid = (node->start + node->end) /2; // 找到两个儿子的分界点
@@ -122,7 +120,57 @@ struct SegmentTreeNode{
             ans = std::max(ans, queryHelper(node->right, start, end));
         return ans;
     }
+```
+
+
+
+## 线段树的修改
+
+
+
+```
+            [0,3]
+           (val=4)
+         /         \
+     [0,1]         [2,3]
+    (val=4)       (val=3)
+    /    \         /    \
+ [0,0]  [1,1]   [2,2]  [3,3]
+(val=1)(val=4) (val=2)(val=3)
+```
+
+修改3,3 为 5 则更新 3，3   2，3， 0， 3
+
+```cpp
+    void modify(int ind, int val)
+    {
+        modifyHelper(root, ind, val);
+    }
     
+    
+    void modifyHelper(SegmentTreeNode* node, int i, int v)
+    {
+        if (!node)
+            return;
+        // leaf node
+        if (i== node->start && i== node->end)
+        {
+            node->val = v;
+            return;
+        }
+        int mid = (node->start + node->end)/2;
+        if (i <= mid )
+        {
+            modifyHelper(node->left, i, v);
+            node->val = std::max(node->left? node->left->val: INT_MIN, node->val);
+        }
+        else
+        {
+            modifyHelper(node->right, i, v);
+            node->val = std::max(node->right? node->right->val: INT_MIN, node->val);
+        }
+    }
+        
 ```
 
 
