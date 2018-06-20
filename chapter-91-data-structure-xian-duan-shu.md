@@ -168,8 +168,6 @@ struct SegmentTreeNode{
     }
 ```
 
-
-
 # 区间最大线段树完整代码
 
 ```cpp
@@ -210,22 +208,22 @@ public:
         if (!root)
             delete root;
     }
-    
+
     void build(const std::vector<int>& arr)
     {
         root = buildHelper(0, arr.size()-1, arr);
     }
-    
+
     int query(int beg, int end)
     {
         return queryHelper(root, beg, end);
     }
-    
+
     void modify(int ind, int val)
     {
         modifyHelper(root, ind, val);
     }
-    
+
 private:
     SegmentTreeNode* buildHelper(int beg, int end, const std::vector<int>& arr)
     {
@@ -240,12 +238,12 @@ private:
         node->val = std::max(node->left?node->left->val:INT_MIN, node->right? node->right->val : INT_MIN);
         return node;
     }
-    
+
     int queryHelper(SegmentTreeNode* node, int start, int end)
     {
         if (!node)
             return INT_MIN;
-            
+
         if (start <= node->start && node->end <= end)
             return node->val;
         int mid = (node->start + node->end) /2;
@@ -256,7 +254,7 @@ private:
             ans = std::max(ans, queryHelper(node->right, start, end));
         return ans;
     }
-    
+
     void modifyHelper(SegmentTreeNode* node, int i, int v)
     {
         if (!node)
@@ -279,7 +277,7 @@ private:
             node->val = std::max(node->right? node->right->val: INT_MIN, node->val);
         }
     }
-    
+
 private:
     SegmentTreeNode* root;
 };
@@ -293,7 +291,110 @@ int main()
   st.modify(3, 11);
   std::cout<<st.query(2,4)<<std::endl;
 }
+```
 
+
+
+
+
+## 201. Segment Tree Build
+
+The structure of Segment Tree is a binary tree which each node has two attributes`start`and`end`denote an segment / interval.
+
+_start_and_end_are both integers, they should be assigned in following rules:
+
+* The root's
+  _start_
+  and
+  _end_
+  is given by
+  `build`
+  method.
+* The left child of node A has
+  `start=A.left, end=(A.left + A.right) / 2`
+  .
+* The right child of node A has
+  `start=(A.left + A.right) / 2 + 1, end=A.right`
+  .
+* if
+  _start_
+  equals to
+  _end_
+  , there will be no children for this node.
+
+Implement a`build`method with two parameters_start_and_end_, so that we can create a corresponding segment tree with every node has the correct_start_and_end_value, return the root of this segment tree.
+
+### Example
+
+Given`start=0, end=3`. The segment tree will be:
+
+```
+               [0,  3]
+             /        \
+      [0,  1]           [2, 3]
+      /     \           /     \
+   [0, 0]  [1, 1]     [2, 2]  [3, 3]
+
+```
+
+Given`start=1, end=6`. The segment tree will be:
+
+```
+               [1,  6]
+             /        \
+      [1,  3]           [4,  6]
+      /     \           /     \
+   [1, 2]  [3,3]     [4, 5]   [6,6]
+   /    \           /     \
+[1,1]   [2,2]     [4,4]   [5,5]
+```
+
+https://www.lintcode.com/problem/segment-tree-build/description  
+
+
+### 解题分析:
+
+O\(n\)
+
+### 代码：
+
+```cpp
+/**
+ * Definition of SegmentTreeNode:
+ * class SegmentTreeNode {
+ * public:
+ *     int start, end;
+ *     SegmentTreeNode *left, *right;
+ *     SegmentTreeNode(int start, int end) {
+ *         this->start = start, this->end = end;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param start: start value.
+     * @param end: end value.
+     * @return: The root of Segment Tree.
+     */
+    SegmentTreeNode * build(int start, int end) {
+        // write your code here
+        if (start > end)
+            return nullptr;
+        auto node = new SegmentTreeNode(start, end);
+        if (start == end)
+            return node;
+        int mid = (start + end)/2;
+        node->left = build(start, mid);
+        node->right = build(mid+1, end);
+        return node;
+    }
+    
+    
+};
 ```
 
 
