@@ -470,7 +470,7 @@ public:
 
 For a`Maximum Segment Tree`, which each node has an extra value`max`to store the maximum value in this node's interval.
 
-Implement a`modify`function with three parameter`root`,`index`and`value`to change the node's value with_**\[start, end\] = \[index, index\]**_to the new given value. Make sure after this change, every node in segment tree still has the**max**attribute with the correct value.
+Implement a`modify`function with three parameter`root`,`index`and`value`to change the node's value with\_**\[start, end\] = \[index, index\]**\_to the new given value. Make sure after this change, every node in segment tree still has the**max**attribute with the correct value.
 
 ### Example
 
@@ -482,7 +482,6 @@ For segment tree:
         [1, 2, max=2]                [3, 4, max=3]
        /              \             /             \
 [1, 1, max=2], [2, 2, max=1], [3, 3, max=0], [4, 4, max=3]
-
 ```
 
 if call`modify(root, 2, 4)`, we can get:
@@ -493,7 +492,6 @@ if call`modify(root, 2, 4)`, we can get:
         [1, 2, max=4]                [3, 4, max=3]
        /              \             /             \
 [1, 1, max=2], [2, 2, max=4], [3, 3, max=0], [4, 4, max=3]
-
 ```
 
 **or**call`modify(root, 4, 0)`, we can get:
@@ -504,14 +502,13 @@ if call`modify(root, 2, 4)`, we can get:
         [1, 2, max=2]                [3, 4, max=0]
        /              \             /             \
 [1, 1, max=2], [2, 2, max=1], [3, 3, max=0], [4, 4, max=0]
-
 ```
 
 ### Challenge
 
 Do it in`O(h)`time, h is the height of the segment tree.
 
-https://lintcode.com/problem/segment-tree-modify/description
+[https://lintcode.com/problem/segment-tree-modify/description](https://lintcode.com/problem/segment-tree-modify/description)
 
 ### 解题分析:
 
@@ -552,9 +549,9 @@ public:
             root->max = value;
             return;
         }
-        
+
         int mid = (root->start + root->end) /2 ;
-        
+
         if (index <= mid)
         {
             modify(root->left, index, value);
@@ -565,9 +562,193 @@ public:
             modify(root->right, index, value);
             root->max = max( root->left? root->left->max:INT_MIN, root->right? root->right->max:INT_MIN);
         }
-        
-        
+
+
     }
+};
+```
+
+
+
+## 207. Interval Sum II
+
+Given an integer array in the construct method, implement two methods`query(start, end)`and`modify(index, value)`:
+
+* For query\(
+  _start_
+  ,
+  _end_
+  \), return the
+  **sum**
+  from index
+  _start_
+  to index
+  _end_
+  in the given array.
+* For modify\(
+  _index_
+  ,
+  _value_
+  \), modify the number in the given index to
+  _value_
+
+### Example
+
+Given array A =`[1,2,7,8,5]`.
+
+* `query(0, 2)`
+  , return
+  `10`
+  .
+* `modify(0, 4)`
+  , change A\[0\] from
+  _1_
+  to
+  _4_
+  .
+* `query(0, 1)`
+  , return
+  `6`
+  .
+* `modify(2, 1)`
+  , change A\[2\] from
+  _7_
+  to
+  _1_
+  .
+* `query(2, 4)`
+  , return
+  `14`
+  .
+
+### Challenge
+
+O\(logN\) time for`query`and`modify`.
+
+https://www.lintcode.com/problem/interval-sum-ii/description
+
+### 解题分析:
+
+O\(n\)
+
+### 代码：
+
+```cpp
+struct Node{
+    Node(int s, int e, long long v)
+    :start(s),end(e),sum(v),left(nullptr),right(nullptr)
+    {}
+    ~Node()
+    {
+        if (left) delete left;
+        if (right) delete right;
+    }
+    int start, end;
+    long long sum;
+    Node *left,*right;
+};
+
+class Solution {
+public:
+    /* you may need to use some attributes here */
+
+    /*
+    * @param A: An integer array
+    */
+    Solution(vector<int> A) {
+        // do intialization if necessary
+        root  = build(0,A.size()-1,A);
+    }
+    ~Solution()
+    {
+        //if (root)
+        //    delete root;
+    }
+    /*
+     * @param start: An integer
+     * @param end: An integer
+     * @return: The sum from start to end
+     */
+    long long query(int start, int end) {
+        // write your code here
+        return query(root, start, end);
+    }
+
+    /*
+     * @param index: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    void modify(int index, int value) {
+        // write your code here
+        modify(root, index, value);
+    }
+    
+private:
+    long long query(Node* root, int beg, int end)
+    {
+        if ( !root)
+            return 0;
+        if (beg <= root->start && root->end <= end)
+            return root->sum;
+        int mid = (root->start + root->end)/2;
+        long long res = 0;
+        if (mid >= beg && root->left)
+        {
+            res += query(root->left, beg, end);
+        }
+        if (mid + 1 <= end && root->right)
+        {
+            res += query(root->right, beg, end);
+        }
+        return res;
+    }
+    
+    void modify(Node* root, int i, int v)
+    {
+        if (!root)
+            return;
+        if (root->start == root->end && root->start == i)
+        {
+            root->sum = v;
+            return;
+        }
+        
+        int mid = (root->start + root->end)/2;
+        if (i<=mid)
+        {
+            modify(root->left, i, v);
+        }
+        else
+        {
+            modify(root->right, i, v);
+        }
+        root->sum = 0;
+        if (root->left)
+            root->sum += root->left->sum;
+        if (root->right)
+            root->sum += root->right->sum;
+    }
+    Node* build(int beg, int end, vector<int>& A)
+    {
+        if ( beg > end)
+            return nullptr;
+        Node* node = new Node(beg, end, A[beg]);
+        if (beg == end)
+            return node;
+        int mid = (beg + end) / 2;
+        
+        node->left = build( beg, mid, A);
+        node->right = build(mid+1, end, A);
+        node->sum = 0;
+        if (node->left)
+            node->sum += node->left->sum;
+        if (node->right)
+            node->sum += node->right->sum;
+
+        return node;
+    }
+    Node* root;
 };
 ```
 
