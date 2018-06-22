@@ -1090,7 +1090,7 @@ struct Node{
       if (left) delete left;
       if (right) delete right; 
   }
-  
+
   int beg, end, val;
   Node *left,*right;
 };
@@ -1114,7 +1114,7 @@ public:
             delete root;
         return res;
     }
-    
+
     Node* build(int beg, int end, vector<int>& A )
     {
         if (beg > end)
@@ -1146,7 +1146,114 @@ public:
             c= min(c, query(root->right, beg, end));
         return c;
     }
+
+};
+```
+
+
+
+## 249. Count of Smaller Number before itself
+
+Give you an integer array \(index from 0 to n-1, where n is the size of this array, data value from 0 to 10000\) . For each element`Ai`in the array, count the number of element before this element`Ai`is smaller than it and return count number array.
+
+### Example
+
+For array`[1,2,7,8,5]`, return`[0,1,2,3,2]`
+
+https://www.lintcode.com/problem/count-of-smaller-number-before-itself/description
+
+
+
+### 解题分析:
+
+边build边query
+
+### 代码：
+
+```cpp
+
+
+
+struct Node{
+  Node(int b, int e, int c)
+    : beg(b), end(e), count(c), left(nullptr),right(nullptr)
+  {}
+  ~Node()
+  {
+      if (left)
+        delete left;
+      if (right)
+        delete right;
+  }
+  int beg, end, count;
+  Node *left, *right;
+};
+
+
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @param queries: The query list
+     * @return: The number of element in the array that are smaller that the given integer
+     */
+    vector<int> countOfSmallerNumberII(vector<int> &A) {
+        // write your code here
+        auto root = build(0, 10000);
+        vector<int> res;
+        for (auto& each : A)
+        {
+            modify(root, each);
+            res.push_back(query(root, each));
+        }
+
+        if (root)
+            delete root;
+        return res;
+    }
     
+    Node* build(int beg, int end)
+    {
+        if (beg > end)
+            return nullptr;
+        auto node = new Node(beg, end, 0);
+        if (beg == end)
+            return node;
+        int mid = (beg + end)/2;
+        node->left = build(beg, mid);
+        node->right = build(mid+1, end);
+        return node;
+    }
+    
+    int query(Node* root, int q)
+    {
+        if (!root || root->beg >= q)
+            return 0;
+        if (root->end < q)
+            return root->count;
+        return query(root->left, q) + query(root->right, q);
+    }
+    
+    void modify(Node* root, int v)
+    {
+        if (!root)
+            return;
+        if (root->beg == root->end && root->beg == v)
+        {
+            root->count += 1;
+            return;
+        }
+        int mid = (root->beg + root->end) / 2;
+        if (v <= mid)
+            modify(root->left, v);
+        else
+            modify(root->right,v);
+        root->count = 0;
+        if (root->left)
+            root->count += root->left->count;
+        if (root->right)
+            root->count += root->right->count;
+    }
 };
 ```
 
