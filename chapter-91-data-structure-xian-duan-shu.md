@@ -1049,5 +1049,106 @@ public:
 };
 ```
 
+## 205. Interval Minimum Number
+
+Given an integer array \(index from 0 to n-1, where n is the size of this array\), and an query list. Each query has two integers`[start, end]`. For each query, calculate the minimum number between index start and end in the given array, return the result list.
+
+### Example
+
+For array`[1,2,7,8,5]`, and queries`[(1,2),(0,4),(2,4)]`, return`[2,1,5]`
+
+### Challenge
+
+O\(logN\) time for each query
+
+[https://www.lintcode.com/problem/interval-minimum-number/description](https://www.lintcode.com/problem/interval-minimum-number/description)
+
+### 解题分析:
+
+这道题根本就不是用segment tree解决，浪费时间用的， 完全加权之后取两端就好O（1）
+
+### 代码：
+
+```cpp
+/**
+ * Definition of Interval:
+ * classs Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this->start = start;
+ *         this->end = end;
+ *     }
+ * }
+ */
+
+struct Node{
+  Node(int b, int e, int v)
+    :beg(b), end(e), val(v), left(nullptr), right(nullptr)
+  {}
+  ~Node()
+  {
+      if (left) delete left;
+      if (right) delete right; 
+  }
+  
+  int beg, end, val;
+  Node *left,*right;
+};
+
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @param queries: An query list
+     * @return: The result list
+     */
+    vector<int> intervalMinNumber(vector<int> &A, vector<Interval> &queries) {
+        // write your code here
+        vector<int> res;
+        auto root= build(0, A.size()-1, A);
+        for (auto& interval:queries)
+        {
+            res.push_back(query(root, interval.start, interval.end));
+        }
+        if (root)
+            delete root;
+        return res;
+    }
+    
+    Node* build(int beg, int end, vector<int>& A )
+    {
+        if (beg > end)
+            return nullptr;
+        auto node = new Node(beg, end, A[beg]);
+        if (beg == end)
+            return node;
+        int mid = (beg + end)/2;
+        node->left = build(beg, mid, A);
+        node->right = build(mid+1, end, A);
+        node->val = INT_MAX;
+        if (node->left)
+            node->val = min(node->val, node->left->val);
+        if (node->right)
+            node->val = min(node->val, node->right->val);
+        return node;
+    }
+    int query(Node* root, int beg, int end)
+    {
+        if (!root)
+            return INT_MAX;
+        if (beg <= root->beg && root->end <= end)
+            return root->val;
+        int mid = (root->beg + root->end)/2;
+        int c = INT_MAX;
+        if (beg <= mid)
+            c = min(c, query(root->left, beg, end));
+        if (mid + 1 <=end)
+            c= min(c, query(root->right, beg, end));
+        return c;
+    }
+    
+};
+```
+
 
 
