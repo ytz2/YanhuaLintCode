@@ -572,8 +572,6 @@ public:
 
 Given an integer array in the construct method, implement two methods`query(start, end)`and`modify(index, value)`
 
-
-
 ### Challenge
 
 O\(logN\) time for`query`and`modify`.
@@ -705,13 +703,11 @@ private:
 };
 ```
 
-
-
 ## 439. Segment Tree Build II
 
 The structure of Segment Tree is a binary tree which each node has two attributes`start`and`end`denote an segment / interval.
 
-_start_and_end_are both integers, they should be assigned in following rules:
+\_start\_and\_end\_are both integers, they should be assigned in following rules:
 
 * The root's
   _start_
@@ -746,7 +742,7 @@ Given`[3,2,1,4]`. The segment tree will be:
 [0, 0](max = 3)  [1, 1](max = 2)[2, 2](max = 1) [3, 3] (max = 4)
 ```
 
-https://www.lintcode.com/problem/segment-tree-build-ii/description
+[https://www.lintcode.com/problem/segment-tree-build-ii/description](https://www.lintcode.com/problem/segment-tree-build-ii/description)
 
 ### 解题分析:
 
@@ -780,7 +776,7 @@ public:
         // write your code here
         return helper(0, A.size()-1, A);
     }
-    
+
     SegmentTreeNode* helper(int beg, int end, vector<int>& A)
     {
         if (beg > end)
@@ -794,6 +790,86 @@ public:
         node->max = max(node->left!=nullptr? node->left->max:INT_MIN, 
                         node->right!=nullptr? node->right->max:INT_MIN);
         return node;
+    }
+};
+```
+
+
+
+## 247. Segment Tree Query II
+
+For an array, we can build a`SegmentTree`for it, each node stores an extra attribute`count`to denote the number of elements in the the array which value is between interval start and end. \(The array may not fully filled by elements\)
+
+Design a`query`method with three parameters`root`,`start`and`end`, find the number of elements in the in array's interval \[_start_,_end_\] by the given root of value SegmentTree.
+
+### Example
+
+For array`[0, 2, 3]`, the corresponding value Segment Tree is:
+
+```
+                     [0, 3, count=3]
+                     /             \
+          [0,1,count=1]             [2,3,count=2]
+          /         \               /            \
+   [0,0,count=1] [1,1,count=0] [2,2,count=1], [3,3,count=1]
+
+```
+
+`query(1, 1)`, return`0`
+
+`query(1, 2)`, return`1`
+
+`query(2, 3)`, return`2`
+
+`query(0, 2)`, return`2`
+
+  
+https://www.lintcode.com/problem/segment-tree-query-ii/description
+
+### 解题分析:
+
+O\(logn\)
+
+### 代码：
+
+```cpp
+/**
+ * Definition of SegmentTreeNode:
+ * class SegmentTreeNode {
+ * public:
+ *     int start, end, count;
+ *     SegmentTreeNode *left, *right;
+ *     SegmentTreeNode(int start, int end, int count) {
+ *         this->start = start;
+ *         this->end = end;
+ *         this->count = count;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param root: The root of segment tree.
+     * @param start: start value.
+     * @param end: end value.
+     * @return: The count number in the interval [start, end]
+     */
+    int query(SegmentTreeNode * root, int start, int end) {
+        // write your code here
+        if (!root)
+            return 0;
+        if (start <= root->start && root->end <= end)
+            return root->count;
+        int mid = (root->start + root->end) / 2;
+        int c = 0;
+        if (start <= mid)
+            c += query(root->left, start, end);
+        if (mid+1 <= end)
+            c += query(root->right, start, end);
+        return c;
     }
 };
 ```
