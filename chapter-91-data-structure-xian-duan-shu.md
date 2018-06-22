@@ -870,8 +870,6 @@ public:
 };
 ```
 
-
-
 ## 248. Count of Smaller Number
 
 Give you an integer array \(index from 0 to n-1, where n is the size of this array, value from 0 to 10000\) and an query list. For each query, give you an integer, return the number of element in the array that are smaller than the given integer.
@@ -888,7 +886,7 @@ Could you use three ways to do it.
 2. Sort and binary search
 3. Build Segment Tree and Search.
 
-https://www.lintcode.com/problem/count-of-smaller-number/description
+[https://www.lintcode.com/problem/count-of-smaller-number/description](https://www.lintcode.com/problem/count-of-smaller-number/description)
 
 ### 解题分析:
 
@@ -932,7 +930,7 @@ public:
             delete root;
         return res;
     }
-    
+
     Node* build(int beg, int end)
     {
         if (beg > end)
@@ -945,7 +943,7 @@ public:
         node->right = build(mid+1, end);
         return node;
     }
-    
+
     int query(Node* root, int q)
     {
         if (!root || root->beg >= q)
@@ -954,7 +952,7 @@ public:
             return root->count;
         return query(root->left, q) + query(root->right, q);
     }
-    
+
     void modify(Node* root, int v)
     {
         if (!root)
@@ -974,6 +972,79 @@ public:
             root->count += root->left->count;
         if (root->right)
             root->count += root->right->count;
+    }
+};
+```
+
+## 206. Interval Sum
+
+Given an integer array \(index from 0 to n-1, where n is the size of this array\), and an query list. Each query has two integers`[start, end]`. For each query, calculate the sum number between index start and end in the given array, return the result list.
+
+### Example
+
+For array`[1,2,7,8,5]`, and queries`[(0,4),(1,2),(2,4)]`, return`[23,9,20]`
+
+### Challenge
+
+O\(logN\) time for each query
+
+[https://www.lintcode.com/problem/count-of-smaller-number/description](https://www.lintcode.com/problem/interval-sum/description)
+
+### 解题分析:
+
+这道题根本就不是用segment tree解决，浪费时间用的， 完全加权之后取两端就好O（1）
+
+### 代码：
+
+```cpp
+/**
+ * Definition of Interval:
+ * classs Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this->start = start;
+ *         this->end = end;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param A: An integer list
+     * @param queries: An query list
+     * @return: The result list
+     */
+    vector<long long> intervalSum(vector<int> &A, vector<Interval> &queries) {
+        // write your code here
+        vector<long long> sumArr;
+        long long sum=0;
+        for (int i=0; i<A.size(); i++)
+        {
+            sum += A[i];
+            sumArr.push_back(sum);
+        }
+        vector<long long> res;
+        for (auto& interval :queries)
+        {
+            int start = interval.start-1;
+            int end = interval.end;
+            long long left, right;
+            if (start < 0)
+                left = 0;
+            else
+                left = sumArr[start];
+            if ( end >= sumArr.size())
+            {
+                right = sumArr[sumArr.size()-1];
+            }
+            else
+            {  
+                right = sumArr[end];
+            }
+            res.push_back(right-left);
+        }       
+        return res;
     }
 };
 ```
