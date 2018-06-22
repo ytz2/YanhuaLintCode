@@ -794,8 +794,6 @@ public:
 };
 ```
 
-
-
 ## 247. Segment Tree Query II
 
 For an array, we can build a`SegmentTree`for it, each node stores an extra attribute`count`to denote the number of elements in the the array which value is between interval start and end. \(The array may not fully filled by elements\)
@@ -812,7 +810,6 @@ For array`[0, 2, 3]`, the corresponding value Segment Tree is:
           [0,1,count=1]             [2,3,count=2]
           /         \               /            \
    [0,0,count=1] [1,1,count=0] [2,2,count=1], [3,3,count=1]
-
 ```
 
 `query(1, 1)`, return`0`
@@ -823,8 +820,7 @@ For array`[0, 2, 3]`, the corresponding value Segment Tree is:
 
 `query(0, 2)`, return`2`
 
-  
-https://www.lintcode.com/problem/segment-tree-query-ii/description
+[https://www.lintcode.com/problem/segment-tree-query-ii/description](https://www.lintcode.com/problem/segment-tree-query-ii/description)
 
 ### 解题分析:
 
@@ -870,6 +866,114 @@ public:
         if (mid+1 <= end)
             c += query(root->right, start, end);
         return c;
+    }
+};
+```
+
+
+
+## 248. Count of Smaller Number
+
+Give you an integer array \(index from 0 to n-1, where n is the size of this array, value from 0 to 10000\) and an query list. For each query, give you an integer, return the number of element in the array that are smaller than the given integer.
+
+### Example
+
+For array`[1,2,7,8,5]`, and queries`[1,8,5]`, return`[0,4,2]`
+
+### Challenge
+
+Could you use three ways to do it.
+
+1. Just loop
+2. Sort and binary search
+3. Build Segment Tree and Search.
+
+https://www.lintcode.com/problem/count-of-smaller-number/description
+
+### 解题分析:
+
+O\(n + klog\(n\)\)
+
+### 代码：
+
+```cpp
+struct Node{
+  Node(int b, int e, int c)
+    : beg(b), end(e), count(c), left(nullptr),right(nullptr)
+  {}
+  ~Node()
+  {
+      if (left)
+        delete left;
+      if (right)
+        delete right;
+  }
+  int beg, end, count;
+  Node *left, *right;
+};
+
+
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @param queries: The query list
+     * @return: The number of element in the array that are smaller that the given integer
+     */
+    vector<int> countOfSmallerNumber(vector<int> &A, vector<int> &queries) {
+        // write your code here
+        auto root = build(0, 10000);
+        for (const auto& num : A)
+            modify(root, num);
+        vector<int> res;
+        for (auto& q : queries)
+            res.push_back(query(root, q));
+        if (root)
+            delete root;
+        return res;
+    }
+    
+    Node* build(int beg, int end)
+    {
+        if (beg > end)
+            return nullptr;
+        auto node = new Node(beg, end, 0);
+        if (beg == end)
+            return node;
+        int mid = (beg + end)/2;
+        node->left = build(beg, mid);
+        node->right = build(mid+1, end);
+        return node;
+    }
+    
+    int query(Node* root, int q)
+    {
+        if (!root || root->beg >= q)
+            return 0;
+        if (root->end < q)
+            return root->count;
+        return query(root->left, q) + query(root->right, q);
+    }
+    
+    void modify(Node* root, int v)
+    {
+        if (!root)
+            return;
+        if (root->beg == root->end && root->beg == v)
+        {
+            root->count += 1;
+            return;
+        }
+        int mid = (root->beg + root->end) / 2;
+        if (v <= mid)
+            modify(root->left, v);
+        else
+            modify(root->right,v);
+        root->count = 0;
+        if (root->left)
+            root->count += root->left->count;
+        if (root->right)
+            root->count += root->right->count;
     }
 };
 ```
