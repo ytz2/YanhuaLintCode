@@ -568,64 +568,17 @@ public:
 };
 ```
 
-
-
 ## 207. Interval Sum II
 
-Given an integer array in the construct method, implement two methods`query(start, end)`and`modify(index, value)`:
+Given an integer array in the construct method, implement two methods`query(start, end)`and`modify(index, value)`
 
-* For query\(
-  _start_
-  ,
-  _end_
-  \), return the
-  **sum**
-  from index
-  _start_
-  to index
-  _end_
-  in the given array.
-* For modify\(
-  _index_
-  ,
-  _value_
-  \), modify the number in the given index to
-  _value_
 
-### Example
-
-Given array A =`[1,2,7,8,5]`.
-
-* `query(0, 2)`
-  , return
-  `10`
-  .
-* `modify(0, 4)`
-  , change A\[0\] from
-  _1_
-  to
-  _4_
-  .
-* `query(0, 1)`
-  , return
-  `6`
-  .
-* `modify(2, 1)`
-  , change A\[2\] from
-  _7_
-  to
-  _1_
-  .
-* `query(2, 4)`
-  , return
-  `14`
-  .
 
 ### Challenge
 
 O\(logN\) time for`query`and`modify`.
 
-https://www.lintcode.com/problem/interval-sum-ii/description
+[https://www.lintcode.com/problem/interval-sum-ii/description](https://www.lintcode.com/problem/interval-sum-ii/description)
 
 ### 解题分析:
 
@@ -683,7 +636,7 @@ public:
         // write your code here
         modify(root, index, value);
     }
-    
+
 private:
     long long query(Node* root, int beg, int end)
     {
@@ -703,7 +656,7 @@ private:
         }
         return res;
     }
-    
+
     void modify(Node* root, int i, int v)
     {
         if (!root)
@@ -713,7 +666,7 @@ private:
             root->sum = v;
             return;
         }
-        
+
         int mid = (root->start + root->end)/2;
         if (i<=mid)
         {
@@ -737,7 +690,7 @@ private:
         if (beg == end)
             return node;
         int mid = (beg + end) / 2;
-        
+
         node->left = build( beg, mid, A);
         node->right = build(mid+1, end, A);
         node->sum = 0;
@@ -749,6 +702,99 @@ private:
         return node;
     }
     Node* root;
+};
+```
+
+
+
+## 439. Segment Tree Build II
+
+The structure of Segment Tree is a binary tree which each node has two attributes`start`and`end`denote an segment / interval.
+
+_start_and_end_are both integers, they should be assigned in following rules:
+
+* The root's
+  _start_
+  and
+  _end_
+  is given by
+  `build`
+  method.
+* The left child of node A has
+  `start=A.left, end=(A.left + A.right) / 2`
+  .
+* The right child of node A has
+  `start=(A.left + A.right) / 2 + 1, end=A.right`
+  .
+* if
+  _start_
+  equals to
+  _end_
+  , there will be no children for this node.
+
+Implement a`build`method with a given array, so that we can create a corresponding segment tree with every node value represent the corresponding interval max value in the array, return the root of this segment tree.
+
+### Example
+
+Given`[3,2,1,4]`. The segment tree will be:
+
+```
+                 [0,  3] (max = 4)
+                  /            \
+        [0,  1] (max = 3)     [2, 3]  (max = 4)
+        /        \               /             \
+[0, 0](max = 3)  [1, 1](max = 2)[2, 2](max = 1) [3, 3] (max = 4)
+```
+
+https://www.lintcode.com/problem/segment-tree-build-ii/description
+
+### 解题分析:
+
+O\(n\)
+
+### 代码：
+
+```cpp
+/**
+ * Definition of SegmentTreeNode:
+ * class SegmentTreeNode {
+ * public:
+ *     int start, end, max;
+ *     SegmentTreeNode *left, *right;
+ *     SegmentTreeNode(int start, int end, int max) {
+ *         this->start = start;
+ *         this->end = end;
+ *         this->max = max;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param A: a list of integer
+     * @return: The root of Segment Tree
+     */
+    SegmentTreeNode * build(vector<int> &A) {
+        // write your code here
+        return helper(0, A.size()-1, A);
+    }
+    
+    SegmentTreeNode* helper(int beg, int end, vector<int>& A)
+    {
+        if (beg > end)
+            return nullptr;
+        auto node = new SegmentTreeNode(beg, end, A[beg]);
+        if (beg == end)
+            return node;
+        int mid = (beg + end)/2;
+        node->left = helper(beg, mid, A);
+        node->right = helper(mid+1, end, A);
+        node->max = max(node->left!=nullptr? node->left->max:INT_MIN, 
+                        node->right!=nullptr? node->right->max:INT_MIN);
+        return node;
+    }
 };
 ```
 
