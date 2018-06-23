@@ -52,9 +52,7 @@ Given`[-3, 1, 1, -3, 5]`, return`[0, 2]`,`[1, 3]`,`[1, 1]`,`[2, 2]`or`[0, 4]`.
 
 O\(nlogn\) time
 
-https://www.lintcode.com/problem/subarray-sum-closest/description
-
-
+[https://www.lintcode.com/problem/subarray-sum-closest/description](https://www.lintcode.com/problem/subarray-sum-closest/description)
 
 ### 解题分析:
 
@@ -95,6 +93,48 @@ public:
         }
         int ind1 = sumarr[minInd].second , ind2 =  sumarr[minInd-1].second;
         return ind1 > ind2?vector<int>{ind2, ind1-1} : vector<int>{ind1, ind2-1};
+    }
+};
+```
+
+## 41. Maximum Subarray
+
+Given an array of integers, find a contiguous subarray which has the largest sum.
+
+### Example
+
+Given the array`[−2,2,−3,4,−1,2,1,−5,3]`, the contiguous subarray`[4,−1,2,1]`has the largest sum =`6`.
+
+### Challenge
+
+Can you do it in time complexity O\(n\)?
+
+https://www.lintcode.com/problem/maximum-subarray/description
+
+### 解题分析:
+
+最大前缀和减去最小前缀和就是结果了，打一个擂台
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @return: A integer indicate the sum of max subarray
+     */
+    int maxSubArray(vector<int> &nums) {
+        // write your code here
+        int minV = 0, maxV = INT_MIN;
+        int sum = 0; 
+        for (int i = 0; i < nums.size(); i++)
+        {
+            sum+= nums[i];
+            maxV = max(maxV, sum - minV);
+            minV = min(minV, sum);
+        }
+        return maxV;
     }
 };
 ```
