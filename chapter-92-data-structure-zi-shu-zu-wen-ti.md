@@ -109,7 +109,7 @@ Given the array`[−2,2,−3,4,−1,2,1,−5,3]`, the contiguous subarray`[4,−
 
 Can you do it in time complexity O\(n\)?
 
-https://www.lintcode.com/problem/maximum-subarray/description
+[https://www.lintcode.com/problem/maximum-subarray/description](https://www.lintcode.com/problem/maximum-subarray/description)
 
 ### 解题分析:
 
@@ -133,6 +133,53 @@ public:
             sum+= nums[i];
             maxV = max(maxV, sum - minV);
             minV = min(minV, sum);
+        }
+        return maxV;
+    }
+};
+```
+
+
+
+## 620. Maximum Subarray IV
+
+Given an integer arrays, find a contiguous subarray which has the largest sum and length should be greater or equal to given length`k`.  
+Return the largest sum, return 0 if there are fewer than k elements in the array.
+
+### Example
+
+Given the array`[-2,2,-3,4,-1,2,1,-5,3]`and k =`5`, the contiguous subarray`[2,-3,4,-1,2,1]`has the largest sum =`5`.
+
+https://www.lintcode.com/problem/maximum-subarray-iv/description
+
+### 解题分析:
+
+老套路，维护一个maxV, minV, 但是minV延迟k个元素计算， 这样 保证 一个最大减一个最小就好
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: an array of integer
+     * @param k: an integer
+     * @return: the largest sum
+     */
+    int maxSubarray4(vector<int> &nums, int k) {
+        // write your code here
+        if (nums.size() < k)
+            return 0;
+        int sum = 0, minSum = 0;
+        int maxV = INT_MIN, minV = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            sum += nums[i];
+            if (i+1 < k)
+                continue;
+            maxV = max(maxV, sum - minV);
+            minSum += nums[i-k+1];
+            minV = min(minV, minSum);
         }
         return maxV;
     }
