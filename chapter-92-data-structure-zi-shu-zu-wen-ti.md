@@ -184,10 +184,6 @@ public:
 };
 ```
 
-
-
-
-
 ## 617. Maximum Average Subarray II
 
 Given an array with positive and negative numbers, find the`maximum average subarray`which length should be greater or equal to given length`k`.
@@ -198,7 +194,7 @@ Given nums =`[1, 12, -5, -6, 50, 3]`, k =`3`
 
 Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
 
-https://www.lintcode.com/problem/maximum-average-subarray-ii/description
+[https://www.lintcode.com/problem/maximum-average-subarray-ii/description](https://www.lintcode.com/problem/maximum-average-subarray-ii/description)
 
 ### 解题分析:
 
@@ -242,13 +238,82 @@ public:
                 maxV = max(maxV, sumarr[i] - preMin);
                 preMin = min(preMin, sumarr[i-k+1]);
             }
-            
+
             if (maxV >= 0)
                 l = mid;
             else
                 r = mid;
         }
         return l;
+    }
+};
+```
+
+
+
+## 191. Maximum Product Subarray
+
+Find the contiguous subarray within an array \(containing at least one number\) which has the largest product.
+
+### Example
+
+For example, given the array`[2,3,-2,4]`, the contiguous subarray`[2,3]`has the largest product =`6`.
+
+https://www.lintcode.com/problem/maximum-product-subarray/description
+
+### 解题分析:
+
+最后一步: 考虑最后一个数A\[n\], 那么乘积最大的就是前面以n - 1为结尾的最大乘积, 再乘上这个数
+
+1. 转移方程:
+   * 维护两个数组, f\[i\] 和 g\[i\], f\[i\]用于记录最大值, g\[i\]用于记录最小值.
+   * A\[i\]代表数组中的第i个数
+   * 转移方程: f\[i\] = max\(i -
+     &gt;
+      1...n \| f\[i - 1\] \* A\[i\], g\[i - 1\] \* A\[i\], A\[i\]\)
+ 
+     g\[i\] = min\(i -
+     &gt;
+      1...n \| f\[i - 1\] \* A\[i\], g\[i - 1\] \* A\[i\], A\[i\]\)
+2. 初始条件与边界情况:
+   * f\[0\] = A\[0\], g\[0\] = A\[0\]
+3. 计算顺序:
+   * 从左往右
+   * 最终结果max\(i -
+     &gt;
+      0...n \| f\[i\]\)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: An array of integers
+     * @return: An integer
+     */
+    int maxProduct(vector<int> &nums) {
+        // write your code here
+        // state definition and initial condition
+        vector<int> maxDp{1}, minDp{1};
+        int res = INT_MIN;
+        // transition
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int num = nums[i];
+            if (num > 0)
+            {
+                maxDp.push_back(max(maxDp[i] * num, num));
+                minDp.push_back(min(minDp[i] * num, num));
+            }
+            else
+            {
+                minDp.push_back(min(maxDp[i] * num, num));
+                maxDp.push_back(max(minDp[i] * num, num));
+            }
+            res = max(res, maxDp.back());
+        }
+        return res;
     }
 };
 ```
