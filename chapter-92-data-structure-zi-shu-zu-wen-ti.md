@@ -276,7 +276,9 @@ For example, given the array`[2,3,-2,4]`, the contiguous subarray`[2,3]`has the 
       1...n \| f\[i - 1\] \* A\[i\], g\[i - 1\] \* A\[i\], A\[i\]\)
 
 2. 初始条件与边界情况:
+
    * f\[0\] = A\[0\], g\[0\] = A\[0\]
+
 3. 计算顺序:
    * 从左往右
    * 最终结果max\(i -
@@ -318,13 +320,11 @@ public:
 };
 ```
 
-
-
 ## 45. Maximum Subarray Difference
 
 Given an array with integers.
 
-Find two_non-overlapping_subarrays_A_and_B_, which`|SUM(A) - SUM(B)|`is the largest.
+Find two_non-overlapping\_subarrays\_A\_and\_B_, which`|SUM(A) - SUM(B)|`is the largest.
 
 Return the largest difference.
 
@@ -336,7 +336,7 @@ For`[1, 2, -3, 1]`, return`6`.
 
 O\(n\) time and O\(n\) space.
 
-https://www.lintcode.com/problem/maximum-subarray-difference/description
+[https://www.lintcode.com/problem/maximum-subarray-difference/description](https://www.lintcode.com/problem/maximum-subarray-difference/description)
 
 ### 解题分析:
 
@@ -357,15 +357,23 @@ public:
         vector<int> leftMax(n, 0), leftMin(n, 0), rightMax(n,0), rightMin(n,0);
         leftMax[0] = leftMin[0] = nums[0];
         rightMax[n-1] = rightMin[n-1] = nums[n-1];
+        int leftSum = nums[0], leftMinv = 0, leftMaxv = 0;
         for (int i = 1; i < n; i++)
         {
-            leftMax[i] = max(leftMax[i-1] + nums[i], nums[i]);
-            leftMin[i] = min(leftMin[i-1] + nums[i], nums[i]);
+            leftMinv = min(leftMinv, leftSum);
+            leftMaxv = max(leftMaxv, leftSum);
+            leftSum += nums[i];
+            leftMax[i] = max(leftMax[i-1], leftSum - leftMinv);
+            leftMin[i] = min(leftMin[i-1], leftSum - leftMaxv);
         }
+        int rightSum = nums[n-1], rightMinv = 0, rightMaxv = 0;
         for (int i = n-2; i >= 0; i--)
         {
-            rightMax[i] = max(rightMax[i+1] + nums[i], nums[i]);
-            rightMin[i] = min(rightMin[i+1] + nums[i], nums[i]);
+            rightMinv = min(rightMinv, rightSum);
+            rightMaxv = max(rightMaxv, rightSum);
+            rightSum += nums[i];
+            rightMax[i] = max(rightMax[i+1], rightSum -rightMinv);
+            rightMin[i] = min(rightMin[i+1], rightSum - rightMaxv);
         }
         
         int res = INT_MIN;
@@ -373,6 +381,67 @@ public:
         {
             res = max(res, max(abs(leftMax[i] - rightMin[i+1]), abs(leftMin[i] - rightMax[i+1])));
         }
+        return res;
+    }
+};
+
+```
+
+
+
+## 42. Maximum Subarray II
+
+Given an array of integers, find two non-overlapping subarrays which have the largest sum.  
+The number in each subarray should be contiguous.  
+Return the largest sum.
+
+### Example
+
+For given`[1, 3, -1, 2, -1, 2]`, the two subarrays are`[1, 3]`and`[2, -1, 2]`or`[1, 3, -1, 2]`and`[2]`, they both have the largest sum`7`.
+
+### Challenge
+
+Can you do it in time complexity O\(_n_\) ?
+
+https://www.lintcode.com/problem/maximum-subarray-ii/description
+
+### 解题分析:
+
+用的DP， 有点像best time to buy sell stock
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param nums: A list of integers
+     * @return: An integer denotes the sum of max two non-overlapping subarrays
+     */
+    int maxTwoSubArrays(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        vector<int> leftMax(n, 0), rightMax(n,0);
+        leftMax[0] = nums[0];
+        rightMax[n-1] = nums[n-1];
+        
+        int leftSum = nums[0], prevLeftMin = min(0,nums[0]);
+        for (int i = 1; i < n; i++)
+        {
+            leftSum+= nums[i];
+            leftMax[i] = max(leftMax[i-1], leftSum-prevLeftMin);
+            prevLeftMin = min(prevLeftMin, leftSum);
+        }
+        int rightSum = nums[n-1], prevRightMin = min(0,nums[n-1]);
+        for (int i = n-2; i >= 0; i--)
+        {
+            rightSum += nums[i];
+            rightMax[i] = max(rightMax[i+1] , rightSum - prevRightMin);
+            prevRightMin = min(prevRightMin, rightSum);
+        }
+        int res = INT_MIN;
+        for (int i = 0; i<n-1; i++)
+            res = max(res, leftMax[i] + rightMax[i+1]);
         return res;
     }
 };
