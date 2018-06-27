@@ -249,8 +249,6 @@ public:
 };
 ```
 
-
-
 ## 191. Maximum Product Subarray
 
 Find the contiguous subarray within an array \(containing at least one number\) which has the largest product.
@@ -259,22 +257,24 @@ Find the contiguous subarray within an array \(containing at least one number\) 
 
 For example, given the array`[2,3,-2,4]`, the contiguous subarray`[2,3]`has the largest product =`6`.
 
-https://www.lintcode.com/problem/maximum-product-subarray/description
+[https://www.lintcode.com/problem/maximum-product-subarray/description](https://www.lintcode.com/problem/maximum-product-subarray/description)
 
 ### 解题分析:
 
 最后一步: 考虑最后一个数A\[n\], 那么乘积最大的就是前面以n - 1为结尾的最大乘积, 再乘上这个数
 
 1. 转移方程:
+
    * 维护两个数组, f\[i\] 和 g\[i\], f\[i\]用于记录最大值, g\[i\]用于记录最小值.
    * A\[i\]代表数组中的第i个数
-   * 转移方程: f\[i\] = max\(i -
-     &gt;
+   * 转移方程: f\[i\] = max\(i -  
+     &gt;  
       1...n \| f\[i - 1\] \* A\[i\], g\[i - 1\] \* A\[i\], A\[i\]\)
- 
-     g\[i\] = min\(i -
-     &gt;
+
+     g\[i\] = min\(i -  
+     &gt;  
       1...n \| f\[i - 1\] \* A\[i\], g\[i - 1\] \* A\[i\], A\[i\]\)
+
 2. 初始条件与边界情况:
    * f\[0\] = A\[0\], g\[0\] = A\[0\]
 3. 计算顺序:
@@ -316,6 +316,67 @@ public:
         return res;
     }
 };
+```
+
+
+
+## 45. Maximum Subarray Difference
+
+Given an array with integers.
+
+Find two_non-overlapping_subarrays_A_and_B_, which`|SUM(A) - SUM(B)|`is the largest.
+
+Return the largest difference.
+
+### Example
+
+For`[1, 2, -3, 1]`, return`6`.
+
+### Challenge
+
+O\(n\) time and O\(n\) space.
+
+https://www.lintcode.com/problem/maximum-subarray-difference/description
+
+### 解题分析:
+
+用的DP， 有点像best time to buy sell stock
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @return: An integer indicate the value of maximum difference between two substrings
+     */
+    int maxDiffSubArrays(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        vector<int> leftMax(n, 0), leftMin(n, 0), rightMax(n,0), rightMin(n,0);
+        leftMax[0] = leftMin[0] = nums[0];
+        rightMax[n-1] = rightMin[n-1] = nums[n-1];
+        for (int i = 1; i < n; i++)
+        {
+            leftMax[i] = max(leftMax[i-1] + nums[i], nums[i]);
+            leftMin[i] = min(leftMin[i-1] + nums[i], nums[i]);
+        }
+        for (int i = n-2; i >= 0; i--)
+        {
+            rightMax[i] = max(rightMax[i+1] + nums[i], nums[i]);
+            rightMin[i] = min(rightMin[i+1] + nums[i], nums[i]);
+        }
+        
+        int res = INT_MIN;
+        for (int i =0; i<n-1; i++)
+        {
+            res = max(res, max(abs(leftMax[i] - rightMin[i+1]), abs(leftMin[i] - rightMax[i+1])));
+        }
+        return res;
+    }
+};
+
 ```
 
 
