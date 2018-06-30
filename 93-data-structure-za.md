@@ -6,7 +6,7 @@ Merge two sorted \(ascending\) lists of interval and return it as a new sorted l
 
 Given list1 =`[(1,2),(3,4)]`and list2 =`[(2,3),(5,6)]`, return`[(1,4),(5,6)]`.
 
-https://www.lintcode.com/problem/merge-two-sorted-interval-lists/description
+[https://www.lintcode.com/problem/merge-two-sorted-interval-lists/description](https://www.lintcode.com/problem/merge-two-sorted-interval-lists/description)
 
 ### 解题分析:
 
@@ -63,6 +63,58 @@ public:
             }
         }
         res.push_back(prev);
+        return res;
+    }
+};
+```
+
+
+
+## 547. Intersection of Two Arrays
+
+Given two arrays, write a function to compute their intersection.
+
+### Example
+
+Given_nums1_=`[1, 2, 2, 1]`,_nums2_=`[2, 2]`, return`[2]`.
+
+### 
+
+https://www.lintcode.com/problem/intersection-of-two-arrays/description
+
+### 解题分析:
+
+感觉没啥技巧，硬上就好了
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    
+    /*
+     * @param nums1: an integer array
+     * @param nums2: an integer array
+     * @return: an integer array
+     */
+    vector<int> intersection(vector<int> nums1, vector<int> nums2) {
+        // write your code here
+        vector<int> res;
+        unordered_map<int, int> counter;
+        if (nums2.size() > nums1.size())
+            swap(nums1,nums2);
+        for (auto& each : nums1)
+            counter[each] = 1;
+        for (auto& each : nums2)
+        {
+            if (!counter.count(each) )
+                continue;
+            if (counter[each] == 1)
+            {
+                counter[each]++;
+                res.push_back(each);
+            }
+        }
         return res;
     }
 };
