@@ -280,6 +280,7 @@ For example, given the array`[2,3,-2,4]`, the contiguous subarray`[2,3]`has the 
    * f\[0\] = A\[0\], g\[0\] = A\[0\]
 
 3. 计算顺序:
+
    * 从左往右
    * 最终结果max\(i -
      &gt;
@@ -375,7 +376,7 @@ public:
             rightMax[i] = max(rightMax[i+1], rightSum -rightMinv);
             rightMin[i] = min(rightMin[i+1], rightSum - rightMaxv);
         }
-        
+
         int res = INT_MIN;
         for (int i =0; i<n-1; i++)
         {
@@ -384,10 +385,7 @@ public:
         return res;
     }
 };
-
 ```
-
-
 
 ## 42. Maximum Subarray II
 
@@ -403,7 +401,7 @@ For given`[1, 3, -1, 2, -1, 2]`, the two subarrays are`[1, 3]`and`[2, -1, 2]`or`
 
 Can you do it in time complexity O\(_n_\) ?
 
-https://www.lintcode.com/problem/maximum-subarray-ii/description
+[https://www.lintcode.com/problem/maximum-subarray-ii/description](https://www.lintcode.com/problem/maximum-subarray-ii/description)
 
 ### 解题分析:
 
@@ -424,7 +422,7 @@ public:
         vector<int> leftMax(n, 0), rightMax(n,0);
         leftMax[0] = nums[0];
         rightMax[n-1] = nums[n-1];
-        
+
         int leftSum = nums[0], prevLeftMin = min(0,nums[0]);
         for (int i = 1; i < n; i++)
         {
@@ -445,7 +443,6 @@ public:
         return res;
     }
 };
-
 ```
 
 

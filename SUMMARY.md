@@ -33,4 +33,5 @@
 * [Chapter 8.3 Data structure 基础篇 ](chapter-83-data-structure-ji-chu-pian.md)
 * [Chapter 9.1 Data Structure 线段树](chapter-91-data-structure-xian-duan-shu.md)
 * [Chapter 9.2 Data Structure 子数组问题](chapter-92-data-structure-zi-shu-zu-wen-ti.md)
+* [9.3 Data Structure 杂](93-data-structure-za.md)
 
