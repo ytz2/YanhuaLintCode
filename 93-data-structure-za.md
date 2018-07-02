@@ -140,7 +140,7 @@ the submatrix with the largest possible sum is:
 ]
 ```
 
-https://www.lintcode.com/problem/maximum-submatrix/description
+[https://www.lintcode.com/problem/maximum-submatrix/description](https://www.lintcode.com/problem/maximum-submatrix/description)
 
 ### 解题分析:
 
@@ -196,6 +196,98 @@ public:
             fill(buffer.begin(), buffer.end(), 0);
         }
         return maxVal;
+    }
+};
+```
+
+
+
+## 654. Maximum SubmatrixSparse Matrix Multiplication
+
+Given two[Sparse Matrix](https://en.wikipedia.org/wiki/Sparse_matrix)A and B, return the result of AB.
+
+You may assume that A's column number is equal to B's row number.
+
+### Example
+
+```
+A = [
+  [ 1, 0, 0],
+  [-1, 0, 3]
+]
+
+B = [
+  [ 7, 0, 0 ],
+  [ 0, 0, 0 ],
+  [ 0, 0, 1 ]
+]
+
+
+     |  1 0 0 |   | 7 0 0 |   |  7 0 0 |
+AB = | -1 0 3 | x | 0 0 0 | = | -7 0 3 |
+                  | 0 0 1 |
+```
+
+https://www.lintcode.com/problem/sparse-matrix-multiplication/description
+
+### 解题分析:
+
+被他名字吓住了，真跑去build row-col-v的稀疏矩阵，其实看了下别人的就是乘了一下。。。真是无聊。。。矩阵的乘法
+
+### 代码：
+
+```cpp
+
+
+
+class Solution {
+public:
+    /**
+     * @param A: a sparse matrix
+     * @param B: a sparse matrix
+     * @return: the result of A * B
+     */
+    vector<vector<int>> multiply(vector<vector<int>> &A, vector<vector<int>> &B) {
+        // write your code here
+        if (A.empty() || B.empty())
+        {
+            return vector<vector<int>>();
+        }
+        
+        int m = A.size();
+        int n = B[0].size();
+        vector<vector<int>> res(m, vector<int>(n, 0));
+        
+        // build A 
+
+        vector<vector<pair<int,int> >> sparseA(m,vector<pair<int,int>>());
+        for (int i = 0; i < A.size(); i++)
+        {
+            for (int j = 0; j <A[0].size(); j++ )
+            {
+                if (A[i][j])
+                {
+                    sparseA[i].push_back(make_pair(j, A[i][j]));
+                }
+            }
+        }
+        
+        for (int i = 0; i < m; i++)
+        {
+            if (sparseA.empty())
+                continue;
+            for (auto& each : sparseA[i])
+            {
+                int j = each.first;
+                int v = each.second;
+                for (int k = 0; k <n; k++)
+                {
+                    res[i][k] += B[j][k]*v;
+                }
+            }
+        }
+        return res;
+        
     }
 };
 ```
