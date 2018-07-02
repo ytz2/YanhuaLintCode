@@ -68,8 +68,6 @@ public:
 };
 ```
 
-
-
 ## 547. Intersection of Two Arrays
 
 Given two arrays, write a function to compute their intersection.
@@ -80,7 +78,7 @@ Given_nums1_=`[1, 2, 2, 1]`,_nums2_=`[2, 2]`, return`[2]`.
 
 ### 
 
-https://www.lintcode.com/problem/intersection-of-two-arrays/description
+[https://www.lintcode.com/problem/intersection-of-two-arrays/description](https://www.lintcode.com/problem/intersection-of-two-arrays/description)
 
 ### 解题分析:
 
@@ -91,7 +89,7 @@ https://www.lintcode.com/problem/intersection-of-two-arrays/description
 ```cpp
 class Solution {
 public:
-    
+
     /*
      * @param nums1: an integer array
      * @param nums2: an integer array
@@ -116,6 +114,88 @@ public:
             }
         }
         return res;
+    }
+};
+```
+
+## 944. Maximum Submatrix
+
+Given an`n x n`matrix of`positive`and`negative`integers, find the submatrix with the largest possible sum.
+
+### Example
+
+```
+Given matrix = 
+[
+[1,3,-1],
+[2,3,-2],
+[-1,-2,-3]
+]
+return 9.
+Explanation:
+the submatrix with the largest possible sum is:
+[
+[1,2],
+[2,3]
+]
+```
+
+https://www.lintcode.com/problem/maximum-submatrix/description
+
+### 解题分析:
+
+最开始想复杂了，总想着把submatrix 求一个submatrix presum 来做DP，实际上不对，浪费类时间。。。。
+
+其实就是 按照列压缩成一维数组， 然后在一维数组内求最大最小， 压缩的范围为列的 i, j， 代表从从i到j行上的和，遍历所有i,j的组合，最后就可以了。
+
+kadene 算法求得的是单行最大，然后按照\(i,j\)打一个擂台就好了
+
+o\(n^2\*m\)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param matrix: the given matrix
+     * @return: the largest possible sum
+     */
+    int maxSubmatrix(vector<vector<int>> &matrix) {
+        // write your code here
+        int m = matrix.size();
+        if (!m)
+            return 0;
+        int n = matrix[0].size();
+        if (!n)
+            return 0;
+        vector<int> buffer(m, 0);
+        int maxVal = INT_MIN;
+        auto eval = [](vector<int>& buffer){
+          int res = INT_MIN;
+          int sum = 0; 
+          for (auto& each : buffer)
+          {
+              sum += each; 
+              res = max(sum, res);
+              if (sum < 0)
+                sum = 0;
+          }
+          return res;
+        };
+        for (int j = 0; j < n; j++)
+        {
+            for (int k = j; k < n; k++)
+            {
+                for (int i = 0; i < m; i++)
+                {
+                    buffer[i] += matrix[i][k];
+                }
+                maxVal = max(maxVal, eval(buffer));
+            }
+            fill(buffer.begin(), buffer.end(), 0);
+        }
+        return maxVal;
     }
 };
 ```
