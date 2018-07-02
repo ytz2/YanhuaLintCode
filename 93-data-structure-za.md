@@ -200,8 +200,6 @@ public:
 };
 ```
 
-
-
 ## 654. Maximum SubmatrixSparse Matrix Multiplication
 
 Given two[Sparse Matrix](https://en.wikipedia.org/wiki/Sparse_matrix)A and B, return the result of AB.
@@ -228,7 +226,7 @@ AB = | -1 0 3 | x | 0 0 0 | = | -7 0 3 |
                   | 0 0 1 |
 ```
 
-https://www.lintcode.com/problem/sparse-matrix-multiplication/description
+[https://www.lintcode.com/problem/sparse-matrix-multiplication/description](https://www.lintcode.com/problem/sparse-matrix-multiplication/description)
 
 ### 解题分析:
 
@@ -237,9 +235,6 @@ https://www.lintcode.com/problem/sparse-matrix-multiplication/description
 ### 代码：
 
 ```cpp
-
-
-
 class Solution {
 public:
     /**
@@ -253,11 +248,11 @@ public:
         {
             return vector<vector<int>>();
         }
-        
+
         int m = A.size();
         int n = B[0].size();
         vector<vector<int>> res(m, vector<int>(n, 0));
-        
+
         // build A 
 
         vector<vector<pair<int,int> >> sparseA(m,vector<pair<int,int>>());
@@ -271,7 +266,7 @@ public:
                 }
             }
         }
-        
+
         for (int i = 0; i < m; i++)
         {
             if (sparseA.empty())
@@ -287,7 +282,101 @@ public:
             }
         }
         return res;
-        
+
+    }
+};
+```
+
+
+
+## 65. Median of two Sorted Arrays
+
+There are two sorted arrays_A_and_B_of size_m_and_n_respectively. Find the**median**of the two sorted arrays.
+
+### Example
+
+Given`A=[1,2,3,4,5,6]`and`B=[2,3,4,5]`, the median is`3.5`.
+
+Given`A=[1,2,3]`and`B=[4,5]`, the median is`3`.
+
+### Challenge
+
+The overall run time complexity should be`O(log (m+n))`.
+
+https://www.lintcode.com/problem/median-of-two-sorted-arrays/description
+
+### 解题分析:
+
+算是套路题：
+
+1. 每次去掉k/2， 比较两个数组的第k/2个元素，去掉小的左半部分
+2. 退出条件： 有一个为空了，则却另外一个第k个
+
+                           k=1, 取 两个 数组第一个元素最小
+
+                          否认则服从1
+
+   3. 有一个边界条件需要处理： 越界了怎么办，一个数组特别小， 不管他，因为他不足k/2， 而另外一个由k/2，直接去掉长的，因为肯定够不在那里面
+
+        int a\_half = abeg + k/2-1 &gt; aend ? INT\_MAX : A\[abeg + k/2 - 1\];
+
+        int b\_half = bbeg + k/2-1 &gt; bend ? INT\_MAX : B\[bbeg + k/2 - 1\];
+
+
+
+
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: a sparse matrix
+     * @param B: a sparse matrix
+     * @return: the result of A * B
+     */
+    vector<vector<int>> multiply(vector<vector<int>> &A, vector<vector<int>> &B) {
+        // write your code here
+        if (A.empty() || B.empty())
+        {
+            return vector<vector<int>>();
+        }
+
+        int m = A.size();
+        int n = B[0].size();
+        vector<vector<int>> res(m, vector<int>(n, 0));
+
+        // build A 
+
+        vector<vector<pair<int,int> >> sparseA(m,vector<pair<int,int>>());
+        for (int i = 0; i < A.size(); i++)
+        {
+            for (int j = 0; j <A[0].size(); j++ )
+            {
+                if (A[i][j])
+                {
+                    sparseA[i].push_back(make_pair(j, A[i][j]));
+                }
+            }
+        }
+
+        for (int i = 0; i < m; i++)
+        {
+            if (sparseA.empty())
+                continue;
+            for (auto& each : sparseA[i])
+            {
+                int j = each.first;
+                int v = each.second;
+                for (int k = 0; k <n; k++)
+                {
+                    res[i][k] += B[j][k]*v;
+                }
+            }
+        }
+        return res;
+
     }
 };
 ```
