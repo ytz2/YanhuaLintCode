@@ -617,7 +617,7 @@ There are`k`sorted arrays`nums`. Find the median of the given`k`sorted arrays.
 
 Given nums =`[[1],[2],[3]]`, return`2.00`
 
-https://www.lintcode.com/problem/median-of-k-sorted-arrays/description
+[https://www.lintcode.com/problem/median-of-k-sorted-arrays/description](https://www.lintcode.com/problem/median-of-k-sorted-arrays/description)
 
 ### 解题分析:
 
@@ -638,14 +638,14 @@ public:
         if (n == 0) {
             return 0;
         }
-        
+
         if (n % 2 != 0) {
             return findKth(nums, n / 2 + 1);
         }
-        
+
         return (findKth(nums, n / 2) + findKth(nums, n / 2 + 1)) / 2.0;
     }
-    
+
     int getTotal(vector<vector<int>> & nums) {
         int sum = 0;
         for (int i = 0; i < nums.size(); i++) {
@@ -653,11 +653,11 @@ public:
         }
         return sum;
     }
-    
+
     // k is not zero-based, it starts from 1.
     int findKth(vector<vector<int>> & nums, int k) {
         int start = 0, end = INT_MAX;
-        
+
         // find the last number x that >= k numbers are >= x. 
         while (start + 1 < end) {
             int mid = start + (end - start) / 2;
@@ -667,14 +667,14 @@ public:
                 end = mid;
             }
         }
-        
+
         if (getGTE(nums, start) >= k) {
             return start;
         }
-        
+
         return end;
     }
-    
+
     // get how many numbers greater than or equal to val in 2d array
     int getGTE(vector<vector<int>> & nums, int val) {
         int sum = 0;
@@ -683,15 +683,15 @@ public:
         }
         return sum;
     }
-    
+
     // get how many numbers greater than or equal to val in an array
     int getGTE(vector<int> & nums, int val) {
         if (nums.size() == 0) {
             return 0;
         }
-        
+
         int start = 0, end = nums.size() - 1;
-        
+
         // find first element >= val 
         while (start + 1 < end) {
             int mid = start + (end - start) / 2;
@@ -701,15 +701,15 @@ public:
                 start = mid;
             }
         }
-        
+
         if (nums[start] >= val) {
             return nums.size() - start;
         }
-        
+
         if (nums[end] >= val) {
             return nums.size() - end;
         }
-        
+
         return 0;
     }
 };
