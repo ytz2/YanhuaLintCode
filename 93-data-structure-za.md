@@ -489,11 +489,11 @@ sumRange(0, 2) -
  8
 ```
 
-https://www.lintcode.com/problem/range-sum-query-mutable/description
+[https://www.lintcode.com/problem/range-sum-query-mutable/description](https://www.lintcode.com/problem/range-sum-query-mutable/description)
 
 ### 解题分析:
 
-SegmentTree 
+SegmentTree
 
 ### 代码：
 
@@ -520,7 +520,7 @@ public:
     NumArray(vector<int> nums) {
         root_ = build(0, nums.size()-1,nums);
     }
-    
+
     ~NumArray()
     {
         if (root_)
@@ -529,13 +529,13 @@ public:
     void update(int i, int val) {
         update(root_, i, val);   
     }
-    
+
     int sumRange(int i, int j) {
 
         return sumRange(root_, i, j);
     }
-    
-    
+
+
     void update(SegNode* node, int i, int val)
     {
         if (!node)
@@ -560,26 +560,26 @@ public:
         if (node->right)
             node->value += node->right->value;
     }
-    
-    
+
+
     int sumRange(SegNode* node, int i, int j)
     {
         if (!node)
             return 0;
-        
+
         if (i<= node->start && node->end <= j)
             return node->value;
-            
+
         int mid = (node->start + node->end) / 2;
         int sum = 0;
         if (node->left && i<=mid)
             sum += sumRange(node->left, i, j);
         if (node->right && mid+1 <= j)
             sum += sumRange(node->right, i, j);
- 
+
         return sum;
     }
-    
+
     SegNode* root_;
     SegNode* build( int beg, int end, vector<int>& A)
     {
@@ -589,7 +589,7 @@ public:
         if (beg == end)
             return node;
         int mid = (beg + end) / 2;
-        
+
         node->left = build( beg, mid, A);
         node->right = build(mid+1, end, A);
         node->value = 0;
@@ -607,6 +607,112 @@ public:
  * obj.update(i,val);
  * int param_2 = obj.sumRange(i,j);
  */
+```
+
+## 931. Median of K Sorted Arrays
+
+There are`k`sorted arrays`nums`. Find the median of the given`k`sorted arrays.
+
+### Example
+
+Given nums =`[[1],[2],[3]]`, return`2.00`
+
+https://www.lintcode.com/problem/median-of-k-sorted-arrays/description
+
+### 解题分析:
+
+BS
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: the given k sorted arrays
+     * @return: the median of the given k sorted arrays
+     */
+    double findMedian(vector<vector<int>> &nums) {
+        // write your code here
+         int n = getTotal(nums);
+        if (n == 0) {
+            return 0;
+        }
+        
+        if (n % 2 != 0) {
+            return findKth(nums, n / 2 + 1);
+        }
+        
+        return (findKth(nums, n / 2) + findKth(nums, n / 2 + 1)) / 2.0;
+    }
+    
+    int getTotal(vector<vector<int>> & nums) {
+        int sum = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i].size();
+        }
+        return sum;
+    }
+    
+    // k is not zero-based, it starts from 1.
+    int findKth(vector<vector<int>> & nums, int k) {
+        int start = 0, end = INT_MAX;
+        
+        // find the last number x that >= k numbers are >= x. 
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (getGTE(nums, mid) >= k) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+        
+        if (getGTE(nums, start) >= k) {
+            return start;
+        }
+        
+        return end;
+    }
+    
+    // get how many numbers greater than or equal to val in 2d array
+    int getGTE(vector<vector<int>> & nums, int val) {
+        int sum = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            sum += getGTE(nums[i], val);
+        }
+        return sum;
+    }
+    
+    // get how many numbers greater than or equal to val in an array
+    int getGTE(vector<int> & nums, int val) {
+        if (nums.size() == 0) {
+            return 0;
+        }
+        
+        int start = 0, end = nums.size() - 1;
+        
+        // find first element >= val 
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (nums[mid] >= val) {
+                end = mid;
+            } else {
+                start = mid;
+            }
+        }
+        
+        if (nums[start] >= val) {
+            return nums.size() - start;
+        }
+        
+        if (nums[end] >= val) {
+            return nums.size() - end;
+        }
+        
+        return 0;
+    }
+};
 ```
 
 
