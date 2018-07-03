@@ -287,11 +287,9 @@ public:
 };
 ```
 
-
-
 ## 65. Median of two Sorted Arrays
 
-There are two sorted arrays_A_and_B_of size_m_and_n_respectively. Find the**median**of the two sorted arrays.
+There are two sorted arrays\_A\_and\_B\_of size\_m\_and\_n\_respectively. Find the**median**of the two sorted arrays.
 
 ### Example
 
@@ -303,7 +301,7 @@ Given`A=[1,2,3]`and`B=[4,5]`, the median is`3`.
 
 The overall run time complexity should be`O(log (m+n))`.
 
-https://www.lintcode.com/problem/median-of-two-sorted-arrays/description
+[https://www.lintcode.com/problem/median-of-two-sorted-arrays/description](https://www.lintcode.com/problem/median-of-two-sorted-arrays/description)
 
 ### 解题分析:
 
@@ -312,19 +310,17 @@ https://www.lintcode.com/problem/median-of-two-sorted-arrays/description
 1. 每次去掉k/2， 比较两个数组的第k/2个元素，去掉小的左半部分
 2. 退出条件： 有一个为空了，则却另外一个第k个
 
-                           k=1, 取 两个 数组第一个元素最小
+   ```
+                       k=1, 取 两个 数组第一个元素最小
 
-                          否认则服从1
+                      否认则服从1
+   ```
 
-   3. 有一个边界条件需要处理： 越界了怎么办，一个数组特别小， 不管他，因为他不足k/2， 而另外一个由k/2，直接去掉长的，因为肯定够不在那里面
+   1. 有一个边界条件需要处理： 越界了怎么办，一个数组特别小， 不管他，因为他不足k/2， 而另外一个由k/2，直接去掉长的，因为肯定够不在那里面
 
-        int a\_half = abeg + k/2-1 &gt; aend ? INT\_MAX : A\[abeg + k/2 - 1\];
+      int a\_half = abeg + k/2-1 &gt; aend ? INT\_MAX : A\[abeg + k/2 - 1\];
 
-        int b\_half = bbeg + k/2-1 &gt; bend ? INT\_MAX : B\[bbeg + k/2 - 1\];
-
-
-
-
+      int b\_half = bbeg + k/2-1 &gt; bend ? INT\_MAX : B\[bbeg + k/2 - 1\];
 
 ### 代码：
 
@@ -377,6 +373,110 @@ public:
         }
         return res;
 
+    }
+};
+```
+
+## 577. Merge K Sorted Interval Lists
+
+
+
+Merge_K_sorted interval lists into one sorted interval list. You need to merge overlapping intervals too.
+
+### Example
+
+Given
+
+```
+[
+  [(1,3),(4,7),(6,8)],
+  [(1,2),(9,10)]
+]
+
+```
+
+Return
+
+```
+[(1,3),(4,8),(9,10)]
+```
+
+https://www.lintcode.com/problem/merge-k-sorted-interval-lists/description
+
+### 解题分析:
+
+了解lambda在pq里的用法， 其他都是套路了
+
+### 代码：
+
+```cpp
+/**
+ * Definition of Interval:
+ * classs Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this->start = start;
+ *         this->end = end;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param intervals: the given k sorted interval lists
+     * @return:  the new sorted interval list
+     */
+    vector<Interval> mergeKSortedIntervalLists(vector<vector<Interval>> &intervals) {
+        // write your code here
+        
+        
+        typedef pair<Interval, int> IntType;
+        
+        auto sortFunc = [](const IntType& left, const IntType& right){
+            return left.first.start > right.first.start;
+        };
+        
+        vector<int> indices(intervals.size(), 0);
+        priority_queue<IntType, vector<IntType>, decltype(sortFunc)> pq(sortFunc);
+        for (int i = 0; i < intervals.size(); i++)
+        {
+            if (intervals[i].empty())
+                continue;
+            auto& interv = intervals[i].front();
+            pq.push(make_pair(interv, i));
+        }
+        
+        vector<Interval> res;
+        if (pq.empty())
+            return res;
+        auto& t = pq.top().first;
+        Interval prev(t.start, t.start);
+        while(!pq.empty())
+        {
+            auto node = pq.top();
+            pq.pop();
+            int ind = node.second;
+            auto& intervalNode = node.first;
+
+            if (intervalNode.start > prev.end)
+            {
+                res.push_back(prev);
+                prev = intervalNode;
+            }
+            else if (intervalNode.end > prev.end)
+            {
+                prev.end = intervalNode.end;
+            }
+            int next = ++indices[ind];
+            if (next < intervals[ind].size())
+            {
+                auto& nextInterval = intervals[ind][next];
+                pq.push(make_pair(intervals[ind][next], ind));
+            }
+        }
+        res.push_back(prev);
+        return res;
     }
 };
 ```
