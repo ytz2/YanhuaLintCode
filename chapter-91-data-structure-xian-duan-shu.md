@@ -1150,8 +1150,6 @@ public:
 };
 ```
 
-
-
 ## 249. Count of Smaller Number before itself
 
 Give you an integer array \(index from 0 to n-1, where n is the size of this array, data value from 0 to 10000\) . For each element`Ai`in the array, count the number of element before this element`Ai`is smaller than it and return count number array.
@@ -1160,9 +1158,7 @@ Give you an integer array \(index from 0 to n-1, where n is the size of this arr
 
 For array`[1,2,7,8,5]`, return`[0,1,2,3,2]`
 
-https://www.lintcode.com/problem/count-of-smaller-number-before-itself/description
-
-
+[https://www.lintcode.com/problem/count-of-smaller-number-before-itself/description](https://www.lintcode.com/problem/count-of-smaller-number-before-itself/description)
 
 ### 解题分析:
 
@@ -1171,9 +1167,6 @@ https://www.lintcode.com/problem/count-of-smaller-number-before-itself/descripti
 ### 代码：
 
 ```cpp
-
-
-
 struct Node{
   Node(int b, int e, int c)
     : beg(b), end(e), count(c), left(nullptr),right(nullptr)
@@ -1211,7 +1204,7 @@ public:
             delete root;
         return res;
     }
-    
+
     Node* build(int beg, int end)
     {
         if (beg > end)
@@ -1224,7 +1217,7 @@ public:
         node->right = build(mid+1, end);
         return node;
     }
-    
+
     int query(Node* root, int q)
     {
         if (!root || root->beg >= q)
@@ -1233,7 +1226,7 @@ public:
             return root->count;
         return query(root->left, q) + query(root->right, q);
     }
-    
+
     void modify(Node* root, int v)
     {
         if (!root)

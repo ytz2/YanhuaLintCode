@@ -346,7 +346,7 @@ public:
         return double(findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2) 
                 + findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2+1) ) / 2.;
     }
-    
+
     int findK(vector<int> &A, int abeg, int aend, vector<int> &B, int bbeg, int bend, int k)
     {
 
@@ -356,10 +356,10 @@ public:
             return B[bbeg + k -1];
         if (k == 1)
             return min(A[abeg], B[bbeg]);
-            
+
         int a_half = abeg + k/2-1 > aend ? INT_MAX : A[abeg + k/2 - 1];
         int b_half = bbeg + k/2-1 > bend ? INT_MAX : B[bbeg + k/2 - 1];
-        
+
         if (a_half < b_half)
             return findK(A, abeg + k/2, aend, B, bbeg, bend, k-k/2);
         else
@@ -467,6 +467,146 @@ public:
         return res;
     }
 };
+```
+
+## 840. Range Sum Query - Mutable
+
+Given an integer array nums, find the sum of the elements between indices i and j \(i ≤ j\), inclusive.
+
+The update\(i, val\) function modifies nums by updating the element at index i to val.
+
+### Example
+
+```
+Given nums = [1, 3, 5]
+
+sumRange(0, 2) -
+>
+ 9
+update(1, 2)
+sumRange(0, 2) -
+>
+ 8
+```
+
+https://www.lintcode.com/problem/range-sum-query-mutable/description
+
+### 解题分析:
+
+SegmentTree 
+
+### 代码：
+
+```cpp
+class SegNode{
+public:
+    SegNode(int l,int r, int v)
+        : start(l), end(r),value(v), left(nullptr), right(nullptr)
+    {}
+    ~SegNode()
+    {
+        if (left)
+            delete left;
+        if (right)
+            delete right;
+    }
+    int start, end, value;
+    SegNode *left, *right;
+};
+
+
+class NumArray {
+public:
+    NumArray(vector<int> nums) {
+        root_ = build(0, nums.size()-1,nums);
+    }
+    
+    ~NumArray()
+    {
+        if (root_)
+            delete root_;
+    }
+    void update(int i, int val) {
+        update(root_, i, val);   
+    }
+    
+    int sumRange(int i, int j) {
+
+        return sumRange(root_, i, j);
+    }
+    
+    
+    void update(SegNode* node, int i, int val)
+    {
+        if (!node)
+            return;
+        if (node->start == node->end && node->start == i)
+        {
+            node->value = val;
+            return;
+        }
+        int mid = (node->start + node->end) /2 ;
+        if (i<=mid)
+        {
+            update(node->left, i, val);
+        }
+        else if (i>= mid+1)
+        {
+            update(node->right, i, val);
+        }
+        node->value = 0;
+        if (node->left)
+            node->value += node->left->value;
+        if (node->right)
+            node->value += node->right->value;
+    }
+    
+    
+    int sumRange(SegNode* node, int i, int j)
+    {
+        if (!node)
+            return 0;
+        
+        if (i<= node->start && node->end <= j)
+            return node->value;
+            
+        int mid = (node->start + node->end) / 2;
+        int sum = 0;
+        if (node->left && i<=mid)
+            sum += sumRange(node->left, i, j);
+        if (node->right && mid+1 <= j)
+            sum += sumRange(node->right, i, j);
+ 
+        return sum;
+    }
+    
+    SegNode* root_;
+    SegNode* build( int beg, int end, vector<int>& A)
+    {
+        if ( beg > end)
+            return nullptr;
+        SegNode* node = new SegNode( beg, end,A[beg]);
+        if (beg == end)
+            return node;
+        int mid = (beg + end) / 2;
+        
+        node->left = build( beg, mid, A);
+        node->right = build(mid+1, end, A);
+        node->value = 0;
+        if (node->left)
+            node->value += node->left->value;
+        if (node->right)
+            node->value += node->right->value;
+        return node;
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
 ```
 
 
