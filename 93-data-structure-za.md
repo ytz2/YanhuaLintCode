@@ -327,61 +327,50 @@ The overall run time complexity should be`O(log (m+n))`.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param A: a sparse matrix
-     * @param B: a sparse matrix
-     * @return: the result of A * B
+    /*
+     * @param A: An integer array
+     * @param B: An integer array
+     * @return: a double whose format is *.5 or *.0
      */
-    vector<vector<int>> multiply(vector<vector<int>> &A, vector<vector<int>> &B) {
+    double findMedianSortedArrays(vector<int> &A, vector<int> &B) {
         // write your code here
-        if (A.empty() || B.empty())
+        int n = A.size()+B.size();
+        if (n == 0)
+            return 0;
+        if (n == 1)
         {
-            return vector<vector<int>>();
+            return A.empty()? B[0] : A[0];
         }
+        if (n%2)
+            return findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2+1);
+        return double(findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2) 
+                + findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2+1) ) / 2.;
+    }
+    
+    int findK(vector<int> &A, int abeg, int aend, vector<int> &B, int bbeg, int bend, int k)
+    {
 
-        int m = A.size();
-        int n = B[0].size();
-        vector<vector<int>> res(m, vector<int>(n, 0));
-
-        // build A 
-
-        vector<vector<pair<int,int> >> sparseA(m,vector<pair<int,int>>());
-        for (int i = 0; i < A.size(); i++)
-        {
-            for (int j = 0; j <A[0].size(); j++ )
-            {
-                if (A[i][j])
-                {
-                    sparseA[i].push_back(make_pair(j, A[i][j]));
-                }
-            }
-        }
-
-        for (int i = 0; i < m; i++)
-        {
-            if (sparseA.empty())
-                continue;
-            for (auto& each : sparseA[i])
-            {
-                int j = each.first;
-                int v = each.second;
-                for (int k = 0; k <n; k++)
-                {
-                    res[i][k] += B[j][k]*v;
-                }
-            }
-        }
-        return res;
-
+        if (bbeg > bend)
+            return A[abeg + k-1];
+        if (abeg > aend)
+            return B[bbeg + k -1];
+        if (k == 1)
+            return min(A[abeg], B[bbeg]);
+            
+        int a_half = abeg + k/2-1 > aend ? INT_MAX : A[abeg + k/2 - 1];
+        int b_half = bbeg + k/2-1 > bend ? INT_MAX : B[bbeg + k/2 - 1];
+        
+        if (a_half < b_half)
+            return findK(A, abeg + k/2, aend, B, bbeg, bend, k-k/2);
+        else
+            return findK(A, abeg, aend, B, bbeg + k/2, bend, k-k/2);
     }
 };
 ```
 
 ## 577. Merge K Sorted Interval Lists
 
-
-
-Merge_K_sorted interval lists into one sorted interval list. You need to merge overlapping intervals too.
+Merge\_K\_sorted interval lists into one sorted interval list. You need to merge overlapping intervals too.
 
 ### Example
 
@@ -392,7 +381,6 @@ Given
   [(1,3),(4,7),(6,8)],
   [(1,2),(9,10)]
 ]
-
 ```
 
 Return
@@ -401,7 +389,7 @@ Return
 [(1,3),(4,8),(9,10)]
 ```
 
-https://www.lintcode.com/problem/merge-k-sorted-interval-lists/description
+[https://www.lintcode.com/problem/merge-k-sorted-interval-lists/description](https://www.lintcode.com/problem/merge-k-sorted-interval-lists/description)
 
 ### 解题分析:
 
@@ -429,14 +417,14 @@ public:
      */
     vector<Interval> mergeKSortedIntervalLists(vector<vector<Interval>> &intervals) {
         // write your code here
-        
-        
+
+
         typedef pair<Interval, int> IntType;
-        
+
         auto sortFunc = [](const IntType& left, const IntType& right){
             return left.first.start > right.first.start;
         };
-        
+
         vector<int> indices(intervals.size(), 0);
         priority_queue<IntType, vector<IntType>, decltype(sortFunc)> pq(sortFunc);
         for (int i = 0; i < intervals.size(); i++)
@@ -446,7 +434,7 @@ public:
             auto& interv = intervals[i].front();
             pq.push(make_pair(interv, i));
         }
-        
+
         vector<Interval> res;
         if (pq.empty())
             return res;
