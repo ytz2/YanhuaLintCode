@@ -84,25 +84,23 @@ public:
 };
 ```
 
-
-
 ## 110. Minimum Path Sum
 
-Given a 
+Given a
 
 **m**
 
-** x **
+** x **
 
 **n**
 
- grid filled with non-negative numbers, find a path from top left to bottom right which 
+grid filled with non-negative numbers, find a path from top left to bottom right which
 
 **minimizes**
 
- the sum of all numbers along its path.
+the sum of all numbers along its path.
 
-https://www.lintcode.com/problem/minimum-path-sum/description
+[https://www.lintcode.com/problem/minimum-path-sum/description](https://www.lintcode.com/problem/minimum-path-sum/description)
 
 ### 解题分析:
 
@@ -129,7 +127,7 @@ public:
         for (int j = 1; j< grid[0].size(); j++)
             dp[0][j] = dp[0][j-1] + grid[0][j];
         // function
-        
+
         for (int i = 1; i < grid.size(); i++)
         {
             for (int j = 1; j<grid[0].size(); j++)
@@ -138,6 +136,47 @@ public:
             }
         }
         return dp.back().back();
+    }
+};
+```
+
+## 111. Climbing Stairs
+
+You are climbing a stair case. It takes **n** steps to reach to the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+### Example
+
+Given an example n=3 , 1+1+1=2+1=1+2=3
+
+return 3
+
+https://www.lintcode.com/problem/climbing-stairs/description
+
+### 解题分析:
+
+递推公式都告诉你了。。。直接写吧
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @return: An integer
+     */
+    int climbStairs(int n) {
+        // write your code here
+        if (n <= 2)
+            return n;
+        vector<int> dp(n+1, 0);
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i<=n; i++ )
+            dp[i] = dp[i-1] + dp[i-2];
+        return dp[n];
     }
 };
 ```
