@@ -18,7 +18,7 @@ sumRange(0, 5) -
  -3
 ```
 
-https://www.lintcode.com/problem/range-sum-query-immutable/description
+[https://www.lintcode.com/problem/range-sum-query-immutable/description](https://www.lintcode.com/problem/range-sum-query-immutable/description)
 
 ### 解题分析:
 
@@ -36,7 +36,7 @@ public:
             prefixsum.push_back(nums[i]+prefixsum[i]);
 
     }
-    
+
     int sumRange(int i, int j) {
         if (i < 0) i = 0;
         if (j+1 > prefixsum.size()-1) j = prefixsum.size()-2;
@@ -66,7 +66,7 @@ Given_nums1_=`[1, 2, 2, 1]`,_nums2_=`[2, 2]`, return`[2, 2]`.
 * What if nums1's size is small compared to num2's size? Which algorithm is better?
 * What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
 
-https://www.lintcode.com/problem/intersection-of-two-arrays-ii/description
+[https://www.lintcode.com/problem/intersection-of-two-arrays-ii/description](https://www.lintcode.com/problem/intersection-of-two-arrays-ii/description)
 
 ### 解题分析:
 
@@ -77,7 +77,7 @@ https://www.lintcode.com/problem/intersection-of-two-arrays-ii/description
 ```cpp
 class Solution {
 public:
-    
+
     /*
      * @param nums1: an integer array
      * @param nums2: an integer array
@@ -108,7 +108,7 @@ public:
 
 class Solution {
 public:
-    
+
     /*
      * @param nums1: an integer array
      * @param nums2: an integer array
@@ -132,6 +132,101 @@ public:
             }
         }
         return res;
+    }
+};
+```
+
+
+
+## 405. Submatrix Sum
+
+Given an integer matrix, find a submatrix where the sum of numbers is zero. Your code should return the coordinate of the left-up and right-down number.
+
+### Example
+
+Given matrix
+
+```
+[
+  [1 ,5 ,7],
+  [3 ,7 ,-8],
+  [4 ,-8 ,9],
+]
+
+```
+
+return`[(1,1), (2,2)]`
+
+### Challenge
+
+O\(n3\) time.
+
+https://www.lintcode.com/problem/submatrix-sum/description
+
+### 解题分析:
+
+和2D求最大sum一样
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param matrix: an integer matrix
+     * @return: the coordinate of the left-up and right-down number
+     */
+    vector<vector<int>> submatrixSum(vector<vector<int>> &matrix) {
+        // write your code here
+        vector<vector<int>> res;
+        int m = matrix.size();
+        if (m == 0)
+            return res;
+        int n = matrix[0].size();
+        if (n == 0)
+            return res;
+        vector<int> buffer(n, 0);
+
+        for (int i =0; i < m; i++)
+        {
+            for (int j = i; j <m; j++)
+            {
+                compress(i,j, buffer, matrix, n);
+                auto ret = eval(buffer);
+                if (ret.first !=-1)
+                {
+                    res.push_back(vector<int>{i, ret.first});
+                    res.push_back(vector<int>{j, ret.second});
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
+    
+    void compress(int i, int j, vector<int>& buffer, vector<vector<int>>& matrix, int n)
+    {
+        fill(buffer.begin(), buffer.end(), 0);
+        for (int k = i; k <= j; k++)
+        {
+            for (int l = 0; l < n; l++)
+                buffer[l] += matrix[k][l];
+        }
+    }
+    
+    pair<int, int> eval(const vector<int>& buffer)
+    {
+      unordered_map<int,int> dict{{0,-1}};
+      int sum = 0;
+      for (int i = 0; i < buffer.size(); i++)
+      {
+          sum += buffer[i];
+          if (dict.count(sum))
+            return make_pair(dict[sum]+1, i);
+          else
+            dict[sum] = i;
+      }
+      return make_pair(-1,-1);
     }
 };
 ```
