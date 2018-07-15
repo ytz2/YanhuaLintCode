@@ -142,7 +142,7 @@ public:
 
 ## 111. Climbing Stairs
 
-You are climbing a stair case. It takes **n** steps to reach to the top.
+You are climbing a stair case. It takes **n** steps to reach to the top.
 
 Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
 
@@ -152,7 +152,7 @@ Given an example n=3 , 1+1+1=2+1=1+2=3
 
 return 3
 
-https://www.lintcode.com/problem/climbing-stairs/description
+[https://www.lintcode.com/problem/climbing-stairs/description](https://www.lintcode.com/problem/climbing-stairs/description)
 
 ### 解题分析:
 
@@ -177,6 +177,71 @@ public:
         for (int i = 3; i<=n; i++ )
             dp[i] = dp[i-1] + dp[i-2];
         return dp[n];
+    }
+};
+```
+
+
+
+## 114. Unique Paths
+
+A robot is located at the top-left corner of a_m_x_n_grid.
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid.
+
+How many possible unique paths are there?
+
+### Example
+
+Given m =`3`and n =`3`, return`6`.  
+Given m =`4`and n =`5`, return`35`.
+
+https://www.lintcode.com/problem/unique-paths/description
+
+### 解题分析:
+
+判断： 求个数， 2^n的暴力解
+
+递归的定义：
+
+dp\[i\]\[j\] 从 0， 0 到i,j的个数
+
+递归的初始化
+
+行列为1，这是因为我们的状态方程无效
+
+状态方程：
+
+dp\[i\]\[j\] = dp\[i-1\]\[j\] + dp\[i\]\[j-1\]
+
+递归的结果：
+
+dp\[n\]\[n\]
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param m: positive integer (1 <= m <= 100)
+     * @param n: positive integer (1 <= n <= 100)
+     * @return: An integer
+     */
+    int uniquePaths(int m, int n) {
+        // write your code here
+        //state
+        if (m == 0 || n == 0)
+            return 0;
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        // init
+        fill(dp[0].begin(), dp[0].end(),1);
+        for (int i = 0; i< m; i++)
+            dp[i][0] = 1;
+        for (int i = 1; i<m; i++)
+            for (int j = 1; j<n;j++)
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        return dp[m-1][n-1];
     }
 };
 ```
