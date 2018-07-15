@@ -420,15 +420,15 @@ public:
 
 ## 151. Best Time to Buy and Sell Stock III
 
-Say you have an array for which the_i_thelement is the price of a given stock on day_i_.
+Say you have an array for which the_i\_thelement is the price of a given stock on day\_i_.
 
-Design an algorithm to find the**maximum**profit. You may complete at most_two_transactions.
+Design an algorithm to find the**maximum**profit. You may complete at most\_two\_transactions.
 
 ### Example
 
 Given an example`[4,4,6,1,1,4,2,5]`, return`6`.
 
-https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-iii/description
+[https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-iii/description](https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-iii/description)
 
 ### 解题分析:
 
@@ -445,7 +445,7 @@ public:
      */
     int maxProfit(vector<int> &prices) {
         // write your code here
-        
+
         if (prices.size()<=1)
             return 0;
         int prevMin = prices[0];
