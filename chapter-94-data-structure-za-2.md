@@ -381,7 +381,7 @@ public:
 
 ## 150. Best Time to Buy and Sell Stock II
 
-Say you have an array for which the ith element is the price of a given stock on day i.
+Say you have an array for which the ith element is the price of a given stock on day i.
 
 Design an algorithm to find the maximum profit. You may complete as many transactions as you like \(ie, buy one and sell one share of the stock multiple times\). However, you may not engage in multiple transactions at the same time \(ie, you must sell the stock before you buy again\).
 
@@ -389,7 +389,7 @@ Design an algorithm to find the maximum profit. You may complete as many transac
 
 Given an example\[2,1,2,0,1\], return 2
 
-https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-ii/description
+[https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-ii/description](https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-ii/description)
 
 ### 解题分析:
 
@@ -413,6 +413,59 @@ public:
             if(delta > 0)
                 res+=delta;
         }
+        return res;
+    }
+};
+```
+
+## 151. Best Time to Buy and Sell Stock III
+
+Say you have an array for which the_i_thelement is the price of a given stock on day_i_.
+
+Design an algorithm to find the**maximum**profit. You may complete at most_two_transactions.
+
+### Example
+
+Given an example`[4,4,6,1,1,4,2,5]`, return`6`.
+
+https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-iii/description
+
+### 解题分析:
+
+DP
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    int maxProfit(vector<int> &prices) {
+        // write your code here
+        
+        if (prices.size()<=1)
+            return 0;
+        int prevMin = prices[0];
+        vector<int> left{0};
+        for (int i = 1; i<prices.size(); i++)
+        {
+            left.push_back(max(left.back(), prices[i] - prevMin));
+            prevMin = min(prices[i], prevMin);
+        }
+        vector<int> right(prices.size(), 0);
+        int prevMax = prices.back();
+        int n = prices.size();
+        for (int i = n-2; i>=0; i--)
+        {
+            right[i] = max(right[i+1], prevMax - prices[i] );
+            prevMax = max(prevMax, prices[i]);
+        }
+        int res = 0;
+        for (int i = 0; i < n-1; i++)
+            res = max(res, left[i]+right[i]);
         return res;
     }
 };
