@@ -228,8 +228,6 @@ public:
 };
 ```
 
-
-
 ## 665. Range Sum Query 2D - Immutable
 
 Given a 2D matrix matrix, find the sum of the elements inside the rectangle defined by its upper left corner`(row1, col1)`and lower right corner`(row2, col2)`.
@@ -246,14 +244,13 @@ Given matrix =
   [4, 1, 0, 1, 7],
   [1, 0, 3, 0, 5]
 ]
-
 ```
 
 sumRegion\(2, 1, 4, 3\) -&gt;`8`  
 sumRegion\(1, 1, 2, 2\) -&gt;`11`  
 sumRegion\(1, 2, 2, 4\) -&gt;`12`
 
-https://www.lintcode.com/problem/range-sum-query-2d-immutable/description
+[https://www.lintcode.com/problem/range-sum-query-2d-immutable/description](https://www.lintcode.com/problem/range-sum-query-2d-immutable/description)
 
 ### 解题分析:
 
@@ -276,11 +273,11 @@ public:
             }
         }
     }
-    
+
     int sumRegion(int row1, int col1, int row2, int col2) {
         return dp[row2+1][col2+1]-dp[row1][col2+1] - dp[row2+1][col1]+dp[row1][col1];
     }
-    
+
     vector<vector<int>> dp;
 
 };
@@ -290,6 +287,100 @@ public:
  * NumMatrix obj = new NumMatrix(matrix);
  * int param_1 = obj.sumRegion(row1,col1,row2,col2);
  */
+```
+
+
+
+## 793. Intersection of Arrays
+
+Give a number of arrays, find their intersection, and output their intersection size.
+
+### Example
+
+Given`[[1,2,3],[3,4,5],[3,9,10]]`, return`1`
+
+```
+explanation:
+Only element 3 appears in all arrays, the intersection is [3], and the size is 1.
+
+```
+
+Given`[[1,2,3,4],[1,2,5,6,7][9,10,1,5,2,3]]`, return`2`
+
+```
+explanation:
+Only element 1,2 appear in all arrays, the intersection is [1,2], the size is 2.
+
+```
+
+https://www.lintcode.com/problem/intersection-of-arrays/description
+
+### 解题分析:
+
+pq
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param arrs: the arrays
+     * @return: the number of the intersection of the arrays
+     */
+    struct Node{
+        Node(int r, int c)
+            : row(r), col(c)
+        {}
+        int row, col;
+    };
+    int intersectionOfArrays(vector<vector<int>> &arrs) {
+        // write your code here
+        
+        for (int i = 0; i < arrs.size(); i++)
+        {
+            sort(arrs[i].begin(), arrs[i].end());
+        }
+        auto cmp = [&arrs](const Node& left, const Node& right)
+        {
+            return arrs[left.row][left.col] > arrs[right.row][right.col];
+        };
+        
+        priority_queue<Node,vector<Node>, decltype(cmp)> pq(cmp);
+        for (int i = 0; i < arrs.size(); i++)
+        {
+            if (!arrs[i].empty())
+                pq.push(Node(i,0));
+            else
+                return 0;
+        }
+        
+        int res = 0, count = 0, last = 0;
+        
+        while(!pq.empty())
+        {
+            auto node = pq.top();
+            pq.pop();
+            if (arrs[node.row][node.col] != last || count == 0)
+            {
+                if (count == arrs.size())
+                    res++;
+                count = 1;
+                last = arrs[node.row][node.col];
+            }
+            else
+            {
+                count++;
+            }
+            node.col++;
+            if (node.col < arrs[node.row].size())
+                pq.push(node);
+        }
+        if (count == arrs.size())
+            res++;
+        return res;
+    }
+};
 ```
 
 
