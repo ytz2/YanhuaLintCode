@@ -1,35 +1,36 @@
-## 943. Range Sum Query - Immutable
+## 109. Triangle
 
-Given an integer array nums, find the sum of the elements between indices`i`and`j(i ≤ j)`, inclusive.
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.  
+
 
 ### Example
 
-```
-Given nums = [-2, 0, 3, -5, 2, -1]
+Given the following triangle:
 
-sumRange(0, 2) -
->
- 1
-sumRange(2, 5) -
->
- -1
-sumRange(0, 5) -
->
- -3
+```
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+
 ```
 
-[https://www.lintcode.com/problem/range-sum-query-immutable/description](https://www.lintcode.com/problem/range-sum-query-immutable/description)
+The minimum path sum from top to bottom is 11 \(i.e., 2 + 3 + 5 + 1 = 11\).
+
+https://www.lintcode.com/problem/triangle/description
 
 ### 解题分析:
 
-判断： 
+判断：
 
 1. 求最小值
 2. 暴力解需要2^n的解法
 
 有可能是DP
 
-a 递归的状态 
+a 递归的状态
 
 dp\[i\]\[j\] : 到 i, j的最小和
 
@@ -65,11 +66,11 @@ public:
             dp[i][0] = dp[i-1][0]+triangle[i][0];
             dp[i][i] = dp[i-1][i-1] + triangle[i][i];
         }
-        
+
         /*  i-1,j-1     i-1, j
         *               i, j
         */ 
-        
+
         for (int i = 1; i < triangle.size(); i++)
         {
             for (int j =1; j <triangle[i].size()-1; j++)
