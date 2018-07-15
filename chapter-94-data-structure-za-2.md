@@ -136,8 +136,6 @@ public:
 };
 ```
 
-
-
 ## 405. Submatrix Sum
 
 Given an integer matrix, find a submatrix where the sum of numbers is zero. Your code should return the coordinate of the left-up and right-down number.
@@ -152,7 +150,6 @@ Given matrix
   [3 ,7 ,-8],
   [4 ,-8 ,9],
 ]
-
 ```
 
 return`[(1,1), (2,2)]`
@@ -161,7 +158,7 @@ return`[(1,1), (2,2)]`
 
 O\(n3\) time.
 
-https://www.lintcode.com/problem/submatrix-sum/description
+[https://www.lintcode.com/problem/submatrix-sum/description](https://www.lintcode.com/problem/submatrix-sum/description)
 
 ### 解题分析:
 
@@ -203,7 +200,7 @@ public:
         }
         return res;
     }
-    
+
     void compress(int i, int j, vector<int>& buffer, vector<vector<int>>& matrix, int n)
     {
         fill(buffer.begin(), buffer.end(), 0);
@@ -213,7 +210,7 @@ public:
                 buffer[l] += matrix[k][l];
         }
     }
-    
+
     pair<int, int> eval(const vector<int>& buffer)
     {
       unordered_map<int,int> dict{{0,-1}};
@@ -229,6 +226,70 @@ public:
       return make_pair(-1,-1);
     }
 };
+```
+
+
+
+## 665. Range Sum Query 2D - Immutable
+
+Given a 2D matrix matrix, find the sum of the elements inside the rectangle defined by its upper left corner`(row1, col1)`and lower right corner`(row2, col2)`.
+
+### Example
+
+Given matrix =
+
+```
+[
+  [3, 0, 1, 4, 2],
+  [5, 6, 3, 2, 1],
+  [1, 2, 0, 1, 5],
+  [4, 1, 0, 1, 7],
+  [1, 0, 3, 0, 5]
+]
+
+```
+
+sumRegion\(2, 1, 4, 3\) -&gt;`8`  
+sumRegion\(1, 1, 2, 2\) -&gt;`11`  
+sumRegion\(1, 2, 2, 4\) -&gt;`12`
+
+https://www.lintcode.com/problem/range-sum-query-2d-immutable/description
+
+### 解题分析:
+
+画格子
+
+### 代码：
+
+```cpp
+class NumMatrix {
+public:
+    NumMatrix(vector<vector<int>> matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        dp = vector<vector<int>>(m+1,vector<int>(n+1, 0));
+        for (int i =0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                dp[i+1][j+1] = dp[i+1][j]+dp[i][j+1]+matrix[i][j] - dp[i][j];
+            }
+        }
+    }
+    
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        return dp[row2+1][col2+1]-dp[row1][col2+1] - dp[row2+1][col1]+dp[row1][col1];
+    }
+    
+    vector<vector<int>> dp;
+
+};
+
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * NumMatrix obj = new NumMatrix(matrix);
+ * int param_1 = obj.sumRegion(row1,col1,row2,col2);
+ */
 ```
 
 
