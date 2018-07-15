@@ -289,8 +289,6 @@ public:
  */
 ```
 
-
-
 ## 793. Intersection of Arrays
 
 Give a number of arrays, find their intersection, and output their intersection size.
@@ -302,7 +300,6 @@ Given`[[1,2,3],[3,4,5],[3,9,10]]`, return`1`
 ```
 explanation:
 Only element 3 appears in all arrays, the intersection is [3], and the size is 1.
-
 ```
 
 Given`[[1,2,3,4],[1,2,5,6,7][9,10,1,5,2,3]]`, return`2`
@@ -310,10 +307,9 @@ Given`[[1,2,3,4],[1,2,5,6,7][9,10,1,5,2,3]]`, return`2`
 ```
 explanation:
 Only element 1,2 appear in all arrays, the intersection is [1,2], the size is 2.
-
 ```
 
-https://www.lintcode.com/problem/intersection-of-arrays/description
+[https://www.lintcode.com/problem/intersection-of-arrays/description](https://www.lintcode.com/problem/intersection-of-arrays/description)
 
 ### 解题分析:
 
@@ -336,7 +332,7 @@ public:
     };
     int intersectionOfArrays(vector<vector<int>> &arrs) {
         // write your code here
-        
+
         for (int i = 0; i < arrs.size(); i++)
         {
             sort(arrs[i].begin(), arrs[i].end());
@@ -345,7 +341,7 @@ public:
         {
             return arrs[left.row][left.col] > arrs[right.row][right.col];
         };
-        
+
         priority_queue<Node,vector<Node>, decltype(cmp)> pq(cmp);
         for (int i = 0; i < arrs.size(); i++)
         {
@@ -354,9 +350,9 @@ public:
             else
                 return 0;
         }
-        
+
         int res = 0, count = 0, last = 0;
-        
+
         while(!pq.empty())
         {
             auto node = pq.top();
@@ -378,6 +374,45 @@ public:
         }
         if (count == arrs.size())
             res++;
+        return res;
+    }
+};
+```
+
+## 150. Best Time to Buy and Sell Stock II
+
+Say you have an array for which the ith element is the price of a given stock on day i.
+
+Design an algorithm to find the maximum profit. You may complete as many transactions as you like \(ie, buy one and sell one share of the stock multiple times\). However, you may not engage in multiple transactions at the same time \(ie, you must sell the stock before you buy again\).
+
+### Example
+
+Given an example\[2,1,2,0,1\], return 2
+
+https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-ii/description
+
+### 解题分析:
+
+market making
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    int maxProfit(vector<int> &prices) {
+        // write your code here
+        int res = 0;
+        for (int i = 1; i<prices.size(); i++)
+        {
+            int delta = prices[i]-prices[i-1];
+            if(delta > 0)
+                res+=delta;
+        }
         return res;
     }
 };
