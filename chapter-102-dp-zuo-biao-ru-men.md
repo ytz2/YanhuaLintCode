@@ -415,6 +415,53 @@ public:
 };
 ```
 
+## 117. Jump Game II
+
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Your goal is to reach the last index in the minimum number of jumps.
+
+### Example
+
+Given array A =`[2,3,1,1,4]`
+
+The minimum number of jumps to reach the last index is`2`. \(Jump`1`step from index 0 to 1, then`3`steps to the last index.\)
+
+https://www.lintcode.com/problem/jump-game-ii/description
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: A list of integers
+     * @return: An integer
+     */
+    int jump(vector<int> &A) {
+        // write your code here
+        int n = A.size();
+        if (n<=1)
+            return 0;
+        vector<int> dp(n, INT_MAX);
+        dp[0] = 0;
+        for (int i = 1; i<n;i++)
+        {
+            for (int j = 0; j<i;j++)
+            {
+                if (j+A[j] >=i)
+                    dp[i] =min(dp[i], dp[j]+1);
+            }
+        }
+        return dp.back();
+    }
+};
+```
+
+## 
+
 ## 76. Longest Increasing Subsequence
 
 Given a sequence of integers, find the longest increasing subsequence \(LIS\).
@@ -646,8 +693,6 @@ public:
 };
 ```
 
-
-
 ## 630. Knight Shortest Path II
 
 Given a knight in a chessboard`n * m`\(a binary matrix with 0 as empty and 1 as barrier\). the knight initialze position is`(0, 0)`and he wants to reach position`(n - 1, m - 1)`, Knight can only be from left to right. Find the shortest path to the destination position, return the length of the route. Return`-1`if knight can not reached.
@@ -668,7 +713,7 @@ Return 3
 Return -1
 ```
 
-https://www.lintcode.com/problem/knight-shortest-path-ii/description
+[https://www.lintcode.com/problem/knight-shortest-path-ii/description](https://www.lintcode.com/problem/knight-shortest-path-ii/description)
 
 ### 解题分析:
 
@@ -691,7 +736,7 @@ public:
         int n = grid[0].size();
         if (n == 0)
             return -1;
-        
+
         vector<int> dx{-1, 1, -2, 2};
         vector<int> dy{-2, -2, -1,-1};
         vector<vector<int>> dp(m, vector<int>(n, INT_MAX));
@@ -717,13 +762,7 @@ public:
             return -1;
         return dp[m-1][n-1];
     }
-    void print(vector<int> v)
-{
-for (auto each : v)
-cout <<each<< " ";
-cout<<endl;
-}
-};
+
 ```
 
 
