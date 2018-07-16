@@ -370,8 +370,6 @@ public:
 };
 ```
 
-
-
 ## 76. Longest Increasing Subsequence
 
 Given a sequence of integers, find the longest increasing subsequence \(LIS\).
@@ -387,11 +385,9 @@ For`[4, 2, 4, 5, 3, 7]`, the LIS is`[2, 4, 5, 7]`, return`4`
 
 Time complexity O\(n^2\) or O\(nlogn\)
 
-https://www.lintcode.com/problem/longest-increasing-subsequence/description
+[https://www.lintcode.com/problem/longest-increasing-subsequence/description](https://www.lintcode.com/problem/longest-increasing-subsequence/description)
 
 ### 解题分析:
-
-
 
 有一道不需要管顺序的，是放一个hash set,然后上下shoot求边界。这个题不是：
 
@@ -403,8 +399,6 @@ https://www.lintcode.com/problem/longest-increasing-subsequence/description
 
 接龙dp优化不了太多，只是减少重复计算而已。 还是o\(n^2\),平均复杂度稍微好点
 
-
-
 dp的定义
 
 dp\[i\]， 以i为结尾的最长subseq
@@ -415,15 +409,18 @@ dp\[\*\] = 1
 
 dp的状态方程：
 
-dp\[i\] = any of max\(a\[j\] &lt; a\[i\]\)+1 
+dp\[i\] = any of max\(a\[j\] &lt; a\[i\]\)+1
 
 dp的答案：
 
 max of dp
 
+另外这个题放了一个prev在里面来track从哪里来的， prev初始为各自的index,这样就可以找到最优的其中之一的解
+
 ### 代码：
 
 ```cpp
+#include <list>
 class Solution {
 public:
     /**
@@ -435,15 +432,44 @@ public:
         if (nums.empty())
             return 0;
         vector<int> dp(nums.size(), 1);
+        vector<int> prev(nums.size(), 0);
+        for (int i = 0; i < prev.size(); i++)
+            prev[i] = i;
         for (int i = 1; i<nums.size(); i++)
         {
             for (int j = i-1; j>=0; j--)
             {
-                if (nums[j] < nums[i])
-                    dp[i] = max(dp[i], dp[j]+1);
+                if (nums[j] < nums[i] && dp[j]+1 > dp[i])
+                {
+                    dp[i] = dp[j]+1;
+                    prev[i] = j;
+                }
             }
         }
-        return *max_element(dp.begin(), dp.end());
+        int ind = 0, val = 0;
+        for (int i = 0; i < dp.size(); i++)
+        {
+            if (dp[i] > val)
+            {
+                ind = i;
+                val = dp[i];
+            }
+        }
+        
+        cout <<"max number = " <<val<<endl;
+        list<int> res;
+        res.push_front(val);
+        while(prev[ind] != ind)
+        {
+            res.push_front(nums[prev[ind]]);
+            ind = prev[ind];
+        }
+        
+        cout <<" sequence is ";
+        for (auto each : res)
+            cout <<each <<" ";
+        cout <<endl;
+        return val;
     }
 };
 ```
