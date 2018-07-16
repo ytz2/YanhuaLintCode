@@ -474,11 +474,82 @@ public:
 };
 ```
 
+## 603. Largest Divisible Subset
+
+Given a set of`distinct positive`integers, find the largest subset such that every pair`(Si, Sj)`of elements in this subset satisfies:`Si % Sj = 0`or`Sj % Si = 0`.
+
+### Example
+
+Given nums =`[1,2,3]`, return`[1,2]`or`[1,3]`
+
+Given nums =`[1,2,4,8]`, return`[1,2,4,8]`
+
+https://www.lintcode.com/problem/largest-divisible-subset/description
+
+题目描述的不准确，其实是找倍数关系的递增数组
+
+给的不是sequence，而是给的是collection,看上去不是DP， 但实际上最后求得是一组数， 那么他们是顺序数出，先sort,然后就可以接龙了， 接龙的思路和longest increase subsequence是一样的，略去
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /*
+     * @param nums: a set of distinct positive integers
+     * @return: the largest subset 
+     */
+    vector<int> largestDivisibleSubset(vector<int> &nums) {
+        // write your code here
+        if (nums.size() <= 1)
+            return nums;
+        vector<int> result;
+        sort(nums.begin(), nums.end());
+        vector<int> dp(nums.size(), 1);
+        vector<int> prev(nums.size(), 0);
+        for (int i = 0; i<nums.size(); i++)
+            prev[i] = i;
+        for (int i = 1; i < nums.size(); i++)
+        {
+            for (int j = i-1; j >=0; j-- )
+            {
+                if (nums[i]%nums[j])
+                    continue;
+                if (dp[j]+1 > dp[i])
+                {
+                    dp[i] = dp[j]+1;
+                    prev[i] = j;
+                }
+            }
+        }
+        int ind = 0;
+        for (int i = 0; i < dp.size(); i++)
+        {
+            if (dp[i] > dp[ind])
+            {
+                ind = i;
+            }
+        }
+        result.push_back(nums[ind]);
+        while(prev[ind] != ind)
+        {
+            result.push_back(nums[prev[ind]]);
+            ind = prev[ind];
+        }
+        return result;
+    }
+    void print(vector<int> v)
+    {
+        for (auto each : v)
+            cout <<each<< " ";
+        cout<<endl;
+    }
+};
+```
+
 
 
 ## 513. Perfect Squares
-
-
 
 Given a positive integer`n`, find the least number of perfect square numbers \(for example,`1, 4, 9, 16, ...`\) which sum to n.
 
@@ -487,7 +558,7 @@ Given a positive integer`n`, find the least number of perfect square numbers \(f
 Given n =`12`, return`3`because`12 = 4 + 4 + 4`  
 Given n =`13`, return`2`because`13 = 4 + 9`
 
-https://www.lintcode.com/problem/perfect-squares/description
+[https://www.lintcode.com/problem/perfect-squares/description](https://www.lintcode.com/problem/perfect-squares/description)
 
 ### 解题分析:
 
