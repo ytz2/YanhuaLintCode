@@ -301,8 +301,6 @@ public:
 };
 ```
 
-
-
 ## 116. Jump Game
 
 Given an array of non-negative integers, you are initially positioned at the first index of the array.
@@ -317,11 +315,11 @@ A =`[2,3,1,1,4]`, return`true`.
 
 A =`[3,2,1,0,4]`, return`false`.
 
-https://www.lintcode.com/problem/jump-game/description
+[https://www.lintcode.com/problem/jump-game/description](https://www.lintcode.com/problem/jump-game/description)
 
 ### 解题分析:
 
-接龙形的DP,这种DP的特点是当前的位置由i以前的位置决定，但是没有明显的递推关系， 需要往回寻找符合跳往i的位置j是否存在且j以前的状态需要叠加。 
+接龙形的DP,这种DP的特点是当前的位置由i以前的位置决定，但是没有明显的递推关系， 需要往回寻找符合跳往i的位置j是否存在且j以前的状态需要叠加。
 
 接龙的形式： j , state j -&gt; i, state i -&gt; last answer
 
@@ -368,6 +366,84 @@ public:
             }
         }
         return dp.back();
+    }
+};
+```
+
+
+
+## 76. Longest Increasing Subsequence
+
+Given a sequence of integers, find the longest increasing subsequence \(LIS\).
+
+You code should return the length of the LIS.
+
+### Example
+
+For`[5, 4, 1, 2, 3]`, the LIS is`[1, 2, 3]`, return`3`  
+For`[4, 2, 4, 5, 3, 7]`, the LIS is`[2, 4, 5, 7]`, return`4`
+
+### Challenge
+
+Time complexity O\(n^2\) or O\(nlogn\)
+
+https://www.lintcode.com/problem/longest-increasing-subsequence/description
+
+### 解题分析:
+
+
+
+有一道不需要管顺序的，是放一个hash set,然后上下shoot求边界。这个题不是：
+
+为什么？
+
+1. 求最长
+2. 给的是一个sequence
+3. 暴力的话是o\(n^2\) 
+
+接龙dp优化不了太多，只是减少重复计算而已。 还是o\(n^2\),平均复杂度稍微好点
+
+
+
+dp的定义
+
+dp\[i\]， 以i为结尾的最长subseq
+
+dp的初始条件：
+
+dp\[\*\] = 1
+
+dp的状态方程：
+
+dp\[i\] = any of max\(a\[j\] &lt; a\[i\]\)+1 
+
+dp的答案：
+
+max of dp
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: An integer array
+     * @return: The length of LIS (longest increasing subsequence)
+     */
+    int longestIncreasingSubsequence(vector<int> &nums) {
+        // write your code here
+        if (nums.empty())
+            return 0;
+        vector<int> dp(nums.size(), 1);
+        for (int i = 1; i<nums.size(); i++)
+        {
+            for (int j = i-1; j>=0; j--)
+            {
+                if (nums[j] < nums[i])
+                    dp[i] = max(dp[i], dp[j]+1);
+            }
+        }
+        return *max_element(dp.begin(), dp.end());
     }
 };
 ```
