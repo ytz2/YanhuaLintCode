@@ -455,7 +455,7 @@ public:
                 val = dp[i];
             }
         }
-        
+
         cout <<"max number = " <<val<<endl;
         list<int> res;
         res.push_front(val);
@@ -464,7 +464,7 @@ public:
             res.push_front(nums[prev[ind]]);
             ind = prev[ind];
         }
-        
+
         cout <<" sequence is ";
         for (auto each : res)
             cout <<each <<" ";
