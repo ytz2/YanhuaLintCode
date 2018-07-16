@@ -476,3 +476,61 @@ public:
 
 
 
+## 513. Perfect Squares
+
+
+
+Given a positive integer`n`, find the least number of perfect square numbers \(for example,`1, 4, 9, 16, ...`\) which sum to n.
+
+### Example
+
+Given n =`12`, return`3`because`12 = 4 + 4 + 4`  
+Given n =`13`, return`2`because`13 = 4 + 9`
+
+https://www.lintcode.com/problem/perfect-squares/description
+
+### 解题分析:
+
+dp的定义
+
+dp\[i\] 第i个数可以表示的个数
+
+dp的初始条件：
+
+dp\[0\] = 0
+
+dp的状态方程：
+
+dp\[i\] = any of min\(a\[i - j^2\)+1\)
+
+dp的答案：
+
+dp.back\(\)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: a positive integer
+     * @return: An integer
+     */
+    int numSquares(int n) {
+        // write your code here
+        vector<int> dp(n+1, INT_MAX);
+        dp[0] = 0;
+        for (int i = 1; i<=n; i++)
+        {
+            for (int j = 1; i-j*j >=0; j++)
+            {
+                dp[i] = min(dp[i-j*j]+1, dp[i]);
+            }
+        }
+        return dp.back();
+    }
+};
+```
+
+
+
