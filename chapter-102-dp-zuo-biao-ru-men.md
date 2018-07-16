@@ -192,7 +192,7 @@ n=`3`
 
 return`4`
 
-https://www.lintcode.com/problem/climbing-stairs-ii/description
+[https://www.lintcode.com/problem/climbing-stairs-ii/description](https://www.lintcode.com/problem/climbing-stairs-ii/description)
 
 ### 解题分析:
 
@@ -643,6 +643,86 @@ public:
         }
         return dp.back();
     }
+};
+```
+
+
+
+## 630. Knight Shortest Path II
+
+Given a knight in a chessboard`n * m`\(a binary matrix with 0 as empty and 1 as barrier\). the knight initialze position is`(0, 0)`and he wants to reach position`(n - 1, m - 1)`, Knight can only be from left to right. Find the shortest path to the destination position, return the length of the route. Return`-1`if knight can not reached.
+
+### Example
+
+```
+[[0,0,0,0],
+ [0,0,0,0],
+ [0,0,0,0]]
+
+Return 3
+
+[[0,0,0,0],
+ [0,0,0,0],
+ [0,1,0,0]]
+
+Return -1
+```
+
+https://www.lintcode.com/problem/knight-shortest-path-ii/description
+
+### 解题分析:
+
+从左往右走，画下格子，就好了
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param grid: a chessboard included 0 and 1
+     * @return: the shortest path
+     */
+    int shortestPath2(vector<vector<bool>> &grid) {
+        // write your code here
+        int m = grid.size();
+        if (m == 0)
+            return -1;
+        int n = grid[0].size();
+        if (n == 0)
+            return -1;
+        
+        vector<int> dx{-1, 1, -2, 2};
+        vector<int> dy{-2, -2, -1,-1};
+        vector<vector<int>> dp(m, vector<int>(n, INT_MAX));
+        dp[0][0] = 0;
+        for (int j=1; j < n; j++)
+        {
+            for (int i = 0; i < m; i++)
+            {
+                if (grid[i][j])
+                    continue;
+                for (int k = 0; k < 4; k++)
+                {
+                    int ox = i + dx[k];
+                    int oy = j + dy[k];
+                    if (ox >= 0 && ox < m && oy >= 0 && oy < n && dp[ox][oy] != INT_MAX)
+                    {
+                        dp[i][j] = min(dp[i][j], dp[ox][oy]+1);
+                    }
+                }
+            }
+        }
+        if (dp[m-1][n-1] == INT_MAX)
+            return -1;
+        return dp[m-1][n-1];
+    }
+    void print(vector<int> v)
+{
+for (auto each : v)
+cout <<each<< " ";
+cout<<endl;
+}
 };
 ```
 
