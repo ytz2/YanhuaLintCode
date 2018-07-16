@@ -303,3 +303,74 @@ public:
 
 
 
+## 116. Jump Game
+
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+### Example
+
+A =`[2,3,1,1,4]`, return`true`.
+
+A =`[3,2,1,0,4]`, return`false`.
+
+https://www.lintcode.com/problem/jump-game/description
+
+### 解题分析:
+
+接龙形的DP,这种DP的特点是当前的位置由i以前的位置决定，但是没有明显的递推关系， 需要往回寻找符合跳往i的位置j是否存在且j以前的状态需要叠加。 
+
+接龙的形式： j , state j -&gt; i, state i -&gt; last answer
+
+dp的定义
+
+dp\[i\]， 能否到达
+
+dp的初始条件：
+
+dp\[0\] = jump\[0\]!=0;
+
+dp的状态方程：
+
+dp\[i\] = any of dp\[j\]且j+jump\[j\]&gt;=i
+
+dp的答案：
+
+dp.back\(\)
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: A list of integers
+     * @return: A boolean
+     */
+    bool canJump(vector<int> &A) {
+        // write your code here
+        if (A.size() <= 1)
+            return true;
+        vector<bool> dp(A.size(), false);
+        dp[0] = A[0]!=0;
+        for (int i = 1; i < A.size(); i++)
+        {
+            for (int j = i-1; j>=0; j--)
+            {
+                if (dp[j] && j+A[j] >= i )
+                {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp.back();
+    }
+};
+```
+
+
+
