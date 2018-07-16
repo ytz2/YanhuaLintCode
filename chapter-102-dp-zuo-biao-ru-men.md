@@ -181,6 +181,51 @@ public:
 };
 ```
 
+## 272. Climbing Stairs II
+
+A child is running up a staircase with`n`steps, and can hop either 1 step, 2 steps, or 3 steps at a time. Implement a method to count how many possible ways the child can run up the stairs.
+
+### Example
+
+n=`3`  
+1+1+1=2+1=1+2=3=3
+
+return`4`
+
+https://www.lintcode.com/problem/climbing-stairs-ii/description
+
+### 解题分析:
+
+递推公式都告诉你了。。。直接写吧
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @return: An Integer
+     */
+    int climbStairs2(int n) {
+        // write your code here
+        if (n==0)
+            return 1;
+        if (n <= 2)
+            return n;
+        if (n == 3)
+            return 4;
+        vector<int> dp(n, 0);
+        dp[0] = 1;dp[1]=2;dp[2]=4;
+        for (int i = 3; i<n;i++)
+            dp[i] = dp[i-3] + dp[i-2]+dp[i-1];
+        return dp.back();
+    }
+};
+```
+
+## 
+
 ## 114. Unique Paths
 
 A robot is located at the top-left corner of a\_m\_x\_n\_grid.
@@ -484,7 +529,7 @@ Given nums =`[1,2,3]`, return`[1,2]`or`[1,3]`
 
 Given nums =`[1,2,4,8]`, return`[1,2,4,8]`
 
-https://www.lintcode.com/problem/largest-divisible-subset/description
+[https://www.lintcode.com/problem/largest-divisible-subset/description](https://www.lintcode.com/problem/largest-divisible-subset/description)
 
 题目描述的不准确，其实是找倍数关系的递增数组
 
@@ -546,8 +591,6 @@ public:
     }
 };
 ```
-
-
 
 ## 513. Perfect Squares
 
