@@ -544,3 +544,87 @@ public:
 
 
 
+## 200. Number of Islands
+
+Given a 2d grid map of`'1'`s \(land\) and`'0'`s \(water\), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+**Example 1:**
+
+```
+Input:
+
+11110
+11010
+11000
+00000
+
+
+Output:
+ 1
+
+```
+
+**Example 2:**
+
+```
+Input:
+
+11000
+11000
+00100
+00011
+
+
+Output: 
+3代码：
+```
+
+```cpp
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        if (m == 0)
+            return 0;
+        int n = grid[0].size();
+        if (n == 0)
+            return 0;
+        int res = 0;
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                res += countOne(grid, i, j, m, n);
+        return res;
+    }
+    
+    int countOne(vector<vector<char>>& grid, int i, int j, int m, int n)
+    {
+        static vector<int> dx{ 0, 0, 1, -1};
+        static vector<int> dy{-1, 1, 0,  0};
+        if (grid[i][j] == '0')
+            return 0;
+        queue<pair<int, int>> q;
+        q.emplace(i, j);
+        grid[i][j] = '0';
+        while(!q.empty())
+        {
+            auto p = q.front();
+            q.pop();
+            for (int k = 0; k < 4; k ++)
+            {
+                auto next_i = p.first + dx[k];
+                auto next_j = p.second + dy[k];
+                if (next_i >=0 && next_i < m && next_j >= 0 && next_j < n && grid[next_i][next_j] == '1')
+                {
+                    q.emplace(next_i, next_j);
+                    grid[next_i][next_j] = '0';
+                }
+            }
+        }
+        return 1;
+    }
+    
+};
+```
+
+
+
