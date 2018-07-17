@@ -311,7 +311,7 @@ Givennnon-negative integersa1,a2, ...,an, where each represents a point at coord
 
 Note: You may not slant the container andnis at least 2.
 
-https://leetcode.com/problems/container-with-most-water/description/
+[https://leetcode.com/problems/container-with-most-water/description/](https://leetcode.com/problems/container-with-most-water/description/)
 
 ### 解题分析:
 
@@ -336,6 +336,72 @@ public:
         }
         return res; 
     }
+};
+```
+
+## 442. Find All Duplicates in an Array
+
+Given an array of integers, 1 ≤ a\[i\] ≤n\(n= size of array\), some elements appear**twice**and others appear**once**.
+
+Find all the elements that appear**twice**in this array.
+
+Could you do it without extra space and in O\(n\) runtime?
+
+
+
+**Example:**  
+
+
+```
+Input:
+
+[4,3,2,7,8,2,3,1]
+
+
+Output:
+
+[2,3]
+```
+
+### 把value当做index， 然后用翻成负数来标记已经访问过了
+
+### 解题分析:
+
+val to index 
+
+### 代码：
+
+```cpp
+class Solution {
+public:
+    vector<int> findDuplicates(vector<int>& nums) {
+        /*
+        unordered_map<int, int> dict;
+        for (auto each : nums)
+            dict[each]++;
+        vector<int> res;
+        for (auto p : dict)
+        {
+            if (p.second > 1)
+                res.push_back(p.first);
+        }
+        return res;
+        */
+        // flip board game
+        vector<int> res;
+        for (auto each : nums)
+        {
+            int absv = abs(each)-1;
+            if (nums[absv] > 0)
+                nums[absv] = - nums[absv];
+            else
+                res.push_back(absv+1);
+        }
+        return res;
+    }
+    
+    
+    
 };
 ```
 
