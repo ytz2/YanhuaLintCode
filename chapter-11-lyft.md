@@ -780,3 +780,45 @@ public:
 
 
 
+## 230. Kth Smallest Element in a BST
+
+Lowest Common Ancestor of a Binary Tree
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        count = 0; val = 0;
+        inorder(root,k);
+        return val;
+    }
+    
+    void inorder(TreeNode* root, int k)
+    {
+        if (!root)
+            return;
+        inorder(root->left,k);
+        count++;
+        if (count == k)
+        {
+            val = root->val;
+            return;
+        }
+        inorder(root->right, k);
+    }
+    int count;
+    int val;
+};
+```
+
+
+
