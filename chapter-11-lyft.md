@@ -742,80 +742,40 @@ public:
 };
 ```
 
-## 155. Min Stack
+## 236. Lowest Common Ancestor of a Binary Tree
 
-Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
-
-* push\(x\) -- Push element x onto stack.
-* pop\(\) -- Removes the element on top of the stack.
-* top\(\) -- Get the top element.
-* getMin\(\) -- Retrieve the minimum element in the stack.
-
-
-
-**Example:**  
-
-
-```
-MinStack minStack = new MinStack();
-minStack.push(-2);
-minStack.push(0);
-minStack.push(-3);
-minStack.getMin();   --
->
- Returns -3.
-minStack.pop();
-minStack.top();      --
->
- Returns 0.
-minStack.getMin();   --
->
- Returns -2.
-```
+Lowest Common Ancestor of a Binary Tree
 
 ```cpp
-class MinStack {
-public:
-    /** initialize your data structure here. */
-    MinStack() {
-        
-    }
-    
-    void push(int x) {
-        stk_.push(x);
-        if (minStk_.empty())
-            minStk_.push(x);
-        else if (x <= minStk_.top())
-            minStk_.push(x);
-    }
-    
-    void pop() {
-        int v = stk_.top();
-        stk_.pop();
-        if (v == minStk_.top())
-            minStk_.pop();
-    }
-    
-    int top() {
-        return stk_.top();
-    }
-    
-    int getMin() {
-        return minStk_.top();
-    }
-    
-    stack<int> stk_;
-    stack<int> minStk_;
-};
-
 /**
- * Your MinStack object will be instantiated and called as such:
- * MinStack obj = new MinStack();
- * obj.push(x);
- * obj.pop();
- * int param_3 = obj.top();
- * int param_4 = obj.getMin();
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
  */
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+       if (!root)
+           return nullptr;
+        if (root== p || root == q)
+            return root;
+        auto left = lowestCommonAncestor(root->left, p, q);
+        auto right = lowestCommonAncestor(root->right, p, q);
+        if (left && right)
+            return root;
+        if ((left|| right) && (root==p || root ==q))
+            return root;
+        if (left)
+            return left;
+        if (right)
+            return right;
+        return nullptr;
+    }
+};
 ```
 
 
