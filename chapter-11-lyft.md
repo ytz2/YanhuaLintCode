@@ -544,7 +544,7 @@ public:
 
 ## 238. Product of Array Except Self
 
-Given an array`nums`of_n_integers where_n_&gt; 1,  return an array`output`such that`output[i]`is equal to the product of all the elements of`nums`except`nums[i]`.
+Given an array`nums`of_n\_integers where\_n_&gt; 1,  return an array`output`such that`output[i]`is equal to the product of all the elements of`nums`except`nums[i]`.
 
 **Example:**
 
@@ -564,7 +564,7 @@ Could you solve it with constant space complexity? \(The output array**does not*
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
-        
+
         vector<int> res;
         if (nums.empty())
             return res;
@@ -588,7 +588,7 @@ public:
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
-        
+
         vector<int> res;
         if (nums.empty())
             return res;
@@ -605,7 +605,48 @@ public:
         return res;
     }
 };
+```
 
+## 128. Longest Consecutive SequenceLongest Consecutive Sequence
+
+Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+Your algorithm should run in O\(_n_\) complexity.
+
+**Example:**
+
+```
+Input:
+ [100, 4, 200, 1, 3, 2]
+
+Output:
+ 4
+
+Explanation:
+ The longest consecutive elements sequence is 
+[1, 2, 3, 4]
+. Therefore its length is 4.
+```
+
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> dict(nums.begin(), nums.end());
+        int res = 0;
+        for (auto each : dict)
+        {
+            int up = each + 1;
+            int down = each - 1;
+            while(dict.count(up))
+                dict.erase(up++);
+            while(dict.count(down))
+                dict.erase(down--);
+            res = max(res, up-down-1);
+        }
+        return res;
+    }
+};
 ```
 
 result
