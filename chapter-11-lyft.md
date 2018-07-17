@@ -901,7 +901,6 @@ public:
      */
     int read(char *buf, int n) {
         int res = 0;
-        int actualRead = 0;
         while(res + 4 < n && read4(buf+res) == 4 )
             res += 4;
         return min(n, res+read4(buf+res));
