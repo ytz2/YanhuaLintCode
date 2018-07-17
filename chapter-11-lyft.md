@@ -542,89 +542,71 @@ public:
 };
 ```
 
+## 238. Product of Array Except Self
 
+Given an array`nums`of_n_integers where_n_&gt; 1,  return an array`output`such that`output[i]`is equal to the product of all the elements of`nums`except`nums[i]`.
 
-## 200. Number of Islands
-
-Given a 2d grid map of`'1'`s \(land\) and`'0'`s \(water\), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
-
-**Example 1:**
+**Example:**
 
 ```
 Input:
-
-11110
-11010
-11000
-00000
-
-
+[1,2,3,4]
 Output:
- 1
-
+[24,12,8,6]
 ```
 
-**Example 2:**
+**Note:**Please solve it**without division**and in O\(_n_\).
 
-```
-Input:
-
-11000
-11000
-00100
-00011
-
-
-Output: 
-3代码：
-```
+**Follow up:**  
+Could you solve it with constant space complexity? \(The output array**does not**count as extra space for the purpose of space complexity analysis.\)
 
 ```cpp
 class Solution {
 public:
-    int numIslands(vector<vector<char>>& grid) {
-        int m = grid.size();
-        if (m == 0)
-            return 0;
-        int n = grid[0].size();
-        if (n == 0)
-            return 0;
-        int res = 0;
-        for (int i = 0; i < m; i++)
-            for (int j = 0; j < n; j++)
-                res += countOne(grid, i, j, m, n);
+    vector<int> productExceptSelf(vector<int>& nums) {
+        
+        vector<int> res;
+        if (nums.empty())
+            return res;
+        int n = nums.size();
+        if (n == 1)
+            return {1};
+
+        vector<int> left(n, 1), right(n,1);
+        for (int i = 1; i<n; i++)
+            left[i] = left[i-1]*nums[i-1];
+
+        right[n-1] = 1;
+        for (int i = n-2; i>=0; i--)
+            right[i] = right[i+1]* nums[i+1];
+        for (int i = 0; i < n; i++)
+            res.push_back(left[i]*right[i]);
         return res;
     }
-    
-    int countOne(vector<vector<char>>& grid, int i, int j, int m, int n)
-    {
-        static vector<int> dx{ 0, 0, 1, -1};
-        static vector<int> dy{-1, 1, 0,  0};
-        if (grid[i][j] == '0')
-            return 0;
-        queue<pair<int, int>> q;
-        q.emplace(i, j);
-        grid[i][j] = '0';
-        while(!q.empty())
-        {
-            auto p = q.front();
-            q.pop();
-            for (int k = 0; k < 4; k ++)
-            {
-                auto next_i = p.first + dx[k];
-                auto next_j = p.second + dy[k];
-                if (next_i >=0 && next_i < m && next_j >= 0 && next_j < n && grid[next_i][next_j] == '1')
-                {
-                    q.emplace(next_i, next_j);
-                    grid[next_i][next_j] = '0';
-                }
-            }
-        }
-        return 1;
-    }
-    
 };
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        
+        vector<int> res;
+        if (nums.empty())
+            return res;
+        int n = nums.size();
+        res = vector<int>(n, 1);
+        for (int i = n-2; i>=0; i--)
+            res[i] = res[i+1]* nums[i+1];
+        int num = 1;
+        for (int i = 0; i < n; i++)
+        {
+            res[i] = num * res[i];
+            num *= nums[i];
+        }
+        return res;
+    }
+};
+
 ```
 
-
+result
 
