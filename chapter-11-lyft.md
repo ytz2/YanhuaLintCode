@@ -617,7 +617,7 @@ Your algorithm should run in O\(_n_\) complexity.
 
 ```
 Input:
- [100, 4, 200, 1, 3, 2]
+ [100, 4, 200, 1, 3, 2]
 
 Output:
  4
@@ -649,5 +649,44 @@ public:
 };
 ```
 
-result
+## 283. Move Zeroes
+
+Given an array`nums`, write a function to move all`0`'s to the end of it while maintaining the relative order of the non-zero elements.
+
+**Example:**
+
+```
+Input:
+[0,1,0,3,12]
+Output:
+[1,3,12,0,0]
+```
+
+**Note**:
+
+1. You must do this
+   **in-place**
+   without making a copy of the array.
+2. Minimize the total number of operations.
+
+```cpp
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int slow = 0, fast = 0;
+        while(fast < nums.size())
+        {
+            if (nums[fast] == 0)
+            {
+                fast++; continue;
+            }
+            while(slow < fast && nums[slow] !=0)
+                slow++;
+            swap(nums[slow++], nums[fast++]);
+        }
+    }
+};
+```
+
+
 
