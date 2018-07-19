@@ -70,7 +70,7 @@ You may assume that duplicates do not exist in the tree.
 For example, given
 
 ```
-inorder = [9,3,15,20,7]
+inorder = [9,3,15,20,7]
 postorder = [9,15,7,20,3]
 ```
 
@@ -113,7 +113,7 @@ public:
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
         return helper(inorder, 0, inorder.size()-1, postorder, 0, postorder.size()-1);
     }
-    
+
     TreeNode* helper(vector<int>& inorder, int iStart, int iEnd, vector<int>& postorder, int pStart, int pEnd)
     {
         if (pStart > pEnd)
@@ -127,6 +127,136 @@ public:
         root->left = helper(inorder, iStart, inorderPos-1, postorder, pStart, pStart + inorderPos - iStart-1);
         root->right = helper(inorder, inorderPos+1, iEnd, postorder, pStart + inorderPos - iStart, pEnd-1);
         return root;
+    }
+};
+```
+
+## 73. Set Matrix Zeroes
+
+Given a_m_x_n_matrix, if an element is 0, set its entire row and column to 0. Do it[**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm).
+
+**Example 1:**
+
+```
+Input:
+ 
+[
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
+]
+
+Output:
+ 
+[
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]
+
+```
+
+**Example 2:**
+
+```
+Input:
+ 
+[
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
+]
+
+Output:
+ 
+[
+  [0,0,0,0],
+  [0,4,5,0],
+  [0,3,1,0]
+]
+
+```
+
+**Follow up:**
+
+* A straight forward solution using O\(
+  _m_
+  _n_
+  \) space is probably a bad idea.
+* A simple improvement uses O\(
+  _m_
+  +
+  _n_
+  \) space, but still not the best solution.
+* Could you devise a constant space solution?
+
+**Note:**  
+这道题的思路是In-place， 所以肯定要好几次循环用空间换时间
+
+1. 第一次循环找左边和上边看要不要把他变成0
+2. 第二次循环找从1-m, 1-n 用左边和上面做标记
+3. 第三次循环1-m, 1-n用标记好的来设为0
+4. 第四次循环，根据最早确定的是不是要把左边上边设为0来设置
+
+```cpp
+/*
+* the idea behind here is to change the boundary only
+*  x  0  x  0
+*  0      
+*  x 
+*  0
+* once boundary is marked, we can scan back to set it , this is so called in-place !
+* so, leave [0][*] and [*][0] register for whehter to mark as 0, during run time do 1-m, 1-n map back to boundary
+* special handle: any elme on first col or first row will mark it to 0, this needs to be done after looping 1-m, 1-n
+*/
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        if (0 == m)
+            return;
+        int n = matrix[0].size();
+        if (0 == n)
+            return;
+
+        bool horizontal = matrix[0][0] == 0; 
+        bool vertical = horizontal;
+        
+        for (int i = 0; i < m; i++)
+            vertical = vertical || matrix[i][0] == 0;
+        for (int j = 0; j < n; j++)
+            horizontal = horizontal || matrix[0][j] == 0;
+        
+        for (int i = 1; i < m; i++)
+        {
+            for (int j = 1; j < n; j++)
+            {
+                if (matrix[i][j] == 0)
+                {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        for (int i = 1; i < m ; i++)
+        {
+            for (int j = 1; j < n; j++)
+            {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0)
+                    matrix[i][j] = 0;
+            }
+        }
+        if (horizontal)
+        {
+            for (int j =0; j < n; j++)
+                matrix[0][j] = 0;
+        }
+        if (vertical)
+        {
+            for (int i = 0; i < m; i++)
+                matrix[i][0] = 0;
+        }
     }
 };
 ```
