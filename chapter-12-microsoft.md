@@ -133,48 +133,46 @@ public:
 
 ## 73. Set Matrix Zeroes
 
-Given a_m_x_n_matrix, if an element is 0, set its entire row and column to 0. Do it[**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm).
+Given a\_m\_x\_n\_matrix, if an element is 0, set its entire row and column to 0. Do it[**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm).
 
 **Example 1:**
 
 ```
 Input:
- 
+
 [
-  [1,1,1],
-  [1,0,1],
-  [1,1,1]
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
 ]
 
 Output:
- 
-[
-  [1,0,1],
-  [0,0,0],
-  [1,0,1]
-]
 
+[
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]
 ```
 
 **Example 2:**
 
 ```
 Input:
- 
+
 [
-  [0,1,2,0],
-  [3,4,5,2],
-  [1,3,1,5]
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
 ]
 
 Output:
- 
-[
-  [0,0,0,0],
-  [0,4,5,0],
-  [0,3,1,0]
-]
 
+[
+  [0,0,0,0],
+  [0,4,5,0],
+  [0,3,1,0]
+]
 ```
 
 **Follow up:**
@@ -222,12 +220,146 @@ public:
 
         bool horizontal = matrix[0][0] == 0; 
         bool vertical = horizontal;
-        
+
         for (int i = 0; i < m; i++)
             vertical = vertical || matrix[i][0] == 0;
         for (int j = 0; j < n; j++)
             horizontal = horizontal || matrix[0][j] == 0;
-        
+
+        for (int i = 1; i < m; i++)
+        {
+            for (int j = 1; j < n; j++)
+            {
+                if (matrix[i][j] == 0)
+                {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        for (int i = 1; i < m ; i++)
+        {
+            for (int j = 1; j < n; j++)
+            {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0)
+                    matrix[i][j] = 0;
+            }
+        }
+        if (horizontal)
+        {
+            for (int j =0; j < n; j++)
+                matrix[0][j] = 0;
+        }
+        if (vertical)
+        {
+            for (int i = 0; i < m; i++)
+                matrix[i][0] = 0;
+        }
+    }
+};
+```
+
+## 168. Excel Sheet Column Title
+
+Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+
+For example:
+
+```
+    1 -
+>
+ A
+    2 -
+>
+ B
+    3 -
+>
+ C
+    ...
+    26 -
+>
+ Z
+    27 -
+>
+ AA
+    28 -
+>
+ AB 
+    ...
+
+```
+
+**Example 1:**
+
+```
+Input:
+ 1
+
+Output:
+ "A"
+
+```
+
+**Example 2:**
+
+```
+Input:
+ 28
+
+Output:
+ "AB"
+
+```
+
+**Example 3:**
+
+```
+Input:
+ 701
+
+Output:
+ "ZY"
+```
+
+**Note:**  
+用n-1而不要用n
+
+1 - A,  A+ \(n-1\)%26
+
+26 - Z A + 25
+
+27 AA A+\(27-1\)%26   A + \(n-1\)/26 %26   
+
+```cpp
+/*
+* the idea behind here is to change the boundary only
+*  x  0  x  0
+*  0      
+*  x 
+*  0
+* once boundary is marked, we can scan back to set it , this is so called in-place !
+* so, leave [0][*] and [*][0] register for whehter to mark as 0, during run time do 1-m, 1-n map back to boundary
+* special handle: any elme on first col or first row will mark it to 0, this needs to be done after looping 1-m, 1-n
+*/
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        if (0 == m)
+            return;
+        int n = matrix[0].size();
+        if (0 == n)
+            return;
+
+        bool horizontal = matrix[0][0] == 0; 
+        bool vertical = horizontal;
+
+        for (int i = 0; i < m; i++)
+            vertical = vertical || matrix[i][0] == 0;
+        for (int j = 0; j < n; j++)
+            horizontal = horizontal || matrix[0][j] == 0;
+
         for (int i = 1; i < m; i++)
         {
             for (int j = 1; j < n; j++)
