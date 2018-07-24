@@ -1,12 +1,10 @@
 ## 第一部分
 
-当给定一个**一维数组**，求**子序**列**满足条件**的**最**大最小最短中最长的问题， 使用这个方法需要证明j不需要往回重置到i. 
+当给定一个**一维数组**，求**子序**列**满足条件**的**最**大最小最短中最长的问题， 使用这个方法需要证明j不需要往回重置到i.
 
 一般跑几个例子就可以看出来
 
 ![](/assets/slidewindowtemplate.png)
-
-
 
 ## 
 
@@ -27,19 +25,17 @@ If you have figured out the O\(n\) solution, try coding another solution of whic
 
 for i-n
 
-  for j -n
+for j -n
 
-       if sum &gt;= target
+```
+   if sum &gt;= target
 
-          break
+      break
+```
 
-
-
-i = 0:  2, 5, 6, 8 j = 3 
+i = 0:  2, 5, 6, 8 j = 3
 
 i = 1:  3, 4, 6 j = 3 j不需要动， 因为j以前的已经被上次遍历证明小于target了。  那么就可以用滑动窗口了。
-
-
 
 ```cpp
 class Solution {
@@ -70,6 +66,55 @@ public:
             sum -= nums[i];
         }
         return len == INT_MAX? -1:len;
+    }
+};
+```
+
+
+
+## 384. Longest Substring Without Repeating Characters
+
+Given a string, find the length of the longest substring without repeating characters.
+
+### Example
+
+For example, the longest substring without repeating letters for`"abcabcbb"`is`"abc"`, which the length is`3`.
+
+For`"bbbbb"`the longest substring is`"b"`, with the length of`1`.
+
+### Challenge
+
+O\(n\) time
+
+还是j不需要再回头，且满足，substring, condition :no repeating, longest
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param s: a string
+     * @return: an integer
+     */
+    int lengthOfLongestSubstring(string &s) {
+        // write your code here
+        // substring , without repeating, longest
+        unordered_set<char> windowCounter;
+        int res = 0;
+        int j = 0;
+        for (int i = 0; i < s.size(); i++)
+        {
+            while(j < s.size())
+            {
+                if (windowCounter.count(s[j]))
+                    break;
+                else
+                    windowCounter.insert(s[j++]);
+            }
+            // update state i 
+            res = max(res, j - i);
+            windowCounter.erase(s[i]);
+        }
+        return res;
     }
 };
 ```
