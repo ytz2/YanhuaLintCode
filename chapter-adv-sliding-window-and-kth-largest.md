@@ -117,8 +117,6 @@ public:
 };
 ```
 
-
-
 ## 32. Longest Substring Without Repeating Characters
 
 Given a string, find the length of the longest substring without repeating characters.
@@ -135,7 +133,7 @@ O\(n\) time
 
 两个地方要注意，判断是不是全部包含， ascii遍历是constant
 
-第二个地方是因为是最小，到最后j == n,会把很多结果抹掉。所以要最后判断一下。 
+第二个地方是因为是最小，到最后j == n,会把很多结果抹掉。所以要最后判断一下。
 
 ```cpp
 class Solution {
@@ -145,8 +143,8 @@ public:
      * @param target: A string
      * @return: A string denote the minimum window, return "" if there is no such a string
      */
-     
-     
+
+
     bool isAll(vector<int>& sourceHash, vector<int>& targetHash)
     {
         for (int i = 0; i < 256; i++)
@@ -165,7 +163,7 @@ public:
         int j = 0;
         int len = INT_MAX;
         string res;
-        
+
         for (int i = 0; i < source.size(); i++)
         {
             while(j < source.size())
@@ -183,6 +181,70 @@ public:
                 res = source.substr(i, j-i);
             }
             sourceHash[source[i]]--;
+        }
+        return res;
+    }
+};
+```
+
+## 386. Longest Substring with At Most K Distinct Characters
+
+Given a string_s_, find the length of the longest substring T that contains at most k distinct characters.
+
+### Example
+
+For example, Given s =`"eceba"`,`k = 3`,
+
+T is`"eceb"`which its length is`4`.
+
+### Challenge
+
+O\(n\), n is the size of the string_s_.
+
+这里面有个大坑.用字典来维护size k, 但是注意不能用一旦字典size == k就退出， 因为cccc可以连续，如果c已经在字典里，则可以继续。排除这种情况后dict.size\(\) == k退出， 否则继续更新。
+
+
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param s: A string
+     * @param k: An integer
+     * @return: An integer
+     */
+    int lengthOfLongestSubstringKDistinct(string &s, int k) {
+        // write your code here
+        int n = s.size();
+        if (k == 0)
+            return 0;
+        int res = 0;
+        int j = 0;
+        unordered_map<char,int> dict;
+        for (int i = 0; i < n; i++)
+        {
+            while(j < n)
+            {
+                /* this is wrong, why ? because once dict.size == k, and the next is also 
+                in the dict, it does not change it and we can still increase the value
+                if (dict.size() >= k)
+                    break;
+                else
+                    dict[s[j++]]++;
+                */
+                if (dict.count(s[j]))
+                    dict[s[j++]]++;
+                else 
+                {
+                    if (dict.size() == k)
+                        break;
+                    dict[s[j++]]++;
+                }
+                
+            }
+            res = max(res, j-i);
+            if (--dict[s[i]] == 0)
+                dict.erase(s[i]);
         }
         return res;
     }
