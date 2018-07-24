@@ -39,4 +39,5 @@
 * [Chapter 10.2 DP 坐标入门](chapter-102-dp-zuo-biao-ru-men.md)
 * [Chapter 11 Lyft ](chapter-11-lyft.md)
 * [Chapter 12 Microsoft](chapter-12-microsoft.md)
+* [Chapter Adv: Sliding window & kth largest](chapter-adv-sliding-window-and-kth-largest.md)
 
