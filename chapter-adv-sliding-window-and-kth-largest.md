@@ -117,23 +117,20 @@ public:
 };
 ```
 
-## 32. Longest Substring Without Repeating Characters
+## 32. Minimum Window Substring
 
-Given a string, find the length of the longest substring without repeating characters.
+  
+
+
+Given a string source and a string target, find the minimum window in source which will contain all the characters in target.
 
 ### Example
 
-For example, the longest substring without repeating letters for`"abcabcbb"`is`"abc"`, which the length is`3`.
-
-For`"bbbbb"`the longest substring is`"b"`, with the length of`1`.
+For source =`"ADOBECODEBANC"`, target =`"ABC"`, the minimum window is`"BANC"`
 
 ### Challenge
 
-O\(n\) time
-
-两个地方要注意，判断是不是全部包含， ascii遍历是constant
-
-第二个地方是因为是最小，到最后j == n,会把很多结果抹掉。所以要最后判断一下。
+Can you do it in time complexity O\(n\) ?
 
 ```cpp
 class Solution {
@@ -203,8 +200,6 @@ O\(n\), n is the size of the string_s_.
 
 这里面有个大坑.用字典来维护size k, 但是注意不能用一旦字典size == k就退出， 因为cccc可以连续，如果c已经在字典里，则可以继续。排除这种情况后dict.size\(\) == k退出， 否则继续更新。
 
-
-
 ```cpp
 class Solution {
 public:
@@ -240,7 +235,7 @@ public:
                         break;
                     dict[s[j++]]++;
                 }
-                
+
             }
             res = max(res, j-i);
             if (--dict[s[i]] == 0)
