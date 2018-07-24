@@ -70,8 +70,6 @@ public:
 };
 ```
 
-
-
 ## 384. Longest Substring Without Repeating Characters
 
 Given a string, find the length of the longest substring without repeating characters.
@@ -113,6 +111,78 @@ public:
             // update state i 
             res = max(res, j - i);
             windowCounter.erase(s[i]);
+        }
+        return res;
+    }
+};
+```
+
+
+
+## 32. Longest Substring Without Repeating Characters
+
+Given a string, find the length of the longest substring without repeating characters.
+
+### Example
+
+For example, the longest substring without repeating letters for`"abcabcbb"`is`"abc"`, which the length is`3`.
+
+For`"bbbbb"`the longest substring is`"b"`, with the length of`1`.
+
+### Challenge
+
+O\(n\) time
+
+两个地方要注意，判断是不是全部包含， ascii遍历是constant
+
+第二个地方是因为是最小，到最后j == n,会把很多结果抹掉。所以要最后判断一下。 
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param source : A string
+     * @param target: A string
+     * @return: A string denote the minimum window, return "" if there is no such a string
+     */
+     
+     
+    bool isAll(vector<int>& sourceHash, vector<int>& targetHash)
+    {
+        for (int i = 0; i < 256; i++)
+        {
+            if (targetHash[i] !=0 && sourceHash[i] < targetHash[i])
+                return false;
+        }
+        return true;
+    }
+    string minWindow(string &source , string &target) {
+        // write your code here
+        vector<int> targetHash(256, 0);
+        for (auto each : target)
+            targetHash[each]++;
+        vector<int> sourceHash(256, 0);
+        int j = 0;
+        int len = INT_MAX;
+        string res;
+        
+        for (int i = 0; i < source.size(); i++)
+        {
+            while(j < source.size())
+            {
+                if (isAll(sourceHash, targetHash))
+                    break;
+                else
+                {
+                    sourceHash[source[j++]]++;
+                }
+            }
+            if ( isAll(sourceHash, targetHash) && j-i < len) // this place, the j might be the end, we cannot control
+            {
+                len = j-i;
+                res = source.substr(i, j-i);
+            }
+            sourceHash[source[i]]--;
         }
         return res;
     }
