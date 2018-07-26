@@ -245,7 +245,7 @@ public:
 
 ## 401. Kth Smallest Number in Sorted Matrix
 
-Find the_k_th smallest number in at row and column sorted matrix.
+Find the\_k\_th smallest number in at row and column sorted matrix.
 
 ### Example
 
@@ -257,7 +257,6 @@ Given k =`4`and a matrix:
   [3 ,7 ,8],
   [4 ,8 ,9],
 ]
-
 ```
 
 return`5`
@@ -266,15 +265,9 @@ return`5`
 
 Solve it in O\(k log n\) time where n is the bigger one between row size and column size.
 
-
-
-这也算一类题目了， 用的思想是top k 就上pq, 碰到不确定的备选答案就丢进去，因为他始终给你维护一个最优的答案。 另外记住pq default是他妈的最大heap,日。 
-
-
+这也算一类题目了， 用的思想是top k 就上pq, 碰到不确定的备选答案就丢进去，因为他始终给你维护一个最优的答案。 另外记住pq default是他妈的最大heap,日。
 
 用pq做BFS的辅助找第k大，是多选情况下的应用
-
-
 
 ```cpp
 class Solution {
@@ -288,7 +281,7 @@ public:
         // write your code here
         int m = matrix.size();
         int n = matrix[0].size();
-        
+
         auto cmp = [&matrix](const pair<int,int>& left, const pair<int,int>& right){
             return matrix[left.first][left.second] > matrix[right.first][right.second];
         };
@@ -318,6 +311,118 @@ public:
     }
 };
 ```
+
+
+
+## 373. Find K Pairs with Smallest Sums
+
+You are given two integer arrays**nums1**and**nums2**sorted in ascending order and an integer**k**.
+
+Define a pair**\(u,v\)**which consists of one element from the first array and one element from the second array.
+
+Find the k pairs**\(u1,v1\),\(u2,v2\) ...\(uk,vk\)**with the smallest sums.
+
+**Example 1:**  
+
+
+```
+Given nums1 = [1,7,11], nums2 = [2,4,6],  k = 3
+
+Return: [1,2],[1,4],[1,6]
+
+The first 3 pairs are returned from the sequence:
+[1,2],[1,4],[1,6],[7,2],[7,4],[11,2],[7,6],[11,4],[11,6]
+
+```
+
+
+
+**Example 2:**  
+
+
+```
+Given nums1 = [1,1,2], nums2 = [1,2,3],  k = 2
+
+Return: [1,1],[1,1]
+
+The first 2 pairs are returned from the sequence:
+[1,1],[1,1],[1,2],[2,1],[1,2],[2,2],[1,3],[1,3],[2,3]
+
+```
+
+
+
+**Example 3:**  
+
+
+```
+Given nums1 = [1,2], nums2 = [3],  k = 3 
+
+Return: [1,3],[2,3]
+
+All possible pairs are returned from the sequence:
+[1,3],[2,3]
+```
+
+return`5`
+
+
+
+https://leetcode.com/problems/find-k-pairs-with-smallest-sums/description/
+
+### Challenge
+
+第K x 的问题， 还是上来想pq,面临多选就网上push,找到为止。
+
+
+
+```cpp
+class Solution {
+public:
+    vector<pair<int, int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        vector<pair<int,int>> result;
+        
+        auto cmp = [&nums1,&nums2](const pair<int,int>& left, const pair<int,int>& right){
+            return nums1[left.first]+nums2[left.second] > nums1[right.first]+nums2[right.second];  
+        };
+        
+        
+        int m = nums1.size();
+        int n = nums2.size();
+        if (0 == m || 0 == n)
+            return result;
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        
+        priority_queue<pair<int,int>, vector<pair<int,int>>,decltype(cmp)> pq(cmp);
+        
+        pq.emplace(0, 0);
+        visited[0][0] = true;
+        for (int i = 0; i < k && !pq.empty(); i++)
+        {
+            auto p = pq.top();
+            pq.pop();
+            result.emplace_back(nums1[p.first], nums2[p.second]);
+            int next_num1 = p.first+1;
+            int next_num2 = p.second+1;
+            
+            if (next_num1 < m && !visited[next_num1][p.second])
+            {
+                pq.emplace(next_num1, p.second);
+                visited[next_num1][p.second] = true;
+            }
+            
+            if (next_num2 < n && !visited[p.first][next_num2])
+            {
+                pq.emplace(p.first,next_num2);
+                visited[p.first][next_num2] = true;
+            }
+        }
+        return result;
+    }
+};
+```
+
+
 
 
 
