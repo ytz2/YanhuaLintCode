@@ -119,9 +119,6 @@ public:
 
 ## 32. Minimum Window Substring
 
-  
-
-
 Given a string source and a string target, find the minimum window in source which will contain all the characters in target.
 
 ### Example
@@ -242,6 +239,82 @@ public:
                 dict.erase(s[i]);
         }
         return res;
+    }
+};
+```
+
+## 401. Kth Smallest Number in Sorted Matrix
+
+Find the_k_th smallest number in at row and column sorted matrix.
+
+### Example
+
+Given k =`4`and a matrix:
+
+```
+[
+  [1 ,5 ,7],
+  [3 ,7 ,8],
+  [4 ,8 ,9],
+]
+
+```
+
+return`5`
+
+### Challenge
+
+Solve it in O\(k log n\) time where n is the bigger one between row size and column size.
+
+
+
+这也算一类题目了， 用的思想是top k 就上pq, 碰到不确定的备选答案就丢进去，因为他始终给你维护一个最优的答案。 另外记住pq default是他妈的最大heap,日。 
+
+
+
+用pq做BFS的辅助找第k大，是多选情况下的应用
+
+
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param matrix: a matrix of integers
+     * @param k: An integer
+     * @return: the kth smallest number in the matrix
+     */
+    int kthSmallest(vector<vector<int>> &matrix, int k) {
+        // write your code here
+        int m = matrix.size();
+        int n = matrix[0].size();
+        
+        auto cmp = [&matrix](const pair<int,int>& left, const pair<int,int>& right){
+            return matrix[left.first][left.second] > matrix[right.first][right.second];
+        };
+        priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(cmp)> pq(cmp);
+        pq.emplace(0, 0);
+        int v = 0;
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        visited[0][0] = true;
+        static vector<int> dx{0, 1};
+        static vector<int> dy{1, 0};
+        for (int i = 0; i < k; i++)
+        {
+            auto p = pq.top();
+            pq.pop();
+            v = matrix[p.first][p.second];
+            for (int j = 0; j < 2; j++)
+            {
+                int nx = p.first + dx[j];
+                int ny = p.second + dy[j];
+                if (nx < 0 || nx >= m || ny<0 || ny >=n || visited[nx][ny])
+                    continue;
+                visited[nx][ny] = true;
+                pq.emplace(nx,ny);
+            }
+        }
+        return v; 
     }
 };
 ```
