@@ -375,8 +375,6 @@ public:
 };
 ```
 
-
-
 ## 773. Sentence Similarity II
 
 Given two sentences`words1, words2`\(each represented as an array of strings\), and a list of similar word pairs`pairs`, determine if two sentences are similar.
@@ -453,10 +451,10 @@ public:
             cluster[p.first] = p.first;
             cluster[p.second] = p.second;
         }
-        
+
         for (const auto& p : pairs)
             Connect(cluster, p.first, p.second);
-        
+
         for (int i = 0; i < words1.size(); i++)
         {
             if (Find(cluster, words1[i]) != Find(cluster, words2[i]))
@@ -464,14 +462,14 @@ public:
         }
         return true;
     }
-    
+
     string Find(unordered_map<string, string>& cluster, const string& ref)
     {
         if (cluster[ref] != ref)
             cluster[ref] = Find(cluster, cluster[ref]);
         return cluster[ref];
     }
-    
+
     void Connect(unordered_map<string, string>& cluster, const string& l, const string& r)
     {
         auto lroot = Find(cluster, l);
@@ -480,6 +478,128 @@ public:
             cluster[lroot] = rroot;
     }
 };
+```
+
+ 
+
+
+
+## TRIE
+
+## 211. Add and Search Word - Data structure design
+
+Design a data structure that supports the following two operations:
+
+```
+void addWord(word)
+bool search(word)
+
+```
+
+search\(word\) can search a literal word or a regular expression string containing only letters`a-z`or`.`. A`.`means it can represent any one letter.
+
+**Example:**
+
+```
+addWord("bad")
+addWord("dad")
+addWord("mad")
+search("pad") -
+>
+ false
+search("bad") -
+>
+ true
+search(".ad") -
+>
+ true
+search("b..") -
+>
+ true
+
+```
+
+**Note:**  
+You may assume that all words are consist of lowercase letters`a-z`.
+
+
+
+```cpp
+class WordDictionary {
+public:
+    /** Initialize your data structure here. */
+
+    struct TrieNode{
+        TrieNode()
+            :isWord(false), children(vector<TrieNode*>(26, nullptr))
+            {}
+        ~TrieNode()
+        {
+            for (auto ptr : children)
+            {
+                if (ptr) delete ptr;
+            }
+        }
+        bool isWord;
+        vector<TrieNode*> children;  
+    };
+    
+    
+    WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    ~WordDictionary(){
+        delete root;
+    }
+    /** Adds a word into the data structure. */
+    void addWord(string word) {
+        auto p = root;
+        for (auto c : word)
+        {
+            int ind = c-'a';
+            if (nullptr == p->children[ind])
+                p->children[ind] = new TrieNode();
+            p = p->children[ind];
+        }
+        p->isWord = true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    bool search(string word) {
+        return search(word, 0, root);
+    }
+    
+private:
+    
+    bool search(string& word, int i, TrieNode* p)
+    {
+        if (i >= word.size())
+            return p && p->isWord;
+        if (word[i] == '.')
+        {
+            for (auto ptr : p->children)
+            {
+                if (ptr && search(word, i+1, ptr))
+                    return true;
+            }
+            return false;
+        }
+        int ind = word[i] - 'a';
+        if (!p->children[ind])
+            return false;
+        return search(word, i+1, p->children[ind]);
+    }
+    
+    TrieNode *root;
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * bool param_2 = obj.search(word);
+ */
 ```
 
 
