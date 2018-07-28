@@ -176,8 +176,6 @@ public:
 };
 ```
 
-
-
 ## 685. Redundant Connection II
 
 In this problem, a rooted tree is a**directed**graph such that, there is exactly one node \(the root\) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
@@ -188,8 +186,7 @@ The resulting graph is given as a 2D-array of`edges`. Each element of`edges`is a
 
 Return an edge that can be removed so that the resulting graph is a rooted tree of N nodes. If there are multiple answers, return the answer that occurs last in the given 2D-array.
 
-**Example 1:**  
-
+**Example 1:**
 
 ```
 Input:
@@ -204,55 +201,45 @@ Explanation:
  / \
 v   v
 2-->3
-
 ```
 
-
-
-**Note:**  
-
+**Note:**
 
 The size of the input 2D-array will be between 3 and 1000.
 
 Every integer represented in the 2D-array will be between 1 and N, where N is the size of the input array.
 
-
-
 有向图和无向图不一样，有向图还要找到变成树的结构有两种情况
-
-
 
 第一种情况： 无环： 退化成无向图UF查找， 比如例子
 
 第二种情况： 有环： 一个节点有两个parent,那么找出构造这两个parent的边作为candidate, 删掉其中一条， UF查找，如果还是有环，那么肯定就是没删掉的另外一条边， 或者UF找到的边。 如果没环了，说明就是被删掉那条边了
 
-  
 
+
+![](/assets/685.png)
 
 ```cpp
-
-
-
 class Solution {
 public:
     vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
-        
+
         int n = edges.size();
         vector<int> father(n+1, 0);
         vector<int> parent(n+1, 0);
         vector<int> ans1, ans2;
-        
-        
+
+
         for (int i = 0; i <=n; i++)
             father[i] = i;
-        
+
         // check how many parents one node have 
         for (auto& edge : edges)
         {
             int u = edge[0];
             int v = edge[1];
             // u->v, v's parent is u
-            
+
             // ok, we have more than one parent
             if (parent[v] > 0)
             {
@@ -266,7 +253,7 @@ public:
             }
             parent[v] = u;
         }
-        
+
         for (auto& edge : edges)
         {
             if (edge[0] == -1)
@@ -274,17 +261,17 @@ public:
             if (!Union(father, edge[0], edge[1]))
                 return ans1.empty()? edge : ans1;
         }
-        
+
 
         return ans2;
     }
-    
+
     int Find(vector<int>& father, int i){
       if (father[i] != i)
           father[i] = Find(father, father[i]);
       return father[i];
     };
-    
+
     bool Union(vector<int>& father, int i, int j){
         int root_i = Find(father,i);
         int root_j = Find(father,j);
@@ -293,7 +280,7 @@ public:
         father[root_i] = root_j;
         return true;
     };
-    
+
 };
 ```
 
