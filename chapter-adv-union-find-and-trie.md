@@ -215,8 +215,6 @@ Every integer represented in the 2D-array will be between 1 and N, where N is th
 
 第二种情况： 有环： 一个节点有两个parent,那么找出构造这两个parent的边作为candidate, 删掉其中一条， UF查找，如果还是有环，那么肯定就是没删掉的另外一条边， 或者UF找到的边。 如果没环了，说明就是被删掉那条边了
 
-
-
 ![](/assets/685.png)
 
 ```cpp
@@ -281,6 +279,106 @@ public:
         return true;
     };
 
+};
+```
+
+
+
+## 721. Accounts Merge
+
+Given a list`accounts`, each element`accounts[i]`is a list of strings, where the first element`accounts[i][0]`is aname, and the rest of the elements areemailsrepresenting emails of the account.
+
+Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some email that is common to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
+
+After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails**in sorted order**. The accounts themselves can be returned in any order.
+
+
+
+两个启示：
+
+UnionFind  可以用string link string
+
+merger类的题目可以考虑UF
+
+
+
+剩下的就是堆代码了
+
+**Example 1:**  
+
+
+```
+Input:
+ 
+accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]
+
+Output:
+ [["John", 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com'],  ["John", "johnnybravo@mail.com"], ["Mary", "mary@mail.com"]]
+
+Explanation:
+ 
+The first and third John's are the same person as they have the common email "johnsmith@mail.com".
+The second John and Mary are different people as none of their email addresses are used by other accounts.
+We could return these lists in any order, for example the answer [['Mary', 'mary@mail.com'], ['John', 'johnnybravo@mail.com'], 
+['John', 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com']] would still be accepted.
+```
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        unordered_map<string, string> parent;
+        unordered_map<string, string> owner;
+        unordered_map<string, set<string>> chain;
+        for ( auto& account : accounts)
+        {
+            string& name = account[0];
+            for (int i = 1; i < account.size(); i++)
+            {
+                parent[account[i]] = account[i];
+                owner[account[i]] = account[0];
+            }
+        }
+        
+        for (  auto& account : accounts)
+        {
+            for (int i = 2; i < account.size(); i++)
+                connect(parent, account[i], account[i-1]);
+        }
+        
+        for ( auto& each : parent)
+        {
+            auto p = Find(parent, each.first);
+            chain[p].insert(each.first);
+        }
+        
+        vector<vector<string>> result;
+        for (auto& each  : chain)
+        {
+            vector<string> v;
+            v.push_back(owner[each.first]);
+            for (auto& e : each.second)
+                v.push_back(e);
+            result.push_back(v);
+        }
+        return result;
+    }
+    
+    string Find(unordered_map<string, string>& parent, string email)
+    {
+        if (parent[email] != email)
+            parent[email] = Find(parent, parent[email]);
+        return parent[email];
+    }
+    
+    void connect (unordered_map<string, string>& parent, string& a, string& b)
+    {
+        auto pa = Find(parent, a);
+        auto pb = Find(parent, b);
+        if (pa != pb)
+            parent[pa] = pb;
+    }
+    
 };
 ```
 
