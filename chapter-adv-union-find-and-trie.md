@@ -282,8 +282,6 @@ public:
 };
 ```
 
-
-
 ## 721. Accounts Merge
 
 Given a list`accounts`, each element`accounts[i]`is a list of strings, where the first element`accounts[i][0]`is aname, and the rest of the elements areemailsrepresenting emails of the account.
@@ -292,31 +290,26 @@ Now, we would like to merge these accounts. Two accounts definitely belong to th
 
 After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails**in sorted order**. The accounts themselves can be returned in any order.
 
-
-
 两个启示：
 
 UnionFind  可以用string link string
 
 merger类的题目可以考虑UF
 
-
-
 剩下的就是堆代码了
 
-**Example 1:**  
-
+**Example 1:**
 
 ```
 Input:
- 
+
 accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]
 
 Output:
  [["John", 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com'],  ["John", "johnnybravo@mail.com"], ["Mary", "mary@mail.com"]]
 
 Explanation:
- 
+
 The first and third John's are the same person as they have the common email "johnsmith@mail.com".
 The second John and Mary are different people as none of their email addresses are used by other accounts.
 We could return these lists in any order, for example the answer [['Mary', 'mary@mail.com'], ['John', 'johnnybravo@mail.com'], 
@@ -339,19 +332,19 @@ public:
                 owner[account[i]] = account[0];
             }
         }
-        
+
         for (  auto& account : accounts)
         {
             for (int i = 2; i < account.size(); i++)
                 connect(parent, account[i], account[i-1]);
         }
-        
+
         for ( auto& each : parent)
         {
             auto p = Find(parent, each.first);
             chain[p].insert(each.first);
         }
-        
+
         vector<vector<string>> result;
         for (auto& each  : chain)
         {
@@ -363,14 +356,14 @@ public:
         }
         return result;
     }
-    
+
     string Find(unordered_map<string, string>& parent, string email)
     {
         if (parent[email] != email)
             parent[email] = Find(parent, parent[email]);
         return parent[email];
     }
-    
+
     void connect (unordered_map<string, string>& parent, string& a, string& b)
     {
         auto pa = Find(parent, a);
@@ -378,7 +371,114 @@ public:
         if (pa != pb)
             parent[pa] = pb;
     }
+
+};
+```
+
+
+
+## 773. Sentence Similarity II
+
+Given two sentences`words1, words2`\(each represented as an array of strings\), and a list of similar word pairs`pairs`, determine if two sentences are similar.
+
+For example,`words1 = ["great", "acting", "skills"]`and`words2 = ["fine", "drama", "talent"]`are similar, if the similar word pairs are`pairs = [["great", "good"], ["fine", "good"], ["acting","drama"], ["skills","talent"]]`.
+
+Note that the similarity relation**is**transitive. For example, if "great" and "good" are similar, and "fine" and "good" are similar, then "great" and "fine"**are similar**.
+
+Similarity is also symmetric. For example, "great" and "fine" being similar is the same as "fine" and "great" being similar.
+
+Also, a word is always similar with itself. For example, the sentences`words1 = ["great"], words2 = ["great"], pairs = []`are similar, even though there are no specified similar word pairs.
+
+Finally, sentences can only be similar if they have the same number of words. So a sentence like`words1 = ["great"]`can never be similar to`words2 = ["doubleplus","good"]`.
+
+**Note:**
+
+The length of
+
+`words1`
+
+and
+
+`words2`
+
+will not exceed
+
+`1000`
+
+.
+
+The length of
+
+`pairs`
+
+will not exceed
+
+`2000`
+
+.
+
+The length of each
+
+`pairs[i]`
+
+will be
+
+`2`
+
+.
+
+The length of each
+
+`words[i]`
+
+and
+
+`pairs[i][j]`
+
+will be in the range
+
+`[1, 20]`
+
+.
+
+```cpp
+class Solution {
+public:
+    bool areSentencesSimilarTwo(vector<string>& words1, vector<string>& words2, vector<pair<string, string>> pairs) {
+        if (words1.size() != words2.size())
+            return false;
+        unordered_map<string, string> cluster;
+        for (const auto& p : pairs)
+        {
+            cluster[p.first] = p.first;
+            cluster[p.second] = p.second;
+        }
+        
+        for (const auto& p : pairs)
+            Connect(cluster, p.first, p.second);
+        
+        for (int i = 0; i < words1.size(); i++)
+        {
+            if (Find(cluster, words1[i]) != Find(cluster, words2[i]))
+                return false;
+        }
+        return true;
+    }
     
+    string Find(unordered_map<string, string>& cluster, const string& ref)
+    {
+        if (cluster[ref] != ref)
+            cluster[ref] = Find(cluster, cluster[ref]);
+        return cluster[ref];
+    }
+    
+    void Connect(unordered_map<string, string>& cluster, const string& l, const string& r)
+    {
+        auto lroot = Find(cluster, l);
+        auto rroot = Find(cluster, r);
+        if (lroot != rroot)
+            cluster[lroot] = rroot;
+    }
 };
 ```
 
