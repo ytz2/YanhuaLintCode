@@ -480,10 +480,6 @@ public:
 };
 ```
 
- 
-
-
-
 ## TRIE
 
 ## 211. Add and Search Word - Data structure design
@@ -493,7 +489,6 @@ Design a data structure that supports the following two operations:
 ```
 void addWord(word)
 bool search(word)
-
 ```
 
 search\(word\) can search a literal word or a regular expression string containing only letters`a-z`or`.`. A`.`means it can represent any one letter.
@@ -516,13 +511,10 @@ search(".ad") -
 search("b..") -
 >
  true
-
 ```
 
 **Note:**  
 You may assume that all words are consist of lowercase letters`a-z`.
-
-
 
 ```cpp
 class WordDictionary {
@@ -543,12 +535,12 @@ public:
         bool isWord;
         vector<TrieNode*> children;  
     };
-    
-    
+
+
     WordDictionary() {
         root = new TrieNode();
     }
-    
+
     ~WordDictionary(){
         delete root;
     }
@@ -564,14 +556,14 @@ public:
         }
         p->isWord = true;
     }
-    
+
     /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
     bool search(string word) {
         return search(word, 0, root);
     }
-    
+
 private:
-    
+
     bool search(string& word, int i, TrieNode* p)
     {
         if (i >= word.size())
@@ -590,7 +582,7 @@ private:
             return false;
         return search(word, i+1, p->children[ind]);
     }
-    
+
     TrieNode *root;
 };
 
