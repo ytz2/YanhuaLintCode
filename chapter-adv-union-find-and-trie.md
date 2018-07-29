@@ -596,3 +596,345 @@ private:
 
 
 
+
+
+## 773. Sentence Similarity II
+
+Given two sentences`words1, words2`\(each represented as an array of strings\), and a list of similar word pairs`pairs`, determine if two sentences are similar.
+
+For example,`words1 = ["great", "acting", "skills"]`and`words2 = ["fine", "drama", "talent"]`are similar, if the similar word pairs are`pairs = [["great", "good"], ["fine", "good"], ["acting","drama"], ["skills","talent"]]`.
+
+Note that the similarity relation**is**transitive. For example, if "great" and "good" are similar, and "fine" and "good" are similar, then "great" and "fine"**are similar**.
+
+Similarity is also symmetric. For example, "great" and "fine" being similar is the same as "fine" and "great" being similar.
+
+Also, a word is always similar with itself. For example, the sentences`words1 = ["great"], words2 = ["great"], pairs = []`are similar, even though there are no specified similar word pairs.
+
+Finally, sentences can only be similar if they have the same number of words. So a sentence like`words1 = ["great"]`can never be similar to`words2 = ["doubleplus","good"]`.
+
+**Note:**
+
+The length of
+
+`words1`
+
+and
+
+`words2`
+
+will not exceed
+
+`1000`
+
+.
+
+The length of
+
+`pairs`
+
+will not exceed
+
+`2000`
+
+.
+
+The length of each
+
+`pairs[i]`
+
+will be
+
+`2`
+
+.
+
+The length of each
+
+`words[i]`
+
+and
+
+`pairs[i][j]`
+
+will be in the range
+
+`[1, 20]`
+
+.
+
+```cpp
+class Solution {
+public:
+    bool areSentencesSimilarTwo(vector<string>& words1, vector<string>& words2, vector<pair<string, string>> pairs) {
+        if (words1.size() != words2.size())
+            return false;
+        unordered_map<string, string> cluster;
+        for (const auto& p : pairs)
+        {
+            cluster[p.first] = p.first;
+            cluster[p.second] = p.second;
+        }
+
+        for (const auto& p : pairs)
+            Connect(cluster, p.first, p.second);
+
+        for (int i = 0; i < words1.size(); i++)
+        {
+            if (Find(cluster, words1[i]) != Find(cluster, words2[i]))
+                return false;
+        }
+        return true;
+    }
+
+    string Find(unordered_map<string, string>& cluster, const string& ref)
+    {
+        if (cluster[ref] != ref)
+            cluster[ref] = Find(cluster, cluster[ref]);
+        return cluster[ref];
+    }
+
+    void Connect(unordered_map<string, string>& cluster, const string& l, const string& r)
+    {
+        auto lroot = Find(cluster, l);
+        auto rroot = Find(cluster, r);
+        if (lroot != rroot)
+            cluster[lroot] = rroot;
+    }
+};
+```
+
+## 
+
+## 642. Design Search Autocomplete System
+
+Design a search autocomplete system for a search engine. Users may input a sentence \(at least one word and end with a special character`'#'`\). For**each character**they type**except '\#'**, you need to return the**top 3**historical hot sentences that have prefix the same as the part of sentence already typed. Here are the specific rules:
+
+1. The hot degree for a sentence is defined as the number of times a user typed the exactly same sentence before.
+2. The returned top 3 hot sentences should be sorted by hot degree \(The first is the hottest one\). If several sentences have the same degree of hot, you need to use ASCII-code order \(smaller one appears first\).
+3. If less than 3 hot sentences exist, then just return as many as you can.
+4. When the input is a special character, it means the sentence ends, and in this case, you need to return an empty list.
+
+Your job is to implement the following functions:
+
+The constructor function:
+
+`AutocompleteSystem(String[] sentences, int[] times):`This is the constructor. The input is**historical data**.`Sentences`is a string array consists of previously typed sentences.`Times`is the corresponding times a sentence has been typed. Your system should record these historical data.
+
+Now, the user wants to input a new sentence. The following function will provide the next character the user types:
+
+`List<String> input(char c):`The input`c`is the next character typed by the user. The character will only be lower-case letters \(`'a'`to`'z'`\), blank space \(`' '`\) or a special character \(`'#'`\). Also, the previously typed sentence should be recorded in your system. The output will be the**top 3**historical hot sentences that have prefix the same as the part of sentence already typed.
+
+  
+
+
+**Example:**  
+**Operation:**AutocompleteSystem\(\["i love you", "island","ironman", "i love leetcode"\], \[5,3,2,2\]\)  
+The system have already tracked down the following sentences and their corresponding times:  
+`"i love you"`:`5`times  
+`"island"`:`3`times  
+`"ironman"`:`2`times  
+`"i love leetcode"`:`2`times  
+Now, the user begins another search:  
+  
+**Operation:**input\('i'\)  
+**Output:**\["i love you", "island","i love leetcode"\]  
+**Explanation:**  
+There are four sentences that have prefix`"i"`. Among them, "ironman" and "i love leetcode" have same hot degree. Since`' '`has ASCII code 32 and`'r'`has ASCII code 114, "i love leetcode" should be in front of "ironman". Also we only need to output top 3 hot sentences, so "ironman" will be ignored.  
+  
+**Operation:**input\(' '\)  
+**Output:**\["i love you","i love leetcode"\]  
+**Explanation:**  
+There are only two sentences that have prefix`"i "`.  
+  
+**Operation:**input\('a'\)  
+**Output:**\[\]  
+**Explanation:**  
+There are no sentences that have prefix`"i a"`.  
+  
+**Operation:**input\('\#'\)  
+**Output:**\[\]  
+**Explanation:**  
+The user finished the input, the sentence`"i a"`should be saved as a historical sentence in system. And the following input will be counted as a new search.  
+
+
+  
+
+
+**Note:**  
+
+
+1. The input sentence will always start with a letter and end with '\#', and only one blank space will exist between two words.
+2. The number of
+   **complete sentences**
+   that to be searched won't exceed 100. The length of each sentence including those in the historical data won't exceed 100.
+3. Please use double-quote instead of single-quote when you write test cases even for a character input.
+4. Please remember to
+   **RESET**
+   your class variables declared in class AutocompleteSystem, as static/class variables are
+   **persisted across multiple test cases**
+   . Please see
+   [here](https://leetcode.com/faq/#different-output)
+   for more details.
+
+两段代码要注意
+
+
+
+1. 如何用lambda做 set 或者map的comparator
+
+    set&lt;string, std::function&lt;bool\(const string& left,const  string& right\)&gt;&gt; top3{
+
+        \[this\]\(const string& left,const  string& right\)
+
+        {
+
+          if \(freq\[left\] == freq\[right\]\)
+
+              return left &lt; right;
+
+          return freq\[left\] &gt; freq\[right\];
+
+        }
+
+    };
+
+2 算TOPK的时候，要先删掉这个str再++, 然后再添加。 如果直接++的话会break二分查找
+
+    
+
+    void update\(const string& str\)
+
+    {   
+
+
+
+        if \(top3.count\(str\)\)
+
+            top3.erase\(str\);
+
+        freq\[str\]++;
+
+        top3.insert\(str\);
+
+        if \(top3.size\(\) &gt; 3\)
+
+            top3.erase\(\*top3.rbegin\(\)\);
+
+            
+
+    }
+
+    
+
+
+
+
+
+```cpp
+#include <functional>
+using namespace std;
+class TrieNode{
+public:
+    
+    
+    TrieNode()
+    {
+        
+    }
+    
+    ~TrieNode()
+    {
+        
+    }
+    
+    void update(const string& str, int times)
+    {
+        freq[str] = times;
+        top3.insert(str);
+        if (top3.size() > 3)
+            top3.erase(*top3.rbegin());
+    }
+    
+    void update(const string& str)
+    {   
+
+        if (top3.count(str))
+            top3.erase(str);
+        freq[str]++;
+        top3.insert(str);
+        if (top3.size() > 3)
+            top3.erase(*top3.rbegin());
+            
+    }
+    
+    vector<string> topThree()
+    {
+        vector<string> res(top3.begin(), top3.end());
+        return res;
+    }
+    
+    unordered_map<char, TrieNode*> children;
+    unordered_map<string ,int> freq;
+    set<string, std::function<bool(const string& left,const  string& right)>> top3{
+        [this](const string& left,const  string& right)
+        {
+          if (freq[left] == freq[right])
+              return left < right;
+          return freq[left] > freq[right];
+        }
+    };
+
+};
+
+
+
+class AutocompleteSystem {
+public:
+    AutocompleteSystem(vector<string> sentences, vector<int> times) {
+        root = new TrieNode();
+        cur = root;
+        for (int i = 0; i < sentences.size(); i++)
+        {
+            auto& sentence = sentences[i];
+            int time = times[i];
+            auto p = root;
+            for (auto c : sentence)
+            {
+                if (!p->children.count(c))
+                    p->children[c] = new TrieNode();
+                p = p->children[c];
+                p->update(sentence, time);
+            }
+        }
+    }
+    
+    vector<string> input(char c) {
+        if (c == '#')
+        {
+            auto p = root;
+            for (auto c : typed)
+            {
+                if (!p->children.count(c))
+                    p->children[c] = new TrieNode();
+                p = p->children[c];
+                p->update(typed);
+            }
+            typed.clear();
+            cur = root;
+            return {};
+        }
+        typed.push_back(c);
+        if (!cur->children.count(c))
+            cur->children[c] = new TrieNode;
+        cur = cur->children[c];
+        return cur->topThree();
+    }
+    string typed;
+    TrieNode *root;
+    TrieNode *cur;
+};
+
+```
+
+
+
