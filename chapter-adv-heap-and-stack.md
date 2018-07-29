@@ -99,7 +99,108 @@ public:
 };
 ```
 
+
+
+## 407. Trapping Rain Water II
+
+Given an`m x n`matrix of positive integers representing the height of each unit cell in a 2D elevation map, compute the volume of water it is able to trap after raining.
+
+**Note:**  
+Bothmandnare less than 110. The height of each unit cell is greater than 0 and is less than 20,000.
+
+**Example:**
+
+```
+Given the following 3x6 height map:
+[
+  [1,4,3,1,3,2],
+  [3,2,1,3,2,4],
+  [2,3,3,2,3,1]
+]
+
+Return 4.
+```
+
+![](/assets/407.png)  
+
+
+---
+
+用PQ+BFS遍历的一个典型的例子：
+
+根据木桶原理，从最矮的地方灌进去， 如果灌的进去就灌，灌不进去更新周边的围墙。
+
+另外注意的是，灌进去后要更新灌好的高度，这样BFS的时候根据neighbor可以方便计算
+
+---
+
+```cpp
+class Solution {
+public:
+    int trapRainWater(vector<vector<int>>& heightMap) {
+        if (heightMap.empty() || heightMap[0].empty())
+            return 0;
+        int m = heightMap.size();
+        int n = heightMap[0].size();        
+        // 用来找最矮的那个墙
+        auto cmp = [&heightMap](const pair<int, int>& l, const pair<int,int>& r){
+            return heightMap[l.first][l.second] > heightMap[r.first][r.second];
+        };
+        
+        // 用来维护周围最矮的那个墙
+        priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(cmp)> pq(cmp);
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+
+        //把周围的墙放进去
+
+        for (int i = 0; i < m; i++)
+        {
+            pq.emplace(i, 0);
+            pq.emplace(i, n-1);
+        }
+        for (int i = 0; i < n; i++)
+        {
+            pq.emplace(0, i);
+            pq.emplace(m-1, i);
+        }
+        
+        static vector<int> dx{0, 0, 1, -1};
+        static vector<int> dy{-1,1, 0,  0};
+        
+        // 开始BFS灌水， 找到最小的一角往里灌，如果灌的进去，那么最小的这个还是最小的角，如果灌不进去，那么就不能从这个角度灌了
+        // 更新围墙，从下一个角度灌进去
+        int ans = 0;
+        while(!pq.empty())
+        {
+            auto p = pq.top();
+            pq.pop();
+            visited[p.first][p.second] = true;
+            for (int i = 0; i < 4; i++)
+            {
+                int x = p.first + dx[i];
+                int y = p.second + dy[i];
+                if (x < 0 || x >= m || y < 0 || y >= n || visited[x][y])
+                    continue;
+                // pour in water now
+                visited[x][y] = true;
+                if (heightMap[p.first][p.second] > heightMap[x][y])
+                {
+                    ans += heightMap[p.first][p.second] - heightMap[x][y];
+                    //这个地方要敲黑板划重点了： 因为维护的是周围墙的高度， 所以把这个地方最矮的墙copy过来，后面就计算依据这个高度来算
+                    //或者换个思路，因为这个地方比周围的矮，所以已经被填到那个高度了
+                    heightMap[x][y] = heightMap[p.first][p.second];
+                }
+                pq.emplace(x,y);
+            }
+        }
+        return ans;
+    }
+};
+```
+
 ## 
+
+
 
 
 
