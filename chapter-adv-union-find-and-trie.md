@@ -917,8 +917,6 @@ public:
 };
 ```
 
-
-
 ## 425. Word Squares
 
 Given a set of words**\(without duplicates\)**, find all[word squares](https://en.wikipedia.org/wiki/Word_square)you can build from them.
@@ -932,11 +930,9 @@ b a l l
 a r e a
 l e a d
 l a d y
-
 ```
 
-**Note:**  
-
+**Note:**
 
 1. There are at least 1 and at most 1000 words.
 2. All words will have the exact same length.
@@ -944,8 +940,6 @@ l a d y
 4. Each word contains only lowercase English alphabet
    `a-z`
    .
-
-
 
 **Example 1:**
 
@@ -974,10 +968,7 @@ Output:
 Explanation:
 
 The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
-
 ```
-
-
 
 **Example 2:**
 
@@ -1006,32 +997,22 @@ Output:
 Explanation:
 
 The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
-
 ```
-
-
 
 犯了好几个错误：
 
 1. 这个是可以重复利用的
 2. Trie是可以放所有startswith的，直接遍历当前startswith就可以了。
 
-
-
-
-
 ---
-
-  
-
 
 ```cpp
 struct TrieNode{
-    
+
     TrieNode()
         :children(vector<TrieNode*>(26, nullptr))
         {}
-    
+
     ~TrieNode()
     {
         for (auto p : children)
@@ -1043,7 +1024,7 @@ struct TrieNode{
 
 class Trie{
 public:
-    
+
     Trie(unordered_set<string>& words)
     {
         root = new TrieNode();
@@ -1061,7 +1042,7 @@ public:
             }
         }
     }
-    
+
     vector<string> startWith(const std::string& str)
     {
         static vector<string> dummy;
@@ -1075,7 +1056,7 @@ public:
         }
         return p->words;
     }
-    
+
     ~Trie(){
         if (root)
             delete root;
@@ -1094,7 +1075,7 @@ public:
         helper(trie, sets, results, solution, words[0].size());
         return results;
     }
-    
+
     void helper(Trie& trie, unordered_set<string>& collection, vector<vector<string>>& results, vector<string>& solution, int size)
     {
         if (solution.size() == size)
@@ -1102,13 +1083,13 @@ public:
             results.push_back(solution);
             return;
         }
-        
+
         string startWith;
         for (int i = 0; i < solution.size(); i++)
             startWith.push_back(solution[i][solution.size()]);
-        
+
         auto candidates = trie.startWith(startWith);
-        
+
         for (auto each : candidates)
         {
             solution.push_back(each);
@@ -1116,7 +1097,7 @@ public:
             solution.pop_back();
         }
     }
-    
+
 };
 ```
 
