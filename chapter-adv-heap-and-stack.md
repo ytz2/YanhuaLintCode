@@ -99,8 +99,6 @@ public:
 };
 ```
 
-
-
 ## 407. Trapping Rain Water II
 
 Given an`m x n`matrix of positive integers representing the height of each unit cell in a 2D elevation map, compute the volume of water it is able to trap after raining.
@@ -121,8 +119,7 @@ Given the following 3x6 height map:
 Return 4.
 ```
 
-![](/assets/407.png)  
-
+![](/assets/407.png)
 
 ---
 
@@ -146,7 +143,7 @@ public:
         auto cmp = [&heightMap](const pair<int, int>& l, const pair<int,int>& r){
             return heightMap[l.first][l.second] > heightMap[r.first][r.second];
         };
-        
+
         // 用来维护周围最矮的那个墙
         priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(cmp)> pq(cmp);
         vector<vector<bool>> visited(m, vector<bool>(n, false));
@@ -163,10 +160,10 @@ public:
             pq.emplace(0, i);
             pq.emplace(m-1, i);
         }
-        
+
         static vector<int> dx{0, 0, 1, -1};
         static vector<int> dy{-1,1, 0,  0};
-        
+
         // 开始BFS灌水， 找到最小的一角往里灌，如果灌的进去，那么最小的这个还是最小的角，如果灌不进去，那么就不能从这个角度灌了
         // 更新围墙，从下一个角度灌进去
         int ans = 0;
@@ -196,6 +193,91 @@ public:
         return ans;
     }
 };
+```
+
+## 
+
+## 295. Find Median from Data Stream
+
+Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+For example,
+
+`[2,3,4]`, the median is`3`
+
+`[2,3]`, the median is`(2 + 3) / 2 = 2.5`
+
+Design a data structure that supports the following two operations:
+
+* void addNum\(int num\) - Add a integer number from the data stream to the data structure.
+* double findMedian\(\) - Return the median of all elements so far.
+
+**Example:**
+
+```
+addNum(1)
+addNum(2)
+findMedian() -
+>
+ 1.5
+addNum(3) 
+findMedian() -
+>
+ 2
+```
+
+
+
+---
+
+老生常谈类的题目， median的特点，左边和右边长度相等，那么需要维护左边比中间小，右边比中间大。 最合适的办法就是维护左边最小堆，右面最大堆。每次选两边插入，同时更新中间的点。 
+
+---
+
+```cpp
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        if (lq.empty() || num < lq.top())
+            lq.push(num);
+        else 
+            rq.push(num);
+        if (lq.size() - rq.size() == 2)
+        {
+            rq.push(lq.top());
+            lq.pop();
+        }
+        if (rq.size() - lq.size() == 1)
+        {
+            lq.push(rq.top());
+            rq.pop();
+        }
+    }
+    
+    double findMedian() {
+        if (lq.size() - rq.size() == 1)
+            return lq.top();
+        
+        return double(lq.top() + rq.top()) / 2.;
+    }
+    
+    // maintain lq and rq
+    // to make lq.size() == rq.size() || lq.size() == rq.size()+1
+    priority_queue<int> lq; // max heap
+    priority_queue<int, vector<int>, greater<int>> rq;  // min heap
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
 ```
 
 ## 
