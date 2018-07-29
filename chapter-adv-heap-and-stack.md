@@ -278,18 +278,11 @@ public:
  */
 ```
 
-
-
-
-
 ## 480. Sliding Window Median
 
 Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
 
 Examples:
-
-  
-
 
 `[2,3,4]`, the median is`3`
 
@@ -309,16 +302,12 @@ Window position                Median
  1  3  -1 [-3  5  3] 6  7       3
  1  3  -1  -3 [5  3  6] 7       5
  1  3  -1  -3  5 [3  6  7]      6
-
 ```
 
 Therefore, return the median sliding window as`[1,-1,-1,3,5,6]`.
 
 **Note:**  
 You may assume`k`is always valid, ie:`k`is always smaller than input array's size for non-empty array.
-
-  
-
 
 ---
 
@@ -382,9 +371,7 @@ public:
  */
 ```
 
-## 
-
-
+## ![](/assets/slidingwindowA.png)
 
 
 
