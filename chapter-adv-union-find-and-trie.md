@@ -594,10 +594,6 @@ private:
  */
 ```
 
-
-
-
-
 ## 773. Sentence Similarity II
 
 Given two sentences`words1, words2`\(each represented as an array of strings\), and a list of similar word pairs`pairs`, determine if two sentences are similar.
@@ -724,9 +720,6 @@ Now, the user wants to input a new sentence. The following function will provide
 
 `List<String> input(char c):`The input`c`is the next character typed by the user. The character will only be lower-case letters \(`'a'`to`'z'`\), blank space \(`' '`\) or a special character \(`'#'`\). Also, the previously typed sentence should be recorded in your system. The output will be the**top 3**historical hot sentences that have prefix the same as the part of sentence already typed.
 
-  
-
-
 **Example:**  
 **Operation:**AutocompleteSystem\(\["i love you", "island","ironman", "i love leetcode"\], \[5,3,2,2\]\)  
 The system have already tracked down the following sentences and their corresponding times:  
@@ -734,34 +727,29 @@ The system have already tracked down the following sentences and their correspon
 `"island"`:`3`times  
 `"ironman"`:`2`times  
 `"i love leetcode"`:`2`times  
-Now, the user begins another search:  
-  
+Now, the user begins another search:
+
 **Operation:**input\('i'\)  
 **Output:**\["i love you", "island","i love leetcode"\]  
 **Explanation:**  
-There are four sentences that have prefix`"i"`. Among them, "ironman" and "i love leetcode" have same hot degree. Since`' '`has ASCII code 32 and`'r'`has ASCII code 114, "i love leetcode" should be in front of "ironman". Also we only need to output top 3 hot sentences, so "ironman" will be ignored.  
-  
+There are four sentences that have prefix`"i"`. Among them, "ironman" and "i love leetcode" have same hot degree. Since`' '`has ASCII code 32 and`'r'`has ASCII code 114, "i love leetcode" should be in front of "ironman". Also we only need to output top 3 hot sentences, so "ironman" will be ignored.
+
 **Operation:**input\(' '\)  
 **Output:**\["i love you","i love leetcode"\]  
 **Explanation:**  
-There are only two sentences that have prefix`"i "`.  
-  
+There are only two sentences that have prefix`"i "`.
+
 **Operation:**input\('a'\)  
 **Output:**\[\]  
 **Explanation:**  
-There are no sentences that have prefix`"i a"`.  
-  
+There are no sentences that have prefix`"i a"`.
+
 **Operation:**input\('\#'\)  
 **Output:**\[\]  
 **Explanation:**  
-The user finished the input, the sentence`"i a"`should be saved as a historical sentence in system. And the following input will be counted as a new search.  
+The user finished the input, the sentence`"i a"`should be saved as a historical sentence in system. And the following input will be counted as a new search.
 
-
-  
-
-
-**Note:**  
-
+**Note:**
 
 1. The input sentence will always start with a letter and end with '\#', and only one blank space will exist between two words.
 2. The number of
@@ -778,75 +766,69 @@ The user finished the input, the sentence`"i a"`should be saved as a historical 
 
 两段代码要注意
 
-
-
 1. 如何用lambda做 set 或者map的comparator
 
-    set&lt;string, std::function&lt;bool\(const string& left,const  string& right\)&gt;&gt; top3{
+   set&lt;string, std::function&lt;bool\(const string& left,const  string& right\)&gt;&gt; top3{
 
-        \[this\]\(const string& left,const  string& right\)
+   ```
+    \[this\]\(const string& left,const  string& right\)
 
-        {
+    {
 
-          if \(freq\[left\] == freq\[right\]\)
+      if \(freq\[left\] == freq\[right\]\)
 
-              return left &lt; right;
+          return left &lt; right;
 
-          return freq\[left\] &gt; freq\[right\];
+      return freq\[left\] &gt; freq\[right\];
 
-        }
+    }
+   ```
 
-    };
+   };
 
 2 算TOPK的时候，要先删掉这个str再++, 然后再添加。 如果直接++的话会break二分查找
 
-    
+```
+void update\(const string& str\)
 
-    void update\(const string& str\)
-
-    {   
-
-
-
-        if \(top3.count\(str\)\)
-
-            top3.erase\(str\);
-
-        freq\[str\]++;
-
-        top3.insert\(str\);
-
-        if \(top3.size\(\) &gt; 3\)
-
-            top3.erase\(\*top3.rbegin\(\)\);
-
-            
-
-    }
-
-    
+{   
 
 
 
+    if \(top3.count\(str\)\)
 
+        top3.erase\(str\);
+
+    freq\[str\]++;
+
+    top3.insert\(str\);
+
+    if \(top3.size\(\) &gt; 3\)
+
+        top3.erase\(\*top3.rbegin\(\)\);
+
+
+
+}
+```
 
 ```cpp
 #include <functional>
 using namespace std;
 class TrieNode{
 public:
-    
-    
+
+
     TrieNode()
     {
-        
+
     }
-    
+
     ~TrieNode()
     {
-        
+
     }
-    
+
     void update(const string& str, int times)
     {
         freq[str] = times;
@@ -854,7 +836,7 @@ public:
         if (top3.size() > 3)
             top3.erase(*top3.rbegin());
     }
-    
+
     void update(const string& str)
     {   
 
@@ -864,15 +846,15 @@ public:
         top3.insert(str);
         if (top3.size() > 3)
             top3.erase(*top3.rbegin());
-            
+
     }
-    
+
     vector<string> topThree()
     {
         vector<string> res(top3.begin(), top3.end());
         return res;
     }
-    
+
     unordered_map<char, TrieNode*> children;
     unordered_map<string ,int> freq;
     set<string, std::function<bool(const string& left,const  string& right)>> top3{
@@ -907,7 +889,7 @@ public:
             }
         }
     }
-    
+
     vector<string> input(char c) {
         if (c == '#')
         {
@@ -933,8 +915,212 @@ public:
     TrieNode *root;
     TrieNode *cur;
 };
+```
+
+
+
+## 425. Word Squares
+
+Given a set of words**\(without duplicates\)**, find all[word squares](https://en.wikipedia.org/wiki/Word_square)you can build from them.
+
+A sequence of words forms a valid word square if thekthrow and column read the exact same string, where 0 ≤k&lt; max\(numRows, numColumns\).
+
+For example, the word sequence`["ball","area","lead","lady"]`forms a word square because each word reads the same both horizontally and vertically.
 
 ```
+b a l l
+a r e a
+l e a d
+l a d y
+
+```
+
+**Note:**  
+
+
+1. There are at least 1 and at most 1000 words.
+2. All words will have the exact same length.
+3. Word length is at least 1 and at most 5.
+4. Each word contains only lowercase English alphabet
+   `a-z`
+   .
+
+
+
+**Example 1:**
+
+```
+Input:
+
+["area","lead","wall","lady","ball"]
+
+
+Output:
+
+[
+  [ "wall",
+    "area",
+    "lead",
+    "lady"
+  ],
+  [ "ball",
+    "area",
+    "lead",
+    "lady"
+  ]
+]
+
+
+Explanation:
+
+The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
+
+```
+
+
+
+**Example 2:**
+
+```
+Input:
+
+["abat","baba","atan","atal"]
+
+
+Output:
+
+[
+  [ "baba",
+    "abat",
+    "baba",
+    "atan"
+  ],
+  [ "baba",
+    "abat",
+    "baba",
+    "atal"
+  ]
+]
+
+
+Explanation:
+
+The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
+
+```
+
+
+
+犯了好几个错误：
+
+1. 这个是可以重复利用的
+2. Trie是可以放所有startswith的，直接遍历当前startswith就可以了。
+
+
+
+
+
+---
+
+  
+
+
+```cpp
+struct TrieNode{
+    
+    TrieNode()
+        :children(vector<TrieNode*>(26, nullptr))
+        {}
+    
+    ~TrieNode()
+    {
+        for (auto p : children)
+            if (p) delete p;
+    }
+    vector<TrieNode*> children;
+    vector<string> words;
+};
+
+class Trie{
+public:
+    
+    Trie(unordered_set<string>& words)
+    {
+        root = new TrieNode();
+        for (auto word: words)
+        {
+            auto p = root;
+            p->words.push_back(word);
+            for (auto c : word)
+            {
+                int i = c-'a';
+                if (!p->children[i])
+                    p->children[i] = new TrieNode();
+                p = p->children[i];
+                p->words.push_back(word);
+            }
+        }
+    }
+    
+    vector<string> startWith(const std::string& str)
+    {
+        static vector<string> dummy;
+        auto p = root;
+        for (auto c: str)
+        {
+            int i = c-'a';
+            if (!p->children[i])
+                return dummy;
+            p = p->children[i];
+        }
+        return p->words;
+    }
+    
+    ~Trie(){
+        if (root)
+            delete root;
+    }
+    TrieNode* root;
+};
+
+
+class Solution {
+public:
+    vector<vector<string>> wordSquares(vector<string>& words) {
+        unordered_set<string> sets(words.begin(), words.end());
+        Trie trie(sets);
+        vector<vector<string>> results;
+        vector<string> solution;
+        helper(trie, sets, results, solution, words[0].size());
+        return results;
+    }
+    
+    void helper(Trie& trie, unordered_set<string>& collection, vector<vector<string>>& results, vector<string>& solution, int size)
+    {
+        if (solution.size() == size)
+        {
+            results.push_back(solution);
+            return;
+        }
+        
+        string startWith;
+        for (int i = 0; i < solution.size(); i++)
+            startWith.push_back(solution[i][solution.size()]);
+        
+        auto candidates = trie.startWith(startWith);
+        
+        for (auto each : candidates)
+        {
+            solution.push_back(each);
+            helper(trie, collection, results, solution,  size);
+            solution.pop_back();
+        }
+    }
+    
+};
+```
+
+## 
 
 
 
