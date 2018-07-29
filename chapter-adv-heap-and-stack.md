@@ -226,11 +226,9 @@ findMedian() -
  2
 ```
 
-
-
 ---
 
-老生常谈类的题目， median的特点，左边和右边长度相等，那么需要维护左边比中间小，右边比中间大。 最合适的办法就是维护左边最小堆，右面最大堆。每次选两边插入，同时更新中间的点。 
+老生常谈类的题目， median的特点，左边和右边长度相等，那么需要维护左边比中间小，右边比中间大。 最合适的办法就是维护左边最小堆，右面最大堆。每次选两边插入，同时更新中间的点。
 
 ---
 
@@ -239,9 +237,9 @@ class MedianFinder {
 public:
     /** initialize your data structure here. */
     MedianFinder() {
-        
+
     }
-    
+
     void addNum(int num) {
         if (lq.empty() || num < lq.top())
             lq.push(num);
@@ -258,14 +256,118 @@ public:
             rq.pop();
         }
     }
-    
+
     double findMedian() {
         if (lq.size() - rq.size() == 1)
             return lq.top();
-        
+
         return double(lq.top() + rq.top()) / 2.;
     }
-    
+
+    // maintain lq and rq
+    // to make lq.size() == rq.size() || lq.size() == rq.size()+1
+    priority_queue<int> lq; // max heap
+    priority_queue<int, vector<int>, greater<int>> rq;  // min heap
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+```
+
+
+
+
+
+## 480. Sliding Window Median
+
+Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+Examples:
+
+  
+
+
+`[2,3,4]`, the median is`3`
+
+`[2,3]`, the median is`(2 + 3) / 2 = 2.5`
+
+Given an arraynums, there is a sliding window of sizekwhich is moving from the very left of the array to the very right. You can only see theknumbers in the window. Each time the sliding window moves right by one position. Your job is to output the median array for each window in the original array.
+
+For example,  
+Givennums=`[1,3,-1,-3,5,3,6,7]`, andk= 3.
+
+```
+Window position                Median
+---------------               -----
+[1  3  -1] -3  5  3  6  7       1
+ 1 [3  -1  -3] 5  3  6  7       -1
+ 1  3 [-1  -3  5] 3  6  7       -1
+ 1  3  -1 [-3  5  3] 6  7       3
+ 1  3  -1  -3 [5  3  6] 7       5
+ 1  3  -1  -3  5 [3  6  7]      6
+
+```
+
+Therefore, return the median sliding window as`[1,-1,-1,3,5,6]`.
+
+**Note:**  
+You may assume`k`is always valid, ie:`k`is always smaller than input array's size for non-empty array.
+
+  
+
+
+---
+
+和上题类似，唯一不一样的就是要把之前的去掉再把新的加进来
+
+两个坑
+
+1 while\(\(int\)left.size\(\) - \(int\)right.size\(\) &gt; 1\)  size\_t这个地方会作妖
+
+2 double\(\*left.rbegin\(\)\)/ 2.  + double\(\*right.begin\(\)\) / 2.  这里处理是为了防止overflow
+
+3 另外注意multiset erase的时候要erase iterator，而不是value, 因为value会去掉相同的所有元素
+
+good practice是写一个balance函数，抽插完毕balance一下
+
+---
+
+```cpp
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+
+    }
+
+    void addNum(int num) {
+        if (lq.empty() || num < lq.top())
+            lq.push(num);
+        else 
+            rq.push(num);
+        if (lq.size() - rq.size() == 2)
+        {
+            rq.push(lq.top());
+            lq.pop();
+        }
+        if (rq.size() - lq.size() == 1)
+        {
+            lq.push(rq.top());
+            rq.pop();
+        }
+    }
+
+    double findMedian() {
+        if (lq.size() - rq.size() == 1)
+            return lq.top();
+
+        return double(lq.top() + rq.top()) / 2.;
+    }
+
     // maintain lq and rq
     // to make lq.size() == rq.size() || lq.size() == rq.size()+1
     priority_queue<int> lq; // max heap
