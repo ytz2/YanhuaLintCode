@@ -373,10 +373,6 @@ public:
 
 ## ![](/assets/slidingwindowA.png)
 
-
-
-
-
 ## **Stack**
 
 ## 394. Decode String
@@ -449,6 +445,71 @@ public:
  * obj.addNum(num);
  * double param_2 = obj.findMedian();
  */
+```
+
+
+
+## 84. Largest Rectangle in Histogram
+
+---
+
+Given
+
+_n_
+
+non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
+
+ ![](/assets/lc84.png)
+
+**Example:**
+
+```
+Input:
+ [2,1,5,6,2,3]
+
+Output:
+ 10
+```
+
+
+
+```cpp
+/*
+
+这道题是一道单调stack的问题，如何转化：
+最大的rectangle实际上就是 以高度为起点，左右扫，找到第一个比他小的，然后宽度确定，高度以当前高度为准
+就是以此高度为基准的最大面积
+
+单调栈解决的就是左面和右面第一个小于的问题 （递增的时候）
+
+基本上是一个套路模板， 维护一个递增stack， 当遇到小于等于的时候，则栈顶可以确定右面第一个小于的是当前
+index,而左面第一个小于的是栈上第二个，则可以确定
+
+中间有个小trick， 遍历的时候最后要放一个-1进去把栈放空
+
+*/
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int ans = 0;
+        stack<int> stk;
+        for (int i = 0; i <= heights.size(); i++)
+        {
+            int v = (i == heights.size() ? -1 : heights[i]);
+            while(!stk.empty() && v <= heights[stk.top()])
+            {
+                int h = heights[stk.top()];
+                stk.pop();
+                int w = stk.empty()? i : i-stk.top()-1;
+                ans = max(ans, w*h);
+            }
+            stk.push(i);
+        }
+        return ans;
+    }
+};
 ```
 
 
