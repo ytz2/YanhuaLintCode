@@ -375,3 +375,81 @@ public:
 
 
 
+
+
+## **Stack**
+
+## 394. Decode String
+
+---
+
+Given an encoded string, return it's decoded string.
+
+The encoding rule is:`k[encoded_string]`, where theencoded\_stringinside the square brackets is being repeated exactlyktimes. Note thatkis guaranteed to be a positive integer.
+
+You may assume that the input string is always valid; No extra white spaces, square brackets are well-formed, etc.
+
+Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers,k. For example, there won't be input like`3a`or`2[4]`.
+
+**Examples:**
+
+```
+s = "3[a]2[bc]", return "aaabcbc".
+s = "3[a2[c]]", return "accaccacc".
+s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
+```
+
+---
+
+当需要保存状态的时候， 就要想到stack， 还有翻转（reverse list）,  再就是递归转遍历等等
+
+---
+
+```cpp
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+
+    }
+
+    void addNum(int num) {
+        if (lq.empty() || num < lq.top())
+            lq.push(num);
+        else 
+            rq.push(num);
+        if (lq.size() - rq.size() == 2)
+        {
+            rq.push(lq.top());
+            lq.pop();
+        }
+        if (rq.size() - lq.size() == 1)
+        {
+            lq.push(rq.top());
+            rq.pop();
+        }
+    }
+
+    double findMedian() {
+        if (lq.size() - rq.size() == 1)
+            return lq.top();
+
+        return double(lq.top() + rq.top()) / 2.;
+    }
+
+    // maintain lq and rq
+    // to make lq.size() == rq.size() || lq.size() == rq.size()+1
+    priority_queue<int> lq; // max heap
+    priority_queue<int, vector<int>, greater<int>> rq;  // min heap
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+```
+
+
+
