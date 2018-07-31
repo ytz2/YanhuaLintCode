@@ -447,8 +447,6 @@ public:
  */
 ```
 
-
-
 ## 84. Largest Rectangle in Histogram
 
 ---
@@ -459,7 +457,7 @@ _n_
 
 non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
 
- ![](/assets/lc84.png)
+![](/assets/lc84.png)
 
 **Example:**
 
@@ -470,8 +468,6 @@ Input:
 Output:
  10
 ```
-
-
 
 ```cpp
 /*
@@ -511,6 +507,118 @@ public:
     }
 };
 ```
+
+
+
+## 224. Basic Calculator
+
+---
+
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string may contain open`(`and closing parentheses`)`, the plus`+`or minus sign`-`,**non-negative**integers and empty spaces.
+
+**Example 1:**
+
+```
+Input:
+ "1 + 1"
+
+Output:
+ 2
+
+```
+
+**Example 2:**
+
+```
+Input:
+ " 2-1 + 2 "
+
+Output:
+ 3
+```
+
+**Example 3:**
+
+```
+Input:
+ "(1+(4+5+2)-3)+(6+8)"
+
+Output:
+ 23
+```
+
+**Note:**
+
+* You may assume that the given expression is always valid.
+* **Do not**
+  use the
+  `eval`
+  built-in library function.
+
+
+
+这道题做了好久，还是看了答案，总结如下：
+
+1.不需要用逆波兰表达式来做， 杀鸡用牛刀
+
+2. 带括号和加减的计算 不需要考虑precedence, 碰到数往数堆上放，碰到operator往operators上放
+
+3. 触发计算有两个条件 
+
+    左边有operator \(这个时候堆上有 一个操作符且不是（\) 
+
+    operator为（， 作为计算终止符， 因为我们每次碰到+-都已经计算过一次了，所以\)必然对应的是一个（， pop掉，再触发计算
+
+    注意的一个条件是（（（）））的情况，所以不需要计算的check是
+
+   ops.empty\(\) \|\| ops.top\(\) == ''\(" ， 这个时候需要等待下一个）来pop 堆上的（  
+
+
+
+
+```cpp
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int> operands;
+        stack<char> ops;
+        int number = 0;
+        for ( int i = 0; i < s.size(); i++)
+        {
+            auto c = s[i];
+            if (c == ' ')
+                continue;
+            else if (c == '+' || c =='-' || c =='(')
+            {
+                ops.push(c);
+                continue;
+            }
+            if (c == ')') ops.pop();
+            else 
+            {
+                number = number * 10 + c -'0';
+                if (i < s.size()-1 && isdigit(s[i+1]))
+                    continue;
+                operands.push(number);
+                number = 0;
+            }
+            if (ops.empty() || ops.top() == '(')
+                continue;
+            int num = operands.top(); operands.pop();
+            if (ops.top() == '+') operands.top() += num;
+            else operands.top() -= num;
+            ops.pop();
+        }
+        return operands.top();
+    }
+    
+    
+};
+```
+
+
 
 
 
