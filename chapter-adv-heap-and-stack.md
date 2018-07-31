@@ -508,8 +508,6 @@ public:
 };
 ```
 
-
-
 ## 224. Basic Calculator
 
 ---
@@ -526,7 +524,6 @@ Input:
 
 Output:
  2
-
 ```
 
 **Example 2:**
@@ -557,26 +554,21 @@ Output:
   `eval`
   built-in library function.
 
-
-
 这道题做了好久，还是看了答案，总结如下：
 
 1.不需要用逆波兰表达式来做， 杀鸡用牛刀
 
-2. 带括号和加减的计算 不需要考虑precedence, 碰到数往数堆上放，碰到operator往operators上放
+1. 带括号和加减的计算 不需要考虑precedence, 碰到数往数堆上放，碰到operator往operators上放
 
-3. 触发计算有两个条件 
+2. 触发计算有两个条件
 
-    左边有operator \(这个时候堆上有 一个操作符且不是（\) 
+   左边有operator \(这个时候堆上有 一个操作符且不是（\)
 
-    operator为（， 作为计算终止符， 因为我们每次碰到+-都已经计算过一次了，所以\)必然对应的是一个（， pop掉，再触发计算
+   operator为（， 作为计算终止符， 因为我们每次碰到+-都已经计算过一次了，所以\)必然对应的是一个（， pop掉，再触发计算
 
-    注意的一个条件是（（（）））的情况，所以不需要计算的check是
+   注意的一个条件是（（（）））的情况，所以不需要计算的check是
 
-   ops.empty\(\) \|\| ops.top\(\) == ''\(" ， 这个时候需要等待下一个）来pop 堆上的（  
-
-
-
+   ops.empty\(\) \|\| ops.top\(\) == ''\(" ， 这个时候需要等待下一个）来pop 堆上的（
 
 ```cpp
 class Solution {
@@ -613,12 +605,132 @@ public:
         }
         return operands.top();
     }
-    
-    
+
+
 };
 ```
 
 
+
+## 227. Basic Calculator II
+
+---
+
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string contains only**non-negative**integers,`+`,`-`,`*`,`/`operators and empty spaces. The integer division should truncate toward zero.
+
+**Example 1:**
+
+```
+Input: 
+"3+2*2"
+
+Output:
+ 7
+
+```
+
+**Example 2:**
+
+```
+Input:
+ " 3/2 "
+
+Output:
+ 1
+```
+
+**Example 3:**
+
+```
+Input:
+ " 3+5 / 2 "
+
+Output:
+ 5
+
+```
+
+**Note:**
+
+* You may assume that the given expression is always valid.
+* **Do not**
+  use the
+  `eval`
+  built-in library function.
+* 
+
+
+这道题和上道题类似，关键点在于想如何触发计算
+
+因为这里有了precedence,所以无论加减乘除都往上放， 唯一触发的计算是乘号和除号， 触发完了放到栈上去
+
+最后栈上剩下的只有加和减， 这个时候把栈倒过来，从头计算 （因为 倒着计算结果不对，1-1+1\) 
+
+
+
+
+
+```cpp
+class Solution {
+public:
+    int calculate(string s) {
+        
+        stack<int> operands;
+        stack<char> operators;
+        int num = 0;
+        for (int i = 0; i < s.size(); i++)
+        {
+            auto c = s[i];
+            if (c == ' ') continue;
+            if ( c == '+' || c == '-' || c== '*' || c == '/')
+            {
+                operators.push(c);
+                continue;
+            }
+            if (isdigit(c))
+            {
+                num = num * 10 + c - '0';
+                if (i < s.size() - 1 && isdigit(s[i+1]))
+                    continue;
+                operands.push(num);
+                num = 0;
+            }
+            if (operators.empty() || operators.top() == '+' || operators.top() == '-')
+                continue;
+            int v = operands.top(); operands.pop();
+            if (operators.top() == '*') operands.top() *= v;
+            else operands.top() /= v;
+            operators.pop();
+        }
+        stack<int> operandsdup;
+        stack<char> operatorsdup;
+        while(!operands.empty())
+        {
+            operandsdup.push(operands.top());
+            operands.pop();
+        }
+        while(!operators.empty())
+        {
+            operatorsdup.push(operators.top());
+            operators.pop();
+        }
+        
+        while(!operatorsdup.empty())
+        {
+            int num = operandsdup.top();operandsdup.pop();
+            if (operatorsdup.top() == '+') 
+                operandsdup.top() += num;
+            else 
+                operandsdup.top() =  num -operandsdup.top();
+            operatorsdup.pop();
+        }
+        
+        return operandsdup.top();
+    }
+};
+```
 
 
 
