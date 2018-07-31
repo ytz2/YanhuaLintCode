@@ -610,8 +610,6 @@ public:
 };
 ```
 
-
-
 ## 227. Basic Calculator II
 
 ---
@@ -628,7 +626,6 @@ Input:
 
 Output:
  7
-
 ```
 
 **Example 2:**
@@ -649,7 +646,6 @@ Input:
 
 Output:
  5
-
 ```
 
 **Note:**
@@ -660,23 +656,17 @@ Output:
   `eval`
   built-in library function.
 * 
-
-
 这道题和上道题类似，关键点在于想如何触发计算
 
 因为这里有了precedence,所以无论加减乘除都往上放， 唯一触发的计算是乘号和除号， 触发完了放到栈上去
 
-最后栈上剩下的只有加和减， 这个时候把栈倒过来，从头计算 （因为 倒着计算结果不对，1-1+1\) 
-
-
-
-
+最后栈上剩下的只有加和减， 这个时候把栈倒过来，从头计算 （因为 倒着计算结果不对，1-1+1\)
 
 ```cpp
 class Solution {
 public:
     int calculate(string s) {
-        
+
         stack<int> operands;
         stack<char> operators;
         int num = 0;
@@ -716,7 +706,7 @@ public:
             operatorsdup.push(operators.top());
             operators.pop();
         }
-        
+
         while(!operatorsdup.empty())
         {
             int num = operandsdup.top();operandsdup.pop();
@@ -726,8 +716,63 @@ public:
                 operandsdup.top() =  num -operandsdup.top();
             operatorsdup.pop();
         }
-        
+
         return operandsdup.top();
+    }
+};
+```
+
+
+
+稍微用isNegative flag优化一下
+
+```
+class Solution {
+```
+
+```cpp
+class Solution {
+public:
+    int calculate(string s) {
+        
+        stack<int> operands;
+        stack<char> operators;
+        int num = 0;
+        bool isNegative = false;
+        for (int i = 0; i < s.size(); i++)
+        {
+            auto c = s[i];
+            if (c == ' ') continue;
+            if ( c == '+' || c == '-' || c== '*' || c == '/')
+            {
+                operators.push(c);
+                if (c == '-')
+                    isNegative = true;
+                continue;
+            }
+            if (isdigit(c))
+            {
+                num = num * 10 + c - '0';
+                if (i < s.size() - 1 && isdigit(s[i+1]))
+                    continue;
+                operands.push(isNegative? -num : num);
+                isNegative = false;
+                num = 0;
+            }
+            if (operators.empty() || operators.top() == '+' || operators.top() == '-')
+                continue;
+            int v = operands.top(); operands.pop();
+            if (operators.top() == '*') operands.top() *= v;
+            else operands.top() /= v;
+            operators.pop();
+        }
+        int res = 0;
+        while(!operands.empty())
+        {
+            res += operands.top();
+            operands.pop();
+        }
+        return res;
     }
 };
 ```
