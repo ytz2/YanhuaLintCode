@@ -94,25 +94,23 @@ public:
 };
 ```
 
-
-
 ## 36. Valid Sudoku
 
 ---
 
-Determine if a 9x9 Sudoku board is valid. Only the filled cells need to be validated **according to the following rules**:
+Determine if a 9x9 Sudoku board is valid. Only the filled cells need to be validated **according to the following rules**:
 
-1. Each row must contain the digits 
+1. Each row must contain the digits 
    `1-9`
    without repetition.
-2. Each column must contain the digits 
+2. Each column must contain the digits 
    `1-9`
-    without repetition.
+    without repetition.
 3. Each of the 9
    `3x3`
-   sub-boxes of the grid must contain the digits 
+   sub-boxes of the grid must contain the digits 
    `1-9`
-    without repetition.
+    without repetition.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Sudoku-by-L2G-20050714.svg/250px-Sudoku-by-L2G-20050714.svg.png)  
 A partially filled sudoku which is valid.
@@ -138,7 +136,6 @@ Input:
 
 Output:
  true
-
 ```
 
 **Example 2:**
@@ -147,15 +144,15 @@ Output:
 Input:
 
 [
-  ["8","3",".",".","7",".",".",".","."],
-  ["6",".",".","1","9","5",".",".","."],
-  [".","9","8",".",".",".",".","6","."],
-  ["8",".",".",".","6",".",".",".","3"],
-  ["4",".",".","8",".","3",".",".","1"],
-  ["7",".",".",".","2",".",".",".","6"],
-  [".","6",".",".",".",".","2","8","."],
-  [".",".",".","4","1","9",".",".","5"],
-  [".",".",".",".","8",".",".","7","9"]
+  ["8","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
 ]
 
 Output:
@@ -168,14 +165,13 @@ Explanation:
     modified to 
 8
 . Since there are two 8's in the top left 3x3 sub-box, it is invalid.
-
 ```
 
 **Note:**
 
 * A Sudoku board \(partially filled\) could be valid but is not necessarily solvable.
-* Only the filled cells need to be validated according to the mentioned rules.
-* The given board contain only digits
+* Only the filled cells need to be validated according to the mentioned rules.
+* The given board contain only digits
   `1-9`
   and the character
   `'.'`
@@ -183,7 +179,7 @@ Explanation:
 * The given board size is always
   `9x9`
 
-https://leetcode.com/problems/valid-sudoku/description/
+[https://leetcode.com/problems/valid-sudoku/description/](https://leetcode.com/problems/valid-sudoku/description/)
 
 ```cpp
 class Solution {
@@ -201,13 +197,101 @@ public:
                 int v = board[i][j] - '0'-1;
                 int ii = i/3;
                 int jj = j/3;
-                
+
                 if (used1[i][v] || used2[v][j] || used3[ii][jj][v])
                     return false;
                 used1[i][v] = used2[v][j] = used3[ii][jj][v] = true;
             }
         }
         return true;
+    }
+};
+```
+
+
+
+## 50. Pow\(x, n\)
+
+---
+
+Implement[pow\(_x_,_n_\)](http://www.cplusplus.com/reference/valarray/pow/), which calculates _x_raised to the power_n_\(xn\).
+
+**Example 1:**
+
+```
+Input:
+ 2.00000, 10
+
+Output:
+ 1024.00000
+
+```
+
+**Example 2:**
+
+```
+Input:
+ 2.10000, 3
+
+Output:
+ 9.26100
+
+```
+
+**Example 3:**
+
+```
+Input:
+ 2.00000, -2
+
+Output:
+ 0.25000
+
+Explanation:
+ 2
+-2
+ = 1/2
+2
+ = 1/4 = 0.25
+
+```
+
+**Note:**
+
+* -100.0 
+  &lt;
+  _x_
+  &lt;
+   100.0
+* _n_
+  is a 32-bit signed integer, within the range \[−2
+  31
+  , 2
+  31 
+  − 1\]
+
+https://leetcode.com/problems/powx-n/description/  
+
+
+```cpp
+class Solution {
+public:
+    double myPow(double x, int n) {
+        return myPowHelper(x, n);
+    }
+    
+    double myPowHelper(double x, long n)
+    {
+        if (n < 0)
+            return 1./myPowHelper(x, -n);
+        if (n == 0)
+            return 1;
+        if (n == 1)
+            return x;
+        double v = myPowHelper(x, n/2);
+        if (n%2)
+            return v*v*x;
+        return v*v;  
     }
 };
 ```
