@@ -10,8 +10,7 @@ A log is a string has this format :`function_id:start_or_end:timestamp`. For exa
 
 Exclusive time of a function is defined as the time spent within this function, the time spent by calling other functions should not be considered as this function's exclusive time. You should return the exclusive time of each function sorted by their function id.
 
-**Example 1:**  
-
+**Example 1:**
 
 ```
 Input:
@@ -34,13 +33,9 @@ calls function 1
 , function 1 starts at time 2, executes 4 units of time and end at time 5.
 Function 0 is running again at time 6, and also end at the time 6, thus executes 1 unit of time. 
 So function 0 totally execute 2 + 1 = 3 units of time, and function 1 totally execute 4 units of time.
-
 ```
 
-
-
-**Note:**  
-
+**Note:**
 
 1. Input logs will be sorted by timestamp, NOT log id.
 2. Your output should be sorted by function id, which means the 0th element of your output corresponds to the exclusive time of function 0.
@@ -52,11 +47,9 @@ So function 0 totally execute 2 + 1 = 3 units of time, and function 1 totally ex
    &lt;
    = 100
 
-https://leetcode.com/problems/exclusive-time-of-functions/description/
+[https://leetcode.com/problems/exclusive-time-of-functions/description/](https://leetcode.com/problems/exclusive-time-of-functions/description/)
 
 ```cpp
-
-
 class Solution {
 public:
     vector<int> exclusiveTime(int n, vector<string>& logs) {
@@ -85,7 +78,7 @@ public:
         }
         return result;
     }
-    
+
     void parse(string& log, int& id, string& tag, int& t)
     {
         stringstream ss(log);
@@ -98,6 +91,124 @@ public:
         t = stoi(token);
     }
 };
+};
+```
+
+
+
+## 36. Valid Sudoku
+
+---
+
+Determine if a 9x9 Sudoku board is valid. Only the filled cells need to be validated **according to the following rules**:
+
+1. Each row must contain the digits 
+   `1-9`
+   without repetition.
+2. Each column must contain the digits 
+   `1-9`
+    without repetition.
+3. Each of the 9
+   `3x3`
+   sub-boxes of the grid must contain the digits 
+   `1-9`
+    without repetition.
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Sudoku-by-L2G-20050714.svg/250px-Sudoku-by-L2G-20050714.svg.png)  
+A partially filled sudoku which is valid.
+
+The Sudoku board could be partially filled, where empty cells are filled with the character`'.'`.
+
+**Example 1:**
+
+```
+Input:
+
+[
+  ["5","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]
+
+Output:
+ true
+
+```
+
+**Example 2:**
+
+```
+Input:
+
+[
+  ["8","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]
+
+Output:
+ false
+
+Explanation:
+ Same as Example 1, except with the 
+5
+ in the top left corner being 
+    modified to 
+8
+. Since there are two 8's in the top left 3x3 sub-box, it is invalid.
+
+```
+
+**Note:**
+
+* A Sudoku board \(partially filled\) could be valid but is not necessarily solvable.
+* Only the filled cells need to be validated according to the mentioned rules.
+* The given board contain only digits
+  `1-9`
+  and the character
+  `'.'`
+  .
+* The given board size is always
+  `9x9`
+
+https://leetcode.com/problems/valid-sudoku/description/
+
+```cpp
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        bool used1[9][9] = {false};
+        bool used2[9][9] = {false};
+        bool used3[3][3][9] = {false};
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j<9; j++)
+            {
+                if (board[i][j] == '.')
+                    continue;
+                int v = board[i][j] - '0'-1;
+                int ii = i/3;
+                int jj = j/3;
+                
+                if (used1[i][v] || used2[v][j] || used3[ii][jj][v])
+                    return false;
+                used1[i][v] = used2[v][j] = used3[ii][jj][v] = true;
+            }
+        }
+        return true;
+    }
 };
 ```
 
