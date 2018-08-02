@@ -464,9 +464,88 @@ private:
  * Logger obj = new Logger();
  * bool param_1 = obj.shouldPrintMessage(timestamp,message);
  */
+ 
+ // Example program
+#include <iostream>
+#include <string>
+#include <chrono>
+#include <thread>
+using namespace std;
+
+typedef std::chrono::high_resolution_clock CLOCK;
+typedef std::chrono::duration<float, std::milli> duration;
+
+class RateLimiter{
+public:
+    enum UNIT{
+      MILLI = 0,
+      SECOND = 1,
+      MINUTE = 2,
+      HOUR = 3
+    };
+    RateLimiter( UNIT unit, int tokenPerUnit)
+        :tokens_(0),
+         tokenPerSec_(tokenPerUnit/ratio(unit)),
+         time_(CLOCK::now())
+    {
+        capacity_ = tokenPerSec_;
+    }
+    
+    int take(int count)
+    {
+        auto now = CLOCK::now();
+        tokens_ += (now - time_).count() / 1e9 * tokenPerSec_;
+        time_ = now;
+        if (tokens_ > capacity_)
+            tokens_ = capacity_;
+        if (tokens_ < count)
+        {
+            int ret = tokens_;
+            tokens_ = 0;
+            return ret;
+        };
+        tokens_-=count;
+        return count;
+    }
+    
+private:
+    double ratio(UNIT unit)
+    {
+        switch(unit){
+            case MILLI : return 1e-3;
+            case SECOND: return 1;
+            case MINUTE: return 60;
+            case HOUR: return 3600;
+        }
+        return 0;
+    }
+private:
+    int tokens_;
+    int capacity_;
+    int tokenPerSec_;
+    CLOCK::time_point time_;
+};
+
+void testCase1()
+{
+    int req = 6;
+    RateLimiter rl(RateLimiter::SECOND , 4);
+    auto epoch = CLOCK::now();
+    for (int i = 0; i < 10; i++)
+    {
+        auto now = CLOCK::now();
+        cout <<"T = " << (now - epoch).count() / 1e9  <<" : Requested = "<< req<<" and consumed = "<< rl.take(req)<<endl;
+        this_thread::sleep_for(chrono::milliseconds(500));
+    }
+}
+
+int main()
+{
+    testCase1();
+    return 0;
+}
+
 ```
-
-
 
 ## 767.Reorganize String
 
@@ -474,7 +553,7 @@ private:
 
 Given a string`S`, check if the letters can be rearranged so that two characters that are adjacent to each other are not the same.
 
-If possible, output any possible result.  If not possible, return the empty string.
+If possible, output any possible result.  If not possible, return the empty string.
 
 **Example 1:**
 
@@ -484,7 +563,6 @@ Input:
 
 Output:
  "aba"
-
 ```
 
 **Example 2:**
@@ -495,7 +573,6 @@ Input:
 
 Output:
  ""
-
 ```
 
 **Note:**
@@ -505,16 +582,16 @@ Output:
   `[1, 500]`
   .
 
-https://leetcode.com/problems/reorganize-string/description/
+[https://leetcode.com/problems/reorganize-string/description/](https://leetcode.com/problems/reorganize-string/description/)
 
 ```cpp
 class Solution {
 public:
     string reorganizeString(string S) {
-        
+
         if (S.empty())
             return S;
-        
+
         unordered_map<char, int> counter;
         for (auto c : S)
             counter[c]++;
@@ -524,7 +601,7 @@ public:
         priority_queue<char, vector<char>,decltype(cmp)> pq(cmp);
         for (auto each : counter)
             pq.push(each.first);
-        
+
         vector<string> slots(counter[pq.top()]);
         int current = 0;
         while(!pq.empty())
@@ -551,8 +628,6 @@ public:
     }
 };
 ```
-
-
 
 
 
