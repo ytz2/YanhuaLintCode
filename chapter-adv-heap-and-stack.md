@@ -655,8 +655,7 @@ Output:
   use the
   `eval`
   built-in library function.
-* 
-这道题和上道题类似，关键点在于想如何触发计算
+* 这道题和上道题类似，关键点在于想如何触发计算
 
 因为这里有了precedence,所以无论加减乘除都往上放， 唯一触发的计算是乘号和除号， 触发完了放到栈上去
 
@@ -722,8 +721,6 @@ public:
 };
 ```
 
-
-
 稍微用isNegative flag优化一下
 
 ```
@@ -734,7 +731,7 @@ class Solution {
 class Solution {
 public:
     int calculate(string s) {
-        
+
         stack<int> operands;
         stack<char> operators;
         int num = 0;
