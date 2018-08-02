@@ -394,8 +394,6 @@ public:
 // codec.deserialize(codec.serialize(root));
 ```
 
-
-
 ## 359.Logger Rate Limiter
 
 ---
@@ -430,16 +428,16 @@ logger.shouldPrintMessage(10,"foo"); returns false;
 logger.shouldPrintMessage(11,"foo"); returns true;
 ```
 
-https://leetcode.com/problems/logger-rate-limiter/description/
+[https://leetcode.com/problems/logger-rate-limiter/description/](https://leetcode.com/problems/logger-rate-limiter/description/)
 
 ```cpp
 class Logger {
 public:
     /** Initialize your data structure here. */
     Logger() {
-        
+
     }
-    
+
     /** Returns true if the message should be printed in the given timestamp, otherwise returns false.
         If this method returns false, the message will not be printed.
         The timestamp is in seconds granularity. */
@@ -467,6 +465,94 @@ private:
  * bool param_1 = obj.shouldPrintMessage(timestamp,message);
  */
 ```
+
+
+
+## 767.Reorganize String
+
+---
+
+Given a string`S`, check if the letters can be rearranged so that two characters that are adjacent to each other are not the same.
+
+If possible, output any possible result.  If not possible, return the empty string.
+
+**Example 1:**
+
+```
+Input:
+ S = "aab"
+
+Output:
+ "aba"
+
+```
+
+**Example 2:**
+
+```
+Input:
+ S = "aaab"
+
+Output:
+ ""
+
+```
+
+**Note:**
+
+* `S`
+  will consist of lowercase letters and have length in range
+  `[1, 500]`
+  .
+
+https://leetcode.com/problems/reorganize-string/description/
+
+```cpp
+class Solution {
+public:
+    string reorganizeString(string S) {
+        
+        if (S.empty())
+            return S;
+        
+        unordered_map<char, int> counter;
+        for (auto c : S)
+            counter[c]++;
+        auto cmp = [&counter](const char& l,const char& r){
+            return counter[l] < counter[r];
+        };
+        priority_queue<char, vector<char>,decltype(cmp)> pq(cmp);
+        for (auto each : counter)
+            pq.push(each.first);
+        
+        vector<string> slots(counter[pq.top()]);
+        int current = 0;
+        while(!pq.empty())
+        {
+            auto c = pq.top();
+            pq.pop();
+            int count = counter[c];
+            for (int i = 0; i < count; i++)
+            {
+                slots[current++].push_back(c);
+                if (current == slots.size())
+                    current = 0;
+            }
+        }
+        string result;
+        for (int i = 0; i < slots.size()-1; i++)
+        {
+            if (slots[i].back() == slots[i+1].front() )
+                return "";
+            result += slots[i];
+        }
+        result += slots.back();
+        return result;
+    }
+};
+```
+
+
 
 
 
