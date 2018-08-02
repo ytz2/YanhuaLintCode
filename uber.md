@@ -464,7 +464,7 @@ private:
  * Logger obj = new Logger();
  * bool param_1 = obj.shouldPrintMessage(timestamp,message);
  */
- 
+
  // Example program
 #include <iostream>
 #include <string>
@@ -490,7 +490,7 @@ public:
     {
         capacity_ = tokenPerSec_;
     }
-    
+
     int take(int count)
     {
         auto now = CLOCK::now();
@@ -507,7 +507,7 @@ public:
         tokens_-=count;
         return count;
     }
-    
+
 private:
     double ratio(UNIT unit)
     {
@@ -544,7 +544,6 @@ int main()
     testCase1();
     return 0;
 }
-
 ```
 
 ## 767.Reorganize String
