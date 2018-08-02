@@ -290,8 +290,6 @@ public:
 };
 ```
 
-
-
 ## 297.Serialize and Deserialize Binary Tree
 
 ---
@@ -300,7 +298,7 @@ Serialization is the process of converting a data structure or object into a seq
 
 Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
 
-**Example: **
+**Example: **
 
 ```
 You may serialize the following tree:
@@ -317,9 +315,9 @@ as
 
 **Clarification:**The above format is the same as[how LeetCode serializes a binary tree](https://leetcode.com/faq/#binary-tree). You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
 
-**Note: **Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
+**Note: **Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
 
-https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/
+[https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/)
 
 ```cpp
 /**
@@ -394,6 +392,80 @@ public:
 // Your Codec object will be instantiated and called as such:
 // Codec codec;
 // codec.deserialize(codec.serialize(root));
+```
+
+
+
+## 359.Logger Rate Limiter
+
+---
+
+Design a logger system that receive stream of messages along with its timestamps, each message should be printed if and only if it is**not printed in the last 10 seconds**.
+
+Given a message and a timestamp \(in seconds granularity\), return true if the message should be printed in the given timestamp, otherwise returns false.
+
+It is possible that several messages arrive roughly at the same time.
+
+**Example:**
+
+```
+Logger logger = new Logger();
+
+// logging string "foo" at timestamp 1
+logger.shouldPrintMessage(1, "foo"); returns true; 
+
+// logging string "bar" at timestamp 2
+logger.shouldPrintMessage(2,"bar"); returns true;
+
+// logging string "foo" at timestamp 3
+logger.shouldPrintMessage(3,"foo"); returns false;
+
+// logging string "bar" at timestamp 8
+logger.shouldPrintMessage(8,"bar"); returns false;
+
+// logging string "foo" at timestamp 10
+logger.shouldPrintMessage(10,"foo"); returns false;
+
+// logging string "foo" at timestamp 11
+logger.shouldPrintMessage(11,"foo"); returns true;
+```
+
+https://leetcode.com/problems/logger-rate-limiter/description/
+
+```cpp
+class Logger {
+public:
+    /** Initialize your data structure here. */
+    Logger() {
+        
+    }
+    
+    /** Returns true if the message should be printed in the given timestamp, otherwise returns false.
+        If this method returns false, the message will not be printed.
+        The timestamp is in seconds granularity. */
+    bool shouldPrintMessage(int timestamp, string message) {
+        if (!last.count(message))
+        {
+            last.emplace(message,timestamp);
+            return true;
+        }
+        auto it = last.find(message);
+        if (timestamp - it->second >= 10)
+        {
+            it->second = timestamp;
+            return true;
+        }
+        return false;
+    }
+private:
+    unordered_map<string, int> last;
+};
+
+/**
+ * Your Logger object will be instantiated and called as such:
+ * Logger obj = new Logger();
+ * bool param_1 = obj.shouldPrintMessage(timestamp,message);
+ */
 ```
 
 
