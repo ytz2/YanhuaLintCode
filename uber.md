@@ -781,7 +781,7 @@ Output:
 ]
 ```
 
-\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[)\)  
+\[\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29\)\)  
 \]\([https://leetcode.com/problems/factor-combinations/description/](https://leetcode.com/problems/factor-combinations/description/)\)
 
 ```cpp
@@ -907,13 +907,11 @@ public:
 };
 ```
 
-
-
 ## 139. Word Break
 
 ---
 
-Given a**non-empty**string_s_and a dictionary_wordDict_containing a list of**non-empty**words, determine if_s_can be segmented into a space-separated sequence of one or more dictionary words.
+Given a**non-empty**string\_s\_and a dictionary\_wordDict\_containing a list of**non-empty**words, determine if\_s\_can be segmented into a space-separated sequence of one or more dictionary words.
 
 **Note:**
 
@@ -935,7 +933,6 @@ Explanation:
  can be segmented as 
 "leet code"
 .
-
 ```
 
 **Example 2:**
@@ -957,8 +954,7 @@ applepenapple
 apple pen apple
 "
 .
-             Note that you are allowed to reuse a dictionary word.
-
+             Note that you are allowed to reuse a dictionary word.
 ```
 
 **Example 3:**
@@ -972,7 +968,7 @@ Output:
 ```
 
 **Notes:**  
-https://leetcode.com/problems/word-break/description/
+[https://leetcode.com/problems/word-break/description/](https://leetcode.com/problems/word-break/description/)
 
 ```cpp
 class Solution {
@@ -981,16 +977,16 @@ public:
         unordered_map<int, unordered_set<string>> dict;
         for (auto word: wordDict)
             dict[word.size()].insert(word);
-        
+
         unordered_map<int, bool> canBreak;
         return wordBreakHelper(s, 0, dict, canBreak);
     }
-    
+
     bool wordBreakHelper(const string& s, int start, unordered_map<int, unordered_set<string>>& dict,unordered_map<int, bool>& canBreak)
     {
         if (start >= s.size())
             return true;
-        
+
         if (canBreak.count(start))
             return canBreak[start];
         for (auto& each : dict)
@@ -1004,6 +1000,122 @@ public:
             canBreak[start+len] = false;
         }
         return false;
+    }
+};
+```
+
+
+
+## 133. Clone Graph
+
+---
+
+Clone an undirected graph. Each node in the graph contains a`label`and a list of its`neighbors`.
+
+  
+
+
+**OJ's undirected graph serialization:**
+
+Nodes are labeled uniquely.
+
+We use
+
+`#`
+
+as a separator for each node, and
+
+`,`
+
+as a separator for node label and each neighbor of the node.
+
+
+
+As an example, consider the serialized graph`{0,1,2#1,2#2,2}`.
+
+The graph has a total of three nodes, and therefore contains three parts as separated by`#`.
+
+1. First node is labeled as
+   `0`
+   . Connect node
+   `0`
+   to both nodes
+   `1`
+   and
+   `2`
+   .
+2. Second node is labeled as
+   `1`
+   . Connect node
+   `1`
+   to node
+   `2`
+   .
+3. Third node is labeled as
+   `2`
+   . Connect node
+   `2`
+   to node
+   `2`
+   \(itself\), thus forming a self-cycle.
+
+
+
+Visually, the graph looks like the following:
+
+```
+       1
+      / \
+     /   \
+    0 --- 2
+         / \
+         \_/
+```
+
+**Notes:**  
+https://leetcode.com/problems/clone-graph/description/
+
+```cpp
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+class Solution {
+public:
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if (!node)
+            return node;
+        unordered_map<UndirectedGraphNode*,UndirectedGraphNode*> dupMap;
+        queue<UndirectedGraphNode*> q;
+        q.push(node);
+        dupMap.emplace(node, new UndirectedGraphNode(node->label));
+        
+        while(!q.empty())
+        {
+            auto n = q.front();q.pop();
+            for (auto each : n->neighbors)
+            {
+                if (dupMap.count(each))
+                    continue;
+                dupMap.emplace(each, new UndirectedGraphNode(each->label));
+                q.push(each);
+            }
+        }
+        
+        for (auto p : dupMap)
+        {
+            auto orig = p.first;
+            auto dup = p.second;
+            for (auto origNeighbor : orig->neighbors)
+            {
+                dup->neighbors.push_back(dupMap[origNeighbor]);
+            }
+        }
+        return dupMap[node];
     }
 };
 ```
