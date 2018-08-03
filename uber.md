@@ -781,7 +781,7 @@ Output:
 ]
 ```
 
-\[\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29\)\)  
+\[\[\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29\)\)  
 \]\([https://leetcode.com/problems/factor-combinations/description/](https://leetcode.com/problems/factor-combinations/description/)\)
 
 ```cpp
@@ -1004,16 +1004,11 @@ public:
 };
 ```
 
-
-
 ## 133. Clone Graph
 
 ---
 
 Clone an undirected graph. Each node in the graph contains a`label`and a list of its`neighbors`.
-
-  
-
 
 **OJ's undirected graph serialization:**
 
@@ -1028,8 +1023,6 @@ as a separator for each node, and
 `,`
 
 as a separator for node label and each neighbor of the node.
-
-
 
 As an example, consider the serialized graph`{0,1,2#1,2#2,2}`.
 
@@ -1059,8 +1052,6 @@ The graph has a total of three nodes, and therefore contains three parts as sepa
    `2`
    \(itself\), thus forming a self-cycle.
 
-
-
 Visually, the graph looks like the following:
 
 ```
@@ -1073,7 +1064,7 @@ Visually, the graph looks like the following:
 ```
 
 **Notes:**  
-https://leetcode.com/problems/clone-graph/description/
+[https://leetcode.com/problems/clone-graph/description/](https://leetcode.com/problems/clone-graph/description/)
 
 ```cpp
 /**
@@ -1093,7 +1084,7 @@ public:
         queue<UndirectedGraphNode*> q;
         q.push(node);
         dupMap.emplace(node, new UndirectedGraphNode(node->label));
-        
+
         while(!q.empty())
         {
             auto n = q.front();q.pop();
@@ -1105,7 +1096,7 @@ public:
                 q.push(each);
             }
         }
-        
+
         for (auto p : dupMap)
         {
             auto orig = p.first;
