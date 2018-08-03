@@ -628,8 +628,6 @@ public:
 };
 ```
 
-
-
 ## 767.Reorganize String
 
 ---
@@ -721,7 +719,6 @@ Numbers can be regarded as product of its factors. For example,
 ```
 8 = 2 x 2 x 2;
   = 2 x 4.
-
 ```
 
 Write a function that takes an integernand return all possible combinations of its factors.
@@ -735,17 +732,16 @@ Write a function that takes an integernand return all possible combinations of i
    n
    .
 
-**Example 1:**
+**Example 1:**
 
 ```
 Input:
 1
 Output:
  []
-
 ```
 
-**Example 2:**
+**Example 2:**
 
 ```
 Input:
@@ -754,7 +750,7 @@ Output:
 []
 ```
 
-**Example 3:**
+**Example 3:**
 
 ```
 Input:
@@ -768,7 +764,7 @@ Output:
 ]
 ```
 
-**Example 4:**
+**Example 4:**
 
 ```
 Input:
@@ -783,13 +779,10 @@ Output:
   [2, 4, 4],
   [4, 8]
 ]
-
 ```
 
-
-
-https://leetcode.com/problems/factor-combinations/description/[  
-](https://leetcode.com/problems/factor-combinations/description/)
+[https://leetcode.com/problems/factor-combinations/description/\[](https://leetcode.com/problems/factor-combinations/description/[)  
+\]\([https://leetcode.com/problems/factor-combinations/description/](https://leetcode.com/problems/factor-combinations/description/)\)
 
 ```cpp
 class Solution {
@@ -800,7 +793,7 @@ public:
         helper(n, 2, solution, result);
         return result;
     }
-    
+
     void helper(int n, int i, vector<int> solution, vector<vector<int>>& result)
     {
         if (n < 2 || i >= n)
@@ -819,6 +812,103 @@ public:
     }
 };
 ```
+
+## 291.Factor Combinations
+
+---
+
+Given a`pattern`and a string`str`, find if`str`follows the same pattern.
+
+Here**follow**means a full match, such that there is a bijection between a letter in`pattern`and a**non-empty**substring in`str`.
+
+**Example 1:**
+
+```
+Input: 
+pattern = 
+"abab"
+, str = 
+"redblueredblue"
+Output:
+ true
+```
+
+**Example 2:**
+
+```
+Input: 
+pattern = pattern = 
+"aaaa"
+, str = 
+"asdasdasdasd"
+Output:
+ true
+```
+
+**Example 3:**
+
+```
+Input:
+ pattern = 
+"aabb"
+, str = 
+"xyzabcxzyabc"
+Output:
+ false
+
+```
+
+**Notes:**  
+You may assume both`pattern`and`str`contains only lowercase letters.
+
+https://leetcode.com/problems/word-pattern-ii/description/
+
+```cpp
+class Solution {
+public:
+    bool wordPatternMatch(string pattern, string str) {
+        unordered_map<char, string> char2str;
+        unordered_map<string, char> str2char;
+        return helper(pattern, str, char2str, str2char, 0, 0);
+    }
+    
+    bool helper(const string& pattern, const string& str, unordered_map<char, string>& char2str, unordered_map<string, char>& str2char, int i, int j)
+    {
+        if (i >= pattern.size() && j >= str.size())
+            return true;
+        if (i < pattern.size() ^ j < str.size())
+            return false;
+        
+        char c = pattern[i];
+        if (char2str.count(c))
+        {
+            const auto& token = char2str[c];
+            if ( j + token.size() > str.size())
+                return false;
+            if (token != str.substr(j, token.size()))
+                return false;
+            return helper(pattern, str, char2str, str2char, i+1, j+token.size());
+        }
+        
+        for (int k = 1; j+k <= str.size(); k++)
+        {
+            auto token = str.substr(j, k);
+            if (str2char.count(token))
+                continue;
+            char2str[c] = token;
+            str2char[token] = c;
+            if (helper(pattern, str, char2str, str2char, i+1, j+k))
+                return true;
+            char2str.erase(c);
+            str2char.erase(token);
+        }
+        
+        return false;
+    }
+};
+```
+
+
 
 
 
