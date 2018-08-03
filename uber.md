@@ -781,7 +781,7 @@ Output:
 ]
 ```
 
-\[\[\[\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\)\](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29%29\)\)  
+\[\[\[\[\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\)\)\](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29%29%29\)\)  
 \]\([https://leetcode.com/problems/factor-combinations/description/](https://leetcode.com/problems/factor-combinations/description/)\)
 
 ```cpp
@@ -1113,7 +1113,7 @@ public:
 
 ## 242. Valid Anagram
 
-Given two strings_s_and_t _, write a function to determine if_t_is an anagram of_s_.
+Given two strings_s\_and\_t _, write a function to determine if_t\_is an anagram of\_s_.
 
 **Example 1:**
 
@@ -1126,7 +1126,6 @@ t
 
 Output:
  true
-
 ```
 
 **Example 2:**
@@ -1140,7 +1139,6 @@ t
 
 Output: 
 false
-
 ```
 
 **Note:**  
@@ -1150,7 +1148,7 @@ You may assume the string contains only lowercase alphabets.
 What if the inputs contain unicode characters? How would you adapt your solution to such case?
 
 **Notes:**  
-https://leetcode.com/problems/valid-anagram/description/
+[https://leetcode.com/problems/valid-anagram/description/](https://leetcode.com/problems/valid-anagram/description/)
 
 ```cpp
 class Solution {
@@ -1164,6 +1162,94 @@ public:
         for (int i = 0; i < 256; i++)
             if (board[i]) return false;
         return true;
+    }
+};
+```
+
+
+
+## 839. Merge Two Sorted Interval Lists
+
+Merge two sorted \(ascending\) lists of interval and return it as a new sorted list. The new sorted list should be made by splicing together the intervals of the two lists and sorted in ascending order.
+
+### Example
+
+Given list1 =`[(1,2),(3,4)]`and list2 =`[(2,3),(5,6)]`, return`[(1,4),(5,6)]`.
+
+**Notes:**  
+https://www.lintcode.com/problem/merge-two-sorted-interval-lists/description
+
+```cpp
+/**
+ * Definition of Interval:
+ * classs Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this->start = start;
+ *         this->end = end;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param list1: one of the given list
+     * @param list2: another list
+     * @return: the new sorted list of interval
+     */
+     
+    void push(vector<Interval>& result, const Interval& interval)
+    {
+        if (interval.start > result.back().end)
+        {
+            result.push_back(interval);
+        }
+        else if (interval.end > result.back().end)
+        {
+            result.back().end = interval.end;
+        }
+    }
+    vector<Interval> mergeTwoInterval(vector<Interval> &list1, vector<Interval> &list2) {
+        // write your code here
+        if (list1.empty())
+            return list2;
+        if (list2.empty())
+            return list1;
+        vector<Interval> result;
+        int start = min(list1[0].start, list2[0].start);
+        result.emplace_back(start, start);
+        
+        auto it1 = list1.begin();
+        auto it2 = list2.begin();
+
+        while(it1 != list1.end() && it2!=list2.end())
+        {
+            const auto& l = *it1;
+            const auto& r = *it2;
+            Interval interval;
+            if (l.start <= r.start)
+            {
+                ++it1;
+                push(result, l);
+            }
+            else
+            {
+                ++it2;
+                push(result, r);
+            }
+        }
+        while(it1 != list1.end())
+        {
+            const auto& interval = *it1++;
+            push(result, interval);
+        }
+        while(it2 != list2.end())
+        {
+            const auto& interval = *it2++;
+            push(result, interval);
+        } 
+        return result;
     }
 };
 ```
