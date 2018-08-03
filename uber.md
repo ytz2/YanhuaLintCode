@@ -781,7 +781,7 @@ Output:
 ]
 ```
 
-[https://leetcode.com/problems/factor-combinations/description/\[](https://leetcode.com/problems/factor-combinations/description/[)  
+\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[)\)  
 \]\([https://leetcode.com/problems/factor-combinations/description/](https://leetcode.com/problems/factor-combinations/description/)\)
 
 ```cpp
@@ -813,7 +813,7 @@ public:
 };
 ```
 
-## 291.Factor Combinations
+## 291. Word Break II
 
 ---
 
@@ -855,13 +855,12 @@ Input:
 "xyzabcxzyabc"
 Output:
  false
-
 ```
 
 **Notes:**  
 You may assume both`pattern`and`str`contains only lowercase letters.
 
-https://leetcode.com/problems/word-pattern-ii/description/
+[https://leetcode.com/problems/word-pattern-ii/description/](https://leetcode.com/problems/word-pattern-ii/description/)
 
 ```cpp
 class Solution {
@@ -871,14 +870,14 @@ public:
         unordered_map<string, char> str2char;
         return helper(pattern, str, char2str, str2char, 0, 0);
     }
-    
+
     bool helper(const string& pattern, const string& str, unordered_map<char, string>& char2str, unordered_map<string, char>& str2char, int i, int j)
     {
         if (i >= pattern.size() && j >= str.size())
             return true;
         if (i < pattern.size() ^ j < str.size())
             return false;
-        
+
         char c = pattern[i];
         if (char2str.count(c))
         {
@@ -889,7 +888,7 @@ public:
                 return false;
             return helper(pattern, str, char2str, str2char, i+1, j+token.size());
         }
-        
+
         for (int k = 1; j+k <= str.size(); k++)
         {
             auto token = str.substr(j, k);
@@ -902,13 +901,112 @@ public:
             char2str.erase(c);
             str2char.erase(token);
         }
-        
+
         return false;
     }
 };
 ```
 
 
+
+## 139. Word Break
+
+---
+
+Given a**non-empty**string_s_and a dictionary_wordDict_containing a list of**non-empty**words, determine if_s_can be segmented into a space-separated sequence of one or more dictionary words.
+
+**Note:**
+
+* The same word in the dictionary may be reused multiple times in the segmentation.
+* You may assume the dictionary does not contain duplicate words.
+
+**Example 1:**
+
+```
+Input:
+ s = "leetcode", wordDict = ["leet", "code"]
+
+Output:
+ true
+
+Explanation:
+ Return true because 
+"leetcode"
+ can be segmented as 
+"leet code"
+.
+
+```
+
+**Example 2:**
+
+```
+Input:
+ s = "applepenapple", wordDict = ["apple", "pen"]
+
+Output:
+ true
+
+Explanation:
+ Return true because 
+"
+applepenapple
+"
+ can be segmented as 
+"
+apple pen apple
+"
+.
+             Note that you are allowed to reuse a dictionary word.
+
+```
+
+**Example 3:**
+
+```
+Input:
+ s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+
+Output:
+ false
+```
+
+**Notes:**  
+https://leetcode.com/problems/word-break/description/
+
+```cpp
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_map<int, unordered_set<string>> dict;
+        for (auto word: wordDict)
+            dict[word.size()].insert(word);
+        
+        unordered_map<int, bool> canBreak;
+        return wordBreakHelper(s, 0, dict, canBreak);
+    }
+    
+    bool wordBreakHelper(const string& s, int start, unordered_map<int, unordered_set<string>>& dict,unordered_map<int, bool>& canBreak)
+    {
+        if (start >= s.size())
+            return true;
+        
+        if (canBreak.count(start))
+            return canBreak[start];
+        for (auto& each : dict)
+        {
+            int len = each.first;
+            auto& collection = each.second;
+            if (!collection.count(s.substr(start, len)))
+                continue;
+            if (wordBreakHelper(s, start + len, dict, canBreak))
+                return true;
+            canBreak[start+len] = false;
+        }
+        return false;
+    }
+};
+```
 
 
 
