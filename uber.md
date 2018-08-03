@@ -781,7 +781,7 @@ Output:
 ]
 ```
 
-\[\[\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29\)\)  
+\[\[\[\[[https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\]\(https://leetcode.com/problems/factor-combinations/description/\[\)\)\)\](https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[]%28https://leetcode.com/problems/factor-combinations/description/[%29%29%29\)\)  
 \]\([https://leetcode.com/problems/factor-combinations/description/](https://leetcode.com/problems/factor-combinations/description/)\)
 
 ```cpp
@@ -1107,6 +1107,63 @@ public:
             }
         }
         return dupMap[node];
+    }
+};
+```
+
+## 242. Valid Anagram
+
+Given two strings_s_and_t _, write a function to determine if_t_is an anagram of_s_.
+
+**Example 1:**
+
+```
+Input:
+s
+ = "anagram", 
+t
+ = "nagaram"
+
+Output:
+ true
+
+```
+
+**Example 2:**
+
+```
+Input:
+s
+ = "rat", 
+t
+ = "car"
+
+Output: 
+false
+
+```
+
+**Note:**  
+You may assume the string contains only lowercase alphabets.
+
+**Follow up:**  
+What if the inputs contain unicode characters? How would you adapt your solution to such case?
+
+**Notes:**  
+https://leetcode.com/problems/valid-anagram/description/
+
+```cpp
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        int board[256]={0};
+        for (auto c : s)
+            board[c]++;
+        for (auto c: t)
+            board[c]--;
+        for (int i = 0; i < 256; i++)
+            if (board[i]) return false;
+        return true;
     }
 };
 ```
