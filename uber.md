@@ -630,3 +630,195 @@ public:
 
 
 
+## 767.Reorganize String
+
+---
+
+Given a string`S`, check if the letters can be rearranged so that two characters that are adjacent to each other are not the same.
+
+If possible, output any possible result.  If not possible, return the empty string.
+
+**Example 1:**
+
+```
+Input:
+ S = "aab"
+
+Output:
+ "aba"
+```
+
+**Example 2:**
+
+```
+Input:
+ S = "aaab"
+
+Output:
+ ""
+```
+
+**Note:**
+
+* `S`
+  will consist of lowercase letters and have length in range
+  `[1, 500]`
+  .
+
+[https://leetcode.com/problems/reorganize-string/description/](https://leetcode.com/problems/reorganize-string/description/)
+
+```cpp
+class Solution {
+public:
+    string reorganizeString(string S) {
+
+        if (S.empty())
+            return S;
+
+        unordered_map<char, int> counter;
+        for (auto c : S)
+            counter[c]++;
+        auto cmp = [&counter](const char& l,const char& r){
+            return counter[l] < counter[r];
+        };
+        priority_queue<char, vector<char>,decltype(cmp)> pq(cmp);
+        for (auto each : counter)
+            pq.push(each.first);
+
+        vector<string> slots(counter[pq.top()]);
+        int current = 0;
+        while(!pq.empty())
+        {
+            auto c = pq.top();
+            pq.pop();
+            int count = counter[c];
+            for (int i = 0; i < count; i++)
+            {
+                slots[current++].push_back(c);
+                if (current == slots.size())
+                    current = 0;
+            }
+        }
+        string result;
+        for (int i = 0; i < slots.size()-1; i++)
+        {
+            if (slots[i].back() == slots[i+1].front() )
+                return "";
+            result += slots[i];
+        }
+        result += slots.back();
+        return result;
+    }
+};
+```
+
+## 254.Factor Combinations
+
+---
+
+Numbers can be regarded as product of its factors. For example,
+
+```
+8 = 2 x 2 x 2;
+  = 2 x 4.
+
+```
+
+Write a function that takes an integernand return all possible combinations of its factors.
+
+**Note:**
+
+1. You may assume that
+   n
+   is always positive.
+2. Factors should be greater than 1 and less than
+   n
+   .
+
+**Example 1:**
+
+```
+Input:
+1
+Output:
+ []
+
+```
+
+**Example 2:**
+
+```
+Input:
+37
+Output:
+[]
+```
+
+**Example 3:**
+
+```
+Input:
+12
+Output:
+
+[
+  [2, 6],
+  [2, 2, 3],
+  [3, 4]
+]
+```
+
+**Example 4:**
+
+```
+Input:
+32
+Output:
+
+[
+  [2, 16],
+  [2, 2, 8],
+  [2, 2, 2, 4],
+  [2, 2, 2, 2, 2],
+  [2, 4, 4],
+  [4, 8]
+]
+
+```
+
+
+
+https://leetcode.com/problems/factor-combinations/description/[  
+](https://leetcode.com/problems/factor-combinations/description/)
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> getFactors(int n) {
+        vector<int> solution;
+        vector<vector<int>> result;
+        helper(n, 2, solution, result);
+        return result;
+    }
+    
+    void helper(int n, int i, vector<int> solution, vector<vector<int>>& result)
+    {
+        if (n < 2 || i >= n)
+            return;
+        for (int k = i; k <= sqrt(n); k++)
+        {
+            if (n%k || n/k < k)
+                continue;
+            solution.push_back(k);
+            solution.push_back(n/k);
+            result.push_back(solution);
+            solution.pop_back();
+            helper(n/k, k, solution, result);
+            solution.pop_back();
+        }
+    }
+};
+```
+
+
+
