@@ -1,22 +1,16 @@
 # GFS
 
-
-
 ### Scenario
 
 读写PB量级的文件系统， 支持modify, delete etc
-
-
 
 # Service
 
 DFS
 
-# Storage 
+# Storage
 
 FileSystem
-
-
 
 首先单机存100G 怎么存？
 
@@ -28,15 +22,7 @@ FileSystem
 
 master-slave \(master is down, bad, but can compensate with shadow master\) ? P2P? \(disadvantage, sync is issue\), go with master slave
 
-
-
 ![](/assets/GFS.png)
 
-
-
-
-
-
-
-
+![](/assets/SUMMARYGFS.png)
 
