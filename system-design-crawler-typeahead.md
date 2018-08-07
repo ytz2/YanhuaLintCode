@@ -1,28 +1,22 @@
-
-
 # Crawler
-
-
 
 # Scenario
 
-Download WWW in 1 week 
+Download WWW in 1 week
 
 Assumption: 1 Trillion web page
 
-                      100k per page
+```
+                  100k per page
 
-                      Download in one week
-
-
+                  Download in one week
+```
 
 | QPS | 1e12/1e5/7 = 1 million /s |
 | :--- | :--- |
 | Storage | 1e12\*.1MB = 1e11 mb = 100 PB |
 
-
-
-# Service 
+# Service
 
 Evolve
 
@@ -34,8 +28,6 @@ From Single Thread to MultiThread
 
 ![](/assets/crawlerFinal.png)
 
-
-
 TypeAhead
 
 ```
@@ -43,18 +35,18 @@ TypeAhead
 using namespace std;
 class TrieNode{
 public:
-    
-    
+
+
     TrieNode()
     {
-        
+
     }
-    
+
     ~TrieNode()
     {
-        
+
     }
-    
+
     void update(const string& str, int times)
     {
         freq[str] = times;
@@ -62,7 +54,7 @@ public:
         if (top3.size() > 3)
             top3.erase(*top3.rbegin());
     }
-    
+
     void update(const string& str)
     {   
 
@@ -72,15 +64,15 @@ public:
         top3.insert(str);
         if (top3.size() > 3)
             top3.erase(*top3.rbegin());
-            
+
     }
-    
+
     vector<string> topThree()
     {
         vector<string> res(top3.begin(), top3.end());
         return res;
     }
-    
+
     unordered_map<char, TrieNode*> children;
     unordered_map<string ,int> freq;
     set<string, std::function<bool(const string& left,const  string& right)>> top3{
@@ -115,7 +107,7 @@ public:
             }
         }
     }
-    
+
     vector<string> input(char c) {
         if (c == '#')
         {
@@ -141,7 +133,6 @@ public:
     TrieNode *root;
     TrieNode *cur;
 };
-
 ```
 
 
