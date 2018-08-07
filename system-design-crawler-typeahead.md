@@ -135,5 +135,5 @@ public:
 };
 ```
 
-
+![](/assets/typeahead.png)
 
