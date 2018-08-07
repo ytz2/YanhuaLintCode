@@ -1,10 +1,6 @@
 Map Reduce
 
-
-
 ![](/assets/mapReduc1.png)
-
-
 
 ```
 /**
@@ -65,4 +61,10 @@ public:
 ```
 
 
+
+How to build inverted index? 
+
+![](/assets/MapReduceInvertedIndex.png)
+
+![](/assets/designmapreduce.png)
 
