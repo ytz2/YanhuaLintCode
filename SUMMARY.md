@@ -48,4 +48,5 @@
 * [System Design: TinyURL](system-design-tinyurl.md)
 * [System Design: Distributed File System](system-design-distributed-file-system.md)
 * [System Design: Crawler, Typeahead](system-design-crawler-typeahead.md)
+* [System Design: Map Reduce](system-design-map-reduce.md)
 
