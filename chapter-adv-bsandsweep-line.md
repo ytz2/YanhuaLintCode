@@ -140,9 +140,92 @@ int main()
 
 二分答案的思路， 求最大最小，靠猜来找答案的办法 类似sqrt
 
-![](/assets/二分答案.png)
+# ![](/assets/二分答案.png)Sweep Line
+
+![](/assets/sweeplineprob.png)
 
 
+
+# 391 Number of Airplanes in the Sky {#find-peak-element-ii}
+
+## Question {#question}
+
+Given an interval list which are flying and landing time of the flight. How many airplanes are on the sky at most?
+
+### Example
+
+For interval list
+
+```
+[
+  (1,10),
+  (2,3),
+  (5,8),
+  (4,7)
+]
+
+```
+
+Return`3`
+
+### Notice
+
+If landing and flying happens at the same time, we consider landing should happen at first.
+
+
+
+![](/assets/countFlight.png)
+
+扫描线的本质就是对于起点和终点的事件化，并且根据事件的不同来处理
+
+这道题目的处理方式是++和--的区别
+
+```cpp
+/**
+ * Definition of Interval:
+ * classs Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this->start = start;
+ *         this->end = end;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param airplanes: An interval array
+     * @return: Count of airplanes are in the sky.
+     */
+    int countOfAirplanes(vector<Interval> &airplanes) {
+        // write your code here
+        if (airplanes.size() <= 1)
+            return airplanes.size();
+        vector<pair<int, int>> schedule;
+        for (Interval& interval : airplanes){
+            schedule.emplace_back(interval.start, 1);
+            schedule.emplace_back(interval.end, 0);
+        }
+        sort(schedule.begin(), schedule.end(), [](pair<int,int>& left, pair<int,int>& right){
+            if (left.first == right.first)
+                return left.second < right.second;
+            return left.first < right.first;
+        });
+        int count = 0;
+        int res = 0;
+        for (int i = 0; i < schedule.size(); i++ )
+        {
+            if (schedule[i].second == 1)
+                count++;
+            else
+                count--;
+            res = max(res, count);
+        }
+        return res;
+    }
+};
+```
 
 
 
