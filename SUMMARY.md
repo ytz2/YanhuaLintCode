@@ -51,4 +51,5 @@
 * [System Design: Map Reduce](system-design-map-reduce.md)
 * [System Design: Design Uber](system-design-design-uber.md)
 * [System Design:  Realtime Communitcate, Rate Limiter and Metrics](system-design-realtime-communitcate-rate-limiter-and-metrics.md)
+* [Chapter Adv: BS&Sweep Line](chapter-adv-bsandsweep-line.md)
 
