@@ -222,8 +222,6 @@ public:
 };
 ```
 
-
-
 # 218 The Skyline Problem {#find-peak-element-ii}
 
 A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Now suppose you are**given the locations and height of all the buildings**as shown on a cityscape photo \(Figure A\), write a program to**output the skyline**formed by these buildings collectively \(Figure B\).
@@ -254,62 +252,63 @@ For instance, the skyline in Figure B should be represented as:`[ [2 10], [3 15]
   is not acceptable; the three lines of height 5 should be merged into one in the final output as such:
   `[...[2 3], [4 5], [12 7], ...]`
 
-
-
 扫描线的本质就是对于起点和终点的事件化，并且根据事件的不同来处理
 
-![](/assets/skyline.png)
+![](/assets/skyline.png)这道题关键还是在于两点:
+
+event处理的方式，要分析清楚，
+
+第二个是sort的时候的特殊情况要清楚
 
 
 
 ```cpp
-/**
- * Definition of Interval:
- * classs Interval {
- *     int start, end;
- *     Interval(int start, int end) {
- *         this->start = start;
- *         this->end = end;
- *     }
- * }
- */
+
 
 class Solution {
-public:
-    /**
-     * @param airplanes: An interval array
-     * @return: Count of airplanes are in the sky.
-     */
-    int countOfAirplanes(vector<Interval> &airplanes) {
-        // write your code here
-        if (airplanes.size() <= 1)
-            return airplanes.size();
-        vector<pair<int, int>> schedule;
-        for (Interval& interval : airplanes){
-            schedule.emplace_back(interval.start, 1);
-            schedule.emplace_back(interval.end, 0);
-        }
-        sort(schedule.begin(), schedule.end(), [](pair<int,int>& left, pair<int,int>& right){
-            if (left.first == right.first)
-                return left.second < right.second;
-            return left.first < right.first;
-        });
-        int count = 0;
-        int res = 0;
-        for (int i = 0; i < schedule.size(); i++ )
+public:   
+    struct Event{
+        Event(int t0, int h0, int tp)
+            :t(t0), h(h0), type(tp)
+            {}
+        int t, h, type ; // type 1 enter -1 exit
+    };
+
+    vector<pair<int, int>> getSkyline(vector<vector<int>>& buildings) {
+        vector<pair<int,int>> ret;
+        multiset<int> height;
+        vector<Event> store;
+        for (auto& each : buildings)
         {
-            if (schedule[i].second == 1)
-                count++;
-            else
-                count--;
-            res = max(res, count);
+            store.emplace_back(each[0], each[2], 1);
+            store.emplace_back(each[1], each[2], -1);
         }
-        return res;
+        
+        sort (store.begin(), store.end(), [](const Event& left, const Event& right){
+            if (left.t == right.t)
+                return left.h*left.type > right.h * right.type;
+            return left.t < right.t;
+        });
+        
+        for (auto& event : store)
+        {
+            if (event.type == 1)
+            {
+                if (height.empty() || event.h > *height.rbegin())
+                    ret.emplace_back(event.t, event.h);
+                height.insert(event.h);
+            }
+            else
+            {
+                height.erase(height.lower_bound(event.h));
+                if (height.empty() || event.h > *height.rbegin())
+                    ret.emplace_back(event.t, height.empty()? 0 : *height.rbegin());
+            }
+        }
+        return ret;
     }
 };
 ```
-
-
 
 
 
