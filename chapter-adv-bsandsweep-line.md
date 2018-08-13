@@ -27,7 +27,6 @@ For all j
  A[j][m - 2] 
 >
  A[j][m - 1].
-
 ```
 
 We define a position P is a peek if:
@@ -46,12 +45,9 @@ Have you met this question in a real interview? Yes Example Given a matrix:
   [14,18,19,20,10],
   [13,14,11,10,9]
 ]
-
 ```
 
 return index of`41`\(which is`[1,1]`\) or index of`24`\(which is`[2,2]`\)
-
-
 
 这道题用的思想是地图分割的思路。
 
@@ -61,9 +57,9 @@ return index of`41`\(which is`[1,1]`\) or index of`24`\(which is`[2,2]`\)
 
 2 那么可以考虑用二分，但是如何进行二维二分，那么尝试在一维进行二分
 
-我们选取中间一行 
+我们选取中间一行
 
-15 17 24 21 7 ， 找到最大的24， 那么24比上下都大则24就是， 加入上面比他还大那就往上走，否则就往下走。 这里有一个问题我们会不会从中间这一样走回来？ 
+15 17 24 21 7 ， 找到最大的24， 那么24比上下都大则24就是， 加入上面比他还大那就往上走，否则就往下走。 这里有一个问题我们会不会从中间这一样走回来？
 
 不会，因为我们选了这一行最大，而且我们只往最大的方位走，那么也就是说我们下面的元素肯定都比当前行大。 所以这个时候会有一个
 
@@ -71,11 +67,7 @@ mlog\(n\) 的解法 出现
 
 3 从一维二分到二维二分进化，因为行列式对称的，很容易就想到了先切行，再切列，再切行。。。。这样就可以每次切掉n/2， 最后是O\(M+N\) 因为我们用了O（m+n\)的复杂度把变为T（m+n / 2\)的问题，类似quick select
 
-
-
 ```cpp
-
-
 #include <iostream>
 #include <vector>
 
@@ -101,7 +93,7 @@ public:
                 return find(matrix, mid+1, y0, x1, y1, !flag);
             return matrix[mid][ind];
         }
-        
+
         int mid = y0 + (y1 - y0) / 2;
         int ind = x0;
         for (int i = x0; i <= x1 ; i++)
@@ -115,7 +107,7 @@ public:
             return find(matrix, x0, mid+1, x1, y1, !flag);
         return matrix[mid][ind];
     }
-  
+
     int findPeak(vector<vector<int>>& matrix)
     {
         return find(matrix, 1, 1, matrix.size()-2, matrix[0].size()-2, true);
@@ -144,12 +136,11 @@ int main()
     cout << sol.findPeak(matrix) << endl;
     return 0;
 }
-
 ```
 
+二分答案的思路， 求最大最小，靠猜来找答案的办法 类似sqrt
 
-
-
+![](/assets/二分答案.png)
 
 
 
