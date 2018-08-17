@@ -52,4 +52,5 @@
 * [System Design: Design Uber](system-design-design-uber.md)
 * [System Design:  Realtime Communitcate, Rate Limiter and Metrics](system-design-realtime-communitcate-rate-limiter-and-metrics.md)
 * [Chapter Adv: BS&Sweep Line](chapter-adv-bsandsweep-line.md)
+* [Chapter Adv: DP](chapter-adv-dp.md)
 
