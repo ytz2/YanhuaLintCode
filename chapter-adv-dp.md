@@ -17,7 +17,7 @@ Output:
 
 Explanation:
  Rob house 1 (money = 1) and then rob house 3 (money = 3).
-             Total amount you can rob = 1 + 3 = 4.
+             Total amount you can rob = 1 + 3 = 4.
 ```
 
 **Example 2:**
@@ -31,7 +31,7 @@ Output:
 
 Explanation:
  Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
-             Total amount you can rob = 2 + 9 + 1 = 12.
+             Total amount you can rob = 2 + 9 + 1 = 12.
 ```
 
 ```cpp
@@ -49,6 +49,72 @@ public:
         for (int i = 2; i <=n; i++)
             val[i%2] = max(nums[i-1] + val[(i-2)%2], val[(i-1)%2]);
         return val[n%2];
+    }
+};
+```
+
+## 221 Maximal Square
+
+Given a 2D binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+
+**Example:**
+
+```
+Input: 
+
+
+1 0 1 0 0
+1 0 
+1
+1
+ 1
+1 1 
+1
+1
+ 1
+1 0 0 1 0
+
+
+Output: 
+4
+```
+
+```cpp
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int m = matrix.size();
+        if ( 0 == m )
+            return 0;
+        int n = matrix[0].size();
+        if ( 0 == n )
+            return 0;
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+        // init
+        int res = 0;
+        for (int i = 0;  i < n; i++)
+        {
+            dp[0][i] = (matrix[0][i] == '1');
+            res = max(res, dp[0][i]);
+        }    
+        for (int i = 0; i < m; i++)
+        {
+            dp[i][0] = (matrix[i][0] == '1');
+            res = max(res, dp[i][0]);
+        }    
+        
+        for (int i = 1; i < m; i++)
+        {
+            for (int j = 1; j < n; j++)
+            {
+                if (matrix[i][j] == '1')
+                {
+                    dp[i][j] = min(dp[i-1][j-1],min(dp[i-1][j], dp[i][j-1]))+1;
+                }    
+                res = max(res, dp[i][j]);
+            }
+        }
+        return res*res;
     }
 };
 ```
