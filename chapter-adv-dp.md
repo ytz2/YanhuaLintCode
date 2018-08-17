@@ -102,7 +102,7 @@ public:
             dp[i][0] = (matrix[i][0] == '1');
             res = max(res, dp[i][0]);
         }    
-        
+
         for (int i = 1; i < m; i++)
         {
             for (int j = 1; j < n; j++)
@@ -115,6 +115,102 @@ public:
             }
         }
         return res*res;
+    }
+};
+```
+
+![](/assets/区间DP.png)
+
+## 312 Burst Balloons
+
+Given`n`balloons, indexed from`0`to`n-1`. Each balloon is painted with a number on it represented by array`nums`. You are asked to burst all the balloons. If the you burst balloon`i`you will get`nums[left] * nums[i] * nums[right]`coins. Here`left`and`right`are adjacent indices of`i`. After the burst, the`left`and`right`then becomes adjacent.
+
+Find the maximum coins you can collect by bursting the balloons wisely.
+
+**Note:**
+
+* You may imagine
+  `nums[-1] = nums[n] = 1`
+  . They are not real therefore you can not burst them.
+* 0 ≤
+  `n`
+  ≤ 500, 0 ≤
+  `nums[i]`
+  ≤ 100
+
+**Example:**
+
+```
+Input:
+[3,1,5,8]
+Output:
+167 
+
+Explanation: 
+nums = [3,1,5,8] --
+>
+ [3,5,8] --
+>
+   [3,8]   --
+>
+  [8]  --
+>
+ []
+             coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
+
+
+
+这道题很容易想的是用递归的解法
+
+选任意一个，打爆，一直打到最后没有，求出每个解的最小值
+这样做的坏处是n!的复杂度
+
+那么由于是n!,且求最大，一般对应DP的解。 套用 区间类模板的话， 这类题目是从大化小之后最值问题，那么可以反过来看
+
+假设最后我打爆的是第k个， 那么我最后的解就是 【0， k-1] + k, [k+1,n] 的和的最大
+
+那么再延伸一下 我在【i,j]的区间呢， 【i, k-1], k, [k+1, j]的最大解
+最后的解就是【0,n] 
+
+那么为什么是DP呢，因为从大化小的时候会产生很多中间区间，从而可以做记忆化搜索
+
+另外这道题有一个trick,左右各push 1， 这样可以保证边界问题
+
+
+```
+
+```cpp
+class Solution {
+public:
+    int maxCoins(vector<int>& nums) {
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+        vector<vector<bool>> visited(n, vector<bool>(n, false));
+        for (int i = 1; i <=n-2; i++)
+        {
+            visited[i][i] = true;
+            dp[i][i] = nums[i-1]*nums[i]*nums[i+1];
+        }
+        return search(nums, dp, visited, 1, n-2);
+        //return dp[1][n-2];
+    }
+    
+    int search(vector<int>& nums, vector<vector<int>>& dp, vector<vector<bool>>& visited, int i, int j)
+    {
+        if (visited[i][j])
+            return dp[i][j];
+        
+        for (int k = i; k <= j; k++)
+        {
+            int l = search(nums, dp, visited, i, k-1);
+            int r = search(nums, dp, visited, k+1, j);
+            int v = nums[k]*nums[i-1]*nums[j+1];
+            dp[i][j] = max(dp[i][j], l+r+v);
+        }
+        visited[i][j] = true;
+        return dp[i][j];
     }
 };
 ```
