@@ -213,5 +213,39 @@ public:
 };
 ```
 
+这道题还可以用类似panlidrome dp的技巧来解，其实p那个就是区间类DP， 问你区间内i到j是不是dp的问题
+
+
+
+```
+class Solution {
+public:
+    int maxCoins(vector<int>& nums) {
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+        vector<vector<bool>> visited(n, vector<bool>(n, false));
+        for (int i = 1; i <=n-2; i++)
+        {
+            visited[i][i] = true;
+            dp[i][i] = nums[i-1]*nums[i]*nums[i+1];
+        }
+
+        for (int l = 2; l <= n-2; l++)
+        {
+            for (int i = 1; i+l-1 <=n-2; i++)
+            {
+                int j = i+l-1;
+                for (int k = i; k<=j; k++)
+                    dp[i][j] = max(dp[i][j], nums[k]*nums[i-1]*nums[j+1] + dp[i][k-1]+dp[k+1][j]);
+            }
+        }
+        return dp[1][n-2];
+    }
+    
+};
+```
+
 
 
