@@ -156,7 +156,7 @@ nums = [3,1,5,8] --
   [8]  --
 >
  []
-             coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
+             coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
 
 
 
@@ -175,8 +175,6 @@ nums = [3,1,5,8] --
 那么为什么是DP呢，因为从大化小的时候会产生很多中间区间，从而可以做记忆化搜索
 
 另外这道题有一个trick,左右各push 1， 这样可以保证边界问题
-
-
 ```
 
 ```cpp
@@ -196,13 +194,13 @@ public:
         return search(nums, dp, visited, 1, n-2);
         //return dp[1][n-2];
     }
-    
+
     int search(vector<int>& nums, vector<vector<int>>& dp, vector<vector<bool>>& visited, int i, int j)
     {
         if (visited[i][j])
             return dp[i][j];
-        
-        for (int k = i; k <= j; k++)
+
+        for (int k = i; k <= j; k++) //这里要相等， 因为越界没关系，0，但是不越界会miss左边一个右面一堆的问题
         {
             int l = search(nums, dp, visited, i, k-1);
             int r = search(nums, dp, visited, k+1, j);
