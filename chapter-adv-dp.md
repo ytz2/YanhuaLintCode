@@ -215,8 +215,6 @@ public:
 
 这道题还可以用类似panlidrome dp的技巧来解，其实p那个就是区间类DP， 问你区间内i到j是不是dp的问题
 
-
-
 ```
 class Solution {
 public:
@@ -243,7 +241,7 @@ public:
         }
         return dp[1][n-2];
     }
-    
+
 };
 ```
 
