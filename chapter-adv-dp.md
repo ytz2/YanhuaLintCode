@@ -330,11 +330,9 @@ public:
 };
 ```
 
-
-
 ## 97 Interleaving String
 
-iGiven_s1_,_s2_,_s3_, find whether_s3_is formed by the interleaving of_s1_and_s2_.
+iGiven_s1_,_s2_,_s3_, find whether_s3\_is formed by the interleaving of\_s1\_and\_s2_.
 
 **Example 1:**
 
@@ -346,7 +344,6 @@ s3
 
 Output:
  true
-
 ```
 
 **Example 2:**
