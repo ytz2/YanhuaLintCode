@@ -249,7 +249,7 @@ public:
 
 ## 72 Edit Distance
 
-iven two words_word1_and_word2_, find the minimum number of operations required to convert_word1_to_word2_.
+iven two words_word1\_and\_word2_, find the minimum number of operations required to convert_word1\_to\_word2_.
 
 You have the following 3 operations permitted on a word:
 
@@ -267,7 +267,7 @@ Output:
  3
 
 Explanation:
- 
+
 horse -
 >
  rorse (replace 'h' with 'r')
@@ -277,7 +277,6 @@ rorse -
 rose -
 >
  ros (remove 'e')
-
 ```
 
 **Example 2:**
@@ -290,7 +289,7 @@ Output:
  5
 
 Explanation:
- 
+
 intention -
 >
  inention (remove 't')
@@ -329,6 +328,50 @@ public:
         return dp.back().back();
     }
 };
+```
+
+
+
+## 97 Interleaving String
+
+iGiven_s1_,_s2_,_s3_, find whether_s3_is formed by the interleaving of_s1_and_s2_.
+
+**Example 1:**
+
+```
+Input:
+ s1 = "aabcc", s2 = "dbbca", 
+s3
+ = "aadbbcbcac"
+
+Output:
+ true
+
+```
+
+**Example 2:**
+
+```
+Input:
+ s1 = "aabcc", s2 = "dbbca", 
+s3
+ = "aadbbbaccc"
+
+Output:
+ false
+```
+
+```cpp
+Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.
+
+Example 1:
+
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+Output: true
+Example 2:
+
+Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
+Output: false
 ```
 
 
