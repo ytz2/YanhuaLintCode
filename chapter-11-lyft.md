@@ -908,5 +908,87 @@ public:
 };
 ```
 
+```cpp
+#include <iostream>
+#include <functional>
+#include <unordered_map>
+#include <list>
+#include <string>
+using namespace std;
+
+typedef void(*Callable)();
+
+
+class EventManager{
+public:
+    EventManager()
+    {}
+    ~EventManager()
+    {}
+    
+    void add(int signalId, Callable callable)
+    {
+        callbacks_[signalId].push_back(callable);
+        reference_[signalId][callable] = prev(callbacks_[signalId].end());
+    }
+    
+    void remove(int signalId, Callable callable)
+    {
+        if (!callbacks_.count(signalId))
+            return;
+        auto it = reference_[signalId][callable];
+        callbacks_[signalId].erase(it);
+        if (callbacks_[signalId].empty())
+            callbacks_.erase(signalId);
+        reference_[signalId].erase(callable);
+    }
+    
+    void signal(int signalId)
+    {
+        if (!callbacks_.count(signalId))
+            return;
+        // copy
+        auto callbackCopy = callbacks_[signalId];
+        for (auto each: callbackCopy)
+            each();
+    }
+    unordered_map<int, list<Callable>> callbacks_;
+    unordered_map<int, unordered_map<Callable, list<Callable>::iterator>> reference_;
+};
+EventManager events;
+
+void test3()
+{
+    cout<<"invoke test3"<<endl;
+}
+
+void test2()
+{
+    cout<<"invoke test2"<<endl;
+    events.remove(1, test2);
+}
+
+void test1()
+{
+    cout<<"invoke test1"<<endl;
+    events.remove(1, test1);
+    events.add(1, test3);
+}
+
+int main()
+{
+    events.add(1, test1);
+    events.add(1, test2);
+    events.signal(1);
+    cout <<"Signal once"<<endl;
+    events.signal(1);
+    cout <<"Signal second" << endl;
+    cout<<"Hello World";
+
+    return 0;
+}
+
+```
+
 
 
