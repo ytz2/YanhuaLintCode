@@ -925,13 +925,13 @@ public:
     {}
     ~EventManager()
     {}
-    
+
     void add(int signalId, Callable callable)
     {
         callbacks_[signalId].push_back(callable);
         reference_[signalId][callable] = prev(callbacks_[signalId].end());
     }
-    
+
     void remove(int signalId, Callable callable)
     {
         if (!callbacks_.count(signalId))
@@ -942,7 +942,7 @@ public:
             callbacks_.erase(signalId);
         reference_[signalId].erase(callable);
     }
-    
+
     void signal(int signalId)
     {
         if (!callbacks_.count(signalId))
@@ -987,7 +987,6 @@ int main()
 
     return 0;
 }
-
 ```
 
 
