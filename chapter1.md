@@ -219,8 +219,6 @@ if (beg <= end && std::tolower(s[beg]) != std::tolower(s[end]))
 
 这一行有两个位置容易出错， 在忽略完非法字符后，应该再判断是否越界，并且将待比较字符归一。
 
-
-
 2020/07/19
 
 isValid可以用C API 来替代， 另外不需要考虑空的情况 while\(beg &lt; end）可以cover
@@ -258,8 +256,6 @@ class Solution:
             i+=1
             j-=1
         return True
-        
-        
 ```
 
 ```
@@ -274,10 +270,10 @@ func isPalindrome(s string) bool {
     end := len(s) - 1
     for beg, end = 0, len(s) - 1; beg < end; beg, end = beg + 1, end - 1 {
         for ;beg < end && !f(rune(s[beg])); beg++ {
-            
+
         }
         for ;beg < end && !f(rune(s[end]));end--{
-            
+
         } 
         if unicode.ToLower(rune(s[beg])) != unicode.ToLower(rune(s[end])) {
             return false
@@ -311,7 +307,7 @@ If source =`"source"`and target =`"target"`, return`-1`.
 
 If source =`"abcdabcdefg"`and target =`"bcd"`, return`1`.
 
-[http://www.lintcode.com/en/problem/valid-palindrome/](http://www.lintcode.com/en/problem/strstr/#)
+[http://www.lintcode.com/en/problem/valid-palindrome/](https://leetcode.com/problems/implement-strstr/)
 
 ### 解题分析:
 
@@ -372,6 +368,85 @@ public:
 ### 复杂度分析:
 
 O（mn\) m = strlen\(m\) n=strlen\(target\)
+
+
+
+2020/07/19
+
+```cpp
+// c++
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int n = needle.size();
+        int m = haystack.size();
+        if (n == 0)
+            return 0;
+        int i = 0;
+        while ( i <= m - n) {
+            bool found = true;
+            for (int k =i, j = 0;  j < n; k++, j++) {
+                if (haystack[k] != needle[j]) {
+                    found = false;
+                    break;
+                }
+            }
+            if (found)
+                return i;
+            i++;
+        }
+        return -1;
+    }
+};
+```
+
+```py
+# py3
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        if len(needle) == 0:
+            return 0
+        i = 0
+        m = len(haystack)
+        n = len(needle)
+        while(i <= m - n):
+            j , k = i, 0
+            match = True
+            while (k < n):
+                if haystack[j] != needle[k]:
+                    match = False
+                    break
+                k+=1
+                j+=1
+            if match:
+                return i
+            i+=1
+        return -1
+        
+```
+
+```go
+// golang
+func strStr(haystack string, needle string) int {
+    m, n := len(haystack), len(needle)
+    if len(needle) == 0 {
+        return 0
+    }
+    for i:=0; i <= m - n; i++ {
+        found := true
+        for j,k := i,0; k < n; j,k = j+1, k+1 {
+            if haystack[j] != needle[k] {
+                found = false
+                break
+            }
+        }
+        if found {
+            return i
+        }
+    }
+    return -1
+}
+```
 
 ## 200 Longest Palindromic Substring
 
