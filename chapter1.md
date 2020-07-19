@@ -80,18 +80,15 @@ public:
 
 O（n\) , n = s.size\(\)
 
-
-
-###### 2020/07/19 
+###### 2020/07/19
 
 回顾一下， 这个题目有两个可以改善的地方
 
 1. 不要想着一口吃个胖子，解决问题的时候永远先计数再解决问题，模块化比速度重要很多
 2. 解决字节计数的问题的时候使用array效率要高很多 
-3. 
-```cpp
-class Solution {
-public:
+3. ```cpp
+   class Solution {
+   public:
     int longestPalindrome(string s) {
         std::vector<int> count(128, 0);
         for (const auto c : s)
@@ -105,10 +102,11 @@ public:
         }
         return len + hasOdd;
     }
-};
-```
+   };
+   ```
 
 ```py
+# python3
 class Solution:
     def longestPalindrome(self, s: str) -> int:
         arr = [0] * 128
@@ -121,10 +119,10 @@ class Solution:
                 hasOdd = 1;
             res = res + n - n%2
         return res + hasOdd
-        
 ```
 
 ```go
+// golang
 func longestPalindrome(s string) int {
     var arr [128]int
     for _, c := range s {
