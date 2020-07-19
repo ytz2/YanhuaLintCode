@@ -82,6 +82,8 @@ O（n\) , n = s.size\(\)
 
 ###### 2020/07/19
 
+[https://leetcode.com/problems/longest-palindrome/](https://leetcode.com/problems/longest-palindrome/)
+
 回顾一下， 这个题目有两个可以改善的地方
 
 1. 不要想着一口吃个胖子，解决问题的时候永远先计数再解决问题，模块化比速度重要很多
@@ -216,6 +218,76 @@ if (beg <= end && std::tolower(s[beg]) != std::tolower(s[end]))
 ```
 
 这一行有两个位置容易出错， 在忽略完非法字符后，应该再判断是否越界，并且将待比较字符归一。
+
+
+
+2020/07/19
+
+isValid可以用C API 来替代， 另外不需要考虑空的情况 while\(beg &lt; end）可以cover
+
+```cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int beg = 0;
+        int end = s.size() - 1;
+        while(beg < end) {
+            while(beg < end && !isalnum(s[beg])) beg++;
+            while(beg < end && !isalnum(s[end])) end--;
+            if (beg < end && std::tolower(s[beg++]) != std::tolower(s[end--]))
+                return false;
+        }
+        return true;
+    }    
+};
+```
+
+```py
+#py3
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        i = 0 
+        j = len(s) - 1
+        while( i < j):
+            while( i < j and not s[i].isalnum()):
+                i+=1
+            while( i < j and not s[j].isalnum()):
+                j-=1
+            if (s[i].lower() != s[j].lower()):
+                return False
+            i+=1
+            j-=1
+        return True
+        
+        
+```
+
+```
+// golang
+// 好久不写golang手生， golang 两个var的forloop pattern, string index 要变成rune才能开搞
+import  "unicode"
+func isPalindrome(s string) bool {
+    f := func(r rune) bool {
+        return r >= 'A' && r <= 'Z'|| r >= 'a' && r <= 'z' || r >='0' && r <= '9'
+    }
+    beg := 0
+    end := len(s) - 1
+    for beg, end = 0, len(s) - 1; beg < end; beg, end = beg + 1, end - 1 {
+        for ;beg < end && !f(rune(s[beg])); beg++ {
+            
+        }
+        for ;beg < end && !f(rune(s[end]));end--{
+            
+        } 
+        if unicode.ToLower(rune(s[beg])) != unicode.ToLower(rune(s[end])) {
+            return false
+        }
+    }
+    return true
+}
+```
+
+## 
 
 ## 13 strStr
 
