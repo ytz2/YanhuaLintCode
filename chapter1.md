@@ -80,6 +80,68 @@ public:
 
 O（n\) , n = s.size\(\)
 
+
+
+###### 2020/07/19 
+
+回顾一下， 这个题目有两个可以改善的地方
+
+1. 不要想着一口吃个胖子，解决问题的时候永远先计数再解决问题，模块化比速度重要很多
+2. 解决字节计数的问题的时候使用array效率要高很多 
+3. 
+```cpp
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        std::vector<int> count(128, 0);
+        for (const auto c : s)
+            count[c]++;
+        int len = 0;
+        int hasOdd = 0;
+        for (const auto& each : count) {
+            if (each % 2 == 1)
+                hasOdd = 1;
+            len += each - each % 2;
+        }
+        return len + hasOdd;
+    }
+};
+```
+
+```py
+class Solution:
+    def longestPalindrome(self, s: str) -> int:
+        arr = [0] * 128
+        for c in s:
+            arr[ord(c)] = arr[ord(c)] + 1
+        res = 0
+        hasOdd = 0
+        for n in arr:
+            if (n % 2 == 1):
+                hasOdd = 1;
+            res = res + n - n%2
+        return res + hasOdd
+        
+```
+
+```go
+func longestPalindrome(s string) int {
+    var arr [128]int
+    for _, c := range s {
+        arr[int(c)]++   
+    }
+    res := 0
+    hasOdd := 0
+    for _, v := range arr {
+        if v % 2 == 1 {
+            hasOdd = 1
+        }
+        res += v - v%2
+    }
+    return res + hasOdd
+}
+```
+
 ## 415 Valid Palindrome
 
 Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
@@ -577,13 +639,11 @@ public:
 
 哈希的时候是有复杂度的， 所以 复杂度为 O\( average string length in a \* size of a \* size of s\) = o \(kmn\)
 
-
-
 ## 594 strStr II
 
 Implement`strStr`function in O\(n + m\) time.
 
-`strStr`return the first index of the target string in a source string. The length of the target string is_m_and the length of the source string is_n_.  
+`strStr`return the first index of the target string in a source string. The length of the target string is_m\_and the length of the source string is\_n_.  
 If target does not exist in source, just return -1.
 
 Have you met this question in a real interview?
@@ -594,9 +654,7 @@ Yes
 
 Given source =`abcdef`, target =`bcd`, return`1`.
 
-
-
-http://www.lintcode.com/en/problem/strstr-ii/\#
+[http://www.lintcode.com/en/problem/strstr-ii/\#](http://www.lintcode.com/en/problem/strstr-ii/#)
 
 ### 解题分析:
 
@@ -604,19 +662,19 @@ http://www.lintcode.com/en/problem/strstr-ii/\#
 
 道题目其实是考察背诵的，无力吐槽，做一遍robin-karp
 
-robin-karp背后的思想很容易理解：
+robin-karp背后的思想很容易理解  
+：
 
-比如，abcde -&gt; cde， strstr里用了双重循环。 第一层为abcde 遍历, 第二重为cde遍历， 从a-&gt;b-&gt;c都需要从头到尾比一遍。 rk算法就是解决不需要从头到尾比的问题， 首先要hash \(cde\) = hashTarget, 那么分别去和 hash\(abc\), hash\(bcd\), hash \(cde\)来比较， 假设hash是一个o\(1\)的算法， 那么实际上可以达到O\(m+n） 的复杂度。 但是实际问题是hash是一个o\(targetLen\)的复杂度的算法。 如何使他变成O\(1\) 
+比如，abcde -&gt; cde  
+， strstr里用了双重循环。 第一层为abcde 遍历, 第二重为cde遍历， 从a-&gt;b-&gt;c都需要从头到尾比一遍。 rk算法就是解决不需要从头到尾比的问题， 首先要hash \(cde\) = hashTarget, 那么分别去和 hash\(abc\), hash\(bcd\), hash \(cde\)来比较， 假设hash是一个o\(1\)的算法， 那么实际上可以达到O\(m+n） 的复杂度。 但是实际问题是hash是一个o\(targetLen\)的复杂度的算法。 如何使他变成O\(1\)
 
-hash\(abc\) = \(a\*BASE^2 + b\* BASE^1 +c\) % MOD ;
+hash\(abc\) = \(a\*BASE^2 + b\* BASE^1 +c\) % MOD ;
 
 当移到hash\(bcd\)的时候 hash\(bcd\) = \(hash\(abcd\) - a\*BASE^3 + MOD\) %MOD, 实际上一步就可以求得
 
 当我们发现hash\(cde\) = hash\(target）的时候， 因为hash相等只是必要条件， 序言验证是否充分，则需要从头比较。
 
 要注意的细节如下：
-
-
 
 BASE 取 31 or 33, 为什么？ 经验值
 
@@ -625,10 +683,6 @@ MOD 取 1E5， 为什么？ 如果是32位机器，不会overflow \(lintcode跑�
 掌握 hash： hash = \(hash\*BASE+c\) % MOD hash start with 0
 
 迭代更新的时候如果小于0， 加上MOD即可
-
-
-
-
 
 ### 代码：
 
@@ -642,25 +696,25 @@ public:
      */
     int strStr2(const char* source, const char* target) {
         // write your code here
-        
+
         if (!source || !target)
             return -1;
         if (!*target)
             return 0;
-            
+
         // abcde ,  bcd 
         int sourceLen = strlen(source);
         int targetLen = strlen(target);
-        
+
         // step 1. define hash
         int BASE = 31;
         int MOD = 1e6;
-        
+
         // step 2. hash target
         int targetHash = 0;
         for (int i = 0; i < targetLen; i++ )
             targetHash = (targetHash * BASE + target[i]) % MOD;
-        
+
         // step 2.5, prepare pow, why? we need it in step 3
         int power = 1;
         for (int i = 0; i < targetLen; i++ )
@@ -694,7 +748,7 @@ public:
                     return i-targetLen+1;
             }
         }
-        
+
         return -1;
     }
 };
@@ -703,6 +757,4 @@ public:
 ### 复杂度分析:
 
 o\(m+n\), m = source.size\(\), n=target.size\(\)
-
-
 
