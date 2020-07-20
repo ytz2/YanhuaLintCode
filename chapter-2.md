@@ -85,7 +85,7 @@ func lastPosition (nums []int, target int) int {
     if n == 0 {
         return -1
     }
-    
+
     b, e := 0, n-1
     for {
         if b + 1 >= e {
@@ -105,7 +105,6 @@ func lastPosition (nums []int, target int) int {
     }
     return -1
 }
-
 ```
 
 ```cpp
@@ -152,6 +151,8 @@ Given`nums`=`[1, 2, 4, 8, 6, 3]`return`8`
 Given`nums`=`[10, 9, 8, 7]`, return`10`
 
 [http://www.lintcode.com/en/problem/maximum-number-in-mountain-sequence/\#](http://www.lintcode.com/en/problem/maximum-number-in-mountain-sequence/#)
+
+[https://leetcode.com/problems/peak-index-in-a-mountain-array/submissions/](https://leetcode.com/problems/peak-index-in-a-mountain-array/submissions/)
 
 ### 解题分析:
 
@@ -221,6 +222,55 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\)\)
+
+2020/07/20 
+
+当今天下， 非杨即墨 ， 求墨子是谁。。。
+
+```cpp
+class Solution {
+public:
+    int peakIndexInMountainArray(vector<int>& A) {
+        int beg = 0;
+        int end = A.size();
+        auto isDescending = [&A](int mid) {
+          return A[mid] > A[mid+1];  
+        };
+        while( beg + 1 < end ) {
+            int mid = beg + ( end - beg ) / 2;
+            if (isDescending(mid))
+                end = mid;
+            else
+                beg = mid;
+        }
+        if (isDescending(end))
+            return end;
+        return beg;
+    }
+};
+```
+
+```go
+// golang
+func peakIndexInMountainArray(A []int) int {
+    b, e := 0, len(A)
+    for {
+        if  b + 1 >= e {
+            break
+        }
+        mid := b + ( e - b ) /2
+        if A[mid] > A[mid+1] {
+            e = mid
+        } else {
+            b = mid
+        }
+    }
+    if A[e] > A[e+1] {
+        return e
+    }
+    return b
+}
+```
 
 ## 460 Find K Closest Elements
 
