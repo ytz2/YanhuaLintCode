@@ -673,7 +673,7 @@ Yes
 Given s =`"bbbab"`return`4`  
 One possible longest palindromic subsequence is`"bbbb"`.
 
-[http://www.lintcode.com/en/problem/valid-palindrome/](http://www.lintcode.com/en/problem/longest-palindromic-subsequence/#)
+[https://leetcode.com/problems/longest-palindromic-subsequence/submissions/](https://leetcode.com/problems/longest-palindromic-subsequence/submissions/)
 
 ### 解题分析:
 
@@ -728,7 +728,7 @@ func longestPalindromeSubseq(s string) int {
     if n <= 1  {
         return n
     }
-    
+
     tbl := make([][]int, n)
     for i := 0; i < n; i++ {
         tbl[i] = make([]int, n)
