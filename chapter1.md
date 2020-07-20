@@ -593,8 +593,6 @@ public:
 
 都是o\(n^2\)， DP有额外o\(n^2\)的空间复杂度
 
-
-
 2020/07/19
 
 ```go
@@ -604,7 +602,7 @@ func longestPalindrome(s string) string {
     }
     radius := func(s *string, l int, r int ) int {
         for ; l>=0 && r < len(*s) && (*s)[l] == (*s)[r]; l, r = l - 1, r + 1 {
-            
+
         }
         return r - l - 1
     }
@@ -622,6 +620,43 @@ func longestPalindrome(s string) string {
         }
     }
     return s[start:start+size]
+}
+```
+
+```go
+func longestPalindrome(s string) string {
+    n := len(s)
+    if n == 0 {
+        return ""
+    }
+    
+    tbl := make([][]bool, n)
+    for i := range tbl {
+        tbl[i] = make([]bool, n)
+    }
+    for i:=0; i < n; i++ {
+        tbl[i][i] = true
+        if i+1 < n && s[i] == s[i+1] {
+            tbl[i][i+1] = true
+        }
+    }
+    
+    for l := 2; l < n; l++ {
+        for i:=0; i + l < n ; i++ {
+            tbl[i][i+l] = tbl[i+1][i+l-1] && s[i]==s[i+l]
+        }
+    }
+    mi, mj := 0, 0
+    for i := 0; i < n; i++ {
+        for j := 0; j < n; j++ {
+            if tbl[i][j] {
+                if (j - i > mj - mi) {
+                    mi, mj = i, j
+                }
+            }
+        }
+    }
+    return s[mi: mj + 1]
 }
 ```
 
