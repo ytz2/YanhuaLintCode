@@ -369,8 +369,6 @@ public:
 
 O（mn\) m = strlen\(m\) n=strlen\(target\)
 
-
-
 2020/07/19
 
 ```cpp
@@ -422,7 +420,6 @@ class Solution:
                 return i
             i+=1
         return -1
-        
 ```
 
 ```go
@@ -596,7 +593,37 @@ public:
 
 都是o\(n^2\)， DP有额外o\(n^2\)的空间复杂度
 
-### 
+
+
+2020/07/19
+
+```go
+func longestPalindrome(s string) string {
+    if len(s) == 0 {
+        return ""
+    }
+    radius := func(s *string, l int, r int ) int {
+        for ; l>=0 && r < len(*s) && (*s)[l] == (*s)[r]; l, r = l - 1, r + 1 {
+            
+        }
+        return r - l - 1
+    }
+    start, size := 0, 1
+    for i := 0; i < len(s); i++ {
+        n1 := radius(&s, i, i)
+        if n1 > size {
+            size = n1
+            start = i - n1/2
+        }
+        n2 := radius(&s, i, i + 1)
+        if n2 > size {
+            size = n2
+            start = i - n2/2 + 1
+        }
+    }
+    return s[start:start+size]
+}
+```
 
 ## 667 Longest Palindromic Subsequence
 
