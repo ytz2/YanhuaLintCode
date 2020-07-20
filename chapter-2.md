@@ -18,7 +18,7 @@ For target =`5`, return 5.
 
 For target =`6`, return -1.
 
-[http://www.lintcode.com/en/problem/longest-palindrome/](http://www.lintcode.com/en/problem/last-position-of-target/#)
+[https://www.lintcode.com/problem/last-position-of-target/description](https://www.lintcode.com/problem/last-position-of-target/description)
 
 ### 解题分析:
 
@@ -66,6 +66,77 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\)\), n = nums.size\(\), 最坏的情况是o\(n\)
+
+2020/07/20
+
+通过控制等于号的处理， 就可以找出最左最右的位置了，不需要 太麻烦了
+
+golang
+
+```cpp
+/**
+ * @param nums: An integer array sorted in ascending order
+ * @param target: An integer
+ * @return: An integer
+ */
+func lastPosition (nums []int, target int) int {
+    // write your code here
+    n := len(nums)
+    if n == 0 {
+        return -1
+    }
+    
+    b, e := 0, n-1
+    for {
+        if b + 1 >= e {
+            break
+        } 
+        mid := b + (e - b) / 2
+        if nums[mid] <= target {
+            b = mid
+        } else {
+            e = mid
+        }
+    }
+    if nums[e] == target {
+        return e
+    } else if nums[b] == target {
+        return b
+    }
+    return -1
+}
+
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: An integer array sorted in ascending order
+     * @param target: An integer
+     * @return: An integer
+     */
+    int lastPosition(vector<int> &nums, int target) {
+        // write your code here
+        if (nums.empty())
+            return -1;
+        size_t beg = 0, end = nums.size() - 1, mid = 0;
+        while(beg + 1 < end)
+        {
+            mid = beg + (end - beg) / 2;
+            if (nums[mid] <= target)
+                beg = mid;
+            else
+                end = mid;
+        }
+        if (nums[end] == target)
+            return end;
+        else if (nums[beg] == target)
+            return beg;
+        return -1;
+    }
+};
+```
 
 ## 585 Maximum Number in Mountain Sequence
 
