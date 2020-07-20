@@ -629,7 +629,7 @@ func longestPalindrome(s string) string {
     if n == 0 {
         return ""
     }
-    
+
     tbl := make([][]bool, n)
     for i := range tbl {
         tbl[i] = make([]bool, n)
@@ -640,7 +640,7 @@ func longestPalindrome(s string) string {
             tbl[i][i+1] = true
         }
     }
-    
+
     for l := 2; l < n; l++ {
         for i:=0; i + l < n ; i++ {
             tbl[i][i+l] = tbl[i+1][i+l-1] && s[i]==s[i+l]
@@ -718,6 +718,50 @@ public:
         return tbl[0][s.size()-1];
     }
 };
+```
+
+### 2020/07/19
+
+```go
+func longestPalindromeSubseq(s string) int {
+    n := len(s)
+    if n <= 1  {
+        return n
+    }
+    
+    tbl := make([][]int, n)
+    for i := 0; i < n; i++ {
+        tbl[i] = make([]int, n)
+    }
+
+    for i := 0; i < n; i++ {
+        tbl[i][i] = 1
+        if i + 1 < n {
+            if s[i] == s[i+1]{
+                tbl[i][i+1] = 2
+            } else {
+                tbl[i][i+1] = 1
+            }
+        }
+    }
+    MAX := func(l int, r int) int {
+        if l > r {
+            return l
+        }
+        return r
+    }
+    for l:= 2; l < n; l++ {
+        for i := 0; i + l < n; i++ {
+            j := i+l;
+            tbl[i][j] = tbl[i+1][j-1]
+            if s[i] == s[j] {
+                tbl[i][j] += 2
+            }
+            tbl[i][j] = MAX(tbl[i][j], MAX(tbl[i+1][j], tbl[i][j-1]))
+        }
+    }
+    return tbl[0][n-1]
+}
 ```
 
 ### 复杂度分析:
