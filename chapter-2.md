@@ -223,7 +223,7 @@ public:
 
 O\(log\(n\)\)
 
-2020/07/20 
+2020/07/20
 
 当今天下， 非杨即墨 ， 求墨子是谁。。。
 
@@ -359,6 +359,53 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) + k\), n = A.size\(\)
+
+2020/07/19 leetcode has similar problem 
+
+[https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+```cpp
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        if (nums.empty()) 
+            return {-1, -1};
+        vector<int> res{-1,-1};
+        int beg =0, end = nums.size() - 1;
+        
+        // leftmost first
+        while(beg + 1 < end) {
+            int mid = beg + (end - beg) / 2;
+            if (nums[mid] >= target )
+                end = mid;
+            else 
+                beg = mid;
+        } 
+        if (nums[beg] == target)
+            res[0] = beg;
+        else if (nums[end] == target)
+            res[0] = end;
+        else
+            return res;
+        beg = 0;
+        end = nums.size() - 1;
+        while( beg + 1 < end) {
+            int mid = beg + (end - beg) / 2;
+            if (nums[mid] > target)
+                end = mid;
+            else
+                beg = mid;
+        }
+        if (nums[end] == target)
+            res[1] = end;
+        else if (nums[beg] == target)
+            res[1] = beg;
+        return res;
+    }
+};
+```
+
+
 
 ## 447 Search in a Big Sorted Array
 
