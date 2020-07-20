@@ -360,7 +360,7 @@ public:
 
 O\(log\(n\) + k\), n = A.size\(\)
 
-2020/07/19 leetcode has similar problem 
+2020/07/19 leetcode has similar problem
 
 [https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -372,7 +372,7 @@ public:
             return {-1, -1};
         vector<int> res{-1,-1};
         int beg =0, end = nums.size() - 1;
-        
+
         // leftmost first
         while(beg + 1 < end) {
             int mid = beg + (end - beg) / 2;
@@ -405,8 +405,6 @@ public:
 };
 ```
 
-
-
 ## 447 Search in a Big Sorted Array
 
 Given a big sorted array with positive integers sorted by ascending order. The array is so big so that you can not get the length of the whole array directly, and you can only access the kth number by`ArrayReader.get(k)`\(or ArrayReader-&gt;get\(k\) for C++\). Find the first index of a target number. Your algorithm should be in O\(log k\), where k is the first index of the target number.
@@ -426,6 +424,8 @@ Yes
 Given`[1, 3, 6, 9, 21, ...]`, and target =`3`, return`1`.
 
 Given`[1, 3, 6, 9, 21, ...]`, and target =`4`, return`-1`.
+
+[https://leetcode.com/problems/search-in-a-sorted-array-of-unknown-size/](https://leetcode.com/problems/search-in-a-sorted-array-of-unknown-size/)
 
 ### 解题分析:
 
@@ -476,6 +476,81 @@ public:
 ### 复杂度分析:
 
 O\(log\(k\) \)
+
+2020/07/20
+
+Leetcode上的表述很有意思，提出一个条件是范围在1-1e4之内，所以回头再写这一版的时候就直接上了把end放到1e4上去。 当然，有启发意义的还是第一版的做饭，找到未知边界，更有趣
+
+```cpp
+/**
+ * // This is the ArrayReader's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class ArrayReader {
+ *   public:
+ *     int get(int index);
+ * };
+ */
+
+class Solution {
+public:
+    int search(const ArrayReader& reader, int target) {
+        const static int nan = 2147483647;
+        int beg = 0;
+        int end  = 1e4;
+        while( beg + 1 < end ) {
+            int mid = beg + ( end - beg ) / 2;
+            auto v = reader.get(mid);
+            if (v == nan || v  > target) {
+                end = mid;
+            } else  {
+                beg = mid;
+            }
+        }
+        if (reader.get(beg) == target)
+            return beg;
+        if (reader.get(end) == target)
+            return end;
+        return -1;
+    }
+};
+```
+
+```go
+// GOLANG
+/**
+ * // This is the ArrayReader's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * type ArrayReader struct {
+ * }
+ *
+ * func (this *MountainArray) get(index int) int {}
+ */
+
+func search(reader ArrayReader, target int) int {
+    b, e := 0, 1
+    for ;reader.get(e) < target; e = e*2 {
+        
+    } 
+    for {
+        if b + 1 >= e {
+            break
+        }
+        mid := b + ( e - b ) / 2
+        if reader.get(mid) < target {
+            b = mid
+        } else {
+            e = mid
+        }
+    }
+    if reader.get(b) == target {
+        return b
+    }
+    if reader.get(e) == target {
+        return e
+    }
+    return -1
+}
+```
 
 ## 428 Pow\(x, n\)
 
