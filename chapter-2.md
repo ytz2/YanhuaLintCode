@@ -529,7 +529,7 @@ public:
 func search(reader ArrayReader, target int) int {
     b, e := 0, 1
     for ;reader.get(e) < target; e = e*2 {
-        
+
     } 
     for {
         if b + 1 >= e {
@@ -614,11 +614,38 @@ public:
 };
 ```
 
-非递归版本：非递归版本看的答案，我觉得很巧妙。 有一个地方要想到： 就是如果要以log\(n\)的复杂度来解决问题需要从n收敛到n=0,在收敛过程中不行的n/=2,同时不停的ans\*= tmp, tmp的初始值为x， 这样在幂指数收敛过程中答案也在以log\(n\)的速度给出， 我觉得很巧妙, 可惜我没看懂lol中间的一个trick, 放弃非递归的解法
+非递归版本：非递归版本看的答案，我觉得很巧妙。 有一个地方要想到： 就是如果要以log\(n\)的复杂度来解决问题需要从n收敛到n=0,在收敛过程中不行的n/=2,同时不停的ans\*= tmp, tmp的初始值为x， 这样在幂指数收敛过程中答案也在以log\(n\)的速度给出， 我觉得很巧妙, 可惜我没看懂lol中间的一个trick, 放弃非递归的解
 
 ### 复杂度分析:
 
 O\(log\(n\) \)
+
+
+
+2020/07/21
+
+```go
+//GOLANG
+func myPow(x float64, n int) float64 {
+    if x == 0 {
+        return 0
+    }
+    if n == 0 {
+        return 1
+    }
+    if n == 1 {
+        return x
+    }
+    if n < 0 {
+        return 1 / myPow(x, -n)
+    }
+    v := myPow(x, n/2)
+    if n%2 == 1 {
+        return v*v*x
+    }
+    return v*v
+}
+```
 
 ## 140 Fast Power
 
