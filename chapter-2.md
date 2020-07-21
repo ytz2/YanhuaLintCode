@@ -574,6 +574,8 @@ Pow(1, 0) = 1
 
 [http://www.lintcode.com/en/problem/powx-n/](http://www.lintcode.com/en/problem/powx-n/)
 
+[https://leetcode.com/problems/powx-n/submissions/](https://leetcode.com/problems/powx-n/submissions/)
+
 ### 解题分析:
 
 求power肯定就是二分了 ， 关键是有几个corner case
@@ -619,8 +621,6 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) \)
-
-
 
 2020/07/21
 
