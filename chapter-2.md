@@ -732,8 +732,6 @@ func fastPower (a int, b int, n int) int {
     }
     return res
 }
-
-
 ```
 
 ## 159 Find Minimum in Rotated Sorted Array
@@ -803,6 +801,37 @@ O\(log\(n\) \)
 ### 笔记:
 
 这个题目在升序的情况下出错了， \[1, 2, 3\]， 后来临时加了一个判断来判定是不是升序。 原因是OOXX假设了先升序后降序，这样代码就不work, 所以OOXX的套路下， 做好先判断是不是符合再OOXX
+
+
+
+2020/07/21
+
+没看笔记，重写的时候又错了一遍。。。
+
+```go
+func findMin(nums []int) int {
+    n := len(nums)
+    if nums[0] <= nums[n-1] {
+        return nums[0]
+    }
+    b, e := 0, n-1
+    for {
+        if b+1 >= e {
+            break
+        }
+        mid := b + (e-b)/2
+        if nums[mid] < nums[0] {
+            e = mid
+        } else {
+            b = mid
+        }
+    }
+    if nums[b] < nums[e] {
+        return nums[b]
+    }
+    return nums[e]
+}
+```
 
 ## 75 Find Peak Element
 
