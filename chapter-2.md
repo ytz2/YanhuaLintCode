@@ -1084,6 +1084,10 @@ For`[4, 5, 1, 2, 3]`and`target=1`, return`2`.
 
 For`[4, 5, 1, 2, 3]`and`target=0`, return`-1`.
 
+
+
+[https://leetcode.com/problems/search-in-rotated-sorted-array/submissions/](https://leetcode.com/problems/search-in-rotated-sorted-array/submissions/)
+
 ### 解题分析:
 
 做这道题做了第三次了，每次再做还是错的，我都郁闷了。 每次二分的时候我都是用 A\[beg\] &lt; A\[end\] 来做二分，如果成立，说明在左右两区间正常二分，但是处理中间区间的时候逻辑务必混乱。
@@ -1138,7 +1142,7 @@ public:
 
 O\(log\(n\) \)
 
-2020/07/21 
+2020/07/21
 
 二分的思想是在不确定中找确定。 确定的是在上面还是在下面， 单调增
 
