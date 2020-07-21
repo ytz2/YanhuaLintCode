@@ -984,6 +984,8 @@ Here we are 100% sure that the 4th version is the first bad version.
 
 [http://www.lintcode.com/en/problem/first-bad-version/\#](http://www.lintcode.com/en/problem/first-bad-version/#)
 
+[https://leetcode.com/problems/first-bad-version/submissions/](https://leetcode.com/problems/first-bad-version/submissions/)
+
 ### 解题分析:
 
 这道题比数据流搜索简单多了， 就是一个OOXX，由于前面一题的教训， OOXX之前要先判断一下
@@ -1037,8 +1039,8 @@ OOXX 问题目标找X先看beg再看end， 因为很有可能只是一个单调�
 /** 
  * Forward declaration of isBadVersion API.
  * @param   version   your guess about first bad version
- * @return 	 	      true if current version is bad 
- *			          false if current version is good
+ * @return                true if current version is bad 
+ *                      false if current version is good
  * func isBadVersion(version int) bool;
  */
 
@@ -1062,7 +1064,7 @@ func firstBadVersion(n int) int {
 }
 ```
 
-## 62 159 Find Minimum in Rotated Sorted Array \(需要重点再看下，每次都错\)
+## 62 Search in Rotated Sorted Array \(需要重点再看下，每次都错\)
 
 Suppose a sorted array is rotated at some pivot unknown to you beforehand.
 
@@ -1135,6 +1137,46 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) \)
+
+2020/07/21 
+
+二分的思想是在不确定中找确定。 确定的是在上面还是在下面， 单调增
+
+```go
+//GOLANG
+func search(nums []int, target int) int {
+    if len(nums) == 0 {
+        return -1
+    }
+    b, e := 0, len(nums) - 1
+    for {
+        if b + 1 >= e {
+            break
+        }
+        mid := b + ( e - b ) / 2
+        if nums[mid] > nums[0] {
+            if nums[mid] >= target && nums[b] <= target {
+                e = mid;
+            } else {
+                b = mid;
+            }
+        } else {
+            if nums[mid] <= target && nums[e] >= target {
+                b = mid
+            } else {
+                e = mid
+            }
+        }
+    }
+    if nums[b] == target {
+        return b
+    }
+    if nums[e] == target {
+        return e
+    }
+    return -1
+}
+```
 
 ## 
 
