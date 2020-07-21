@@ -860,6 +860,8 @@ Return index`1`\(which is number 2\) or`6`\(which is number 7\)
 
 [http://www.lintcode.com/en/problem/find-peak-element/\#](http://www.lintcode.com/en/problem/find-peak-element/#)
 
+[https://leetcode.com/problems/find-peak-element/submissions/](https://leetcode.com/problems/find-peak-element/submissions/)
+
 ### 解题分析:
 
 还是OOXX问题， 只不过是可以有多个peak
@@ -1028,6 +1030,37 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) \)
+
+OOXX 问题目标找X先看beg再看end， 因为很有可能只是一个单调问题，先看beg就解决了单调问题
+
+```go
+/** 
+ * Forward declaration of isBadVersion API.
+ * @param   version   your guess about first bad version
+ * @return 	 	      true if current version is bad 
+ *			          false if current version is good
+ * func isBadVersion(version int) bool;
+ */
+
+func firstBadVersion(n int) int {
+    b, e := 1, n
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + (e - b) / 2
+        if isBadVersion(m) {
+            e = m
+        } else {
+            b = m
+        }
+    }
+    if isBadVersion(b) {
+        return b
+    }
+    return e
+}
+```
 
 ## 62 159 Find Minimum in Rotated Sorted Array \(需要重点再看下，每次都错\)
 
