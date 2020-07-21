@@ -706,6 +706,36 @@ public:
 
 O\(log\(n\) \)
 
+2020/07/21
+
+\(a_b\)%c = \(a%c\)_\(b%c\)%c
+
+```go
+/**
+ * @param a: A 32bit integer
+ * @param b: A 32bit integer
+ * @param n: A 32bit integer
+ * @return: An integer
+ */
+func fastPower (a int, b int, n int) int {
+    // write your code here
+    if n == 0 {
+        return 1 % b;
+    }
+    if n == 1 {
+        return a % b;
+    }
+    v := fastPower(a, b, n/2) 
+    res := ((v%b) * (v%b)) % b 
+    if n%2 == 1 {
+        return (res * a)%b
+    }
+    return res
+}
+
+
+```
+
 ## 159 Find Minimum in Rotated Sorted Array
 
 Suppose a sorted array is rotated at some pivot unknown to you beforehand.
