@@ -802,8 +802,6 @@ O\(log\(n\) \)
 
 这个题目在升序的情况下出错了， \[1, 2, 3\]， 后来临时加了一个判断来判定是不是升序。 原因是OOXX假设了先升序后降序，这样代码就不work, 所以OOXX的套路下， 做好先判断是不是符合再OOXX
 
-
-
 2020/07/21
 
 没看笔记，重写的时候又错了一遍。。。
@@ -904,6 +902,51 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) \)
+
+2020/07/21
+
+当今天下，非杨即墨 所以收敛就是了，这是个数学问题。  刚开始我还test 1个元素还有单序问题， 因为是和邻居比所以总是顺杆爬的。 最后一行解决了非杨即墨的问题，不需要太复杂的逻辑了
+
+```cpp
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int n = nums.size();
+        int beg = 0;
+        int end = n - 1;
+        while(beg + 1 < end) {
+            int mid = beg + (end-beg)/2;
+            if (nums[mid] > nums[mid+1])
+                end = mid;
+            else
+                beg = mid;
+        }
+        return nums[beg] > nums[end]? beg:end;
+    }
+};
+```
+
+```go
+// GOLANG
+func findPeakElement(nums []int) int {
+    b, e := 0, len(nums) - 1
+    for {
+        if b + 1 >= e {
+            break
+        }
+        mid := b + (e - b) / 2
+        if nums[mid] > nums[mid+1] {
+            e = mid
+        } else {
+            b = mid
+        }
+    }
+    if nums[b] > nums[e] {
+        return b
+    }
+    return e
+}
+```
 
 ## 74 First Bad Version
 
