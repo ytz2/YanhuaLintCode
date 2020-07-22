@@ -67,6 +67,46 @@ public:
 
 最坏情况nlog\(n\)
 
+
+
+2020/07/22
+
+质因数的处理上多了个sqrt\(n\) 和最后剩下的渣渣，这样可以过test case， 用sqrt算是数学上一个argument， 也就是sqrt可以被找出余数那么实际上所有的已经被找过了
+
+
+
+```go
+/**
+ * @param num: An integer
+ * @return: an integer array
+ */
+import "math"
+func primeFactorization (num int) []int {
+    // write your code here
+    res := make([]int,0)
+    if num <= 1 {
+        res = append(res, num)
+        return res
+    }
+    n := num
+    for i := 2; i <= int(math.Sqrt(float64(n))); i++ {
+        for {
+            if num%i == 0 {
+                res = append(res, i)
+                num = num / i
+            } else {
+                break
+            }
+        }
+    }
+    if num != 1 {
+        res = append(res, num)
+    }
+    return res
+}
+
+```
+
 ## 462 total Occurrence of Target
 
 Given a target number and an integer array sorted in ascending order. Find the total number of occurrences of target in the array.
