@@ -67,13 +67,9 @@ public:
 
 最坏情况nlog\(n\)
 
-
-
 2020/07/22
 
 质因数的处理上多了个sqrt\(n\) 和最后剩下的渣渣，这样可以过test case， 用sqrt算是数学上一个argument， 也就是sqrt可以被找出余数那么实际上所有的已经被找过了
-
-
 
 ```go
 /**
@@ -104,7 +100,6 @@ func primeFactorization (num int) []int {
     }
     return res
 }
-
 ```
 
 ## 462 total Occurrence of Target
@@ -319,7 +314,39 @@ public:
 };
 ```
 
-### 
+2020/07/22 
+
+如果没记错这是quant面试的经典题， 第一个决定后面多少
+
+```go
+/**
+ * @param n: An integer
+ * @return: An integer
+ */
+ 
+ // find x to make x + x-1 + x-2 + 1 >= n
+ // solve (1+x)x / 2 >= n
+ // eg. n = 10 -> x^2+x -10 >=0 ==> (x+5)(x-4) >=0 , x >=4 or x >= -5
+func dropEggs (n int) int {
+    // write your code here
+    b, e := 1, n
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + (e - b) / 2
+        if m*(m+1) / 2 < n {
+            b = m
+        } else {
+            e = m
+        }
+    }
+    if b*(b+1)/2 >= n {
+        return b
+    }
+    return e
+}
+```
 
 ### 28. Search a 2D Matrix
 
