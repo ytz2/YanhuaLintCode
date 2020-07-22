@@ -314,7 +314,7 @@ public:
 };
 ```
 
-2020/07/22 
+2020/07/22
 
 如果没记错这是quant面试的经典题， 第一个决定后面多少
 
@@ -323,7 +323,7 @@ public:
  * @param n: An integer
  * @return: An integer
  */
- 
+
  // find x to make x + x-1 + x-2 + 1 >= n
  // solve (1+x)x / 2 >= n
  // eg. n = 10 -> x^2+x -10 >=0 ==> (x+5)(x-4) >=0 , x >=4 or x >= -5
@@ -375,7 +375,7 @@ Consider the following matrix:
 
 Given`target = 3`, return`true`.
 
-### 
+[https://leetcode.com/problems/search-a-2d-matrix/](https://leetcode.com/problems/search-a-2d-matrix/)
 
 ### 代码：
 
@@ -416,7 +416,68 @@ public:
 };
 ```
 
-### 
+
+
+2020/07/22
+
+傻了， 写了个复杂的算法 用了两次二分， logm+logn  == log\(m\*n\)
+
+```cpp
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if (matrix.empty() || matrix[0].empty())
+           return false;
+        int beg = 0;
+        int end = matrix.size() - 1;
+        while ( beg + 1 < end) {
+            int mid = beg + (end - beg)/2;
+            if (matrix[mid][0] > target)
+                end = mid;
+            else  
+                beg = mid;
+        }
+        if (matrix[beg][0] > target)
+            return false;
+        beg = matrix[end][0] <= target? end:beg;
+        int b = 0;
+        int e = matrix[0].size() - 1;
+        while (b + 1 < e) {
+            int mid = b + ( e - b ) / 2;
+            if (matrix[beg][mid] < target)
+                b = mid;
+            else 
+                e = mid;
+        }
+        return matrix[beg][b] == target || matrix[beg][e] == target;
+    }
+};
+```
+
+
+
+```go
+// GOLANG
+func searchMatrix(matrix [][]int, target int) bool {
+    if len(matrix) == 0 || len(matrix[0]) == 0 {
+        return false
+    }
+    m, n := len(matrix), len(matrix[0])
+    b, e := 0, m*n - 1
+    for {
+        if b + 1 >= e {
+            break
+        }
+        mid := b + (e - b)/2
+        if matrix[mid/n][mid%n] < target {
+            b = mid
+        } else {
+            e = mid
+        }
+    }
+    return matrix[b/n][b%n] == target || matrix[e/n][e%n] == target;
+}
+```
 
 #### 14. First Position of Target
 
