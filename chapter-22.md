@@ -81,6 +81,8 @@ sqrt\(10\) = 3
 
 [http://www.lintcode.com/en/problem/sqrtx/](http://www.lintcode.com/en/problem/sqrtx/)
 
+[https://leetcode.com/problems/sqrtx/submissions/](https://leetcode.com/problems/sqrtx/submissions/)
+
 ### 解题分析:
 
 求解sqrt就是找一个OOXX的位置，左面的平方小于x,右面的平方大于x，中间要注意的是大数的溢出。再就是注意等于号
@@ -119,6 +121,29 @@ public:
 ### 复杂度分析:
 
 log\(x\)
+
+2020/07/23 
+
+```go
+func mySqrt(x int) int {
+    b, e := 0, x
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + ( e - b ) / 2
+        if m*m > x {
+            e = m
+        } else {
+            b = m
+        }
+    }
+    if e*e <= x {
+        return e
+    }
+    return b
+}
+```
 
 ## 586 Sqrt\(x\) II
 
@@ -515,8 +540,6 @@ public:
 
 nlog\(n\)
 
-
-
 ## \*\*\*183 Wood Cut
 
 Given n pieces of wood with length`L[i]`\(integer array\). Cut them into small pieces to guarantee you could have equal or more than k pieces with the same length. What is the longest length you can get from the n pieces of wood? Given L & k, return the maximum length of the small pieces.
@@ -525,15 +548,13 @@ Given n pieces of wood with length`L[i]`\(integer array\). Cut them into small p
 
 You couldn't cut wood into float length.
 
-If you couldn't get &gt;=_k_pieces, return`0`.
-
-
+If you couldn't get &gt;=\_k\_pieces, return`0`.
 
 **Example**
 
 For`L=[232, 124, 456]`,`k=7`, return`114`.
 
-http://www.lintcode.com/en/problem/wood-cut/\#
+[http://www.lintcode.com/en/problem/wood-cut/\#](http://www.lintcode.com/en/problem/wood-cut/#)
 
 ### 解题分析:
 
@@ -547,7 +568,7 @@ x的范围， 1， max\(L\)
 
 子问题：
 
-bool check\(L, k, v\) 
+bool check\(L, k, v\)
 
 ### 代码：
 
@@ -581,7 +602,7 @@ public:
             return beg;
         return 0;
     }
-    
+
     bool check(const vector<int>& L, int k, int v)
     {
         int count = 0;
