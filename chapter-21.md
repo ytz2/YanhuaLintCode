@@ -416,8 +416,6 @@ public:
 };
 ```
 
-
-
 2020/07/22
 
 傻了， 写了个复杂的算法 用了两次二分， logm+logn  == log\(m\*n\)
@@ -453,8 +451,6 @@ public:
     }
 };
 ```
-
-
 
 ```go
 // GOLANG
@@ -493,7 +489,7 @@ Yes
 
 If the array is`[1, 2, 3, 3, 4, 5, 10]`, for given target`3`, return`2`.
 
-### 
+
 
 ### 代码：
 
@@ -529,7 +525,42 @@ public:
 };
 ```
 
-### 
+### 2020/07/22
+
+```go
+/**
+ * @param nums: The integer array.
+ * @param target: Target to find.
+ * @return: The first position of target. Position starts from 0.
+ */
+func binarySearch (nums []int, target int) int {
+    // write your code here
+    n := len(nums)
+    if n == 0 {
+        return -1
+    }
+    b, e := 0, n-1
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + ( e - b ) / 2
+        if (nums[m] >= target) {
+            e = m
+        } else {
+            b = m
+        }
+    }
+    if nums[b] == target {
+        return b
+    }
+    if nums[e] == target {
+        return e
+    }
+    return -1
+}
+
+```
 
 ## 414 Divide Two Integers
 
