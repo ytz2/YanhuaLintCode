@@ -846,7 +846,9 @@ Given target =`3`, return`2`.
 
 [http://www.lintcode.com/en/problem/search-a-2d-matrix-ii](http://www.lintcode.com/en/problem/search-a-2d-matrix-ii)
 
-### 解题分析:
+[https://leetcode.com/problems/search-a-2d-matrix-ii/](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+
+解题分析:
 
 ```
 [
@@ -910,7 +912,7 @@ public:
 
 O（m+n\)
 
-2020/07/22 
+2020/07/22
 
 不走回头路所以才有这个解法
 
@@ -932,7 +934,7 @@ func searchMatrix(matrix [][]int, target int) bool {
         } else {
             j++
         }
-        
+
     }
     return false
 }
