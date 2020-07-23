@@ -122,7 +122,7 @@ public:
 
 log\(x\)
 
-2020/07/23 
+2020/07/23
 
 ```go
 func mySqrt(x int) int {
@@ -199,6 +199,10 @@ public:
 ### 复杂度分析:
 
 log\(x/delta\)
+
+2020/07/23 【0,1】是个special case
+
+
 
 ## 160 Find Minimum in Rotated Sorted Array II
 
