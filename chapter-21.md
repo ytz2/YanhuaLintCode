@@ -489,7 +489,7 @@ Yes
 
 If the array is`[1, 2, 3, 3, 4, 5, 10]`, for given target`3`, return`2`.
 
-
+[https://www.lintcode.com/problem/first-position-of-target/description](https://www.lintcode.com/problem/first-position-of-target/description)
 
 ### 代码：
 
@@ -559,7 +559,6 @@ func binarySearch (nums []int, target int) int {
     }
     return -1
 }
-
 ```
 
 ## 414 Divide Two Integers
