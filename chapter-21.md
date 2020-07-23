@@ -910,6 +910,34 @@ public:
 
 O（m+n\)
 
+2020/07/22 
+
+不走回头路所以才有这个解法
+
+```go
+func searchMatrix(matrix [][]int, target int) bool {
+    if len(matrix) == 0 || len(matrix[0]) == 0 {
+        return false
+    }
+    m, n := len(matrix), len(matrix[0])
+    i, j := m-1, 0
+    for {
+        if i < 0 || j >= n {
+            break
+        }
+        if matrix[i][j] == target {
+            return true
+        } else if target < matrix[i][j] {
+            i--
+        } else {
+            j++
+        }
+        
+    }
+    return false
+}
+```
+
 ## 600 Smallest Rectangle Enclosing Black Pixels
 
 An image is represented by a binary matrix with`0`as a white pixel and`1`as a black pixel. The black pixels are connected, i.e., there is only one black region. Pixels are connected horizontally and vertically. Given the location`(x, y)`of one of the black pixels, return the area of the smallest \(axis-aligned\) rectangle that encloses all black pixels.
