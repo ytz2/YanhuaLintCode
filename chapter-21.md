@@ -585,8 +585,6 @@ y/x不能用乘法， 那就只能用位操作 x&lt;&lt;1 = x\*2， 所以把y�
 
 同理，乘法也是这样的 x\*y , 相对简单一点
 
-
-
 [https://leetcode.com/problems/divide-two-integers/submissions/](https://leetcode.com/problems/divide-two-integers/submissions/)
 
 ### 代码：
@@ -762,6 +760,61 @@ public:
 ### 复杂度分析:
 
 O\(log\(n\) + k\), k为重复大小
+
+
+
+2020/07/22
+
+动手写一遍就发现为啥以前横着扫一遍了，因为一旦有重复元素，二分搜素效率不是很高 
+
+```go
+func searchRange(nums []int, target int) []int {
+    res := make([]int, 2)
+    res[0], res[1] = -1, -1
+    n := len(nums)
+    if n == 0 {
+        return res
+    }
+    b, e := 0, n-1
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + ( e - b ) / 2
+        if nums[m] >= target {
+            e = m
+        } else {
+            b = m
+        }
+    }
+    if nums[b] == target {
+        res[0] = b
+    } else if nums[e] == target {
+        res[0] = e
+    } else {
+        return res
+    }
+    
+    b, e = 0, n-1
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + ( e - b ) / 2
+        if nums[m] <= target {
+            b = m
+        } else {
+            e = m
+        }
+    }
+    if nums[e] == target {
+        res[1] = e
+    } else if nums[b] == target {
+        res[1] = b
+    } 
+    return res
+}
+```
 
 ## 38 Search a 2D Matrix II
 
