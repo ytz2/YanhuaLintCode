@@ -965,6 +965,8 @@ Return`6`.
 
 [http://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/\#](http://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/#)
 
+[https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/submissions/](https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/submissions/)
+
 ### 解题分析:
 
 写了一个BFS， 虽然题目要求是用BS， 我觉得BS写出来和狗屎差不多， BFS就够了
@@ -1118,9 +1120,9 @@ public:
 };
 ```
 
-2020/07/23 
+2020/07/23
 
-二维的二分答案， 回顾起来觉得很有意思mlog\(n\) +nlog\(m\) 压缩的时候不可避免有个线性。 当然最Naive 的还是bfs 
+二维的二分答案， 回顾起来觉得很有意思mlog\(n\) +nlog\(m\) 压缩的时候不可避免有个线性。 当然最Naive 的还是bfs, 现在回头看以前写的二分是错的， 当时还是没有理解二分的精髓啊 ：p
 
 ```go
 func minArea(image [][]byte, x int, y int) int {
@@ -1131,9 +1133,9 @@ func minArea(image [][]byte, x int, y int) int {
     if image[x][y] == '0' {
         return 0
     }
-    
+
     l, r, u, d := y, y, x, x
-    
+
     // zip vertically
     checkRow := func(image [][]byte,  y int) bool {
         for i := 0; i < len(image); i++ {
@@ -1143,7 +1145,7 @@ func minArea(image [][]byte, x int, y int) int {
         }
         return false
     }
-    
+
     checkCol := func(image [][]byte,  x int) bool {
         for i := 0; i < len(image[0]); i ++ {
             if image[x][i] == '1' {
@@ -1152,7 +1154,7 @@ func minArea(image [][]byte, x int, y int) int {
         }
         return false
     }
-    
+
     //1 fix row, search col, left most
     b, e := 0, y
     for {
@@ -1171,7 +1173,7 @@ func minArea(image [][]byte, x int, y int) int {
     } else if checkRow(image, e) {
         l = e
     }
-    
+
     // 2 fix row, search col, right most
     b, e = y, len(image[0]) - 1
     for {
@@ -1190,7 +1192,7 @@ func minArea(image [][]byte, x int, y int) int {
     } else if checkRow(image, b) {
         r = b
     }
-    
+
     //3 fix  col, search row, upper most
     b, e  = 0, x
     for {
@@ -1209,7 +1211,7 @@ func minArea(image [][]byte, x int, y int) int {
     } else if checkCol(image, e) {
         u = e
     }
-    
+
     // 4 fix col, search row, down most
     b, e  = x, len(image) - 1
     for {
