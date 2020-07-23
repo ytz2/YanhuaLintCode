@@ -650,6 +650,73 @@ public:
 
 log\(n\)
 
+2020/07/22
+
+```cpp
+class Solution {
+public:
+    int divide(int dividend , int divisor) {
+        bool isNegative = (dividend < 0) ^ (divisor < 0);
+        long up = dividend < 0 ? -(long)dividend : dividend;
+        long down = divisor < 0 ? -(long)divisor : divisor;
+        long res = 0;
+        while( up >= down ) {
+            auto tmp = down;
+            auto count = 1;
+            while (up >= tmp) {
+                up -= tmp;
+                res += count;
+                count <<= 1;
+                tmp <<= 1;
+            }
+        }
+        res = isNegative? -res : res;
+        if (res < INT_MIN || res > INT_MAX) 
+            return INT_MAX;
+        return res;
+    }
+};
+```
+
+```go
+// GOLANG
+func divide(dividend int, divisor int) int {
+    INT_MAX, INT_MIN := 2147483647, -2147483648
+    isNegative := (dividend < 0  ||  divisor < 0  ) && !(divisor < 0 && dividend < 0 ) // golang has no xor, simulate it
+    if dividend < 0 {
+        dividend = -dividend
+    }
+    if divisor < 0 {
+        divisor = -divisor
+    }
+    
+    res := 0
+    for {
+        if dividend < divisor {
+            break
+        }
+        tmp := divisor 
+        count := 1
+        for {
+            if dividend < tmp {
+                break
+            }
+            dividend -= tmp
+            res += count
+            tmp = tmp << 1
+            count = count << 1
+        }
+    }
+    if isNegative {
+        res = -res
+    }
+    if res < INT_MIN || res > INT_MAX {
+        return INT_MAX
+    }
+    return res
+}
+```
+
 ## 61 Search for a Range
 
 Given a sorted array of\_n\_integers, find the starting and ending position of a given target value.
