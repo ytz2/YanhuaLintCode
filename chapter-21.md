@@ -585,29 +585,9 @@ y/x不能用乘法， 那就只能用位操作 x&lt;&lt;1 = x\*2， 所以把y�
 
 同理，乘法也是这样的 x\*y , 相对简单一点
 
-count = 0;
 
-val = 0;
 
-while count &lt; x;
-
-```
-int tmp = 1;
-
-int tmpres = y
-
-while \(tmp&lt;&lt;1 &lt;= x\)
-
-        tmp &lt;&lt;=1
-
-        res &lt;&lt;=1
-
-count += tmp
-
-val += res
-```
-
-return val
+[https://leetcode.com/problems/divide-two-integers/submissions/](https://leetcode.com/problems/divide-two-integers/submissions/)
 
 ### 代码：
 
@@ -689,7 +669,7 @@ func divide(dividend int, divisor int) int {
     if divisor < 0 {
         divisor = -divisor
     }
-    
+
     res := 0
     for {
         if dividend < divisor {
