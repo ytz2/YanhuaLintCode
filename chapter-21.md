@@ -1118,5 +1118,119 @@ public:
 };
 ```
 
+2020/07/23 
+
+二维的二分答案， 回顾起来觉得很有意思mlog\(n\) +nlog\(m\) 压缩的时候不可避免有个线性。 当然最Naive 的还是bfs 
+
+```go
+func minArea(image [][]byte, x int, y int) int {
+    // corner case
+    if len(image) == 0 || len(image[0]) == 0 {
+        return 0
+    }
+    if image[x][y] == '0' {
+        return 0
+    }
+    
+    l, r, u, d := y, y, x, x
+    
+    // zip vertically
+    checkRow := func(image [][]byte,  y int) bool {
+        for i := 0; i < len(image); i++ {
+            if image[i][y] == '1' {
+                return true
+            }   
+        }
+        return false
+    }
+    
+    checkCol := func(image [][]byte,  x int) bool {
+        for i := 0; i < len(image[0]); i ++ {
+            if image[x][i] == '1' {
+                return true
+            }
+        }
+        return false
+    }
+    
+    //1 fix row, search col, left most
+    b, e := 0, y
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + ( e - b ) / 2
+        if checkRow(image, m) {
+            e = m
+        } else {
+            b = m
+        }
+    }
+    if checkRow(image, b) {
+        l = b
+    } else if checkRow(image, e) {
+        l = e
+    }
+    
+    // 2 fix row, search col, right most
+    b, e = y, len(image[0]) - 1
+    for {
+        if b + 1 >= e {
+            break
+        }        
+        m := b + ( e - b ) / 2
+        if checkRow(image, m) {
+            b = m
+        } else {
+            e = m
+        }
+    }
+    if checkRow(image, e) {
+        r = e
+    } else if checkRow(image, b) {
+        r = b
+    }
+    
+    //3 fix  col, search row, upper most
+    b, e  = 0, x
+    for {
+        if b + 1 >= e {
+            break
+        }        
+        m := b + ( e - b ) / 2
+        if checkCol(image, m) {
+            e = m
+        } else {
+            b = m
+        }
+    }
+    if checkCol(image, b) {
+        u = b
+    } else if checkCol(image, e) {
+        u = e
+    }
+    
+    // 4 fix col, search row, down most
+    b, e  = x, len(image) - 1
+    for {
+        if b + 1 >= e {
+            break
+        }        
+        m := b + ( e - b ) / 2
+        if checkCol(image, m) {
+            b = m
+        } else {
+            e = m
+        }
+    }
+    if checkCol(image, e) {
+        d = e
+    } else if checkCol(image, b) {
+        d = b
+    }
+    return (r- l + 1) * (d -u + 1)
+}
+```
+
 
 
