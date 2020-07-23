@@ -712,6 +712,8 @@ return`[3, 4]`.
 
 [http://www.lintcode.com/en/problem/search-for-a-range/\#](http://www.lintcode.com/en/problem/search-for-a-range/#)
 
+[https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/submissions/](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/submissions/)
+
 ### 解题分析:
 
 先找到一遍，另外一遍向外衍射就好了，当然end也可以用 二分找，但其实没啥必要，因为当数组内重复元素过高后，复杂度就不算log\(n\)了
@@ -761,11 +763,9 @@ public:
 
 O\(log\(n\) + k\), k为重复大小
 
-
-
 2020/07/22
 
-动手写一遍就发现为啥以前横着扫一遍了，因为一旦有重复元素，二分搜素效率不是很高 
+动手写一遍就发现为啥以前横着扫一遍了，因为一旦有重复元素，二分搜素效率不是很高
 
 ```go
 func searchRange(nums []int, target int) []int {
@@ -794,7 +794,7 @@ func searchRange(nums []int, target int) []int {
     } else {
         return res
     }
-    
+
     b, e = 0, n-1
     for {
         if b + 1 >= e {
