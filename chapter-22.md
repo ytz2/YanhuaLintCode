@@ -202,8 +202,6 @@ log\(x/delta\)
 
 2020/07/23 【0,1】是个special case
 
-
-
 ## 160 Find Minimum in Rotated Sorted Array II
 
 Suppose a sorted array is rotated at some pivot unknown to you beforehand.
@@ -264,6 +262,71 @@ public:
 ```
 
 log\(x\) , worst o\(n\)
+
+
+
+2020/07/23 
+
+记得当时做这道题的时候不是很费力气，但是怎么都不对，实际上没想明白二分在处理不知道往哪里走的时候该怎么办上晕了
+
+```cpp
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        if (nums.front() < nums.back())
+            return nums.front();
+        int beg = 0;
+        int end = nums.size() - 1;
+        while ( beg + 1 < end ) {
+            int mid = beg + (end - beg)/2;
+            if (nums[mid] > nums[0]) {
+                beg = mid;
+            } else if (nums[mid] < nums[0]) {
+                end = mid;
+            } else {
+                if (nums[beg] < nums[end])
+                    end--;
+                else 
+                    beg++;
+            }
+        }
+        return nums[beg] < nums[end] ? nums[beg]:nums[end];
+    }
+};
+```
+
+```go
+func findMin(nums []int) int {
+    n := len(nums)
+    if nums[0] < nums[n-1] {
+        return nums[0]
+    }
+    b, e := 0, n-1
+    for {
+        if b + 1 >= e {
+            break
+        }
+        m := b + ( e - b ) /2
+        if nums[m] < nums[0] {
+            e = m
+        } else if nums[m] > nums[0] {
+            b = m
+        } else {
+            if nums[b] < nums[e] {
+                e--
+            } else {
+                b++
+            }
+        }
+    }
+    if nums[b] <= nums[e] {
+        return nums[b]
+    } 
+    return nums[e]
+}
+```
+
+
 
 ## 63 Search in Rotated Sorted Array II
 
