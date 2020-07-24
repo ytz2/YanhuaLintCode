@@ -220,6 +220,8 @@ Given`[4,4,5,6,7,0,1,2]`return`0`.
 
 [http://www.lintcode.com/en/problem/find-minimum-in-rotated-sorted-array-ii/\#](http://www.lintcode.com/en/problem/find-minimum-in-rotated-sorted-array-ii/#)
 
+[https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/submissions/](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/submissions/)
+
 ### 解题分析:
 
 OOXX问题， 所以上来先判断是不是符合OOXX， 另外和上一题不一样的是相等的时候如何处理， 相等的时候不能再任性左右移动了，而是要判断移动beg/ end， 这个要根据情况来写了。最坏就是o（n\)了
@@ -263,9 +265,7 @@ public:
 
 log\(x\) , worst o\(n\)
 
-
-
-2020/07/23 
+2020/07/23
 
 记得当时做这道题的时候不是很费力气，但是怎么都不对，实际上没想明白二分在处理不知道往哪里走的时候该怎么办上晕了
 
@@ -325,8 +325,6 @@ func findMin(nums []int) int {
     return nums[e]
 }
 ```
-
-
 
 ## 63 Search in Rotated Sorted Array II
 
