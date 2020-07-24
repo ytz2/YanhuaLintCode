@@ -267,7 +267,7 @@ log\(x\) , worst o\(n\)
 
 2020/07/23
 
-记得当时做这道题的时候不是很费力气，但是怎么都不对，实际上没想明白二分在处理不知道往哪里走的时候该怎么办上晕了
+记得当时做这道题的时候不是很费力气，但是怎么都不对，实际上没想明白二分在处理不知道往哪里走的时候该怎么办上晕了， 如果查看原题的话，和end， beg 比各有清楚的好处，这题已经不能用OOXX来做，上面的题虽然过了OJ但是思路错了
 
 ```cpp
 class Solution {
@@ -279,15 +279,34 @@ public:
         int end = nums.size() - 1;
         while ( beg + 1 < end ) {
             int mid = beg + (end - beg)/2;
-            if (nums[mid] > nums[0]) {
+            if (nums[mid] > nums[end]) {
                 beg = mid;
-            } else if (nums[mid] < nums[0]) {
+            } else if (nums[mid] < nums[end]) {
                 end = mid;
             } else {
-                if (nums[beg] < nums[end])
-                    end--;
-                else 
-                    beg++;
+                end--;
+            }
+        }
+        return nums[beg] < nums[end] ? nums[beg]:nums[end];
+    }
+};
+
+或者
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int beg = 0;
+        int end = nums.size() - 1;
+        while ( beg + 1 < end ) {
+            if (nums[beg] < nums[end])
+                return nums[beg];
+            int mid = beg + (end - beg)/2;
+            if (nums[mid] > nums[beg]) {
+                beg = mid;
+            } else if (nums[mid] < nums[beg]) {
+                end = mid;
+            } else {
+                beg++;
             }
         }
         return nums[beg] < nums[end] ? nums[beg]:nums[end];
@@ -295,36 +314,7 @@ public:
 };
 ```
 
-```go
-func findMin(nums []int) int {
-    n := len(nums)
-    if nums[0] < nums[n-1] {
-        return nums[0]
-    }
-    b, e := 0, n-1
-    for {
-        if b + 1 >= e {
-            break
-        }
-        m := b + ( e - b ) /2
-        if nums[m] < nums[0] {
-            e = m
-        } else if nums[m] > nums[0] {
-            b = m
-        } else {
-            if nums[b] < nums[e] {
-                e--
-            } else {
-                b++
-            }
-        }
-    }
-    if nums[b] <= nums[e] {
-        return nums[b]
-    } 
-    return nums[e]
-}
-```
+
 
 ## 63 Search in Rotated Sorted Array II
 
