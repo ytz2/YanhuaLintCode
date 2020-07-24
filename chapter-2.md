@@ -831,9 +831,61 @@ func findMin(nums []int) int {
 }
 ```
 
+2020/07/24 revisit
+
+因为在做有重复问题的时候再往这个上面套是套不上了， 因为OOXX的时候必须要有OOXX， 有重复的时候是OOXXOO的问题， 二分不起来， 所以就回到了动态的比较这个问题了
+
+注意到一个节点就是mid同beg比较的时候， mid大于start 不一定知道最小在左面还是再右面 所以在这里要重新二分一下
+
+
+
+```cpp
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int beg = 0;
+        int end = nums.size() - 1;
+        while(beg + 1 < end) {
+            if (nums[beg] < nums[end])
+                return nums[beg]; // 《--------here you are
+            int mid = beg + (end-beg)/2;
+            if (nums[mid] >= nums[beg])
+                beg = mid;
+            else
+                end = mid;
+        }
+        return nums[beg] < nums[end] ? nums[beg] : nums[end];
+    }
+};
+```
+
+反而同end比不存在不确定性 （特例， 升序， 因为是动态算index，大脑锁死了）
+
+
+
+```cpp
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int beg = 0;
+        int end = nums.size() - 1;
+        while(beg + 1 < end) {
+            int mid = beg + (end-beg)/2;
+            if (nums[mid] >= nums[end])
+                beg = mid;
+            else
+                end = mid;
+        }
+        return nums[beg] < nums[end] ? nums[beg] : nums[end];
+    }
+};
+```
+
+## 
+
 ## 75 Find Peak Element
 
-There is an integer array which has the following features:
+There is an array which has the following features:
 
 * The numbers in adjacent positions are different.
 * A\[0\] &lt;A\[1\] && A\[A.length - 2\] &gt; A\[A.length - 1\].
@@ -1083,8 +1135,6 @@ Yes
 For`[4, 5, 1, 2, 3]`and`target=1`, return`2`.
 
 For`[4, 5, 1, 2, 3]`and`target=0`, return`-1`.
-
-
 
 [https://leetcode.com/problems/search-in-rotated-sorted-array/submissions/](https://leetcode.com/problems/search-in-rotated-sorted-array/submissions/)
 
