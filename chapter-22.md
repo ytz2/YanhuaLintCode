@@ -389,9 +389,9 @@ public:
 
 log\(x\) , worst o\(n\)
 
-
-
 2020/07/24
+
+为什么nums\[0\]换到nums\[b\]， OOXX原理不成立， 只能靠动态。 为什么不再担心 MID vs B 的二元性，  我们只是在不确定中找确定而不是找min， 所以够用就好。 因为一直和start比， 所以b++
 
 ```go
 func search(nums []int, target int) bool {
@@ -414,7 +414,7 @@ func search(nums []int, target int) bool {
             } else {
                 e = m
             }
-            
+
         } else {
             b++
         }
