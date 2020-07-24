@@ -314,8 +314,6 @@ public:
 };
 ```
 
-
-
 ## 63 Search in Rotated Sorted Array II
 
 Follow up for[Search in Rotated Sorted Array](http://www.lintcode.com/problem/search-in-rotated-sorted-array/):
@@ -390,6 +388,40 @@ public:
 ### 复杂度分析:
 
 log\(x\) , worst o\(n\)
+
+
+
+2020/07/24
+
+```go
+func search(nums []int, target int) bool {
+    n := len(nums)
+    if n == 0 {
+        return false
+    }
+    b, e := 0, n - 1
+    for  b + 1 < e {
+        m := b + ( e - b ) / 2
+        if nums[m] > nums[b] {
+            if target >= nums[b] && target <= nums[m] {
+                e = m
+            } else {
+                b = m
+            }
+        } else if nums[m] < nums[b] {
+            if target >= nums[m] && target <= nums[e] {
+                b = m
+            } else {
+                e = m
+            }
+            
+        } else {
+            b++
+        }
+    }
+    return nums[b] == target || nums[e] == target
+}
+```
 
 ## \*\*\*617 Maximum Average Subarray II
 
