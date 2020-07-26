@@ -717,6 +717,57 @@ public:
 
 nlog\(n\)
 
+
+
+2020/07/25
+
+```go
+// golang
+/**
+ * @param pages: an array of integers
+ * @param k: An integer
+ * @return: an integer
+ */
+func copyBooks (pages []int, k int) int {
+    // write your code here
+    
+    check := func(x int) bool {
+        w := 0
+        p := 1
+        for _, n := range pages {
+            if n > x {
+                return false
+            }
+            if w + n > x {
+                w = n
+                p++
+            } else {
+                w += n
+            }
+        }
+        return p <= k
+    }
+    
+    beg, end := 0, 0;
+    for _, n := range pages {
+        end += n
+    }
+    for beg + 1 < end {
+        mid := beg + ( end - beg ) / 2
+        if check(mid) {
+            end = mid
+        } else {
+            beg = mid
+        }
+    }
+    if check(beg) {
+        return beg
+    }
+    return end
+}
+
+```
+
 ## \*\*\*183 Wood Cut
 
 Given n pieces of wood with length`L[i]`\(integer array\). Cut them into small pieces to guarantee you could have equal or more than k pieces with the same length. What is the longest length you can get from the n pieces of wood? Given L & k, return the maximum length of the small pieces.
