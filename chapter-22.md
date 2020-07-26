@@ -526,9 +526,50 @@ public:
 
 nlog\(\(max-min\)/eps\)
 
-2020/07/26 
+2020/07/26
 
 回头看还是觉得很巧妙啊， 二分答案的巧妙之处在于二维，甚至多维不固定的情况下寻找一个极限，类似于线性规划的逼近办法一样，用答案来反逼条件。 找到条件以后这个题的条件是一道DP 子问题，寻找数组大于等于k的子数组最大值。
+
+cpp版本用lambda更明快一些
+
+```cpp
+class Solution {
+public:
+    double findMaxAverage(vector<int>& nums, int k) {
+        auto check = [&](double m) {
+            vector<double> sumArray(nums.size()+1, 0);
+            for (int i = 0; i < nums.size(); i++) {
+                sumArray[i+1] = sumArray[i] + nums[i] - m;
+            }
+            double res = -1;
+            double prevMin = 0;
+            for (int i = k; i < sumArray.size(); i++) {
+                res = max(res, sumArray[i] - prevMin);
+                prevMin = min(prevMin, sumArray[i-k+1]);
+            }
+            return res >= 0;
+        };
+        
+        double b = INT_MAX;
+        double e = INT_MIN;
+        for (auto v : nums) {
+            b = min(b, double(v));
+            e = max(e, double(v));
+        }
+        double eps = 1e-6;
+        while( b + eps < e) {
+            auto mid = b + ( e - b ) / 2;
+            if (check(mid)) 
+                b = mid;
+            else 
+                e = mid;
+        }
+        if (check(e)) 
+            return e;
+        return b;
+    }
+};
+```
 
 
 
@@ -539,7 +580,7 @@ import (
 )
 
 func findMaxAverage(nums []int, k int) float64 {
-    
+
     check := func(nums []int, mid float64, k int) bool {
         s := make([]float64, len(nums) + 1)
         for i, n := range nums {
@@ -553,7 +594,7 @@ func findMaxAverage(nums []int, k int) float64 {
         }
         return res >= 0
     }
-    
+
     b, e := float64(math.MaxInt64), float64(math.MinInt64)
     for _, m := range nums {
         b = math.Min(float64(m), b)
@@ -574,8 +615,6 @@ func findMaxAverage(nums []int, k int) float64 {
     return b
 }
 ```
-
-
 
 ## \*\*\*437 Copy Books
 
