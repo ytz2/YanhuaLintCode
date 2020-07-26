@@ -443,6 +443,8 @@ Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
 
 [http://www.lintcode.com/en/problem/maximum-average-subarray-ii/](http://www.lintcode.com/en/problem/maximum-average-subarray-ii/)
 
+[https://leetcode.com/problems/maximum-average-subarray-ii/submissions/](https://leetcode.com/problems/maximum-average-subarray-ii/submissions/)
+
 ### 解题分析:
 
 二分答案：
@@ -549,7 +551,7 @@ public:
             }
             return res >= 0;
         };
-        
+
         double b = INT_MAX;
         double e = INT_MIN;
         for (auto v : nums) {
@@ -570,8 +572,6 @@ public:
     }
 };
 ```
-
-
 
 ```go
 // GOLANG
