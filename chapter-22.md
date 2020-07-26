@@ -526,6 +526,57 @@ public:
 
 nlog\(\(max-min\)/eps\)
 
+2020/07/26 
+
+回头看还是觉得很巧妙啊， 二分答案的巧妙之处在于二维，甚至多维不固定的情况下寻找一个极限，类似于线性规划的逼近办法一样，用答案来反逼条件。 找到条件以后这个题的条件是一道DP 子问题，寻找数组大于等于k的子数组最大值。
+
+
+
+```go
+// GOLANG
+import (
+    "math"
+)
+
+func findMaxAverage(nums []int, k int) float64 {
+    
+    check := func(nums []int, mid float64, k int) bool {
+        s := make([]float64, len(nums) + 1)
+        for i, n := range nums {
+            s[i+1] = s[i] + float64(n) - mid
+        }
+        res := float64(math.MinInt64)
+        var prevMin float64
+        for i:=k; i < len(s); i++ {
+            res = math.Max(res, s[i] - prevMin)
+            prevMin = math.Min(prevMin, s[i - k + 1]) // precalc next prevMin thus use + 1, if have trouble, just use two array
+        }
+        return res >= 0
+    }
+    
+    b, e := float64(math.MaxInt64), float64(math.MinInt64)
+    for _, m := range nums {
+        b = math.Min(float64(m), b)
+        e = math.Max(float64(m), e)
+    }
+    eps := 1e-6
+    for b + eps < e {
+        m := b + ( e - b ) / 2
+        if check(nums, m, k) {
+            b = m
+        } else {
+            e = m
+        }
+    }
+    if check(nums, e, k) {
+        return e
+    }
+    return b
+}
+```
+
+
+
 ## \*\*\*437 Copy Books
 
 Given\_n\_books and the\_i\_th book has`A[i]`pages. You are given\_k\_people to copy the\_n\_books.
