@@ -717,8 +717,6 @@ public:
 
 nlog\(n\)
 
-
-
 2020/07/25
 
 ```go
@@ -730,7 +728,7 @@ nlog\(n\)
  */
 func copyBooks (pages []int, k int) int {
     // write your code here
-    
+
     check := func(x int) bool {
         w := 0
         p := 1
@@ -747,7 +745,7 @@ func copyBooks (pages []int, k int) int {
         }
         return p <= k
     }
-    
+
     beg, end := 0, 0;
     for _, n := range pages {
         end += n
@@ -765,7 +763,6 @@ func copyBooks (pages []int, k int) int {
     }
     return end
 }
-
 ```
 
 ## \*\*\*183 Wood Cut
@@ -849,4 +846,52 @@ public:
 ```
 
 nlog\(n\)
+
+
+
+2020/07/25
+
+```go
+/**
+ * @param L: Given n pieces of wood with length L[i]
+ * @param k: An integer
+ * @return: The maximum length of the small pieces
+ */
+func woodCut (L []int, k int) int {
+    // write your code here
+    check := func(x int) bool {
+        c := 0
+        for _, l := range L{
+            c += l/x
+        }
+        return c >= k
+    }
+    
+    b := 1
+    e := 1
+    for _, n := range L {
+        if n > e {
+            e = n
+        }
+    }
+    for b + 1 < e {
+        m := b + ( e - b ) / 2
+        if check(m) {
+            b = m
+        } else {
+            e = m
+        }
+    }
+    if check(e) {
+        return e
+    }
+    if check(b) {
+        return b
+    }
+    return 0
+}
+
+```
+
+
 
