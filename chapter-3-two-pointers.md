@@ -57,6 +57,64 @@ public:
 
 o\(n\)
 
+2020/07/26 纯粹为了写golang
+
+
+
+```go
+import "sort"
+func twoSum(nums []int, target int) []int {
+
+    type pair struct {
+        v int
+        i int  
+    } 
+    arr := make([]*pair, len(nums))
+    
+    for i, v := range nums {
+        arr[i] = &pair{
+            v:v,
+            i:i,
+        }
+    }
+    sort.SliceStable(arr, func(i, j int) bool {
+        return arr[i].v < arr[j].v
+    })
+    
+    res := make([]int, 2)
+    b, e := 0, len(nums) -1
+    for b < e {
+        s := arr[b].v + arr[e].v
+        if s == target {
+            res[0] = arr[b].i
+            res[1] = arr[e].i
+            break
+        } else if s < target {
+            b++
+        } else {
+            e--
+        }
+    }
+    return res
+}
+
+func twoSum(nums []int, target int) []int {
+    h := make(map[int]int, len(nums))
+    res := make([]int, 2)
+    for i, v := range nums {
+        if prev, ok := h[target - v]; ok {
+            res[0] = prev
+            res[1] = i
+            break
+        }
+        h[v] = i
+    }
+    return res
+}
+```
+
+
+
 ## 数组去重问题
 
 ## 521 Remove Duplicate Numbers in Array
