@@ -24,6 +24,8 @@ return`[0, 1]`
 
 [http://www.lintcode.com/en/problem/remove-duplicate-numbers-in-array/](http://www.lintcode.com/en/problem/remove-duplicate-numbers-in-array/)
 
+[https://leetcode.com/problems/two-sum/submissions/](https://leetcode.com/problems/two-sum/submissions/)
+
 ### 解题分析:
 
 当年被问烂了的题， 直接写吧
@@ -59,8 +61,6 @@ o\(n\)
 
 2020/07/26 纯粹为了写golang
 
-
-
 ```go
 import "sort"
 func twoSum(nums []int, target int) []int {
@@ -70,7 +70,7 @@ func twoSum(nums []int, target int) []int {
         i int  
     } 
     arr := make([]*pair, len(nums))
-    
+
     for i, v := range nums {
         arr[i] = &pair{
             v:v,
@@ -80,7 +80,7 @@ func twoSum(nums []int, target int) []int {
     sort.SliceStable(arr, func(i, j int) bool {
         return arr[i].v < arr[j].v
     })
-    
+
     res := make([]int, 2)
     b, e := 0, len(nums) -1
     for b < e {
@@ -112,8 +112,6 @@ func twoSum(nums []int, target int) []int {
     return res
 }
 ```
-
-
 
 ## 数组去重问题
 
