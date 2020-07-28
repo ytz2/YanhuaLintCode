@@ -137,6 +137,8 @@ Actually we don't care about what you place in`?`, we only care about the part w
 
 [http://www.lintcode.com/en/problem/remove-duplicate-numbers-in-array/](http://www.lintcode.com/en/problem/remove-duplicate-numbers-in-array/)
 
+[https://leetcode.com/problems/remove-duplicates-from-sorted-array/](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
+
 ### 解题分析:
 
 空间换时间的话就是弄一个hash set往里面丢， o\(n\)算是最优了， 要么就sort一下快慢指针来做
@@ -172,6 +174,29 @@ public:
 ### 复杂度分析:
 
 nlog\(n\)
+
+2020/07/28
+
+```go
+func removeDuplicates(nums []int) int {
+    if len(nums) == 0 {
+        return 0
+    }
+    s, f := 0, 0
+    for f < len(nums) {
+        if nums[s] == nums[f] {
+            f++;
+        } else {
+            nums[s+1] = nums[f];
+            s++
+            f++
+        }
+    }
+    return s+1
+}
+```
+
+
 
 ## 滑动窗口问题
 
