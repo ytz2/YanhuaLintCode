@@ -196,8 +196,6 @@ func removeDuplicates(nums []int) int {
 }
 ```
 
-
-
 ## 滑动窗口问题
 
 ## 604 Window Sum
@@ -256,6 +254,42 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/07/28
+
+```go
+/**
+ * @param nums: a list of integers.
+ * @param k: length of window.
+ * @return: the sum of the element inside the window at each moving.
+ */
+func winSum (nums []int, k int) []int {
+    // write your code here
+    res := make([]int, 0)
+    if len(nums) < k || k == 0 {
+        return res
+    }
+    i, j, s := 0, 0, 0
+    for j < len(nums) {
+        if j < k {
+            s += nums[j]
+            if j == k-1 {
+                res = append(res, s)
+            }
+            j++        
+        } else {
+            s = s + nums[j] - nums[i]
+            res = append(res, s)
+            i++
+            j++
+        }
+    }
+    return res
+}
+
+```
+
+
 
 ## 360 Sliding Window Median
 
