@@ -409,7 +409,7 @@ upper_bound, lower\_bound, rotate, next, prev   这些std lib要熟悉_
 
 2020/07/29
 
-
+这次回头写了一个双队列版本， 也还行
 
 ```cpp
 class Solution {
@@ -418,7 +418,7 @@ public:
         vector<double> res;
         if (nums.size() < k) 
             return res;
-        
+
         multiset<int> lower(nums.begin(), next(nums.begin(), (k+1)/2));
         multiset<int> upper;
         for (int i = (k+1) / 2; i < k; i++) {
@@ -430,14 +430,14 @@ public:
                 lower.erase(prev(lower.end()));
             }
         }
-        
+
         auto med = [&lower, &upper]() {
             if (lower.size() == upper.size())
                 return double(*prev(lower.end())) / 2 + double(*upper.begin()) / 2;
             return double(*prev(lower.end()));
         };
-        
-        
+
+
         res.push_back(med());
         for (int i = k; i < nums.size(); i++) {
             if (nums[i] >= *prev(lower.end())) {
@@ -450,25 +450,23 @@ public:
             } else {
                 upper.erase(upper.lower_bound(nums[i-k]));
             }
-            
+
             while(lower.size() > upper.size() + 1) {
                 upper.insert(*prev(lower.end()));
                 lower.erase(prev(lower.end()));
             }
-            
+
             while(lower.size() < upper.size()) {
                 lower.insert(*upper.begin());
                 upper.erase(upper.begin());
             }
-            
+
             res.push_back(med());
         }
         return res;
     }
 };
 ```
-
-
 
 ## 362 Sliding Window Maximum
 
