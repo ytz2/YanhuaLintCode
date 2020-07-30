@@ -286,10 +286,7 @@ func winSum (nums []int, k int) []int {
     }
     return res
 }
-
 ```
-
-
 
 ## 360 Sliding Window Median
 
@@ -316,6 +313,8 @@ then the window move one step forward again.
 `[1,2, | 7,8,5 | ]`, return the median`7`;
 
 [http://www.lintcode.com/en/problem/sliding-window-median/](http://www.lintcode.com/en/problem/sliding-window-median/)
+
+[https://leetcode.com/problems/sliding-window-median/](https://leetcode.com/problems/sliding-window-median/)
 
 ### 解题分析 1:
 
@@ -407,6 +406,69 @@ klog\(k\) + \(n-k\)\*log\(k\)
 #### 笔记：
 
 upper_bound, lower\_bound, rotate, next, prev   这些std lib要熟悉_
+
+2020/07/29
+
+
+
+```cpp
+class Solution {
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        vector<double> res;
+        if (nums.size() < k) 
+            return res;
+        
+        multiset<int> lower(nums.begin(), next(nums.begin(), (k+1)/2));
+        multiset<int> upper;
+        for (int i = (k+1) / 2; i < k; i++) {
+            if (nums[i] >= *prev(lower.end())) {
+                upper.insert(nums[i]);
+            } else {
+                lower.insert(nums[i]);
+                upper.insert(*prev(lower.end()));
+                lower.erase(prev(lower.end()));
+            }
+        }
+        
+        auto med = [&lower, &upper]() {
+            if (lower.size() == upper.size())
+                return double(*prev(lower.end())) / 2 + double(*upper.begin()) / 2;
+            return double(*prev(lower.end()));
+        };
+        
+        
+        res.push_back(med());
+        for (int i = k; i < nums.size(); i++) {
+            if (nums[i] >= *prev(lower.end())) {
+                upper.insert(nums[i]);
+            } else {
+                lower.insert(nums[i]);
+            } 
+            if (nums[i - k ] <= *prev(lower.end())) {
+                lower.erase(lower.lower_bound(nums[i-k]));
+            } else {
+                upper.erase(upper.lower_bound(nums[i-k]));
+            }
+            
+            while(lower.size() > upper.size() + 1) {
+                upper.insert(*prev(lower.end()));
+                lower.erase(prev(lower.end()));
+            }
+            
+            while(lower.size() < upper.size()) {
+                lower.insert(*upper.begin());
+                upper.erase(upper.begin());
+            }
+            
+            res.push_back(med());
+        }
+        return res;
+    }
+};
+```
+
+
 
 ## 362 Sliding Window Maximum
 
