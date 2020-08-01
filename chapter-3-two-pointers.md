@@ -761,8 +761,6 @@ For numbers coming list:`[4, 5, 1, 3, 2, 6, 0]`, return`[4, 4, 4, 3, 3, 3, 3]`.
 
 For numbers coming list:`[2, 20, 100]`, return`[2, 2, 20]`.
 
-
-
 [https://leetcode.com/submissions/detail/166519760/](https://leetcode.com/submissions/detail/166519760/)
 
 ### 解题分析:
@@ -869,22 +867,18 @@ public:
 
 插入是log\(n\)
 
-
-
 2020/ 08 /01 回头写了leetcode居然发现自己以前写的好简单。。。。
 
 丑的版本
-
-
 
 ```cpp
 class MedianFinder {
 public:
     /** initialize your data structure here. */
     MedianFinder() {
-        
+
     }
-    
+
     void addNum(int num) {
         if (p.empty()) {
             p.push(num);
@@ -908,14 +902,14 @@ public:
             }
         }
     }
-    
-    
+
+
     double findMedian() {
         if (p.size() > q.size())
             return p.top();
         return p.top()/2. + q.top() / 2.;
     }
-    
+
 private:
     priority_queue<int> p;
     priority_queue<int, vector<int>, std::greater<int>> q;
@@ -929,8 +923,6 @@ private:
  */
 ```
 
-
-
 简洁的， pq上来就插， 插完了只能有两个结果
 
 左边比右边大2， 右边比左边大一， 这两个需要rebalance,其他情况都是合法情况
@@ -940,9 +932,9 @@ class MedianFinder {
 public:
     /** initialize your data structure here. */
     MedianFinder() {
-        
+
     }
-    
+
     void addNum(int num) {
         if (lq.empty() || num < lq.top())
             lq.push(num);
@@ -959,14 +951,14 @@ public:
             rq.pop();
         }
     }
-    
+
     double findMedian() {
         if (lq.size() - rq.size() == 1)
             return lq.top();
-        
+
         return double(lq.top() + rq.top()) / 2.;
     }
-    
+
     // maintain lq and rq
     // to make lq.size() == rq.size() || lq.size() == rq.size()+1
     priority_queue<int> lq; // max heap
@@ -980,8 +972,6 @@ public:
  * double param_2 = obj.findMedian();
  */
 ```
-
-
 
 ## 545. Top k Largest Numbers II
 
@@ -1154,6 +1144,50 @@ private:
 #### 复杂度
 
 插入是nlog\(k\) , klog\(k\)
+
+
+
+2020/08/01  multiset 大法好
+
+```cpp
+class Solution {
+public:
+    /*
+    * @param k: An integer
+    */Solution(int k) : k(k) {
+        // do intialization if necessary
+    }
+
+    /*
+     * @param num: Number to be added
+     * @return: nothing
+     */
+    void add(int num) {
+        if (ms.size() < k ){
+            ms.insert(num);
+        } else {
+            if (num <= *ms.begin()) {
+                return;
+            } else {
+                ms.insert(num);
+                ms.erase(ms.begin());
+            }
+        }
+    }
+
+    /*
+     * @return: Top k element
+     */
+    vector<int> topk() {
+        // write your code here
+        return vector<int>(ms.rbegin(), ms.rend());
+    }
+    
+private:
+    multiset<int> ms;
+    int k;
+};
+```
 
 ## 550. Top K Frequent Words II
 
