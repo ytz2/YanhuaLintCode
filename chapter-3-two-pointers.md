@@ -1145,8 +1145,6 @@ private:
 
 插入是nlog\(k\) , klog\(k\)
 
-
-
 2020/08/01  multiset 大法好
 
 ```cpp
@@ -1182,7 +1180,7 @@ public:
         // write your code here
         return vector<int>(ms.rbegin(), ms.rend());
     }
-    
+
 private:
     multiset<int> ms;
     int k;
@@ -1295,6 +1293,91 @@ public:
         }
     };
     set<string, MyCompare> recorder_;
+};
+```
+
+2020/08/01
+
+[https://leetcode.com/problems/top-k-frequent-words/submissions/](https://leetcode.com/problems/top-k-frequent-words/submissions/)
+
+Leetcode 有道简单的做完再做stream就简单很多
+
+```cpp
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string, int> counter;
+        for (const auto& word : words) {
+            counter[word]++;
+        }
+        auto cmp = [&](const std::string& l, const std::string& r) {
+            if (counter[l] == counter[r])
+                return l > r;
+            return counter[l] < counter[r];
+        };
+        set<string, decltype(cmp)> res(cmp);
+        for (const auto& each : counter) {
+            res.insert(each.first);
+            if (res.size() > k) {
+                res.erase(res.begin());
+            }
+        }
+        return vector<string>(res.rbegin(), res.rend());
+    }
+};
+```
+
+
+
+2020/08/01
+
+再写一遍的时候还是犯了先update reference再抹去record的错误。 again,因为set用到了map做ref， 先更新map就导致查找的时候出错。
+
+太tricky！
+
+```cpp
+unordered_map<string, int> counter;
+
+struct CMP {
+    bool operator()(const string& l, const string& r) {
+        if (counter[l] == counter[r])
+            return l > r;
+        return counter[l] < counter[r];        
+    }
+};
+class TopK {
+public:
+    /*
+    * @param k: An integer
+    */TopK(int k) : size(k){
+        // do intialization if necessary
+    }
+
+    /*
+     * @param word: A string
+     * @return: nothing
+     */
+    void add(string &word) {
+        auto it = sorter.find(word);
+        if (it != sorter.end())
+            sorter.erase(it);
+        counter[word]++;
+        sorter.insert(word);
+        if (sorter.size() > size )
+            sorter.erase(sorter.begin());
+    }
+
+    /*
+     * @return: the current top k frequent words.
+     */
+    vector<string> topk() {
+        // write your code here
+        return vector<string>(sorter.rbegin(), sorter.rend());
+    }
+    
+private:
+    int size;
+    set<string, CMP> sorter;
 };
 ```
 
