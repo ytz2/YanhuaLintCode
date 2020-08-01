@@ -613,13 +613,13 @@ o\(nlog\(n\)\)
 
 这道题在Leetcode上没原题， 所以就懒得做了. 实际上稍微写一下， 排序以后
 
-1， 3， 4， 5, 6 找 4 
+1， 3， 4， 5, 6 找 4
 
 那就+ 5，
 
 5， 7， 8， 9， 10
 
-数列1， 数列2并集的位置就是了，  因为本身排序复杂度就是nlog\(n\) 了 所以大不了二分搜索找并集. space friendly的还是原题解。 
+数列1， 数列2并集的位置就是了，  因为本身排序复杂度就是nlog\(n\) 了 所以大不了二分搜索找并集. space friendly的还是原题解。
 
 总结下来就是相向指针求和，同向指针求差了
 
@@ -640,6 +640,8 @@ Given`1->2->3`, return the node with value 2.
 Given`1->2`, return the node with value 1.
 
 [http://www.lintcode.com/en/problem/middle-of-linked-list/](http://www.lintcode.com/en/problem/middle-of-linked-list/)
+
+[https://leetcode.com/problems/middle-of-the-linked-list/submissions/](https://leetcode.com/problems/middle-of-the-linked-list/submissions/)
 
 ### 解题分析:
 
