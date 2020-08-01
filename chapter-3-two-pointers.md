@@ -691,6 +691,56 @@ public:
 
 o\(n\).
 
+
+
+2020/08/01
+
+这次回头做想起来为什么lintcode的head要前置一位了， 因为leetcode要的是后面哪一位，lintcode要的是前面那一位
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        auto slow = head;
+        auto fast = head;
+        while(fast && fast->next ) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+};
+```
+
+```go
+// golang
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func middleNode(head *ListNode) *ListNode {
+    s, f:= head, head
+    for f != nil && f.Next != nil {
+        s = s.Next
+        f = f.Next.Next
+    }
+    return s
+}
+```
+
 ## 81. Data Stream Median
 
 Numbers keep coming, return the median of numbers at every time a new number added.
