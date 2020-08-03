@@ -224,6 +224,8 @@ O\(n\) time, O\(1\) extra memory.
 
 [http://www.lintcode.com/en/problem/kth-largest-element/](http://www.lintcode.com/en/problem/kth-largest-element/)
 
+[https://leetcode.com/problems/kth-largest-element-in-an-array/](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+
 ### 解题分析:
 
 这个是快排的一个变种题目， 用的思想是，每次partition ， 从大到小， 如果 第k个数字在左边从左边搜，如果在右面从右边搜，否则就是在中间位置。
@@ -267,6 +269,105 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/02
+
+今天revisit这道题目，自己做错了但又觉得很有趣， 我拿了快排的模板然后去看前面数组长度是不是k-1, 结果就出错了， 纠结问题的地方在于应不应该用l,r 来计算 长度， 答案是不行的。 当初拿到的这个模板是快排模板，只是能保证你及时退出而不能保证index 是对的， 
+
+\[3,2,1,5,6,4\]
+
+2
+
+这个test case ,  用1做Pivot
+
+3, 2, 5,6,4 \| 1
+
+然后用5
+
+6, 5\| 3, 2, 4
+
+那么要早6,5 找k=2 , 快排把两个指针都移到6然后变换指针为了符合模板退出， 这个时候下面的解必然是错的， 因为 右指针为-1了， 拿来算长度怎么也不会对的。
+
+所以才有了以前的解，把beg, k 拿来和 b, e 比， 而不是算长度来比， 这是模板的局限性导致的bug， take it
+
+
+
+错误的答案：
+
+```go
+func findKthLargest(nums []int, k int) int {
+    return findKthLargestImpl(nums, k, 0, len(nums) -1)
+}
+
+func findKthLargestImpl(nums []int, k, b, e int) int {
+    if k == 1 {
+        return nums[b]
+    }
+    p := nums[b + ( e - b) / 2]
+    l, r := b, e
+    for l <= r {
+        for l <= r && nums[l] > p {
+            l++
+        }
+        
+        for l <= r && nums[r] < p {
+            r--
+        }
+        
+        if l <= r {
+            nums[l], nums[r] = nums[r], nums[l]
+            l++
+            r--
+        }
+    }
+    ll := r - b + 1
+    // now look at r
+    if ll == k-1 {
+        return nums[r+1]
+    } else if ll > k - 1{
+        return findKthLargestImpl(nums, k, b, r)
+    }
+    return findKthLargestImpl(nums, k - ll, r+1, e)
+}
+```
+
+正确解
+
+
+
+```go
+func findKthLargest(nums []int, k int) int {
+    return findKthLargestImpl(nums, k, 0, len(nums) -1)
+}
+
+func findKthLargestImpl(nums []int, k, b, e int) int {
+    p := nums[b + ( e - b) / 2]
+    l, r := b, e
+    for l <= r {
+        for l <= r && nums[l] > p {
+            l++
+        }
+        
+        for l <= r && nums[r] < p {
+            r--
+        }
+        
+        if l <= r {
+            nums[l], nums[r] = nums[r], nums[l]
+            l++
+            r--
+        }
+    }
+    if b + k - 1 <= r {
+        return findKthLargestImpl(nums, k, b, r)
+    } else if b + k - 1 >= l {
+        return findKthLargestImpl(nums, k - ( l - b ), l, e)
+    }
+    return nums[r+1]
+}
+```
+
+
 
 ## 148 Sort Colors
 
