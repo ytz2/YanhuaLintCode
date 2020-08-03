@@ -12,6 +12,8 @@ Given`[3, 2, 1, 4, 5]`, return`[1, 2, 3, 4, 5]`.
 
 [http://www.lintcode.com/en/problem/sort-integers-ii/](http://www.lintcode.com/en/problem/sort-integers-ii/)
 
+[https://leetcode.com/problems/sort-an-array/](https://leetcode.com/problems/sort-an-array/)
+
 ### 解题分析:
 
 两个经典的排序方法：
@@ -116,8 +118,6 @@ public:
 
 nlog\(n\)
 
-
-
 2020/08/02
 
 ```go
@@ -138,12 +138,12 @@ func quickSort(nums []int, beg, end int) {
     }
     l, r := beg, end
     p := nums[beg + ( end - beg ) / 2]
-    
+
     for l <= r {
         for l <= r && nums[l] < p {
             l++
         }
-        
+
         for l <= r && nums[r] > p {
             r--
         }
@@ -191,16 +191,14 @@ func mergeSort(nums []int, buffer []int, beg int, end int) {
         r++
         s++
     }
-    
+
     for beg <= end {
         nums[beg] = buffer[beg]
         beg++
     }
-    
+
 }
 ```
-
-
 
 ## \*\*\*\*\*\*\*5 Kth Largest Elemen
 
