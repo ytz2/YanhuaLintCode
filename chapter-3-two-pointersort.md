@@ -116,6 +116,92 @@ public:
 
 nlog\(n\)
 
+
+
+2020/08/02
+
+```go
+func sortArray(nums []int) []int {
+    //MergeSort(nums)
+    QuickSort(nums)
+    return nums
+}
+
+func QuickSort(nums []int) {
+    quickSort(nums, 0, len(nums)-1)
+}
+
+func quickSort(nums []int, beg, end int) {
+    // partion
+    if beg >= end {
+        return;
+    }
+    l, r := beg, end
+    p := nums[beg + ( end - beg ) / 2]
+    
+    for l <= r {
+        for l <= r && nums[l] < p {
+            l++
+        }
+        
+        for l <= r && nums[r] > p {
+            r--
+        }
+        if l <= r {
+            nums[l], nums[r] = nums[r], nums[l]
+            l++
+            r--
+        }
+    }
+    quickSort(nums, beg, r)
+    quickSort(nums, l, end)
+}
+
+
+func MergeSort(nums []int) {
+    buffer := make([]int, len(nums))
+    mergeSort(nums, buffer, 0, len(nums)-1)
+}
+
+func mergeSort(nums []int, buffer []int, beg int, end int) {
+    if beg >= end {
+        return;
+    }
+    mid := beg + ( end - beg) / 2;
+    mergeSort(nums, buffer, beg, mid)
+    mergeSort(nums, buffer, mid+1, end)
+    s, l, r := beg, beg, mid + 1
+    for l <= mid && r <= end {
+        if nums[l] < nums[r]{
+            buffer[s] = nums[l]
+            l++
+        } else {
+            buffer[s] = nums[r]
+            r++
+        }
+        s++
+    }   
+    for l <= mid {
+        buffer[s] = nums[l]
+        l++
+        s++
+    }
+    for r <= end {
+        buffer[s] = nums[r]
+        r++
+        s++
+    }
+    
+    for beg <= end {
+        nums[beg] = buffer[beg]
+        beg++
+    }
+    
+}
+```
+
+
+
 ## \*\*\*\*\*\*\*5 Kth Largest Elemen
 
 Find K-th largest element in an array.
@@ -184,11 +270,9 @@ public:
 
 o\(n\)
 
-
-
 ## 148 Sort Colors
 
-Given an array with_n_objects colored_red_,_white_or_blue_, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.
+Given an array with_n\_objects colored\_red_,_white\_or\_blue_, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.
 
 Here, we will use the integers`0`,`1`, and`2`to represent the color red, white, and blue respectively.
 
@@ -205,9 +289,7 @@ Yes
 
 Given`[1, 0, 1, 2]`, sort it in-place to`[0, 1, 1, 2]`.
 
-http://www.lintcode.com/en/problem/sort-colors/\#
-
-
+[http://www.lintcode.com/en/problem/sort-colors/\#](http://www.lintcode.com/en/problem/sort-colors/#)
 
 ### 解题分析:
 
@@ -227,7 +309,7 @@ public:
         int start = partition(nums, 0, nums.size()-1, 1);
         start = partition(nums, start, nums.size()-1, 2);
     }
-    
+
     int partition(vector<int>& nums, int beg, int end, int piv)
     {
         while(beg <= end)
