@@ -424,7 +424,7 @@ o\(n\)
 
 ```go
 func sortColors(nums []int)  {
-    
+
     b, c, e := 0, 0, len(nums) - 1
     for c <= e {
         if nums[c] == 0 {
@@ -433,17 +433,13 @@ func sortColors(nums []int)  {
             c++
         } else if nums[c] == 2 {
             nums[e], nums[c] = nums[c], nums[e]
-            e--
+            e-- //这个鸟地方必须背诵了，完全想不出来，只能说cur++ 有一个地方变了
         } else {
             c++
         }
     }
 }
 ```
-
-
-
-
 
 
 
