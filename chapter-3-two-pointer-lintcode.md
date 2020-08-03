@@ -19,6 +19,8 @@ find(7) // return false
 
 [http://www.lintcode.com/en/problem/two-sum-data-structure-design/](http://www.lintcode.com/en/problem/two-sum-data-structure-design/)
 
+[https://leetcode.com/problems/two-sum-iii-data-structure-design/](https://leetcode.com/problems/two-sum-iii-data-structure-design/)
+
 ### 解题分析:
 
 挺好玩的一个题目， two sum算是经典题了，但这道题是让选数据结构。 什么样的数据结构插入简单搜索也简单？
@@ -108,6 +110,56 @@ public:
 };
 ```
 
+2020/08/03 
+
+```go
+type TwoSum struct {
+    dict map[int]int
+}
+
+
+/** Initialize your data structure here. */
+func Constructor() TwoSum {
+    return TwoSum {
+        dict: make(map[int]int, 0),
+    }
+}
+
+
+/** Add the number to an internal data structure.. */
+func (this *TwoSum) Add(number int)  {
+    this.dict[number] = this.dict[number] + 1       
+}
+
+
+/** Find if there exists any pair of numbers which sum is equal to the value. */
+func (this *TwoSum) Find(value int) bool {
+    for k, v := range this.dict {
+        t := value - k
+        if t == k {
+            if v > 1 {
+                return true
+            } else {
+                continue
+            }
+        }
+        
+        if _, ok := this.dict[t]; ok {
+            return true
+        }
+    }
+    return false
+}
+
+
+/**
+ * Your TwoSum object will be instantiated and called as such:
+ * obj := Constructor();
+ * obj.Add(number);
+ * param_2 := obj.Find(value);
+ */
+```
+
 ## 539 Move Zeroes
 
 Given an array`nums`, write a function to move all`0`'s to the end of it while maintaining the relative order of the non-zero elements.
@@ -128,6 +180,8 @@ Yes
 Given`nums = [0, 1, 0, 3, 12]`, after calling your function,`nums`should be`[1, 3, 12, 0, 0]`.
 
 [http://www.lintcode.com/en/problem/move-zeroes/\#](http://www.lintcode.com/en/problem/move-zeroes/#)
+
+[https://leetcode.com/problems/move-zeroes/submissions/](https://leetcode.com/problems/move-zeroes/submissions/)
 
 ### 解题分析:
 
@@ -167,6 +221,21 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/02
+
+```go
+func moveZeroes(nums []int)  {
+    for s, f := 0, 0; f < len(nums); f++ {
+        if nums[f] != 0 {
+            nums[s], nums[f] = nums[f], nums[s]
+            s++
+        }
+    }
+}
+```
+
+
 
 #### 608. Two Sum - Input array is sorted
 
@@ -231,6 +300,32 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+
+
+2020/08/03
+
+```go
+func twoSum(numbers []int, target int) []int {
+    res := make([]int, 2)
+    b, e := 0, len(numbers) - 1
+    for b < e {
+        s := numbers[b] + numbers[e]
+        if s < target {
+            b++
+        } else if s > target{
+            e--
+        } else {
+            break
+        }
+    }
+    res[0] = b + 1
+    res[1] = e + 1
+    return res
+}
+```
+
+
 
 #### 57. 3Sum
 
