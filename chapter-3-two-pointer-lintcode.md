@@ -110,7 +110,7 @@ public:
 };
 ```
 
-2020/08/03 
+2020/08/03
 
 ```go
 type TwoSum struct {
@@ -143,7 +143,7 @@ func (this *TwoSum) Find(value int) bool {
                 continue
             }
         }
-        
+
         if _, ok := this.dict[t]; ok {
             return true
         }
@@ -235,8 +235,6 @@ func moveZeroes(nums []int)  {
 }
 ```
 
-
-
 #### 608. Two Sum - Input array is sorted
 
 Given an array of integers that is already_sorted in ascending order_, find two numbers such that they add up to a specific target number.
@@ -301,8 +299,6 @@ public:
 
 o\(n\)
 
-
-
 2020/08/03
 
 ```go
@@ -324,8 +320,6 @@ func twoSum(numbers []int, target int) []int {
     return res
 }
 ```
-
-
 
 #### 57. 3Sum
 
@@ -351,6 +345,8 @@ For example, given array S =`{-1 0 1 2 -1 -4}`, A solution set is:
 ```
 
 [http://www.lintcode.com/en/problem/3sum/\#](http://www.lintcode.com/en/problem/3sum/#)
+
+[https://leetcode.com/problems/3sum/](https://leetcode.com/problems/3sum/)
 
 ### 解题分析:
 
@@ -418,6 +414,42 @@ public:
 
 o\(n^2\)
 
+2020/08/04
+
+
+
+```go
+import "sort"
+func threeSum(nums []int) [][]int {
+    sort.Ints(nums)
+    res := make([][]int, 0)
+    for i := 0; i < len(nums) - 2; i++ {
+        if i > 0 && nums[i] == nums[i-1] {
+            continue
+        }
+        b, e := i + 1, len(nums) - 1;
+        for b < e {
+            if b > i + 1&& nums[b] == nums[b-1] {
+                b++
+                continue
+            }
+            t := nums[i] + nums[b] + nums[e]
+            if t < 0 {
+                b++
+            } else if t > 0{
+                e--
+            } else {
+                res = append(res, []int{nums[i], nums[b], nums[e]})
+                b++
+            }
+        }
+    }
+    return res
+}
+```
+
+
+
 #### 31. Partition Array
 
 Given an array`nums`of integers and an int`k`, partition the array \(i.e move the elements in "nums"\) such that:
@@ -483,6 +515,34 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/04
+
+```go
+/**
+ * @param nums: The integer array you should partition
+ * @param k: An integer
+ * @return: The index after partition
+ */
+func partitionArray (nums []int, k int) int {
+    // write your code here
+    if len(nums) <= 1 {
+        return 0
+    }
+    s := 0
+    for f := 0; f < len(nums); f++ {
+        if nums[f] >= k {
+            continue
+        }
+        nums[s], nums[f] = nums[f], nums[s]
+        s++
+    } 
+    return s
+}
+
+```
+
+
 
 #### 609. Two Sum - Less than or equal to target
 
