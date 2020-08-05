@@ -189,6 +189,12 @@ public:
 
 o\(n\)
 
+2020/08/05 
+
+三色排序的一个变形, 就不写一遍了
+
+
+
 #### 102. Linked List Cycle
 
 Given a linked list, determine if it has a cycle in it.
