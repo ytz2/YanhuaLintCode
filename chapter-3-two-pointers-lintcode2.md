@@ -28,6 +28,8 @@ Use`flip(arr, i)`function to sort the array.
 
 [http://www.lintcode.com/en/problem/pancake-sorting/](http://www.lintcode.com/en/problem/pancake-sorting/)
 
+[https://leetcode.com/problems/pancake-sorting/submissions/](https://leetcode.com/problems/pancake-sorting/submissions/)
+
 ### 解题分析:
 
 Youtube上看一个视频， 先找最大的，翻到顶上去，然后再全翻，这样最大的就在下面了，然后再找从0到倒数第二的最大，重复上面的操作
@@ -86,7 +88,7 @@ func pancakeSort(A []int) []int {
             A[b], A[e] = A[e], A[b]
         }
     }
-    
+
     fmax := func(A []int, k int) int {
         index := 0
         for i:= 0; i < k; i++ {
@@ -96,10 +98,10 @@ func pancakeSort(A []int) []int {
         } 
         return index + 1
     }
-    
+
     res := make([]int, 0)
     k := len(A)
-    
+
     for k > 1 {
         m := fmax(A, k)
         flip(A, m)
