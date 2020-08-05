@@ -77,6 +77,43 @@ public:
 
 o\(n^2\)
 
+2020/08/05
+
+```go
+func pancakeSort(A []int) []int {
+    flip := func(A []int, k int) {
+        for b, e := 0, k -1; b < e; b, e = b +1, e-1 {
+            A[b], A[e] = A[e], A[b]
+        }
+    }
+    
+    fmax := func(A []int, k int) int {
+        index := 0
+        for i:= 0; i < k; i++ {
+            if A[i] > A[index] {
+                index = i
+            }
+        } 
+        return index + 1
+    }
+    
+    res := make([]int, 0)
+    k := len(A)
+    
+    for k > 1 {
+        m := fmax(A, k)
+        flip(A, m)
+        res = append(res, m)
+        flip(A, k)
+        res = append(res, k)
+        k--
+    }
+    return res
+}
+```
+
+写Golang还挺好玩的
+
 #### 625. Partition Array II
 
 Partition an unsorted integer array into three parts:
@@ -298,8 +335,6 @@ public:
 ### 复杂度分析:
 
 o\(n^3\)
-
-
 
 #### 103. Linked List Cycle II
 
