@@ -416,8 +416,6 @@ o\(n^2\)
 
 2020/08/04
 
-
-
 ```go
 import "sort"
 func threeSum(nums []int) [][]int {
@@ -447,8 +445,6 @@ func threeSum(nums []int) [][]int {
     return res
 }
 ```
-
-
 
 #### 31. Partition Array
 
@@ -539,10 +535,7 @@ func partitionArray (nums []int, k int) int {
     } 
     return s
 }
-
 ```
-
-
 
 #### 609. Two Sum - Less than or equal to target
 
@@ -965,4 +958,39 @@ public:
 ### 复杂度分析:
 
 o\(n^2\)
+
+2020/08/06
+
+```go
+/**
+ * @param S: A list of integers
+ * @return: An integer
+ */
+import "sort"
+func triangleCount (S []int) int {
+    // write your code here
+    n := len(S)
+    if n < 3 {
+        return 0
+    }
+    c := 0
+    sort.Ints(S)
+    for end := n-1; end >=2; end--{
+        b, e := 0, end -1
+        for b < e {
+            s := S[b] + S[e]
+            if s <= S[end] {
+                b++
+            } else {
+                c += e - b
+                e--
+            }
+        }
+    }
+    return c
+}
+
+```
+
+
 
