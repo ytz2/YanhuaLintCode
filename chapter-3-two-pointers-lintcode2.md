@@ -189,11 +189,9 @@ public:
 
 o\(n\)
 
-2020/08/05 
+2020/08/05
 
 三色排序的一个变形, 就不写一遍了
-
-
 
 #### 102. Linked List Cycle
 
@@ -202,6 +200,8 @@ Given a linked list, determine if it has a cycle in it.
 **Example**
 
 Given -21-&gt;10-&gt;4-&gt;5, tail connects to node index 1, return true
+
+[https://leetcode.com/problems/linked-list-cycle/](https://leetcode.com/problems/linked-list-cycle/)
 
 ### 解题分析:
 
@@ -249,6 +249,35 @@ public:
 
 o\(n\)
 
+
+
+2020/08/07
+
+```go
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func hasCycle(head *ListNode) bool {
+    if head == nil {
+        return false
+    }
+    s, f := head, head.Next
+    for f != nil && f.Next != nil {
+        s , f = s.Next, f.Next.Next
+        if s == f {
+            return true
+        }
+    }
+    return false
+}
+```
+
+
+
 #### 58. 4Sum
 
 Given an array_S\_of\_n\_integers, are there elements\_a_,_b_,_c_, and_d\_in\_S\_such that\_a + b + c + d = target_?
@@ -263,6 +292,10 @@ The solution set must not contain duplicate quadruplets.
 Have you met this question in a real interview?
 
 Yes
+
+
+
+[https://leetcode.com/problems/4sum/](https://leetcode.com/problems/4sum/)
 
 **Example**
 
@@ -344,6 +377,60 @@ public:
 
 o\(n^3\)
 
+2020/08/07
+
+```go
+import (
+    "sort"
+)
+func fourSum(nums []int, target int) [][]int {
+    res := make([][]int, 0)
+    n := len(nums)
+    
+    // illegal input
+    if n < 4 {
+        return res
+    }
+    sort.Ints(nums)
+    for b := 0; b < n -3; b++ {
+        if b > 0 && nums[b] == nums[b-1] {
+            continue
+        }
+        for s := b+1; s < n - 2; s++ {
+            if s > b + 1 && nums[s] == nums[s-1] {
+                continue
+            }
+            x, y := s + 1, n -1 
+            for x < y {
+                if x < y && x > s + 1 && nums[x] == nums[x-1] {
+                    x++
+                    continue
+                }
+                if x < y && y < n - 1 && nums[y] == nums[y+1] {
+                    y--
+                    continue
+                }
+                if x == y {
+                    break
+                }
+                v := nums[b] + nums[s] + nums[x] + nums[y]
+                if v > target {
+                    y--
+                } else if v < target {
+                    x++
+                } else {
+                    res = append(res, []int{nums[b], nums[s], nums[x], nums[y]})
+                    x++
+                }
+            }
+        }
+    }
+    return res
+}
+```
+
+
+
 #### 103. Linked List Cycle II
 
 Given a linked list, return the node where the cycle begins.
@@ -377,4 +464,31 @@ Given -21->10->4->5, tail connects to node index 1，return 10
 ### 复杂度分析:
 
 NA
+
+2020/08/07
+
+那个方法太fancy了。。。我着实不会。。。。
+
+```go
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func detectCycle(head *ListNode) *ListNode {
+    set := make(map[*ListNode]bool)
+    for head != nil {
+        if _, ok := set[head]; ok {
+            return head
+        }
+        set[head] = true
+        head = head.Next
+    }
+    return nil
+}
+```
+
+
 
