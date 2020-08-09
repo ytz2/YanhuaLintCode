@@ -424,6 +424,8 @@ Return`[0,1,2,3]`or`[0,2,1,3]`
 
 [http://www.lintcode.com/en/problem/course-schedule-ii/\#](http://www.lintcode.com/en/problem/course-schedule-ii/#)
 
+[https://leetcode.com/problems/course-schedule-ii/](https://leetcode.com/problems/course-schedule-ii/)
+
 ### 解题分析:
 
 依赖关系， schedule, workflow 都是用的拓扑排序， 并行计算里面的lazy compute也是用的这个方法。
@@ -506,7 +508,7 @@ func findOrder(numCourses int, prerequisites [][]int) []int {
             q = append(q, i)
         }
     }
-    
+
     c := 0
     for len(q) != 0 {
         c, q = q[0], q[1:]
