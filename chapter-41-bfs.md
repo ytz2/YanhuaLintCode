@@ -82,7 +82,7 @@ public:
 
 o\(n\)
 
-2020/08/09 
+2020/08/09
 
 套路还都是那个套路，用q来做BFS遍历，同时搞一个去重， golang写的有些丑
 
@@ -96,16 +96,16 @@ func numIslands(grid [][]byte) int {
     if n == 0 {
         return 0
     }
-    
+
     visited := make([][]bool, m)
     for i := 0; i < m; i++ {
         visited[i] = make([]bool, n)
     }
-    
+
     counter := 0
     dx := []int{-1, 1, 0, 0}
     dy := []int{ 0, 0, -1, 1}
-    
+
     traverse := func(i, j int) {
         q := make([]int, 1)
         q[0] = i * n + j
@@ -125,7 +125,7 @@ func numIslands(grid [][]byte) int {
             }
         }
     }
-    
+
     for i := 0; i < m; i++ {
         for j := 0; j < n; j++ {
             if grid[i][j] == '0' || visited[i][j] {
@@ -147,7 +147,7 @@ public:
             return 0;
         int m = grid.size();
         int n = grid[0].size();
-        
+
         int counter = 0;
         const static vector<int> dx{-1, 1, 0, 0};
         const static vector<int> dy{0, 0, -1, 1};
@@ -294,6 +294,8 @@ Return`false`
 
 [http://www.lintcode.com/en/problem/course-schedule/\#](http://www.lintcode.com/en/problem/course-schedule/#)
 
+[https://leetcode.com/problems/course-schedule/submissions/](https://leetcode.com/problems/course-schedule/submissions/)
+
 ### 解题分析:
 
 依赖关系， schedule, workflow 都是用的拓扑排序， 并行计算里面的lazy compute也是用的这个方法。
@@ -361,6 +363,43 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/09
+
+写了一版简单的
+
+```cpp
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<unordered_set<int>> indegrees(numCourses, unordered_set<int>());
+        vector<unordered_set<int>> outdegrees(numCourses, unordered_set<int>());
+        for (const auto& v : prerequisites) {
+            indegrees[v[0]].insert(v[1]);
+            outdegrees[v[1]].insert(v[0]);
+        }
+        int taken = 0;
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (indegrees[i].empty()) 
+                q.push(i);
+        }
+        while(!q.empty()) {
+            auto course = q.front();
+            q.pop();
+            taken++;
+            // tell outdegree courses this is done
+            for (auto outdegree : outdegrees[course]) {
+                indegrees[outdegree].erase(course);
+                if ( indegrees[outdegree].empty()) {
+                    q.push(outdegree);
+                }
+            }
+        }
+        return taken == numCourses;
+    }
+};
+```
 
 ## 616. Course Schedule II
 
@@ -446,6 +485,45 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/08
+
+```go
+func findOrder(numCourses int, prerequisites [][]int) []int {
+    res := make([]int, 0)
+    indegrees, outdegrees := make([]map[int]bool, numCourses), make([]map[int]bool, numCourses)
+    for i := 0; i < numCourses; i++ {
+        indegrees[i], outdegrees[i] = make(map[int]bool),  make(map[int]bool)
+    }
+    // 0<-1, 
+    for _, pair := range prerequisites {
+        indegrees[pair[0]][pair[1]] = true
+        outdegrees[pair[1]][pair[0]] = true
+    }
+    q := make([]int, 0)
+    for i, v := range indegrees {
+        if len(v) == 0 {
+            q = append(q, i)
+        }
+    }
+    
+    c := 0
+    for len(q) != 0 {
+        c, q = q[0], q[1:]
+        res = append(res, c)
+        for v, _ := range outdegrees[c] {
+            delete(indegrees[v], c)
+            if len(indegrees[v]) == 0 {
+                q = append(q, v)
+            }
+        }
+    }
+    if len(res) == numCourses {
+        return res
+    }
+    return make([]int, 0)
+}
+```
 
 ## 611. Knight Shortest Path
 
