@@ -82,6 +82,102 @@ public:
 
 o\(n\)
 
+2020/08/09 
+
+套路还都是那个套路，用q来做BFS遍历，同时搞一个去重， golang写的有些丑
+
+```go
+func numIslands(grid [][]byte) int {
+    m := len(grid)
+    if m == 0 {
+        return 0
+    }
+    n := len(grid[0])
+    if n == 0 {
+        return 0
+    }
+    
+    visited := make([][]bool, m)
+    for i := 0; i < m; i++ {
+        visited[i] = make([]bool, n)
+    }
+    
+    counter := 0
+    dx := []int{-1, 1, 0, 0}
+    dy := []int{ 0, 0, -1, 1}
+    
+    traverse := func(i, j int) {
+        q := make([]int, 1)
+        q[0] = i * n + j
+        visited[i][j] = true
+        for len(q) != 0 {
+            ind := 0
+            ind, q = q[0], q[1:]
+            ni, nj := ind / n, ind % n 
+            for k:=0; k < 4; k++ {
+                mi, mj := ni + dx[k], nj+dy[k]
+                if mi >= 0 && mi < m && mj >= 0 && mj < n && !visited[mi][mj] {
+                    visited[mi][mj] = true
+                    if grid[mi][mj] == '1' {
+                        q = append(q, mi * n + mj)
+                    }
+                }
+            }
+        }
+    }
+    
+    for i := 0; i < m; i++ {
+        for j := 0; j < n; j++ {
+            if grid[i][j] == '0' || visited[i][j] {
+                continue
+            }
+            traverse(i, j)
+            counter++
+        }
+    }
+    return counter
+}
+```
+
+```cpp
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        if (grid.empty() || grid[0].empty())
+            return 0;
+        int m = grid.size();
+        int n = grid[0].size();
+        
+        int counter = 0;
+        const static vector<int> dx{-1, 1, 0, 0};
+        const static vector<int> dy{0, 0, -1, 1};
+        queue<pair<int,int>> q;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '0')
+                    continue;
+                counter++;
+                q.emplace(i, j);
+                grid[i][j] = '0';
+                while(!q.empty()) {
+                    auto p = q.front();
+                    q.pop();
+                    for (int k = 0; k < 4; k++) {
+                        int nx = p.first + dx[k];
+                        int ny = p.second + dy[k];
+                        if (nx < 0 || nx >= m | ny < 0 || ny >= n || grid[nx][ny] == '0')
+                            continue;
+                        q.emplace(nx, ny);
+                        grid[nx][ny] = '0';
+                    }
+                }
+            }
+        }
+        return counter;
+    }
+};
+```
+
 ## 69. Binary Tree Level Order Traversal
 
 Given a binary tree, return the level order traversal of its nodes' values. \(ie, from left to right, level by level\).
@@ -171,6 +267,10 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/08
+
+重写了一遍 就不贴了，其实就是多一个std::move， golang也懒得写了
 
 ## 615. Course Schedule
 
@@ -958,8 +1058,6 @@ public:
 
 O\( 26 \*size of \(start\) \* visited time of \(nodes\)\)
 
-
-
 ## 7. Serialize and Deserialize Binary Tree
 
 Design an algorithm and write code to serialize and deserialize a binary tree. Writing the tree to a file is called 'serialization' and reading back from the file to reconstruct the exact same binary tree is 'deserialization'.
@@ -982,14 +1080,13 @@ An example of testdata: Binary tree`{3,9,20,#,#,15,7}`, denote the following str
 9  20
   /  \
  15   7
-
 ```
 
 Our data serialization use bfs traversal. This is just for when you got wrong answer and want to debug the input.
 
 You can use other method to do serializaiton and deserialization.
 
-http://www.lintcode.com/en/problem/serialize-and-deserialize-binary-tree/\#
+[http://www.lintcode.com/en/problem/serialize-and-deserialize-binary-tree/\#](http://www.lintcode.com/en/problem/serialize-and-deserialize-binary-tree/#)
 
 ### 解题分析:
 
