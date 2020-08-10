@@ -1205,6 +1205,8 @@ return its length`5`.
 
 [http://www.lintcode.com/en/problem/word-ladder/\#](http://www.lintcode.com/en/problem/word-ladder/#)
 
+[https://leetcode.com/problems/word-ladder/](https://leetcode.com/problems/word-ladder/)
+
 ### 解题分析:
 
 shortest path, BFS 上了。 有道类似的题叫word edit,用的DP， 都可以。
@@ -1325,6 +1327,68 @@ public:
 ### 复杂度分析：
 
 O\( 26 \*size of \(start\) \* visited time of \(nodes\)\)
+
+
+
+2020/08/09
+
+```go
+func replaceAtIndex(in string, r rune, i int) string {
+    out := []rune(in)
+    out[i] = r
+    return string(out)
+}
+
+func ladderLength(beginWord string, endWord string, wordList []string) int {
+    // prepare
+    visited, dict := make(map[string]bool, 0), make(map[string]bool, 0)
+    for _, word := range wordList {
+        dict[word] = true
+    }
+    
+    // no need to traverse if does not exist
+    if _, ok := dict[endWord];!ok || beginWord == endWord {
+        return 0
+    }
+    
+    q := make([]string, 0)
+    l := 0
+    
+    // BFS
+    q = append(q, beginWord)
+    visited[beginWord] = true
+    for len(q) != 0 {
+        l++
+        size := len(q)
+        for lev := 0; lev < size; lev++ {
+            cur := q[0]
+            q = q[1:]
+            if cur == endWord {
+                return l
+            }
+            for i := 0; i < len(cur); i++ {
+                c := rune(cur[i])
+                for j := int('a'); j <= int('z'); j++ {
+                    t := rune(j)
+                    if c == t {
+                        continue
+                    }
+                    str := replaceAtIndex(cur, t, i)
+                    if _, ok := dict[str]; !ok {
+                        continue
+                    }
+                    if _, ok := visited[str]; ok {
+                        continue
+                    }
+                    visited[str] = true
+                    q = append(q, str)
+                } 
+            }            
+        }
+    }
+    return 0
+}
+```
 
 ## 7. Serialize and Deserialize Binary Tree
 
