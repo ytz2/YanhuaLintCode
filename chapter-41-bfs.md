@@ -681,6 +681,8 @@ Return true
 
 [http://www.lintcode.com/en/problem/sequence-reconstruction/\#](http://www.lintcode.com/en/problem/sequence-reconstruction/#)
 
+[https://leetcode.com/problems/sequence-reconstruction/](https://leetcode.com/problems/sequence-reconstruction/)
+
 ### 解题分析:
 
 这是一个拓扑排序可以解决的问题，当然不是唯一解
@@ -793,6 +795,104 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+
+
+2020.08/09 
+
+写了一版用indegrees, outdegrees 表示的题目，写的很别扭， 总结一下原因就是解决这类问题还是套路好用， 如果从indegrees, outdegrees考虑的话这个题里的special input就抓不到， 比如seq \[1\], \[2\]的情况。 其实稍作变通加一模板化：
+
+1 建图
+
+2 建关系 \(indegrees\)
+
+3 拓扑排序即可
+
+C++ indegrees/ out degrees 想偏了版，所以加了一个nodes 
+
+```cpp
+class Solution {
+public:
+    bool sequenceReconstruction(vector<int>& org, vector<vector<int>>& seqs) {
+        unordered_map<int, unordered_set<int>> indegrees, outdegrees;
+        unordered_set<int> nodes;
+        queue<int> q;
+        for (const auto& seq : seqs) {
+            for (int i = 1; i < seq.size(); i++) 
+                indegrees[seq[i]].insert(seq[i-1]);
+            for (int i = 0; i < seq.size() - 1; i++)
+                outdegrees[seq[i]].insert(seq[i+1]);
+            for (auto each : seq) nodes.insert(each);
+        }
+        
+        for (const auto v : org) {
+            if (indegrees[v].empty() && nodes.count(v)) q.push(v);
+        }
+        
+        while(!q.empty()) {
+            if (q.size() != 1 || org.empty()) return false;
+            auto v = q.front();
+            nodes.erase(v);
+            q.pop();
+            if (v != org.front()) return false;
+            org.erase(org.begin());
+            for (const auto dependent : outdegrees[v]) {
+                indegrees[dependent].erase(v);
+                if (indegrees[dependent].empty()) q.push(dependent);
+            }
+        }
+        return org.empty() && nodes.empty();
+    }
+};
+
+```
+
+老老实实的把图和indegrees 为空和为0的放好， 老老实实拓扑排序， 建立indegrees的时候要从图来， 建图的时候注意孤岛节点， 建立indegrees孤岛节点设置为0 
+
+```cpp
+class Solution {
+public:
+    bool sequenceReconstruction(vector<int>& org, vector<vector<int>>& seqs) {
+        // 1 build graph
+        unordered_map<int, unordered_set<int>> graph;
+        for (const auto& seq : seqs) {
+            if (seq.empty()) continue;
+            for (int i = 0; i < seq.size() - 1; i++) graph[seq[i]].insert(seq[i+1]);
+            if (!graph.count(seq.back())) graph[seq.back()] = unordered_set<int>();
+        }
+        if (graph.size() != org.size()) return false;
+        // 2 build indegrees
+        unordered_map<int, int> indegrees;
+        for (const auto& node : graph) {
+            if (!indegrees.count(node.first)) indegrees[node.first]  = 0;
+            for (auto each : node.second) {
+                indegrees[each]++;
+            }
+        }
+        // 3 top sort
+        queue<int> q;
+        int ind = 0;
+        for (const auto& node : graph ) {
+            if (indegrees[node.first] == 0)
+                q.push(node.first);
+        }
+        
+        while(!q.empty()) {
+            if (q.size() != 1 || ind >= org.size()) return false;
+            auto v = q.front(); q.pop();
+            if (v != org[ind++]) return false;
+            for (auto node : graph[v]) {
+                if (--indegrees[node] == 0 ) {
+                    q.push(node);
+                }
+            }
+        }
+        return ind == org.size();
+    }
+};
+```
+
+## 
 
 ## 137. Clone Graph
 
