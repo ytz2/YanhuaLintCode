@@ -1008,18 +1008,18 @@ o\(n\)
  */
 
 func cloneGraph(node *Node) *Node {
-    
+
     clone := func(node *Node) *Node {
         return &Node{
             Val: node.Val,
             Neighbors: make([]*Node, 0),
         }
     }
-    
+
     if node == nil {
         return nil
     }
-    
+
     mirror := make(map[*Node]*Node, 0)
     q := []*Node{node}
     for len(q) != 0 {
@@ -1032,18 +1032,16 @@ func cloneGraph(node *Node) *Node {
             }
         }
     }
-    
+
     for k, v := range mirror {
         for _, n := range k.Neighbors {
             v.Neighbors = append(v.Neighbors, mirror[n])
         }
     }
-    
+
     return mirror[node]
 }
 ```
-
-
 
 ## 127. Topological Sorting
 
@@ -1133,6 +1131,50 @@ public:
 ### 复杂度分析：
 
 o\(n\)
+
+2020/08/09
+
+```cpp
+/**
+ * Definition for Directed graph.
+ * struct DirectedGraphNode {
+ *     int label;
+ *     vector<DirectedGraphNode *> neighbors;
+ *     DirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+
+class Solution {
+public:
+    /*
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */
+    vector<DirectedGraphNode*> topSort(vector<DirectedGraphNode*>& graph) {
+        // write your code here
+        vector<DirectedGraphNode*> result;
+        unordered_map<DirectedGraphNode*, int> indegrees;
+        for (const auto& node : graph) {
+            if (!indegrees.count(node)) indegrees[node] = 0;
+            for (const auto& neighbor : node->neighbors) {
+                indegrees[neighbor]++;
+            }
+        }
+        queue<DirectedGraphNode*> q;
+        for (const auto& node : graph) {
+            if (!indegrees[node]) q.push(node);
+        }
+        while(!q.empty()) {
+            auto node = q.front(); q.pop();
+            result.push_back(node);
+            for (const auto& n : node->neighbors) {
+                if (--indegrees[n] == 0 ) q.push(n);
+            }
+        }
+        return result;
+    }
+};
+```
 
 ## 120. Word Ladder
 
