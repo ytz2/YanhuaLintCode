@@ -796,9 +796,7 @@ public:
 
 o\(n\)
 
-
-
-2020.08/09 
+2020.08/09
 
 写了一版用indegrees, outdegrees 表示的题目，写的很别扭， 总结一下原因就是解决这类问题还是套路好用， 如果从indegrees, outdegrees考虑的话这个题里的special input就抓不到， 比如seq \[1\], \[2\]的情况。 其实稍作变通加一模板化：
 
@@ -808,7 +806,7 @@ o\(n\)
 
 3 拓扑排序即可
 
-C++ indegrees/ out degrees 想偏了版，所以加了一个nodes 
+C++ indegrees/ out degrees 想偏了版，所以加了一个nodes
 
 ```cpp
 class Solution {
@@ -824,11 +822,11 @@ public:
                 outdegrees[seq[i]].insert(seq[i+1]);
             for (auto each : seq) nodes.insert(each);
         }
-        
+
         for (const auto v : org) {
             if (indegrees[v].empty() && nodes.count(v)) q.push(v);
         }
-        
+
         while(!q.empty()) {
             if (q.size() != 1 || org.empty()) return false;
             auto v = q.front();
@@ -844,10 +842,9 @@ public:
         return org.empty() && nodes.empty();
     }
 };
-
 ```
 
-老老实实的把图和indegrees 为空和为0的放好， 老老实实拓扑排序， 建立indegrees的时候要从图来， 建图的时候注意孤岛节点， 建立indegrees孤岛节点设置为0 
+老老实实的把图和indegrees 为空和为0的放好， 老老实实拓扑排序， 建立indegrees的时候要从图来， 建图的时候注意孤岛节点， 建立indegrees孤岛节点设置为0
 
 ```cpp
 class Solution {
@@ -876,7 +873,7 @@ public:
             if (indegrees[node.first] == 0)
                 q.push(node.first);
         }
-        
+
         while(!q.empty()) {
             if (q.size() != 1 || ind >= org.size()) return false;
             auto v = q.front(); q.pop();
@@ -998,6 +995,55 @@ public:
 ### 复杂度分析：
 
 o\(n\)
+
+202/08/09
+
+```
+/**
+ * Definition for a Node.
+ * type Node struct {
+ *     Val int
+ *     Neighbors []*Node
+ * }
+ */
+
+func cloneGraph(node *Node) *Node {
+    
+    clone := func(node *Node) *Node {
+        return &Node{
+            Val: node.Val,
+            Neighbors: make([]*Node, 0),
+        }
+    }
+    
+    if node == nil {
+        return nil
+    }
+    
+    mirror := make(map[*Node]*Node, 0)
+    q := []*Node{node}
+    for len(q) != 0 {
+        c := q[0]
+        q = q[1:]
+        mirror[c] = clone(c)
+        for _, neighbor := range c.Neighbors {
+            if _, ok := mirror[neighbor]; !ok {
+                q = append(q, neighbor)
+            }
+        }
+    }
+    
+    for k, v := range mirror {
+        for _, n := range k.Neighbors {
+            v.Neighbors = append(v.Neighbors, mirror[n])
+        }
+    }
+    
+    return mirror[node]
+}
+```
+
+
 
 ## 127. Topological Sorting
 
