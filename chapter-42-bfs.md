@@ -279,8 +279,6 @@ public:
 
 o\(n\)
 
-
-
 2020/08/12
 
 ```go
@@ -288,14 +286,14 @@ o\(n\)
  * @param grid: a 2D integer grid
  * @return: an integer
  */
- 
+
 func zombie (grid [][]int) int {
     // write your code here
     if len(grid) == 0 || len(grid[0]) == 0 {
         return 0
     }
     m, n := len(grid), len(grid[0])
-    
+
     numPeople := 0
     type pos struct {
         x int
@@ -350,7 +348,6 @@ func zombie (grid [][]int) int {
     }
     return days
 }
-
 ```
 
 ## 531. Six Degrees
@@ -684,6 +681,105 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+
+
+2020/08/12
+
+回头看还是要记住一个结论， n个节点n-1条边， 不是树木就是森林，如果是森林那就必然有环所以第一个方法看是不是森林 （遍历n个节点）， 第二个方法是看他是不是有环
+
+```go
+func validTree(n int, edges [][]int) bool {
+    if len(edges) != n -1 {
+        return false
+    }
+    graph := make(map[int][]int, 0)
+    // build graph
+    for _, edge := range edges {
+        if _, ok := graph[edge[0]]; ok {
+            graph[edge[0]] = append(graph[edge[0]], edge[1])
+        } else {
+            graph[edge[0]] = []int{edge[1]}
+        }
+        
+        if _, ok := graph[edge[1]]; ok {
+            graph[edge[1]] = append(graph[edge[1]], edge[0])
+        } else {
+            graph[edge[1]] = []int{edge[0]}
+        }
+    }
+    q := []int{0}
+    visited := map[int]bool {0 : true}
+    for len(q) != 0 {
+        node := q[0]
+        q = q[1:]
+        for _, nb := range graph[node] {
+            if _, ok := visited[nb]; !ok {
+                q = append(q, nb)
+                visited[nb] = true
+            }
+        }
+    }
+    
+    return len(visited) == n
+}
+
+// solution 2
+
+type UnionFind struct {
+    Parent []int
+    Rank []int
+}
+
+func New(n int) *UnionFind {
+    r := UnionFind{
+        Parent : make([]int, n),
+        Rank: make([]int, n), 
+    }
+    for i := 0; i < n; i++ {
+        r.Parent[i] = i
+    }
+    return &r
+}
+
+func (u *UnionFind) Find(x int) int {
+    if x != u.Parent[x] {
+        u.Parent[x] = u.Find(u.Parent[x])
+    }
+    return u.Parent[x]
+}
+
+func (u *UnionFind) Union(x, y int) bool {
+    px, py := u.Parent[x], u.Parent[y]
+    if px == py {
+        return false
+    }
+    if u.Rank[px] > u.Rank[py] {
+        u.Parent[py] = px
+    } else if u.Rank[px] < u.Rank[py] {
+        u.Parent[px] = py
+    } else {
+        u.Parent[px] = py
+        u.Rank[py]++
+    }
+    
+    return true
+}
+
+func validTree(n int, edges [][]int) bool {
+    if len(edges) != n-1 {
+        return false
+    }
+    uf := New(n)
+    for _, edge := range edges {
+        if !uf.Union(edge[0], edge[1]) {
+            return false
+        }
+    }
+    return true
+}
+
+```
 
 ## 431. Connected Component in Undirected Graph
 
