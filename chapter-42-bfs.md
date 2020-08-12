@@ -8,8 +8,6 @@ Have you met this question in a real interview?
 
 Yes
 
-
-
 **Example**
 
 Given binary tree:
@@ -99,6 +97,10 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/12
+
+这道题leetcode没有对应的题目， 重写一遍，技巧上还是对linkedlist dummy node 的使用
 
 ## \*\*\*\*624. Remove Substrings
 
@@ -276,6 +278,80 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+
+
+2020/08/12
+
+```go
+/**
+ * @param grid: a 2D integer grid
+ * @return: an integer
+ */
+ 
+func zombie (grid [][]int) int {
+    // write your code here
+    if len(grid) == 0 || len(grid[0]) == 0 {
+        return 0
+    }
+    m, n := len(grid), len(grid[0])
+    
+    numPeople := 0
+    type pos struct {
+        x int
+        y int
+    }
+    q := make([]*pos, 0)
+    for i := 0; i < m; i++ {
+        for j := 0; j < n; j++ {
+            if grid[i][j] == 1 {
+                q = append(q, &pos{
+                    x: i,
+                    y: j,
+                })
+            } else if grid[i][j] == 0 {
+                numPeople++
+            }
+        }
+    }
+
+    dx := []int { -1, 1, 0, 0}
+    dy := []int {0, 0, -1, 1}
+    days := 0
+    for len(q) != 0 {
+        nq := len(q) 
+        count := 0
+        for i := 0; i < nq; i++ {
+            p := q[0]
+            q = q[1:]
+            for j := 0; j < 4; j ++ {
+                x := p.x + dx[j]
+                y := p.y + dy[j]
+                if x < 0 || x >= m || y < 0 || y >= n {
+                    continue
+                }
+                if grid[x][y] == 0 {
+                    count++
+                    grid[x][y] = 1 
+                    q = append(q, &pos{
+                        x: x,
+                        y: y,
+                    })
+                }
+            }
+        }
+        numPeople -= count
+        if count != 0 {
+            days++
+        }
+    }
+    if numPeople != 0 {
+        return -1
+    }
+    return days
+}
+
+```
 
 ## 531. Six Degrees
 
