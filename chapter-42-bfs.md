@@ -8,6 +8,8 @@ Have you met this question in a real interview?
 
 Yes
 
+
+
 **Example**
 
 Given binary tree:
@@ -894,8 +896,6 @@ public:
 
 o\(n\)
 
-
-
 ## 794. Sliding Puzzle II
 
 On a 3x3 board, there are 8 tiles represented by the integers 1 through 8, and an empty square represented by 0.
@@ -906,7 +906,7 @@ Given an initial state of the puzzle board and final state, return the least num
 
 If it is impossible to move from initial state to final state, return -1.
 
-https://www.lintcode.com/en/problem/sliding-puzzle-ii/
+[https://www.lintcode.com/en/problem/sliding-puzzle-ii/](https://www.lintcode.com/en/problem/sliding-puzzle-ii/)
 
 ### 解题分析:
 
@@ -919,8 +919,6 @@ https://www.lintcode.com/en/problem/sliding-puzzle-ii/
 3. 中间还有一个swap两次的小trick，这个倒是很容易想到 
 
 一旦把问题转为一维string的编辑搜索之后，其他的都是和BFS的套路一样了。
-
-
 
 ### 代码：
 
@@ -982,7 +980,7 @@ public:
         }
         return -1;
     }
-    
+
     string flatten(const vector<vector<int>>& input)
     {
         string res;
