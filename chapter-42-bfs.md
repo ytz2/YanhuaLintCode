@@ -939,14 +939,14 @@ public:
         }
         return counter.size();
     }
-    
+
 private:
     int Find(int x) {
         if (x != parent_[x])
             parent_[x] = Find(parent_[x]);
         return parent_[x];
     }
-    
+
     bool Union(int x, int y) {
         auto px = Find(x);
         auto py = Find(y);
@@ -963,7 +963,7 @@ private:
         }
         return true;
     }
-    
+
 private:
     vector<int> parent_;
     vector<int> rank_;
@@ -1001,6 +1001,8 @@ return its zigzag level order traversal as:
 ```
 
 [http://www.lintcode.com/en/problem/binary-tree-zigzag-level-order-traversal/\#](http://www.lintcode.com/en/problem/binary-tree-zigzag-level-order-traversal/#)
+
+[https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/)
 
 ### 解题分析:
 
@@ -1064,6 +1066,49 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/13
+
+```
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func zigzagLevelOrder(root *TreeNode) [][]int {
+    res := make([][]int, 0)
+    if root == nil {
+        return res
+    }
+    q := []*TreeNode{root};
+    level := 0
+    for len(q) > 0 {
+        level++
+        n := len(q)
+        l := make([]int, n)
+        for i := 0; i < n; i++ {
+            node := q[0]
+            q = q[1:]
+            if node.Left != nil {
+                q = append(q, node.Left)
+            }
+            if node.Right != nil {
+                q = append(q, node.Right)
+            }
+            if level % 2 == 1 {
+                l[i] = node.Val
+            } else {
+                l[n-i-1] = node.Val
+            }
+        }
+        res = append(res, l)
+    }
+    return res
+}
+```
 
 ## 70. Binary Tree Level Order Traversal II
 
