@@ -469,6 +469,8 @@ Given`n = 5`and`edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]]`, return false.
 
 [http://www.lintcode.com/en/problem/graph-valid-tree/\#](http://www.lintcode.com/en/problem/graph-valid-tree/#)
 
+[https://leetcode.com/problems/graph-valid-tree/](https://leetcode.com/problems/graph-valid-tree/)
+
 ### 解题分析:
 
 #### 思路1:
@@ -682,8 +684,6 @@ public:
 
 o\(n\)
 
-
-
 2020/08/12
 
 回头看还是要记住一个结论， n个节点n-1条边， 不是树木就是森林，如果是森林那就必然有环所以第一个方法看是不是森林 （遍历n个节点）， 第二个方法是看他是不是有环
@@ -701,7 +701,7 @@ func validTree(n int, edges [][]int) bool {
         } else {
             graph[edge[0]] = []int{edge[1]}
         }
-        
+
         if _, ok := graph[edge[1]]; ok {
             graph[edge[1]] = append(graph[edge[1]], edge[0])
         } else {
@@ -720,7 +720,7 @@ func validTree(n int, edges [][]int) bool {
             }
         }
     }
-    
+
     return len(visited) == n
 }
 
@@ -762,7 +762,7 @@ func (u *UnionFind) Union(x, y int) bool {
         u.Parent[px] = py
         u.Rank[py]++
     }
-    
+
     return true
 }
 
@@ -778,7 +778,6 @@ func validTree(n int, edges [][]int) bool {
     }
     return true
 }
-
 ```
 
 ## 431. Connected Component in Undirected Graph
@@ -813,6 +812,8 @@ A------B  C
 Return`{A,B,D}, {C,E}`. Since there are two connected component which is`{A,B,D}, {C,E}`
 
 [http://www.lintcode.com/en/problem/connected-component-in-undirected-graph/\#](http://www.lintcode.com/en/problem/connected-component-in-undirected-graph/#)
+
+[https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
 
 ### 解题分析:
 
@@ -879,6 +880,95 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/13
+
+leetcode solution
+
+```cpp
+class Solution {
+public:
+    int countComponents(int n, vector<vector<int>>& edges) {
+        vector<bool> visited(n, false);
+        int count = 0;
+        vector<unordered_set<int>> graph(n, unordered_set<int>());
+        for (const auto& edge : edges) {
+            graph[edge[0]].insert(edge[1]);
+            graph[edge[1]].insert(edge[0]);
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (visited[i])
+                continue;
+            count++;
+            visited[i] = true;
+            queue<int> q;
+            q.push(i);
+            while(!q.empty()) {
+                auto v = q.front();
+                q.pop();
+                for (const auto neighbor : graph[v]) {
+                    if (visited[neighbor])
+                        continue;
+                    visited[neighbor] = true;
+                    q.push(neighbor);
+                }
+            }
+        }
+        return count;
+    }
+};
+```
+
+```cpp
+// version in union find
+class Solution {
+public:
+    int countComponents(int n, vector<vector<int>>& edges) {
+        parent_ = vector<int>(n, 0);
+        rank_ = vector<int>(n, 0);
+        for (int i = 0; i < n; i++){
+            parent_[i] = i;
+        }
+        for (const auto& edge : edges) {
+            Union(edge[0], edge[1]);
+        }
+        unordered_set<int> counter;
+        for (int i = 0; i < n; i++){
+            counter.insert(Find(i));
+        }
+        return counter.size();
+    }
+    
+private:
+    int Find(int x) {
+        if (x != parent_[x])
+            parent_[x] = Find(parent_[x]);
+        return parent_[x];
+    }
+    
+    bool Union(int x, int y) {
+        auto px = Find(x);
+        auto py = Find(y);
+        if (px == py) {
+            return false;
+        }
+        if (rank_[px] > rank_[py]) {
+            parent_[py] = px;
+        } else if (rank_[px] < rank_[py]) {
+            parent_[px] = py;
+        } else {
+            parent_[px] = py;
+            rank_[py]++;
+        }
+        return true;
+    }
+    
+private:
+    vector<int> parent_;
+    vector<int> rank_;
+};
+```
 
 ## 71. Binary Tree Zigzag Level Order Traversal
 
