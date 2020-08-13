@@ -1215,6 +1215,8 @@ If it is impossible to move from initial state to final state, return -1.
 
 [https://www.lintcode.com/en/problem/sliding-puzzle-ii/](https://www.lintcode.com/en/problem/sliding-puzzle-ii/)
 
+[https://leetcode.com/problems/sliding-puzzle/submissions/](https://leetcode.com/problems/sliding-puzzle/submissions/)
+
 ### 解题分析:
 
 由点及面的最短路径问题，BFS
@@ -1306,4 +1308,62 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/12
+
+再写一遍还是老办法
+
+```cpp
+class Solution {
+public:
+    int slidingPuzzle(vector<vector<int>>& board) {
+        stringstream ss;
+        for (const auto& row : board) {
+            for (const auto& v : row ){
+                ss<<v;
+            }
+        }
+        string state = ss.str();
+        string target = "123450";
+        int ind = state.find('0');
+        queue<pair<int, string>> q;
+        q.emplace(ind, state);
+        unordered_set<string> visited;
+        visited.insert(state);
+        int level = 0;
+        vector<int> dx{-1, 1, 0, 0};
+        vector<int> dy{0, 0, -1, 1};
+        while(!q.empty()) {
+            int n = q.size();
+            for (int i = 0; i < n; i++) {
+                auto p = q.front();
+                q.pop();
+                if (p.second == target) 
+                    return level;
+                auto pos = p.first;
+                int x = pos/3;
+                int y = pos % 3;
+                auto& str = p.second;
+                for (int j = 0; j < 4; j++) {
+                    int nx = x + dx[j];
+                    int ny = y + dy[j];
+                    if (nx < 0 || nx >= 2 || ny < 0 || ny >= 3)
+                        continue;
+                    int ni = nx * 3 + ny;
+                    swap(str[ni], str[pos]);
+                    if (!visited.count(str)) {
+                        visited.insert(str);
+                        q.emplace(ni, str);
+                    }
+                    swap(str[ni], str[pos]);          
+                }
+            } 
+            level++;
+        }
+        return -1;
+    }
+};
+```
+
+
 
