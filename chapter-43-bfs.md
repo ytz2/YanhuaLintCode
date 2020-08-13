@@ -253,6 +253,8 @@ Return`6`.
 
 [https://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/\#](https://www.lintcode.com/en/problem/smallest-rectangle-enclosing-black-pixels/#)
 
+[https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/](https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/)
+
 ### 解题分析:
 
 一边BFS， 一边找最左边最右边最上边最下边
@@ -312,8 +314,6 @@ public:
 
 O（kn\)
 
-
-
 ## \*\*\*\*434. Number of Islands II
 
 Given a n,m which means the row and column of the 2D matrix and an array of pair A\( size k\). Originally, the 2D matrix is all 0 which means there is only sea in the matrix. The list pair has k operator and each operator has two integer A\[i\].x, A\[i\].y means that you can change the grid matrix\[A\[i\].x\]\[A\[i\].y\] from sea to island. Return how many island are there in the matrix after each operator.
@@ -332,7 +332,7 @@ Given`n`=`3`,`m`=`3`, array of pair A =`[(0,0),(0,1),(2,2),(2,1)]`.
 
 return`[1,1,2,2]`.
 
-https://www.lintcode.com/en/problem/number-of-islands-ii/\#
+[https://www.lintcode.com/en/problem/number-of-islands-ii/\#](https://www.lintcode.com/en/problem/number-of-islands-ii/#)
 
 ### 解题分析:
 
@@ -342,13 +342,13 @@ https://www.lintcode.com/en/problem/number-of-islands-ii/\#
 
 1. UnionFind大法对于一维比较方便，所以需要把island 变化到一维去。
 
-   2. 如何更新岛： 
+   1. 如何更新岛：
 
       a. 如果有一个新的进来， cache i, j 为岛，且增加技术
 
       b. 遍历四周，如果周围有岛， 每次如果他们没有共同的root via find ,那么因为这次插入，他们联通了 via union， 且count要减一
 
-  3. corner case : 会有重复的op出现，所以加一个cache, 过滤掉一些操作，同时要保持count update.  
+   2. corner case : 会有重复的op出现，所以加一个cache, 过滤掉一些操作，同时要保持count update.
 
 ### 代码：
 
@@ -362,7 +362,7 @@ https://www.lintcode.com/en/problem/number-of-islands-ii/\#
  *     Point(int a, int b) : x(a), y(b) {}
  * };
  */
- 
+
 class UnionFind{
 public:
     UnionFind(int n)
@@ -372,14 +372,14 @@ public:
         for (int i = 0; i < n; i++)
             parent_[i] = i;
     }
-    
+
     int Find(int x)
     {
         if (parent_[x] != x)
             parent_[x] = Find(parent_[x]);
         return parent_[x];
     }
-    
+
     bool Union(int x, int y)
     {
         int rx = Find(x);
@@ -459,4 +459,93 @@ public:
 ### 复杂度分析:
 
 O（kn\)
+
+2020/08/13
+
+```go
+type UnionFind struct {
+    Parent []int
+    Rank []int
+}
+
+func New( n int) *UnionFind {
+    uf := UnionFind {
+        Parent: make([]int, n),
+        Rank: make([]int, n),
+    }
+    for i := 0; i < n; i++ {
+        uf.Parent[i] = i
+    }
+    return &uf
+}
+
+func (u *UnionFind) Find(x int) int {
+    if u.Parent[x] != x {
+        u.Parent[x] = u.Find(u.Parent[x])
+    }
+    return u.Parent[x]
+}
+
+func (u *UnionFind) Union(x, y int) bool {
+    px, py := u.Find(x), u.Find(y)
+    if px == py {
+        return true
+    }
+    if u.Rank[px] > u.Rank[py] {
+        u.Parent[py] =px
+    } else if u.Rank[px] < u.Rank[py] {
+        u.Parent[px] = py
+    } else {
+        u.Parent[px] = py
+        u.Rank[py]++
+    }
+    return true
+}
+
+
+func numIslands2(m int, n int, positions [][]int) []int {
+    toInd := func(p []int) int {
+        return p[0]*n + p[1]
+    }
+    res := make([]int, 0)
+    if m == 0 || n == 0 || len(positions) == 0 {
+        return res
+    }
+    uf := New(m*n)
+    count := 1
+    res = append(res, 1)
+    dx := []int { -1, 1, 0, 0}
+    dy := []int { 0, 0, -1, 1}
+    visited := map[int]bool{toInd(positions[0]) : true}
+    for i := 1; i < len(positions); i++ {
+        p := positions[i]
+        ind := toInd(p)
+        if _, ok := visited[ind]; ok {
+            res = append(res, count)
+            continue
+        }
+        visited[ind] = true
+        count++
+        for j := 0; j < 4; j++ {
+            px := p[0] + dx[j]
+            py := p[1] + dy[j]
+            if px < 0 || px >= m || py < 0 || py >= n {
+                continue
+            } 
+            pind := toInd([]int{px, py})
+            if _, ok := visited[pind]; !ok {
+                continue
+            }
+            if uf.Find(pind) != uf.Find(ind) {
+                uf.Union(pind, ind)
+                count--
+            }
+        }
+        res = append(res, count)
+    }
+    return res
+}
+```
+
+
 
