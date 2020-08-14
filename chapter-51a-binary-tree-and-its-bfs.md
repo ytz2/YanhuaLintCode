@@ -35,6 +35,8 @@ return the node`1`.
 
 ### 代码：
 
+2020/08/14, rewrite with modern cpp
+
 ```cpp
 /**
  * Definition of TreeNode:
@@ -49,60 +51,47 @@ return the node`1`.
  * }
  */
 
-struct ReturnType
-{
-    int minSum;
-    TreeNode* node;
-    int sum;
-    ReturnType(int mSum, TreeNode* nd, int csum)
-        :minSum(mSum), node(nd), sum(csum)
-        {}
-};
 class Solution {
 public:
     /**
      * @param root: the root of binary tree
      * @return: the root of the minimum subtree
      */
+    struct ReturnType {
+        int minVal;
+        TreeNode* minNode;
+        int sum;
+        ReturnType(int m, TreeNode* n, int s)
+        :minVal(m), minNode(n), sum(s) {}
+    };
+    
     TreeNode * findSubtree(TreeNode * root) {
-        // write your code here
-        auto res = helper(root);
-        return res.node;
+        return helper(root).minNode;
     }
-
-    ReturnType helper(TreeNode * root)
-    {
-        if (!root)
-            return ReturnType(INT_MAX, nullptr, 0);
-
+    
+    ReturnType helper(TreeNode* root) {
+        ReturnType res(INT_MAX, root, 0);
+        if (!root) return res;
         auto left = helper(root->left);
         auto right = helper(root->right);
-        auto sum = left.sum + right.sum + root->val;
-
-        if ( sum < left.minSum && sum < right.minSum)
-            return ReturnType(sum, root, sum);
-
-        return left.minSum < right.minSum? ReturnType(left.minSum, left.node, sum) : ReturnType(right.minSum, right.node, sum);
-
+        res.sum = left.sum + right.sum + root->val;
+        res.minVal = res.sum;
+        if (left.minVal < res.minVal) {
+            res.minVal = left.minVal;
+            res.minNode = left.minNode;
+        }
+        if (right.minVal < res.minVal) {
+            res.minVal = right.minVal;
+            res.minNode = right.minNode;
+        }
+        return res;
     }
-
 };
 ```
 
-```cpp
-/**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
- *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
- */
 
+
+```cpp
 class Solution {
 public:
     /**
@@ -110,35 +99,25 @@ public:
      * @return: the root of the minimum subtree
      */
     TreeNode * findSubtree(TreeNode * root) {
-        // write your code here
-        m_sum = INT_MAX;
-        m_node = nullptr;
-        int val = helper(root);
-        return m_node;
-    }
-
-    int helper(TreeNode * root)
-    {
         if (!root)
-            return INT_MAX;
-        int left = helper(root->left);
-        int right = helper(root->right);
-        int sum = root->val;
-        if (root->left)
-            sum += left;
-        if (root->right)
-            sum += right;
-        if (sum < m_sum)
-        {
-            m_sum = sum;
-            m_node = root;
-        }
-        return sum;
+            return nullptr;
+        minSum(root);
+        return minRoot;
     }
-
-    int m_sum;
-    TreeNode* m_node;
-
+    
+    int minSum(TreeNode* root) {
+        if (!root)
+            return 0;
+        auto v = root->val + minSum(root->left) + minSum(root->right);
+        if (v < minVal) {
+            minVal = v;
+            minRoot = root;
+        }     
+        return v;
+    }
+    
+    TreeNode* minRoot = nullptr;
+    int minVal = INT_MAX;
 };
 ```
 
