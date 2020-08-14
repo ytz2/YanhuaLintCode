@@ -18,7 +18,7 @@
 * [Chapter 4.4 BFS Conclusion](chapter-44-bfs.md)
 * [Chapter 5 Binary Tree and Its DFS](chapter-5-binary-tree-and-its-dfs.md)
 * [Chapter 5.1a Binary Tree and Its DFS](chapter-51-binary-tree-and-its-bfs.md)
-* Chapter 5.1b Binary Tree and Its DFS
+* [Chapter 5.1b Binary Tree and Its DFS](chapter-51b-binary-tree-and-its-dfs.md)
 * [Chapter 5.2 Binary Tree and Its DFS](chapter-52-binary-tree-and-its-bfs.md)
 * [Chapter 5.3 Binary Tree and Its DFS](chapter-53-binary-tree-and-its-dfs.md)
 * [Chapter 5.4 Binary Tree and Its DFS conclusion](chapter-54-binary-tree-and-its-dfs-conclusion.md)
