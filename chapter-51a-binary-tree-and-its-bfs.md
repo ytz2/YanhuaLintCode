@@ -424,7 +424,7 @@ public:
         if (res && Find(res, A) && Find(res, B)) return res;
         return nullptr;
     }
-    
+
     TreeNode * helper(TreeNode * root, TreeNode * A, TreeNode * B) {
         if (!root) return nullptr;
         if (root == A || root == B) return root;
@@ -435,7 +435,7 @@ public:
         if (r) return r;
         return nullptr;
     }
-    
+
     TreeNode* Find(TreeNode* root, TreeNode* t) {
         if (!root) return nullptr;
         if (root == t) return root;
@@ -510,50 +510,42 @@ Yes
 
 ```cpp
 /**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
+ * Definition for a binary tree node.
+ * struct TreeNode {
  *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
  */
-
 class Solution {
 public:
-    /**
-     * @param root: a TreeNode, the root of the binary tree
-     * @return: nothing
-     */
-    void flatten(TreeNode * root) {
-        // write your code here
-        auto tmp =helper(root);
+    void flatten(TreeNode* root) {
+        helper(root);
     }
-
-    TreeNode* helper(TreeNode* root)
-    {
-        if (!root || !root->left && !root->right)
-            return root;
-        auto left = helper(root->left);
-        auto right = helper(root->right);
-
-        if (!left)
-            return right;
-        if (!right)
-        {
-            root->right = root->left;
-            root->left = nullptr;
-            return left;
+    
+    pair<TreeNode*, TreeNode*> helper(TreeNode* root) {
+        if (!root) 
+            return make_pair(nullptr, nullptr);
+        auto ret = make_pair(root, root);
+        if (!root->left && !root->right) 
+            return ret;
+        auto left = root->left;
+        auto right = root->right;
+        if (left) {
+            auto l = helper(left);
+            ret.second->right = l.first;
+            ret.second = l.second;
         }
-        auto tmp = root->right;
-        root->right = root->left;
+        if (right) {
+            auto r = helper(right);
+            ret.second->right = r.first;
+            ret.second = r.second;
+        }
         root->left = nullptr;
-        left->left = nullptr;
-        left->right = tmp;
-        return right;
+        return ret;
     }
 };
 ```
