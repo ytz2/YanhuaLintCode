@@ -64,11 +64,11 @@ public:
         ReturnType(int m, TreeNode* n, int s)
         :minVal(m), minNode(n), sum(s) {}
     };
-    
+
     TreeNode * findSubtree(TreeNode * root) {
         return helper(root).minNode;
     }
-    
+
     ReturnType helper(TreeNode* root) {
         ReturnType res(INT_MAX, root, 0);
         if (!root) return res;
@@ -89,8 +89,6 @@ public:
 };
 ```
 
-
-
 ```cpp
 class Solution {
 public:
@@ -104,7 +102,7 @@ public:
         minSum(root);
         return minRoot;
     }
-    
+
     int minSum(TreeNode* root) {
         if (!root)
             return 0;
@@ -115,7 +113,7 @@ public:
         }     
         return v;
     }
-    
+
     TreeNode* minRoot = nullptr;
     int minVal = INT_MAX;
 };
@@ -127,7 +125,7 @@ public:
 
 o\(n\)
 
-## 数的形态
+
 
 ## 480. Binary Tree Paths
 
@@ -165,6 +163,8 @@ All root-to-leaf paths are:
 ```
 
 [https://www.lintcode.com/en/problem/binary-tree-paths/\#](https://www.lintcode.com/en/problem/binary-tree-paths/#)
+
+[https://leetcode.com/problems/binary-tree-paths/](https://leetcode.com/problems/binary-tree-paths/)
 
 ### 解题分析:
 
@@ -335,6 +335,40 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/14
+
+```go
+/**
+ * Definition for TreeNode.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *ListNode
+ *     Right *ListNode
+ * }
+ */
+ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+     if (root == nil) {
+         return nil
+     }     
+     if (root == p || root == q) {
+         return root
+     }
+     l := lowestCommonAncestor(root.Left, p, q)
+     r := lowestCommonAncestor(root.Right, p, q)
+     if ( l != nil && r != nil) {
+         return root
+     }
+     if (l != nil ) {
+         return l
+     }
+     if (r != nil ) {
+         return r
+     }
+     return nil
+ 
+ }
+```
 
 ## 578. Lowest Common Ancestor III
 
