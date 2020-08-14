@@ -125,8 +125,6 @@ public:
 
 o\(n\)
 
-
-
 ## 480. Binary Tree Paths
 
 Given a binary tree, return all root-to-leaf paths.
@@ -366,7 +364,7 @@ o\(n\)
          return r
      }
      return nil
- 
+
  }
 ```
 
@@ -402,27 +400,17 @@ LCA\(5, 6\) =`7`
 
 LCA\(6, 7\) =`7`
 
+[https://www.lintcode.com/problem/lowest-common-ancestor-iii/description](https://www.lintcode.com/problem/lowest-common-ancestor-iii/description)
+
 ### 解题分析:
 
 和上题不一样， A,B不一定存在，所以不能着急退出， 而是在遍历完左右孩子后，判断A,B是否为root,只有两个都有且则由上个题目衍生出来的结论才成立
 
 ### 代码：
 
+2020/08/14 重写了一下， 以前是搞两个状态量has A has B, 重写以后先假设他必然有解， 然后再验证，这样感觉更易懂易读一些
+
 ```cpp
-/**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
- *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
- */
-
-
 class Solution {
 public:
     /*
@@ -432,36 +420,31 @@ public:
      * @return: Return the LCA of the two nodes.
      */
     TreeNode * lowestCommonAncestor3(TreeNode * root, TreeNode * A, TreeNode * B) {
-        // write your code here
-        hasA= false; hasB=false;
-        auto v = helper(root, A,B);
-        return hasA && hasB? v:nullptr;
-    }
-
-    TreeNode* helper(TreeNode* root, TreeNode* A, TreeNode* B)
-    {
-        if (!root )
-            return root;
-        auto left =helper(root->left, A, B);
-        auto right = helper(root->right, A, B);
-        if (root == A)
-            hasA = true;
-        if (root == B)
-            hasB = true;
-        if (root == A || root == B)
-            return root;
-        if (left && right)
-            return root;
-        if (left)
-            return left;
-        if (right)
-            return right;
+        auto res = helper(root, A, B);
+        if (res && Find(res, A) && Find(res, B)) return res;
         return nullptr;
     }
-
-    bool hasA;
-    bool hasB;
-
+    
+    TreeNode * helper(TreeNode * root, TreeNode * A, TreeNode * B) {
+        if (!root) return nullptr;
+        if (root == A || root == B) return root;
+        auto l = helper(root->left, A, B);
+        auto r = helper(root->right, A, B);
+        if (l && r) return root;
+        if (l) return l;
+        if (r) return r;
+        return nullptr;
+    }
+    
+    TreeNode* Find(TreeNode* root, TreeNode* t) {
+        if (!root) return nullptr;
+        if (root == t) return root;
+        auto l = Find(root->left, t);
+        if (l) return l;
+        auto r = Find(root->right, t);
+        if (r) return r;
+        return nullptr;
+    }
 };
 ```
 
