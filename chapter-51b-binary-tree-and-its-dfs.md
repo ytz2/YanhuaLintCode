@@ -30,92 +30,63 @@ For the following binary search tree, in-order traversal by using iterator is`[1
 
 [https://www.lintcode.com/en/problem/binary-search-tree-iterator/\#](https://www.lintcode.com/en/problem/binary-search-tree-iterator/#)
 
+[https://leetcode.com/problems/binary-search-tree-iterator/](https://leetcode.com/problems/binary-search-tree-iterator/)
+
 ### 解题分析:
 
-用一个stack一直存到最左边
-
-下一个：
-
-top为下一个返回值， 但是每次返回后：
-
-1.如果cur有右面，一直走到右面的最左边
-
-2 如果cur没右面， 一直走到第一个左拐点 ： while\(!stk.empty\(\) && stk.top\(\)-&gt;right == node\) node = stk.top\(\), stk.pop\(\)
+2020/08/14， 看了一眼以前的解法，画图后觉得以前的解有问题
 
 ### 代码:
 
 ```cpp
 /**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
+ * Definition for a binary tree node.
+ * struct TreeNode {
  *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
- * Example of iterate a tree:
- * BSTIterator iterator = BSTIterator(root);
- * while (iterator.hasNext()) {
- *    TreeNode * node = iterator.next();
- *    do something for node
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
  */
-
-
 class BSTIterator {
 public:
-    /*
-    * @param root: The root of binary tree.
-    */BSTIterator(TreeNode * root) {
-        // do intialization if necessary
-        while(root)
-        {
+    BSTIterator(TreeNode* root) {
+        while(root) {
             stk.push(root);
-            root=root->left;
+            root = root->left;
         }
     }
-
-    /*
-     * @return: True if there has next node, or false
-     */
-    bool hasNext() {
-        // write your code here
-        return !stk.empty();
-    }
-
-    /*
-     * @return: return next node
-     */
-    TreeNode * next() {
-        // write your code here
+    
+    /** @return the next smallest number */
+    int next() {
         auto cur = stk.top();
         stk.pop();
-        if (cur->right)
-        {
-            auto node = cur->right;
-            while(node)
-            {
-                stk.push(node);
-                node = node->left;
+        int v = cur->val;
+        if (cur->right) {
+            cur = cur->right;
+            while(cur){
+                stk.push(cur);
+                cur = cur->left;
             }
         }
-        else
-        {
-            auto node = cur;
-            while(!stk.empty() && stk.top()->right == node)
-            {
-                node = stk.top();
-                stk.pop();
-            }
-        }
-        return cur;
+        return v;
     }
-
-private:
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !stk.empty();
+    }
     stack<TreeNode*> stk;
 };
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator* obj = new BSTIterator(root);
+ * int param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
 ```
 
 amortized o\(1\)
@@ -339,8 +310,6 @@ public:
 
 o\(n\) worst
 
-
-
 ## 95. Validate Binary Search Tree
 
 Given a binary tree, determine if it is a valid binary search tree \(BST\).
@@ -370,12 +339,11 @@ An example:
 1   4
    / \
   3   5
-
 ```
 
 The above binary tree is serialized as`{2,1,4,#,#,3,5}`\(in level order\).
 
-https://www.lintcode.com/en/problem/validate-binary-search-tree/
+[https://www.lintcode.com/en/problem/validate-binary-search-tree/](https://www.lintcode.com/en/problem/validate-binary-search-tree/)
 
 ### 解题分析:
 
@@ -416,13 +384,13 @@ public:
         // write your code here
         return helper(root).isBST;
     }
-    
+
     ReturnType helper(TreeNode* root){
-        
+
         // local
         if (!root)
             return ReturnType(true, INT_MAX, INT_MIN);
-        
+
         ReturnType res(true, root->val, root->val);
         if (root->left)
         {
@@ -434,7 +402,7 @@ public:
             }
             res.minVal = min(res.minVal, left.minVal);
         }
-        
+
         if (root->right)
         {
             auto right = helper(root->right);
@@ -445,9 +413,9 @@ public:
             }
             res.maxVal = max(res.maxVal, right.maxVal);
         }
-        
+
         return res;
-        
+
     }
 };
 ```
@@ -643,3 +611,6 @@ public:
     }
 };
 ```
+
+
+

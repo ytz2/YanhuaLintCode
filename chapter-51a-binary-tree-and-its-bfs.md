@@ -710,7 +710,7 @@ public:
     int kthSmallest(TreeNode* root, int k) {
         return helper(root, k)->val;
     }
-    
+
     TreeNode* helper(TreeNode* root, int& k) {
         if (!root) return nullptr;
         auto l = helper(root->left, k);
