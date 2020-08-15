@@ -525,7 +525,7 @@ public:
     void flatten(TreeNode* root) {
         helper(root);
     }
-    
+
     pair<TreeNode*, TreeNode*> helper(TreeNode* root) {
         if (!root) 
             return make_pair(nullptr, nullptr);
@@ -556,7 +556,7 @@ o\(n\)
 
 ![](/assets/BSTchar.png)
 
-## 902. Flatten Binary Tree to Linked List
+## 902. Kth Smallest Element in a BST
 
 Given a binary search tree, write a function`kthSmallest`to find the kth smallest element in it.
 
@@ -577,6 +577,8 @@ Given root =`{1,#,2}`, k =`2`, return`2`.
 What if the BST is modified \(insert/delete operations\) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine?
 
 [https://www.lintcode.com/en/problem/kth-smallest-element-in-a-bst/](https://www.lintcode.com/en/problem/kth-smallest-element-in-a-bst/)
+
+[https://leetcode.com/problems/kth-smallest-element-in-a-bst/](https://leetcode.com/problems/kth-smallest-element-in-a-bst/)
 
 ### 解题分析:
 
@@ -699,4 +701,28 @@ public:
 ### 复杂度分析:
 
 o\(k+h\)
+
+2020/08/14
+
+```cpp
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        return helper(root, k)->val;
+    }
+    
+    TreeNode* helper(TreeNode* root, int& k) {
+        if (!root) return nullptr;
+        auto l = helper(root->left, k);
+        if (l) return l;
+        k--;
+        if (k == 0) return root;
+        auto r = helper(root->right, k);
+        if (r) return r;
+        return nullptr;
+    }
+};
+```
+
+
 
