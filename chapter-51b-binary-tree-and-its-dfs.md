@@ -180,7 +180,7 @@ public:
         if (!u) return l->val;
         return fabs(l->val - target) < fabs(u->val - target) ? l->val : u->val;
     }
-    
+
     TreeNode* lower_bound(TreeNode* root, double target) {
         if (!root) return root;
         auto v = root->val - target;
@@ -189,7 +189,7 @@ public:
         if (child) return child;
         return root;
     }
-    
+
     TreeNode* upper_bound(TreeNode* root, double target) {
         if (!root) return root;
         auto v = target - root->val;
@@ -254,6 +254,8 @@ The binary tree A is a height-balanced binary tree, but B is not.
 
 [https://www.lintcode.com/en/problem/balanced-binary-tree/\#](https://www.lintcode.com/en/problem/balanced-binary-tree/#)
 
+[https://leetcode.com/problems/balanced-binary-tree/](https://leetcode.com/problems/balanced-binary-tree/)
+
 ### 解题分析:
 
 左右两边的，D&Q。。。
@@ -308,6 +310,28 @@ public:
 ```
 
 o\(n\) worst
+
+2020/08/16 加一个打擂台
+
+```cpp
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        int dummy;
+        return helper(root, dummy);
+    }
+    
+    bool helper(TreeNode* root, int& h) {
+        if (!root) return true;
+        int l = 0;
+        int r = 0;
+        if (!helper(root->left, l) || !helper(root->right, r)) return false;
+        if (abs(l - r) > 1) return false;
+        h = max(l, r) + 1;
+        return true;
+    }
+};
+```
 
 ## 95. Validate Binary Search Tree
 
