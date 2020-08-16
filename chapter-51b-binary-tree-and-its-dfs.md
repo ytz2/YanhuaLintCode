@@ -171,61 +171,31 @@ o\(n\)
 第二版，上边界，下边界，两边比一下，这样就是o\(log\(n\)\)
 
 ```cpp
-/**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
- *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
- */
-
 class Solution {
 public:
-    /**
-     * @param root: the given BST
-     * @param target: the given target
-     * @return: the value in the BST that is closest to the target
-     */
-    int closestValue(TreeNode * root, double target) {
-        // write your code here
-        if (!root)
-            return INT_MAX;
-        auto lower = lower_bound(root, target);
-        auto upper = upper_bound(root, target);
-        if (!lower)
-            return upper->val;
-        if (!upper)
-            return lower->val;
-        return target-lower->val < upper->val-target? lower->val : upper->val;
+    int closestValue(TreeNode* root, double target) {
+        auto l = lower_bound(root, target);
+        auto u = upper_bound(root, target);
+        if (!l) return u->val;
+        if (!u) return l->val;
+        return fabs(l->val - target) < fabs(u->val - target) ? l->val : u->val;
     }
-
-    TreeNode* lower_bound(TreeNode* root, double target)
-    {
-        if (!root)
-            return root;
-        if (root->val > target)
-            return lower_bound(root->left, target);
-        // root->val <= target
-        auto node = lower_bound(root->right, target);
-        if (node)
-            return node;
+    
+    TreeNode* lower_bound(TreeNode* root, double target) {
+        if (!root) return root;
+        auto v = root->val - target;
+        if (v < 0) return lower_bound(root->right, target);
+        auto child = lower_bound(root->left, target);
+        if (child) return child;
         return root;
     }
-
-    TreeNode* upper_bound(TreeNode* root, double target)
-    {
-        if (!root)
-            return nullptr;
-        if (root->val <= target)
-            return upper_bound(root->right, target);
-        auto node = upper_bound(root->left, target);
-        if (node)
-            return node;
+    
+    TreeNode* upper_bound(TreeNode* root, double target) {
+        if (!root) return root;
+        auto v = target - root->val;
+        if (v < 0) return upper_bound(root->left, target);
+        auto child = upper_bound(root->right, target);
+        if (child) return child;
         return root;
     }
 };
@@ -243,7 +213,7 @@ func helper(root *TreeNode, target float64) float64 {
     if root == nil {
         return float64(math.MaxInt64)
     }
-    
+
     delta := float64(root.Val) - target
     child := float64(math.MaxInt64)
     if delta > 0 {
