@@ -58,7 +58,7 @@ public:
             root = root->left;
         }
     }
-    
+
     /** @return the next smallest number */
     int next() {
         auto cur = stk.top();
@@ -73,7 +73,7 @@ public:
         }
         return v;
     }
-    
+
     /** @return whether we have a next smallest number */
     bool hasNext() {
         return !stk.empty();
@@ -109,6 +109,8 @@ Yes
 Given root =`{1}`, target =`4.428571`, return`1`.
 
 [https://www.lintcode.com/en/problem/closest-binary-search-tree-value/](https://www.lintcode.com/en/problem/closest-binary-search-tree-value/)
+
+[https://leetcode.com/problems/closest-binary-search-tree-value/](https://leetcode.com/problems/closest-binary-search-tree-value/)
 
 ### 解题分析:
 
@@ -227,6 +229,33 @@ public:
         return root;
     }
 };
+```
+
+2020/08/16 其实closest value有个套路， 就是在有序数列中找差， 差大了缩小，差小了增大，在0周围反复震荡
+
+```go
+import "math"
+func closestValue(root *TreeNode, target float64) int {
+    return int(helper(root, target))
+}
+
+func helper(root *TreeNode, target float64) float64 {
+    if root == nil {
+        return float64(math.MaxInt64)
+    }
+    
+    delta := float64(root.Val) - target
+    child := float64(math.MaxInt64)
+    if delta > 0 {
+        child = helper(root.Left, target)
+    } else {
+        child = helper(root.Right, target)        
+    } 
+    if math.Abs(delta) < math.Abs(child-target) {
+        return float64(root.Val)
+    }
+    return child
+}
 ```
 
 ## 93. Balanced Binary Tree
