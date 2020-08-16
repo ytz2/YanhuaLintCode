@@ -447,9 +447,9 @@ public:
 
 o\(n\) worst
 
-2020/08/16 
+2020/08/16
 
-又写了一遍，还是出错， 错在处理root  == nullptr的处理上，一般处理的时候都是min = INT\__MAX, max = INT_MIN, 然后就懒得管左边和右边有没有了，这样导致的结果就是比较左右必然不成立， 但是如果min = INTMIN, max= INTMAX 那又会左右比较的时候必然成立， 唯一的办法就是别偷懒，判断左右在不在的情况。 还有一个笔记就是ReturnType的套路在判断左右的情况的时候通常要方便于traversal的办法 
+又写了一遍，还是出错， 错在处理root  == nullptr的处理上，一般处理的时候都是min = INT\_\_MAX, max = INT\_MIN, 然后就懒得管左边和右边有没有了，这样导致的结果就是比较左右必然不成立， 但是如果min = INTMIN, max= INTMAX 那又会左右比较的时候必然成立， 唯一的办法就是别偷懒，判断左右在不在的情况。 还有一个笔记就是ReturnType的套路在判断左右的情况的时候通常要方便于traversal的办法
 
 ## \*\*\*\*901. Closest Binary Search Tree Value II
 
@@ -480,6 +480,8 @@ Given root =`{1}`, target =`0.000000`, k =`1`, return`[1]`.
 Assume that the BST is balanced, could you solve it in less than O\(n\) runtime \(where n = total nodes\)?
 
 [https://www.lintcode.com/en/problem/closest-binary-search-tree-value-ii/](https://www.lintcode.com/en/problem/closest-binary-search-tree-value-ii/)
+
+[https://leetcode.com/problems/closest-binary-search-tree-value-ii/](https://leetcode.com/problems/closest-binary-search-tree-value-ii/)
 
 ### 解题分析:
 
@@ -638,6 +640,45 @@ public:
         }
         helper(root->right, target, k);
     }
+};
+```
+
+202/08/16
+
+这次回头再看的时候发现还是不会log\(n\), 但是O\(N\)的方法还好， median, 前k个啊什么的，无脑想pq吧
+
+```cpp
+struct cmp {
+    cmp(double t) : target(t) {}
+    double target = 0;
+    bool operator()(int l, int r) {
+        return fabs(l - target) < fabs(r - target);
+    }
+};
+class Solution {
+public:
+    typedef priority_queue<int, vector<int>, cmp> pq_type;
+    vector<int> closestKValues(TreeNode* root, double target, int k) {
+        auto c = cmp(target);
+        pq_type pq(c);
+        helper(root, k, pq);
+        vector<int> res;
+        while(!pq.empty()) {
+            res.push_back(pq.top());
+            pq.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+    
+    void helper(TreeNode* root, int k, pq_type& pq) {
+        if (!root) return;
+        helper(root->left, k, pq);
+        pq.push(root->val);
+        if (pq.size() > k ) pq.pop();
+        helper(root->right, k, pq);
+    }
+   
 };
 ```
 
