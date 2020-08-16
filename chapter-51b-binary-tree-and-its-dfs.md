@@ -320,7 +320,7 @@ public:
         int dummy;
         return helper(root, dummy);
     }
-    
+
     bool helper(TreeNode* root, int& h) {
         if (!root) return true;
         int l = 0;
@@ -367,6 +367,8 @@ An example:
 The above binary tree is serialized as`{2,1,4,#,#,3,5}`\(in level order\).
 
 [https://www.lintcode.com/en/problem/validate-binary-search-tree/](https://www.lintcode.com/en/problem/validate-binary-search-tree/)
+
+[https://leetcode.com/problems/validate-binary-search-tree/](https://leetcode.com/problems/validate-binary-search-tree/)
 
 ### 解题分析:
 
@@ -444,6 +446,10 @@ public:
 ```
 
 o\(n\) worst
+
+2020/08/16 
+
+又写了一遍，还是出错， 错在处理root  == nullptr的处理上，一般处理的时候都是min = INT\__MAX, max = INT_MIN, 然后就懒得管左边和右边有没有了，这样导致的结果就是比较左右必然不成立， 但是如果min = INTMIN, max= INTMAX 那又会左右比较的时候必然成立， 唯一的办法就是别偷懒，判断左右在不在的情况。 还有一个笔记就是ReturnType的套路在判断左右的情况的时候通常要方便于traversal的办法 
 
 ## \*\*\*\*901. Closest Binary Search Tree Value II
 
