@@ -670,7 +670,7 @@ public:
         reverse(res.begin(), res.end());
         return res;
     }
-    
+
     void helper(TreeNode* root, int k, pq_type& pq) {
         if (!root) return;
         helper(root->left, k, pq);
@@ -678,7 +678,7 @@ public:
         if (pq.size() > k ) pq.pop();
         helper(root->right, k, pq);
     }
-   
+
 };
 ```
 

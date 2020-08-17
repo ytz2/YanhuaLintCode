@@ -27,6 +27,8 @@ return the node`11`.
 
 [https://www.lintcode.com/en/problem/subtree-with-maximum-average/](https://www.lintcode.com/en/problem/subtree-with-maximum-average/)
 
+[https://leetcode.com/problems/maximum-average-subtree/](https://leetcode.com/problems/maximum-average-subtree/)
+
 ### 解题分析:
 
 打擂台+post order
@@ -102,6 +104,30 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/16
+
+还是擂台， 有套路的， returnType要简单很多
+
+```cpp
+class Solution {
+public:
+    double maximumAverageSubtree(TreeNode* root) {
+        if (!root) return 0;
+        return get<2>(helper(root));
+    }
+    
+    tuple<int, int, double> helper(TreeNode* root) {
+        if (!root) return make_tuple(0, 0, INT_MIN);
+        auto l = helper(root->left);
+        auto r = helper(root->right);
+        auto c = get<0>(l) + get<0>(r) + 1;
+        auto s = get<1>(l) + get<1>(r) + root->val;
+        auto avg = max(double(s) / double(c), max(get<2>(l), get<2>(r)));
+        return make_tuple(c, s, avg);
+    }
+};
+```
 
 ## 474. Lowest Common Ancestor II
 
@@ -676,7 +702,7 @@ public:
         inOrder(root, target, res);
         return res;
     }
-    
+
     void inOrder(ParentTreeNode* root, int target, vector<vector<int>>& res)
     {
         if (!root)
@@ -686,7 +712,7 @@ public:
         inOrder(root->left, target, res);
         inOrder(root->right, target, res);
     }
-    
+
     void findSum(ParentTreeNode* root, int target, ParentTreeNode* from, vector<vector<int>>& res, vector<int>& solution)
     {
         if (!root)
@@ -706,7 +732,7 @@ public:
 
         solution.pop_back();
     }
-    
+
 };
 ```
 
