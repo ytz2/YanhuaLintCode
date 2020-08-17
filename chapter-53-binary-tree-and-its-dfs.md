@@ -67,7 +67,7 @@ public:
     int longestConsecutive(TreeNode* root) {
         return helper(root).max;
     }
-    
+
     ReturnType helper(TreeNode* root) {
         ReturnType res;
         if (!root) return res;
@@ -111,6 +111,8 @@ Yes
 Return`4`//`0-1-2-3`
 
 [https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-ii/](https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence-ii/)
+
+[https://leetcode.com/problems/binary-tree-longest-consecutive-sequence-ii/](https://leetcode.com/problems/binary-tree-longest-consecutive-sequence-ii/)
 
 ### 解题分析:
 
@@ -202,6 +204,46 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020.08/17 重写这一版，把maxLen移到returnType里
+
+```cpp
+class Solution {
+public:
+    struct ReturnType {
+        int ascend = 0;
+        int descend = 0;
+        int max = 0;
+    };
+    
+    int longestConsecutive(TreeNode* root) {
+        return helper(root).max;
+    }
+    
+    ReturnType helper(TreeNode* root) {
+        ReturnType res;
+        if (!root) return res;
+        auto l = helper(root->left);
+        auto r = helper(root->right);
+        res.ascend = res.descend = res.max = 1;
+        int linc, rinc,ldec, rdec;
+        linc = rinc = ldec = rdec = 0;
+        if (root->left) {
+            if (root->left->val == root->val + 1) linc = l.ascend;
+            if (root->left->val + 1 == root->val) ldec = l.descend;
+        }
+        if (root->right) {
+            if (root->right->val == root->val + 1) rinc = r.ascend;
+            if (root->right->val + 1 == root->val) rdec = r.descend;
+        }
+
+        res.ascend = max(linc, rinc) + 1;
+        res.descend = max(ldec, rdec) + 1;
+        res.max = (max(res.ascend, res.descend), max(max(linc + rdec, ldec + rinc) + 1 , max(l.max, r.max)));
+        return res;
+    }
+};
+```
 
 ## 619. Binary Tree Longest Consecutive Sequence III
 
