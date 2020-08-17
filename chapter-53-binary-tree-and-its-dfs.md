@@ -38,6 +38,8 @@ Longest consecutive sequence path is`2-3`,not`3-2-1`, so return`2`.
 
 [https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence/\#](https://www.lintcode.com/en/problem/binary-tree-longest-consecutive-sequence/#)
 
+[https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/](https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/)
+
 ### 解题分析:
 
 搜索问题，从上往下找，如果连续， +1， 不连续，设为1
@@ -46,56 +48,46 @@ Longest consecutive sequence path is`2-3`,not`3-2-1`, so return`2`.
 
 ```cpp
 /**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
+ * Definition for a binary tree node.
+ * struct TreeNode {
  *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
  */
-
 class Solution {
+    struct ReturnType {
+        int max = 0;
+        int length = 0;
+    };
 public:
-    /**
-     * @param root: the root of binary tree
-     * @return: the length of the longest consecutive sequence path
-     */
-    int longestConsecutive(TreeNode * root) {
-        // write your code here
-        if (!root)
-            return 0;
-        maxLen = INT_MIN;
-        len = 0; 
-        helper(root, nullptr);
-        return maxLen;
+    int longestConsecutive(TreeNode* root) {
+        return helper(root).max;
     }
-
-    void helper(TreeNode* root, TreeNode* prev)
-    {
-        if (!root)
-            return;
-        if (!prev || prev->val+1 != root->val)
-            len = 1;
-        else
-            len++;
-        maxLen = max(maxLen, len);
-        prev = root;
-        helper(root->left, root);
-        helper(root->right, root);
+    
+    ReturnType helper(TreeNode* root) {
+        ReturnType res;
+        if (!root) return res;
+        auto l = helper(root->left);
+        auto r = helper(root->right);
+        auto len = 1;
+        if (root->left && root->val + 1 == root->left->val) len += l.length;
+        if (root->right && root->val + 1 == root->right->val) len = max(len, 1+r.length);
+        res.length = len;
+        res.max = max(len, max(l.max, r.max));
+        return res;
     }
-
-    int maxLen;
-    int len;
 };
 ```
 
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/17 重新写为打擂台的形式
 
 ## 614. Binary Tree Longest Consecutive Sequence II
 
