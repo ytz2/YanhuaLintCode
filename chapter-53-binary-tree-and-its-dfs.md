@@ -226,20 +226,20 @@ public:
         auto l = helper(root->left);
         auto r = helper(root->right);
         res.ascend = res.descend = res.max = 1;
-        int linc, rinc,ldec, rdec;
-        linc = rinc = ldec = rdec = 0;
+        int ascend = 0;
+        int descend = 0;
         if (root->left) {
-            if (root->left->val == root->val + 1) linc = l.ascend;
-            if (root->left->val + 1 == root->val) ldec = l.descend;
+            if (root->left->val == root->val + 1) ascend = max(ascend, l.ascend);
+            if (root->left->val + 1 == root->val) descend = max(descend, l.descend);
         }
         if (root->right) {
-            if (root->right->val == root->val + 1) rinc = r.ascend;
-            if (root->right->val + 1 == root->val) rdec = r.descend;
+            if (root->right->val == root->val + 1) ascend = max(ascend, r.ascend);
+            if (root->right->val + 1 == root->val) descend = max(descend, r.descend);
         }
 
-        res.ascend = max(linc, rinc) + 1;
-        res.descend = max(ldec, rdec) + 1;
-        res.max = (max(res.ascend, res.descend), max(max(linc + rdec, ldec + rinc) + 1 , max(l.max, r.max)));
+        res.ascend = ascend + 1;
+        res.descend = descend + 1;
+        res.max = (max(res.ascend, res.descend), max( 1 + ascend + descend , max(l.max, r.max)));
         return res;
     }
 };
