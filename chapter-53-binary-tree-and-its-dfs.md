@@ -215,11 +215,11 @@ public:
         int descend = 0;
         int max = 0;
     };
-    
+
     int longestConsecutive(TreeNode* root) {
         return helper(root).max;
     }
-    
+
     ReturnType helper(TreeNode* root) {
         ReturnType res;
         if (!root) return res;
@@ -360,6 +360,8 @@ return`6`.
 
 [https://www.lintcode.com/en/problem/binary-tree-maximum-path-sum/\#](https://www.lintcode.com/en/problem/binary-tree-maximum-path-sum/#)
 
+[https://leetcode.com/problems/binary-tree-maximum-path-sum/](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
+
 ### 解题分析:
 
 左边最大和右边最大求得后，要做选择， root-&gt;val, left+root-&gt;val, right+root-&gt;val 返回最大，因为 返回的可能是负数。
@@ -415,6 +417,35 @@ public:
 ### 复杂度分析:
 
 o\(n\)
+
+2020/08/17
+
+这种子path的问题， 一般套路就是return type, 一个存以root为起点的值一个存待求值， 待求值， （ 选左面 + 选右 + 选左右，都不选） + root val， 来比较。 而根节点值可以有选左，选右，左右都不选直选root组成，这样简单很多很多
+
+```cpp
+class Solution {
+public:
+    struct ReturnType {
+        int sum = 0;
+        int max = INT_MIN;
+    };
+    int maxPathSum(TreeNode* root) {
+        return helper(root).max;
+    }
+    
+    ReturnType helper(TreeNode* root) {
+        ReturnType res;
+        if (!root) return res;
+        auto l = helper(root->left);
+        auto r = helper(root->right);
+        res.max = max( max(l.max, r.max),   max(max( max(l.sum, r.sum) , l.sum + r.sum ), 0) + root->val);
+        res.sum = max( max(l.sum, r.sum), 0) + root->val;
+        return res;
+    }
+};
+```
+
+
 
 ## 475. Binary Tree Maximum Path Sum II
 
