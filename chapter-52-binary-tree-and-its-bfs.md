@@ -183,7 +183,7 @@ public:
         helper(root, target, path, result);
         return result;
     }
-    
+
     void helper(TreeNode* root, int target, vector<int>& path, vector<vector<int>>& result) {
         if (!root) return;
         path.push_back(root->val);
@@ -192,7 +192,7 @@ public:
         helper(root->right, target, path, result);
         path.pop_back();
     }
-    
+
     void update(const vector<int>& path,  vector<vector<int>>& result, int target) {
         vector<int> solution;
         int sum = 0;
@@ -242,6 +242,8 @@ The minimum depth is`2`.
 
 [https://www.lintcode.com/en/problem/minimum-depth-of-binary-tree/](https://www.lintcode.com/en/problem/minimum-depth-of-binary-tree/)
 
+[https://leetcode.com/problems/minimum-depth-of-binary-tree/](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
+
 ### 解题分析:
 
 如果没有子树，则不算树深
@@ -249,44 +251,22 @@ The minimum depth is`2`.
 ### 代码：
 
 ```
-/**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
- *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
- */
-
 class Solution {
 public:
-    /**
-     * @param root: The root of binary tree
-     * @return: An integer
-        */
-    int minDepth(TreeNode * root) {
-        // write your code here
-        if (!root)
-            return 0;
-        int left = minDepth(root->left);
-        int right =minDepth(root->right);
-
-        if (!left)
-            return right+1;
-        if (!right)
-            return left+1;
-        return min(left,right)+1;
+    int minDepth(TreeNode* root) {
+        if (!root) return 0;
+        if (!root->left && !root->right) return 1;
+        if (!root->left) return 1 + minDepth(root->right);
+        if (!root->right) return 1 + minDepth(root->left);
+        return 1 + min(minDepth(root->left), minDepth(root->right));
     }
-};
+    
+};复杂度分析:
 ```
 
-### 复杂度分析:
-
 O（N\)
+
+2020/08/16， 简洁一点重写
 
 ## 97. Maximum Depth of Binary Tree
 
@@ -313,6 +293,8 @@ Given a binary tree as follow:
 The maximum depth is`3`
 
 [https://www.lintcode.com/en/problem/maximum-depth-of-binary-tree/](https://www.lintcode.com/en/problem/maximum-depth-of-binary-tree/)
+
+[https://leetcode.com/problems/maximum-depth-of-binary-tree/](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
 
 ### 解题分析:
 
@@ -471,6 +453,8 @@ return node`3`.
 
 [https://www.lintcode.com/en/problem/inorder-successor-in-bst/](https://www.lintcode.com/en/problem/inorder-successor-in-bst/)
 
+[https://leetcode.com/problems/inorder-successor-in-bst/](https://leetcode.com/problems/inorder-successor-in-bst/)
+
 ### 解题分析:
 
 BST upper\_bound问题， 这个比前序简单点， 因为当p-&gt;right-val == p-&gt;val的时候，必定是他的后序。 否则必然是p的upper bound
@@ -514,6 +498,32 @@ public:
 ### 复杂度分析:
 
 log\(n\)
+
+2020/08/16
+
+```go
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func inorderSuccessor(root *TreeNode, p *TreeNode) *TreeNode {
+    if root == nil || p == nil {
+        return nil
+    }
+    if root.Val <= p.Val {
+        return  inorderSuccessor(root.Right, p)
+    }
+    node := inorderSuccessor(root.Left, p)
+    if node != nil {
+        return node
+    }
+    return root
+}
+```
 
 ## \*\*\*\*472. Binary Tree Path Sum III
 
