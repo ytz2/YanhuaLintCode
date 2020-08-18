@@ -421,6 +421,8 @@ Given`n = 4`and`k = 2`, a solution is:
 
 [https://www.lintcode.com/en/old/problem/combinations/\#](https://leetcode.com/problems/combinations/)
 
+[https://leetcode.com/problems/combinations/](https://leetcode.com/problems/combinations/)
+
 ### 解题分析:
 
 记得剪枝
@@ -436,7 +438,7 @@ public:
         helper(res, sol, n, k, 1);
         return res;
     }
-    
+
     void helper(vector<vector<int>>& res, vector<int>& sol, int n, int k, int c) {
         if (sol.size() == k) {
             res.push_back(sol);
