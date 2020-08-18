@@ -491,6 +491,8 @@ If S =`[1,2,2]`, a solution is:
 
 [https://www.lintcode.com/en/old/problem/subsets-ii/\#](https://www.lintcode.com/en/old/problem/subsets-ii/#)
 
+[https://leetcode.com/problems/subsets-ii/submissions/](https://leetcode.com/problems/subsets-ii/submissions/)
+
 ### 解题分析:
 
 DFS去重
@@ -500,34 +502,22 @@ DFS去重
 ```
 class Solution {
 public:
-    /**
-     * @param nums: A set of numbers.
-     * @return: A list of lists. All valid subsets.
-     */
-    vector<vector<int>> subsetsWithDup(vector<int> &nums) {
-        // write your code here
-        vector<vector<int>> results;
-        vector<int> subset;
-        if (nums.empty())
-        {
-            results.push_back(subset);
-            return results;
-        }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> res{{}};
+        vector<int> sol;
         sort(nums.begin(), nums.end());
-        dfs(nums, subset, 0, results);
-        return results;
+        helper(res, sol, nums, 0);
+        return res;
     }
-
-    void dfs(vector<int>& nums, vector<int>& subset, int startIndex, vector<vector<int>>& results)
-    {
-        results.push_back(subset);
-        for (int i = startIndex; i < nums.size(); i++)
-        {
-            if (nums[i] == nums[i-1] && i != startIndex)
-                continue;
-            subset.push_back(nums[i]);
-            dfs(nums, subset, i+1, results);
-            subset.pop_back();
+    
+    void helper(vector<vector<int>>& res, vector<int>& solution, const vector<int>& nums, int cur) {
+        if (cur >= nums.size()) return;
+        for (int i = cur; i < nums.size(); i++) {
+            if (i != cur && nums[i] == nums[i-1]) continue;
+            solution.push_back(nums[i]);
+            res.push_back(solution);
+            helper(res, solution, nums, i+1);
+            solution.pop_back();
         }
     }
 };
