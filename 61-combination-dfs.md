@@ -154,7 +154,7 @@ public:
         helper(res, solution, s, 0);
         return res;
     }
-    
+
     void helper(vector<vector<string>>& res, vector<string>& solution, string& s, int cur) {
         if (cur >= s.size()) {
             res.push_back(solution);
@@ -211,87 +211,13 @@ return`17`
 
 递归过程中，应该有其他的出口: 搜索失败
 
-### 代码：
-
-```
-class Solution {
-public:
-    /**
-     * @param n: An integer
-     * @param str: a string with number from 1-n in random order and miss one number
-     * @return: An integer
-     */
-    int findMissing2(int n, string &str) {
-        // write your code here
-        if (n == 0 || str.empty())
-            return -1;
-        unordered_set<int> visited;
-        int result = -1;
-        dfs(n, str, 0, visited, result);
-        return result;
-    }
-
-    void dfs(int n, const string& str, int startIndex, unordered_set<int>& visited, int& result)
-    {
-        if (startIndex >= str.size() )
-        {
-            if (visited.size() == n-1)
-                result = getMissed(visited, n);
-            return;
-        }
-        int oneNum = stoi(str.substr(startIndex, 1));
-        if (oneNum  == 0 || oneNum > n)
-            return;
-
-        if (visited.find(oneNum) == visited.end())
-        {
-            visited.insert(oneNum);
-            dfs(n, str, startIndex+1, visited, result);
-            visited.erase(oneNum);
-        }
-
-        if (startIndex == str.size()-1)
-            return;
-        int twoNum = stoi(str.substr(startIndex,2));
-        if (twoNum < 10 || visited.find(twoNum) != visited.end() || twoNum > n)
-            return;
-        visited.insert(twoNum);
-        dfs(n, str, startIndex+2, visited, result);
-        visited.erase(twoNum);
-    }
-
-    int getMissed(unordered_set<int>& dict, int n)
-    {
-        // look for the missted one
-        for (int i = 1; i<= n; i++)
-        {
-            if (dict.find(i) == dict.end())
-            {
-                return i; 
-            }
-        }
-        return -1;
-    }
-};
-```
+### 代码:
 
 ### 复杂度分析:
 
 o\(2^n\)
 
-写的有点恶心， 看了一眼别人的答案，感觉写的简洁多了，而且还是套路方法，重写一遍：
-
-其实这个给了一个启迪就是visited不一定要用unordered\_set，用vector&lt;bool&gt;反而效率更高，空间更优
-
-第二个启迪是就算只有两个选择也用个循环可以套路
-
-第三个启迪是不一定非要是排列组合才要回溯套路，这种选方案A还是方案B的问题，一样讨论，即使求一个唯一解
-
-可以
-
-递归的出口： 返回答案
-
-递归的定义:  搜索如果不是default,返回答案。
+2020/08/18重新写这一版
 
 ```cpp
 class Solution {
@@ -303,41 +229,35 @@ public:
      */
     int findMissing2(int n, string &str) {
         // write your code here
-        if (n == 0 || str.empty())
-            return -1;
-        vector<bool> visited(n+1, false);
-        return find(n, str, 0, visited);
+        if (str.empty()) return n;
+        vector<bool> collect(n+1, false);
+        return helper(n, str, collect, 0);
     }
-
-    int find(int n, const string& str, int startIndex, vector<bool>& visited)
-    {
-        if (startIndex >= str.size())
-        {
-            vector<int> res;
-            for (int i =1 ; i <= n; i++)
-            {
-                if (!visited[i])
-                    res.push_back(i);
+    
+    int helper(int n, string& str, vector<bool>& collect, int cur) {
+        if (cur >= str.size()){
+            int count = 0, num = 0;
+            for (int i = 1; i <= n; i++) {
+                if (!collect[i]) {
+                    count++;
+                    num = i;
+                }
             }
-            if (res.size() == 1)
-                return res[0];
-            return -1;
+            if (count == 1) return num;
+            return 0;
         }
-        if (str[startIndex] == '0')
-            return -1;
-        for (int len = 1; len < 3; len++)
-        {
-            int num = stoi(str.substr(startIndex, len));
-            if (num >=1 && num <=n && !visited[num])
-            {
-                visited[num] = true;
-                int res = find(n, str, startIndex+len, visited);
-                visited[num] = false;
-                if (res != -1)
-                    return res;
-            }
+        if (str[cur] == '0') return 0;
+        for (int len = 1; len < 3; len++) {
+            if (len == 2 && ( n < 10 || cur == str.size() -1 )) continue;
+            int num = stoi(str.substr(cur, len));
+            if (num <= n && !collect[num] ) {
+                collect[num] = true;
+                auto r = helper(n, str, collect, cur + len);
+                if (r) return r;
+                collect[num] = false;
+            }            
         }
-        return -1;
+        return 0;
     }
 };
 ```
