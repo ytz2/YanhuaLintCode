@@ -371,14 +371,14 @@ public:
         helper(res, comb, candidates, target, 0);
         return res;
     }
-    
+
     void helper(vector<vector<int>>& res, vector<int>& comb, vector<int>& candidates, int target, int cur) {
         if (target == 0) {
             res.push_back(comb);
             return;
         }
         if (target < 0 || cur >= candidates.size()) return;
-        
+
         for (int i = cur; i < candidates.size(); i++) {
             comb.push_back(candidates[i]);
             helper(res, comb, candidates, target - candidates[i], i);
@@ -419,7 +419,7 @@ Given`n = 4`and`k = 2`, a solution is:
 ]
 ```
 
-[https://www.lintcode.com/en/old/problem/combinations/\#](https://www.lintcode.com/en/old/problem/combinations/#)
+[https://www.lintcode.com/en/old/problem/combinations/\#](https://leetcode.com/problems/combinations/)
 
 ### 解题分析:
 
@@ -430,41 +430,25 @@ Given`n = 4`and`k = 2`, a solution is:
 ```
 class Solution {
 public:
-    /**
-     * @param n: Given the range of numbers
-     * @param k: Given the numbers of combinations
-     * @return: All the combinations of k numbers out of 1..n
-     */
     vector<vector<int>> combine(int n, int k) {
-        // write your code here
-        vector<vector<int>> result;
-        if ( n == 0 || k == 0)
-            return result;
-        vector<int> subset;
-        dfs(n, k, 1, subset, result);
-        return result;
+        vector<vector<int>> res;
+        vector<int> sol;
+        helper(res, sol, n, k, 1);
+        return res;
     }
-
-    void dfs(int n, int k, int startIndex, vector<int>& subset, vector<vector<int>>& result)
-    {
-
-        if (subset.size() == k)
-        {
-            result.push_back(subset);
+    
+    void helper(vector<vector<int>>& res, vector<int>& sol, int n, int k, int c) {
+        if (sol.size() == k) {
+            res.push_back(sol);
             return;
         }
-        if (startIndex > n)
-            return;
-        if (n - startIndex + 1 < k - subset.size())
-            return;
-        for (int i = startIndex; i <=n; i++)
-        {
-            subset.push_back(i);
-            dfs(n, k, i+1, subset, result);
-            subset.pop_back();
+        if (c > n) return;
+        for (int i = c; i <= n; i++) {
+            sol.push_back(i);
+            helper(res, sol, n, k, i+1);
+            sol.pop_back();
         }
     }
-
 };
 ```
 
