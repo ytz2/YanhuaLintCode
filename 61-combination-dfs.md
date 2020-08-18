@@ -233,7 +233,7 @@ public:
         vector<bool> collect(n+1, false);
         return helper(n, str, collect, 0);
     }
-    
+
     int helper(int n, string& str, vector<bool>& collect, int cur) {
         if (cur >= str.size()){
             int count = 0, num = 0;
@@ -295,6 +295,8 @@ A solution set is:
 
 [https://www.lintcode.com/en/old/problem/combination-sum-ii/\#](https://www.lintcode.com/en/old/problem/combination-sum-ii/#)
 
+[https://leetcode.com/problems/combination-sum-ii/](https://leetcode.com/problems/combination-sum-ii/)
+
 ### 解题分析:
 
 其实可以理解成subsets里面找和为target的，就可以直接无脑上套路了
@@ -308,39 +310,25 @@ if \(total + num\[i\] &gt; target\) break;
 ```
 class Solution {
 public:
-    /**
-     * @param num: Given the candidate numbers
-     * @param target: Given the target number
-     * @return: All the combinations that sum to target
-     */
-    vector<vector<int>> combinationSum2(vector<int> &num, int target) {
-        // write your code here
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
         vector<vector<int>> res;
-        if (num.empty())
-            return res;
-        sort(num.begin(), num.end());
-        vector<int> subset;
-        dfs(num, subset,0, target, 0, res);
+        vector<int> combo;
+        helper(candidates, res, combo, target, 0);
         return res;
     }
-
-    void dfs(vector<int>& num, vector<int>& subset, int total, int target, int startIndex, vector<vector<int>>& result)
-    {
-
-        if (!subset.empty() && total == target)
-        {
-            result.push_back(subset);
+    
+    void helper(const vector<int>& candidates,vector<vector<int>>& res, vector<int>& comb, int target, int cur) {
+        if (target == 0) {
+            res.push_back(comb);
             return;
         }
-        for (int i = startIndex; i < num.size(); i++)
-        {
-            if (num[i] == num[i-1] && i!=startIndex)
-                continue;
-            if (total + num[i] > target)
-                break;
-            subset.push_back(num[i]);
-            dfs(num, subset, total + num[i], target, i+1, result);
-            subset.pop_back();
+        if (target < 0 || cur >= candidates.size()) return;
+        for (int i = cur; i < candidates.size(); i++) {
+            if (i != cur && candidates[i] == candidates[i-1]) continue;
+            comb.push_back(candidates[i]);
+            helper(candidates, res, comb, target - candidates[i], i + 1);
+            comb.pop_back();
         }
     }
 };
