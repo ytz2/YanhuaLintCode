@@ -32,6 +32,8 @@ If S =`[1,2,3]`, a solution is:
 
 [https://www.lintcode.com/en/old/problem/subsets/\#](https://www.lintcode.com/en/old/problem/subsets/#)
 
+[https://leetcode.com/problems/subsets/](https://leetcode.com/problems/subsets/)
+
 ### 解题分析:
 
 全子集问题，组合问题，permutation问题，基本的套路就是一个，回溯，放上去，往下搜索，再拿下来
@@ -90,6 +92,32 @@ public:
 ### 复杂度分析:
 
 o\(2^n\)
+
+2020/08/18 golang如果要改变array， 就要传指针
+
+```go
+func subsets(nums []int) [][]int {
+    res := [][]int{[]int{}}
+    solution := []int{}
+    helper(0, nums, solution, &res)
+    return res
+}
+
+func helper(cur int, nums, solution []int, res *[][]int) {    
+    if cur == len(nums){
+        return
+    }
+    for i := cur; i < len(nums); i++ {
+        solution = append(solution, nums[i])
+        tmp := make([]int, len(solution))
+        copy(tmp, solution)
+        *res = append(*res, tmp)
+        helper(i+1, nums, solution, res)
+        solution = solution[:len(solution) - 1]
+    }
+}
+
+```
 
 ## 680. Split String
 
@@ -761,11 +789,9 @@ o\(n CnK\) k为最后的长度
 
 我觉得不如BFS好理解。
 
-另外还有一个更快的 http://www.cnblogs.com/grandyang/p/4944875.html
+另外还有一个更快的 [http://www.cnblogs.com/grandyang/p/4944875.html](http://www.cnblogs.com/grandyang/p/4944875.html)
 
 两边sweep， 也是不太好理解
-
-
 
 ## 582. Word Break II
 
@@ -784,7 +810,7 @@ dict =`["de", "ding", "co", "code", "lint"]`.
 
 A solution is`["lint code", "lint co de"]`.
 
-https://www.lintcode.com/en/old/problem/word-break-ii/\#
+[https://www.lintcode.com/en/old/problem/word-break-ii/\#](https://www.lintcode.com/en/old/problem/word-break-ii/#)
 
 ### 解题分析:
 
@@ -820,10 +846,10 @@ public:
             return results;
         vector<string> subset;
         unordered_map<int, bool> canBreak;
-        
+
         helper(s, wordDict, subset, results, 0, canBreak );
     }
-    
+
     void helper(const string& s, const unordered_set<string>& wordDict, vector<string>& subset, vector<string>& results, int startIndex, unordered_map<int, bool>& canBreak)
     {
         if (startIndex >= s.size())
@@ -845,13 +871,13 @@ public:
             canBreak[i+1] = results.size() != n;
             subset.pop_back();
         }
-        
+
     }
-    
+
     void pushResult(vector<string>& results, const vector<string>& subset)
     {
         string res;
-        
+
         for(const auto& each : subset)
             res += each +" ";
         res.pop_back();

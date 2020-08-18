@@ -432,7 +432,7 @@ public:
     int maxPathSum(TreeNode* root) {
         return helper(root).max;
     }
-    
+
     ReturnType helper(TreeNode* root) {
         ReturnType res;
         if (!root) return res;
@@ -444,8 +444,6 @@ public:
     }
 };
 ```
-
-
 
 ## 475. Binary Tree Maximum Path Sum II
 

@@ -107,27 +107,19 @@ blanced binary tree D&Q， 判断依据: local到整体的思路， 本地是bal
 
 min depth of b tree , max depth of btree min这个有个坑，就是写顺手min\(left, right\)直接上了，实际上root-&gt;left没得话，他的深度是从右边来的，否则上去就是0了
 
-
-
 Lowest Common Ancestor : 这是一组题目，讨巧的是如果是A, B 返回A, B， 否则是null
 
 左边， 右边，如果都不是null root是，否则返回不是null的或者null， 前提是A,B肯定存在
 
-
-
-LCA II 是带parent的， 带上parent 更简单了，就是裸找， 从A,B各搜索他们下面有没有，没有就来自两边，然后从A开始找他的sibling, 如果sibling找不到，再从A 网上，一直到root. 
+LCA II 是带parent的， 带上parent 更简单了，就是裸找， 从A,B各搜索他们下面有没有，没有就来自两边，然后从A开始找他的sibling, 如果sibling找不到，再从A 网上，一直到root.
 
 LCA III, 就是AB不一定有， 还是老办法，但是遍历的时候要记录有没有AB， 就这么简单
-
-
 
 Binary tree longest consecutive sequence  求连续， 是一个前序遍历问题，但是要记住他们的parent是谁，有一个from 这样就可以和前面比较是不是连续，如果连续+1否则重设，打一个擂台就好了
 
 LCS II D&Q， 返回最大增长和递减长度， 左增右减，左减右增是否连续，连续加起来， 然后打一个擂台后返回最长的增和最长的减
 
 LCS III， 更简单一些， 是multi tree, 所以就是打一圈擂台
-
-
 
 ### Consistent hashing II
 
@@ -136,8 +128,6 @@ LCS III， 更简单一些， 是multi tree, 所以就是打一圈擂台
 1. 当加入一台新的机器的时候，随机选择在圆周中撒 k 个点，代表这台机器的 k 个 micro-shards。
 2. 每个数据在圆周上也对应一个点，这个点通过一个 hash function 来计算。
 3. 一个数据该属于那台机器负责管理，是按照该数据对应的圆周上的点在圆上顺时针碰到的第一个 micro-shard 点所属的机器来决定。
-
-
 
 
 
