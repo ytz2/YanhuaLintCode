@@ -116,7 +116,6 @@ func helper(cur int, nums, solution []int, res *[][]int) {
         solution = solution[:len(solution) - 1]
     }
 }
-
 ```
 
 ## 680. Split String
@@ -149,33 +148,25 @@ public:
      */
     vector<vector<string>> splitString(string& s) {
         // write your code here
-        vector<vector<string>> res; 
-        if (s.empty())
-        {
-            res.push_back(vector<string>());
-            return res;
-        }
-        vector<string> subset;
-        dfs(s, 0, subset, res);
+        vector<vector<string>> res;
+        if (s.empty()) {{}};
+        vector<string> solution;
+        helper(res, solution, s, 0);
         return res;
     }
-
-    void dfs(const string& s, int startIndex, vector<string>& subset, vector<vector<string>>& result)
-    {
-        // exit
-        if (startIndex >= s.size())
-        {
-            result.push_back(subset);
+    
+    void helper(vector<vector<string>>& res, vector<string>& solution, string& s, int cur) {
+        if (cur >= s.size()) {
+            res.push_back(solution);
             return;
         }
-        subset.push_back(s.substr(startIndex, 1));
-        dfs(s, startIndex+1, subset, result);
-        subset.pop_back();
-        if (startIndex == s.size() - 1)
-            return;
-        subset.push_back(s.substr(startIndex, 2));
-        dfs(s, startIndex+2, subset, result);
-        subset.pop_back();
+        solution.push_back(s.substr(cur,  1));
+        helper(res, solution, s, cur + 1);
+        solution.pop_back();
+        if (cur == s.size() - 1) return;
+        solution.push_back(s.substr(cur,  2));
+        helper(res, solution, s, cur + 2);
+        solution.pop_back();
     }
 };
 ```
