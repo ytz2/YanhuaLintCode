@@ -509,7 +509,7 @@ public:
         helper(res, sol, nums, 0);
         return res;
     }
-    
+
     void helper(vector<vector<int>>& res, vector<int>& solution, const vector<int>& nums, int cur) {
         if (cur >= nums.size()) return;
         for (int i = cur; i < nums.size(); i++) {
@@ -571,74 +571,47 @@ BFS把最小edit转化为最大长度问题，因为是层级遍历，所以维�
 ```
 class Solution {
 public:
-    /**
-     * @param s: The input string
-     * @return: Return all possible results
-     */
-    vector<string> removeInvalidParentheses(string &s) {
-        // Write your code here
-
-        unordered_set<string> visited;
+    vector<string> removeInvalidParentheses(string s) {
+        vector<string> result;
         queue<string> q;
         q.push(s);
+        unordered_set<string> visited;
         visited.insert(s);
-        vector<string> candidates;
-        int maxLen = 0;
-        while(!q.empty())
-        {
-            auto str = q.front();
-            q.pop();
-
-            if (str.size() < maxLen)
-                continue;
-
-            if (isValid(str))
-            {
-                maxLen = max(maxLen, (int)str.size());
-                candidates.push_back(str);
-                continue;
-            }
-            for (int i = 0; i < str.size(); i++)
-            {
-                if (s[i] != '(' && s[i] != ')')
-                {
-                    continue;
+        while(!q.empty()) {
+            int n = q.size();
+            bool found = false;
+            for (int i = 0; i < n; i++) {
+                auto str = q.front(); q.pop();
+                if (isValid(str)) {
+                    result.push_back(str);
+                    found = true;
                 }
-                auto newStr = str.substr(0, i)+str.substr(i+1);
-                if (visited.find(newStr) != visited.end())
-                    continue;
-                visited.insert(newStr);
-                q.push(newStr);
+                if (found) continue;
+                for (int i = 0; i < str.size(); i++) {
+                    if (str[i] != '(' && str[i] != ')') continue;
+                    auto news = str;
+                    news.erase(i, 1);
+                    if (visited.count(news)) continue;
+                    visited.insert(news);
+                    q.push(news);
+                }
             }
+            if (found) break;
+
         }
-
-        return candidates;
+        return result;
     }
-
-
-
-    // 0... n-1 
-    // l = num of ( r = num of )
-    // i !=n-1 l>=r and i==n-1 && l==r ==>valid
-    bool isValid(const string& s)
-    {
-        int l = 0, r = 0;
-
-        for (int i = 0; i< s.size(); i++)
-        {
-            if (s[i] == '(') 
-                l++;
-            else if (s[i] == ')')
-                r++;
-            if (i != s.size()-1 && r > l)
-                return false;
-            else if (i == s.size()-1 && r!=l)
-                return false;
+    
+    bool isValid(const string& s) {
+        int l = 0;
+        int r = 0;
+        for (const auto c : s) {
+            if (c == '(') l++;
+            else if (c == ')') r++;
+            if (r > l) return false;
         }
-        return true;
+        return l == r;
     }
-
-
 };
 ```
 
