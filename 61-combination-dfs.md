@@ -555,6 +555,8 @@ Yes
 
 [https://www.lintcode.com/en/old/problem/remove-invalid-parentheses/\#](https://www.lintcode.com/en/old/problem/remove-invalid-parentheses/#)
 
+[https://leetcode.com/problems/remove-invalid-parentheses/](https://leetcode.com/problems/remove-invalid-parentheses/)
+
 ### 解题分析:
 
 这个完全是凭经验做第一次分析了。。。第一道坎就是判断是不是valid，经典的做法是放一个stack,放狗一搜满足以下条件即可
@@ -601,7 +603,7 @@ public:
         }
         return result;
     }
-    
+
     bool isValid(const string& s) {
         int l = 0;
         int r = 0;
