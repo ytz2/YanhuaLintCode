@@ -650,6 +650,8 @@ A solution is`["lint code", "lint co de"]`.
 
 [https://www.lintcode.com/en/old/problem/word-break-ii/\#](https://www.lintcode.com/en/old/problem/word-break-ii/#)
 
+[https://leetcode.com/problems/word-break-ii/](https://leetcode.com/problems/word-break-ii/)
+
 ### 解题分析:
 
 套路题，BFS也可以做，但是BFS做剪枝有个套路， 就是从i开始往后如不可以break,都没有必要搜索，所以可以加个memorized search这样速度稍微快一些。字符串向下搜索常用技巧。。。。。
@@ -672,59 +674,47 @@ for (int i = startIndex; i < s.size(); i++)
 ```
 class Solution {
 public:
-    /*
-     * @param s: A string
-     * @param wordDict: A set of words.
-     * @return: All possible sentences.
-     */
-    vector<string> wordBreak(string &s, unordered_set<string> &wordDict) {
-        // write your code here
-        vector<string> results;
-        if (s.empty() || wordDict.empty())
-            return results;
-        vector<string> subset;
-        unordered_map<int, bool> canBreak;
-
-        helper(s, wordDict, subset, results, 0, canBreak );
-    }
-
-    void helper(const string& s, const unordered_set<string>& wordDict, vector<string>& subset, vector<string>& results, int startIndex, unordered_map<int, bool>& canBreak)
-    {
-        if (startIndex >= s.size())
-        {
-            pushResult(results, subset);
-            return;
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_map<int, unordered_set<string>> dict;
+        for (const auto& word : wordDict) {
+            dict[word.size()].insert(word);
         }
-        if (canBreak.find(startIndex) != canBreak.end() && !canBreak[startIndex])
-            return;
-        for (int i = startIndex; i < s.size(); i++)
-        {
-
-            auto str = s.substr(startIndex, i-startIndex+1);
-            if (wordDict.find(str) == wordDict.end())
-                continue;
-            subset.push_back(str);
-            int n = results.size();
-            helper(s, wordDict, subset, results, i+1, canBreak);
-            canBreak[i+1] = results.size() != n;
-            subset.pop_back();
+        vector<string> result;
+        vector<string> solution;
+        helper(s, dict, result, solution, 0);
+        return result;
+    }
+    
+    void helper(const string& s, const unordered_map<int, unordered_set<string>>& dict, vector<string>& result, vector<string>& solution, int cur) {
+        if (cur >= s.size()) {
+            string sol;
+            for (const auto& word : solution) {
+                sol += word + " ";
+            }
+            sol.pop_back();
+            result.push_back(sol);
         }
-
+        if (canBreak.count(cur) && !canBreak[cur]) return;
+        for (const auto& each : dict) {
+            const int len = each.first;
+            const auto& subdict = each.second;
+            if (cur + len > s.size()) continue;
+            auto sub = s.substr(cur, len);
+            if (!subdict.count(sub)) continue;
+            solution.push_back(sub);
+            int n = result.size();
+            helper(s, dict, result, solution, cur + len);
+            canBreak[cur+len] = result.size() != n;
+            solution.pop_back();
+        }
     }
-
-    void pushResult(vector<string>& results, const vector<string>& subset)
-    {
-        string res;
-
-        for(const auto& each : subset)
-            res += each +" ";
-        res.pop_back();
-        results.push_back(res);
-    }
+    unordered_map<int, bool> canBreak;
 };
 ```
 
 ### 复杂度分析:
 
 o\(n CnK\) k为最后的长度
+
+2020/08/19 重写这一版， 稍微简洁些， 这道题可以类比split string by 1 or 2 那道题， 一般来说找所有方案就奔就是组合问题了
 
