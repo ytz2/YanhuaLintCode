@@ -5,7 +5,6 @@ Numbers can be regarded as product of its factors. For example,
 ```
 8 = 2 x 2 x 2;
   = 2 x 4.
-
 ```
 
 Write a function that takes an integernand return all possible combinations of its factors.
@@ -19,7 +18,7 @@ Write a function that takes an integernand return all possible combinations of i
    n
    .
 
-**Example 1:**
+**Example 1:**
 
 ```
 Input:
@@ -100,6 +99,8 @@ Order does not matter.
 
 [https://www.lintcode.com/en/old/problem/restore-ip-addresses/](https://www.lintcode.com/en/old/problem/restore-ip-addresses/)
 
+[https://leetcode.com/problems/restore-ip-addresses/](https://leetcode.com/problems/restore-ip-addresses/)
+
 ### 解题分析:
 
 一个有效的IP地址由四个数字组成 xxx.xxx.xxx.xxx每一个xxx在0-255之间那么就是看是不是最后有四个0-255的数字组成。那么这道题还是一个选还是不选的问题
@@ -109,58 +110,34 @@ Order does not matter.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param s: the IP string
-     * @return: All possible valid IP addresses
-     */
-    vector<string> restoreIpAddresses(string &s) {
-        // write your code here
-        vector<string> results;
-        if (s.empty())
-            return results;
-        vector<int> subset;
-        dfs(s, 0, results, subset);
-        return results;
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> result;
+        vector<string> solution;
+        helper(result, solution, s, 0);
+        return result;
     }
-
-    void dfs(const string&s, int startIndex, vector<string>& results, vector<int>& subset)
-    {
-        if (startIndex >= s.size() )
-        {
-            if (subset.size() == 4)
-            {
-                string res;
-                for(int i = 0; i < 4; i++)
-                    res += to_string(subset[i])+".";
-                res.pop_back();
-                results.push_back(res);
+    
+    void helper(vector<string>& result, vector<string>& solution, const string& s, int ind) {
+        if (solution.size() >= 4 || ind ==s.size()) {
+            if (solution.size() == 4 && ind == s.size()) {
+                string s;
+                for (const auto& each : solution) {
+                    s += each + ".";
+                }
+                s.pop_back();
+                result.push_back(s);
             }
             return;
         }
-
-        if (subset.size() >= 4)
-            return;
-
-        for (int i = 1; i <= 3; i++)
-        {
-            if (startIndex+i > s.size())
-                break;
-            auto str = s.substr(startIndex, i);
-            int n = stoi(str);
-            if (n == 0 && i == 1)
-            {
-                subset.push_back(n);
-                dfs(s, startIndex+1, results, subset);
-                subset.pop_back();
-                break;
-            }
-            if (n>255)
-                break;
-            subset.push_back(n);
-            dfs(s, startIndex+i, results, subset);
-            subset.pop_back();
+        for (int len = 1; len <= 3; len++) {
+            if (len > 1 && s[ind] == '0') continue;
+            if (ind + len > s.size()) continue;
+            auto sub = s.substr(ind, len);
+            if (stoi(sub) > 255) continue;
+            solution.push_back(sub);
+            helper(result, solution, s, ind + len);
+            solution.pop_back();
         }
-
     }
 };
 ```
