@@ -402,7 +402,7 @@ private:
 
 n^2 懒得分析mem search, 如果是DP肯定是n^2 :\)
 
-2020/08/20 雕虫小技，放empty string在testing case 好无聊
+2020/08/20 雕虫小技，放empty string在testing case 好无聊， 记忆化搜索的套路在这道题里很明显
 
 ## 108. Palindrome Partitioning II
 
