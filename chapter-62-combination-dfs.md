@@ -427,48 +427,30 @@ Return`1`since the palindrome partitioning \["aa", "b"\] could be produced using
 ```cpp
 class Solution {
 public:
-    /**
-     * @param s: A string
-     * @return: An integer
-     */
-    int minCut(string &s) {
-        // write your code here
-        if (s.empty())
-            return 0;
-        return dfs(s, 0)-1;
+    int minCut(string s) {
+        return helper(s, 0);    
     }
-
-    int dfs(string& s, int startIndex)
-    {
-        if (startIndex >= s.size())
-            return 0;
-        int res = INT_MAX;
-        for (int i = startIndex; i < s.size(); i++)
-        {
-            if (isValid(s, startIndex, i))
-            {
-                if (count_.find(i+1) == count_.end())
-                    res = min(res, 1+ dfs(s, i+1));
-                else
-                    res = min(res, 1+count_[i+1]);
-            }
+    
+    int helper(const string& s, int beg) {
+        if (beg >= s.size() || isValid(s, beg, s.size() - 1)) return 0;
+        if (counter_.count(beg)) return counter_[beg];
+        int cut = INT_MAX;
+        for (int i = beg; i < s.size(); i++) {
+            if (!isValid(s, beg, i)) continue;
+            cut = min(cut, 1+ helper(s, i + 1));
         }
-
-        count_[startIndex] = res;
-        return res;
+        counter_[beg] = cut;
+        return cut;
     }
-
-    bool isValid(const string& s, int beg, int end)
-    {
-        while(beg < end)
-        {
-            if (s[beg] != s[end])
-                return false;
-            beg++; end--;
+    
+    bool isValid(const string& s, int beg, int end) {
+        while(beg < end ) {
+            if (s[beg++] != s[end--]) return false;
         }
         return true;
     }
-    unordered_map<int, int> count_;
+    
+    unordered_map<int, int> counter_;
 };
 ```
 
