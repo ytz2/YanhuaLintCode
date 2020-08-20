@@ -282,7 +282,7 @@ public:
             dict[word.size()].insert(word);
         return helper(s, dict, 0);
     }
-    
+
     bool helper(const string& s, unordered_map<int, unordered_set<string>>& dict, int cur) {
         if (cur >= s.size()) return true;
         if (cache_.count(cur)) return false;
@@ -401,6 +401,8 @@ private:
 ### 复杂度分析:
 
 n^2 懒得分析mem search, 如果是DP肯定是n^2 :\)
+
+2020/08/20 雕虫小技，放empty string在testing case 好无聊
 
 ## 108. Palindrome Partitioning II
 
