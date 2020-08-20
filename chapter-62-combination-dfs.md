@@ -219,6 +219,8 @@ Given_N_=`3`and the array`[0, 1, 3]`, return`2`.
 
 [https://www.lintcode.com/en/old/problem/missing-number/](https://www.lintcode.com/en/old/problem/missing-number/)
 
+[https://leetcode.com/problems/missing-number/](https://leetcode.com/problems/missing-number/)
+
 ### 解题分析:
 
 o\(n\)
@@ -274,38 +276,28 @@ Return true because**"lintcode"**can be break as`"lint code"`.
 ```cpp
 class Solution {
 public:
-    /*
-     * @param s: A string
-     * @param dict: A dictionary of words dict
-     * @return: A boolean
-     */
-    bool wordBreak(string &s, unordered_set<string> &dict) {
-        // write your code here
-        if (s.empty() && dict.empty())
-            return true;
-        if (s.empty() || dict.empty())
-            return false;
-        set<int> lenSize;
-        for (const auto& each: dict)
-            lenSize.insert(each.size());
-        return dfs(s, 0, lenSize, dict);
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_map<int, unordered_set<string>> dict;
+        for (const auto& word : wordDict) 
+            dict[word.size()].insert(word);
+        return helper(s, dict, 0);
     }
-
-    bool dfs(string& s, int startIndex, set<int>& lenSize, unordered_set<string>& dict)
-    {
-        if (startIndex >= s.size())
-            return true;
-        for (const auto& len : lenSize)
-        {
-            auto str = s.substr(startIndex, len );
-            if (dict.find(str) == dict.end())
-                continue;
-            if (dfs(s, startIndex+len, lenSize, dict))
-                return true;
+    
+    bool helper(const string& s, unordered_map<int, unordered_set<string>>& dict, int cur) {
+        if (cur >= s.size()) return true;
+        if (cache_.count(cur)) return false;
+        for (const auto& index : dict) {
+            int len = index.first;
+            const auto& sets = index.second;
+            if (cur + len > s.size()) continue;
+            auto sub = s.substr(cur, len);
+            if (!sets.count(sub)) continue;
+            if (helper(s, dict, cur + len)) return true;
+            cache_.insert(cur + len);
         }
         return false;
     }
-
+    unordered_set<int> cache_;
 };
 ```
 
