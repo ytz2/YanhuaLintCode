@@ -143,6 +143,41 @@ public:
 };
 ```
 
+```go
+import "sort"
+func permuteUnique(nums []int) [][]int {
+    res := make([][]int, 0)
+    subset := make([]int, 0)
+    visited := make([]bool, len(nums))
+    sort.Ints(nums)
+    helper(nums, subset, visited, &res)
+    return res
+}
+
+func helper(nums []int, subset []int, visited []bool, result *[][]int) {
+    if (len(subset) == len(nums)) {
+        tmp := make([]int, len(subset))
+        copy(tmp, subset)
+        *result = append(*result, tmp)
+        return
+    }
+    for i := 0; i < len(visited); i++ {
+        if visited[i] {
+            continue
+        }
+        
+        if i != 0 && nums[i] == nums[i-1] && !visited[i-1] {
+            continue
+        }
+        visited[i] = true
+        subset = append(subset, nums[i])
+        helper(nums, subset, visited, result)
+        visited[i] = false
+        subset = subset[:len(subset) - 1]
+    }
+}
+```
+
 ## \*\*\*\*\*52. Next Permutation 感觉只能靠背了。。。
 
 Given a list of integers, which denote a permutation.
