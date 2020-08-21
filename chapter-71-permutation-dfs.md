@@ -204,13 +204,7 @@ For`[4,3,2,1]`, the next permutation is`[1,2,3,4]`time since it is smaller than 
 
 [https://leetcode.com/problems/next-permutation/](https://leetcode.com/problems/next-permutation/)
 
-
-
 以 1,2,3,4,5,6 为例，其排列依次为：
-
-
-
-
 
 123456
 
@@ -224,13 +218,9 @@ For`[4,3,2,1]`, the next permutation is`[1,2,3,4]`time since it is smaller than 
 
 可以看到有这样的关系：123456 &lt; 123465 &lt; 123546 &lt; ... &lt; 654321。
 
-
-
 算法推导
 
 如何得到这样的排列顺序？这是本文的重点。我们可以这样来分析：
-
-
 
 我们希望下一个数比当前数大，这样才满足“下一个排列”的定义。因此只需要将后面的「大数」与前面的「小数」交换，就能得到一个更大的数。比如 123456，将 5 和 6 交换就能得到一个更大的数 123465。
 
@@ -243,8 +233,6 @@ For`[4,3,2,1]`, the next permutation is`[1,2,3,4]`time since it is smaller than 
 将「大数」换到前面后，需要将「大数」后面的所有数重置为升序，升序排列就是最小的排列。以 123465 为例：首先按照上一步，交换 5 和 4，得到 123564；然后需要将 5 之后的数重置为升序，得到 123546。显然 123546 比 123564 更小，123546 就是 123465 的下一个排列
 
 以上就是求“下一个排列”的分析过程。
-
-
 
 ### 代码：
 
@@ -279,59 +267,38 @@ public:
 };
 ```
 
-## \*\*\*\*\*190. Next Permutation II
-
-Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
-
-If such arrangement is not possible, it must rearrange it as the lowest possible order \(ie, sorted in ascending order\).
-
-Have you met this question in a real interview?
-
-Yes
-
-**Example**
-
-Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
-
-`1,2,3`→`1,3,2`
-
-`3,2,1`→`1,2,3`
-
-`1,1,5`→`1,5,1`
-
-[https://www.lintcode.com/en/old/problem/next-permutation-ii/](https://www.lintcode.com/en/old/problem/next-permutation-ii/)
-
-### 解题分析:
-
-和上面一道题一样的。。。无聊
-
-### 代码：
-
-```cpp
-class Solution {
-public:
-    /**
-     * @param nums: An array of integers
-     * @return: nothing
-     */
-    void nextPermutation(vector<int> &nums) {
-        // write your code here
-        int n = nums.size();
-        if (n <= 1)
-            return;
-        int i = n - 2;
-        while(i >=0 && nums[i] >= nums[i+1])
-            i--;
-        if (i>=0)
-        {
-            int j = n-1;
-            while(j>=0 && nums[j] <= nums[i])
-                j--;
-            swap(nums[i], nums[j]);
-        }
-        reverse(nums.begin()+i+1, nums.end());
+```go
+/**
+ * @param nums: An array of integers
+ * @return: nothing
+ */
+func nextPermutation (nums *[]int)  {
+    // write your code here
+    arr := *nums
+    l := len(arr)
+    if l <= 1 {
+        return
     }
-};
+    i := l - 2
+    for i >= 0 && arr[i] >= arr[i+1] {
+        i--
+    }
+    j := l - 1
+    if (i >= 0 ) {
+        for (j > i && arr[j] <= arr[i]) {
+            j--
+        }
+        arr[i], arr[j] = arr[j], arr[i]
+    }
+    i = i + 1
+    j = l - 1
+    for i < j {
+        arr[i], arr[j] = arr[j], arr[i]
+        i++
+        j--
+    }
+}
+
 ```
 
 ## \*\*\*\*197. Permutation Index
