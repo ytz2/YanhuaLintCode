@@ -393,7 +393,6 @@ func permutationIndex (A []int) int64 {
     }
     return res
 }
-
 ```
 
 ## \*\*\*\*198 Permutation Index II
@@ -443,6 +442,41 @@ public:
         return res+1;
     }
 };
+```
+
+```go
+/**
+ * @param A: An array of integers
+ * @return: A long integer
+ */
+func permutationIndexII (A []int) int64 {
+    // write your code here
+    n := len(A)
+    if n <= 1 {
+        return 1
+    }
+    
+    var res int64 = 1
+    var factorial int64 = 1
+    var factor int64 = 1
+    counter := map[int]int{A[n-1] : 1}
+
+    for i := n - 2; i >= 0; i-- {
+        curInd  := n - i - 1
+        factorial = factorial * int64(curInd)
+        counter[A[i]] = counter[A[i]] + 1
+        factor *= int64(counter[A[i]])
+        var count int64 = 0
+        for j := i + 1; j < n; j++ {
+            if A[i] > A[j] {
+                count++
+            }
+        }
+        res += count * factorial / factor
+    }
+    return res
+}
+
 ```
 
 ## 862 Next Closest Time
