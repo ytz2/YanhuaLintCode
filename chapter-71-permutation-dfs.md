@@ -298,7 +298,6 @@ func nextPermutation (nums *[]int)  {
         j--
     }
 }
-
 ```
 
 ## \*\*\*\*197. Permutation Index
@@ -367,6 +366,34 @@ public:
         return result;
     }
 };
+```
+
+```go
+/**
+ * @param A: An array of integers
+ * @return: A long integer
+ */
+func permutationIndex (A []int) int64 {
+    // write your code here
+    n := len(A)
+    if n <= 1 {
+        return 1
+    }
+    var res int64 = 1
+    var factorial int64 = 1;
+    for i := n - 2; i >=0; i-- {
+        factorial = factorial * int64( n - i -1)
+        var c int64
+        for j := i + 1; j <n; j++ {
+            if ( A[i] > A[j]) {
+                c++
+            }
+        }
+        res += c * factorial
+    }
+    return res
+}
+
 ```
 
 ## \*\*\*\*198 Permutation Index II
