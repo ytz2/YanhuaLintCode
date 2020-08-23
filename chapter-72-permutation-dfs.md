@@ -22,46 +22,27 @@ Given pattern =`"abba"`, str =`"dog dog dog dog"`, return`false`.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param pattern: a string, denote pattern string
-     * @param str: a string, denote matching string
-     * @return: an boolean, denote whether the pattern string and the matching string match or not
-     */
-    bool wordPattern(string &pattern, string &str) {
-        // write your code here
-        unordered_map<char, string> charStr;
-        unordered_map<string, char> strChar;
-        for (int i = 0, j=0; i < pattern.size(); i++)
-        {
-            if (str.empty())
-                return false;
-            char c = pattern[i];
-            auto pos = str.find(" ");
-            auto token = str.substr(0, pos);
-            if (pos != string::npos)
-                str = str.substr(pos+1);
-            else
-                str = "";
-
-            auto cit = charStr.find(c);
-            auto strit = strChar.find(token);
-            if (cit == charStr.end() && strit == strChar.end())
-            {
-                charStr[c] = token;
-                strChar[token] = c;
+    bool wordPattern(string pattern, string str) {
+        if (pattern.empty() ^ str.empty()) return false;
+        if (pattern.empty() && str.empty()) return true;
+        unordered_map<char, string> cToStr;
+        unordered_map<string, char> strToC;
+        stringstream ss(str);
+        string token;
+        for (auto c : pattern) {
+            if (ss.eof()) return false;
+            ss >> token;
+            if (!cToStr.count(c) && !strToC.count(token)) {
+                cToStr[c] = token;
+                strToC[token] = c;
+                continue;
             }
-            else if (cit !=charStr.end() && strit != strChar.end())
-            {
-                if (cit->first != strit->second)
-                    return false;
-            }
-            else
-            {
-                return false;
-            }
+            if (cToStr.count(c) ^ strToC.count(token)) return false;
+            if (cToStr[c] != token && strToC[token] != c) return false;
         }
-        return str.empty();
+        return ss.eof();
     }
+    
 };
 ```
 

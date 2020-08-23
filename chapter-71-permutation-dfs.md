@@ -793,7 +793,7 @@ public:
         }
         return total;
     }
-    
+
     bool isValid(const vector<int>& board, int row, int col) {
         // same col
         for ( int i = row - 1; i >= 0; i--) {
@@ -804,7 +804,7 @@ public:
         }
         return true;
     }
-};  
+};
 ```
 
 
