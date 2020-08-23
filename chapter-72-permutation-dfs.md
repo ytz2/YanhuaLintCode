@@ -107,6 +107,8 @@ word = `"ABCB"`, -&gt; returns `false`.
 
 [https://www.lintcode.com/problem/word-search/description](https://www.lintcode.com/problem/word-search/description)
 
+[https://leetcode.com/problems/word-search/](https://leetcode.com/problems/word-search/)
+
 ### 解题分析:
 
 BFS/DFS all OK, use DFS here
@@ -130,7 +132,7 @@ public:
         }
         return false;
     }
-    
+
     bool search(const vector<vector<char>>& board, const string& word, int cur , vector<vector<bool>>& visited, int x, int y) {
         if (board[x][y] != word[cur]) return false;
         if (cur >= word.size() - 1) return true;
