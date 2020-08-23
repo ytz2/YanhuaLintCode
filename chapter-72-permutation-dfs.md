@@ -373,6 +373,8 @@ The output consists of two word squares. The order of output does not matter (ju
 
 [https://www.lintcode.com/problem/word-squares/description](https://www.lintcode.com/problem/word-squares/description)
 
+[https://leetcode.com/problems/word-squares/](https://leetcode.com/problems/word-squares/)
+
 ### 解题分析:
 
 第一步上来就是用回溯法一个一个尝试，但是在build的过程中要验证是不是startwith 的问题， 比如 ball area, 第三个的时候要判断是不是lexx 如果words set太大的话就要一个一个过。所以要引入trie, 把每一个节点存入startswith的list，这样一下就可得了，算是剪枝。
