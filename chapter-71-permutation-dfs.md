@@ -455,7 +455,7 @@ func permutationIndexII (A []int) int64 {
     if n <= 1 {
         return 1
     }
-    
+
     var res int64 = 1
     var factorial int64 = 1
     var factor int64 = 1
@@ -476,7 +476,6 @@ func permutationIndexII (A []int) int64 {
     }
     return res
 }
-
 ```
 
 ## 862 Next Closest Time
@@ -518,39 +517,32 @@ DFS也可以，但是写的代码太多了
 ```cpp
 class Solution {
 public:
-    /**
-     * @param time: the given time
-     * @return: the next closest time
-     */
-
-
-    string nextClosestTime(string &time) {
-        unordered_set<char> store(time.begin(), time.end());
-        int hr = stoi(time.substr(0, 2));
-        int m = stoi(time.substr(3));
-        int tot = hr*60 + m;
-
-        for (int i = 1; i < 24*60; i++)
-        {
-            tot++; 
-            char buffer[5];
-            sprintf(buffer, "%02d:%02d", tot/60%24, tot%60);
-            string res(buffer);
-            bool valid = true;
-            for (auto& each : res)
-                if (store.find(each) == store.end())
-                {
-                    valid = false;
+    string nextClosestTime(string time) {
+        unordered_set<char> valids(time.begin(), time.end());
+        char buffer[6];
+        
+        auto delim = time.find(":");
+        
+        int hr = stoi(time.substr(0, delim));
+        int mt = stoi(time.substr(delim + 1));
+        for (int i = 1; i < 3600 * 24; i++) {
+            mt++;
+            hr += mt/60;
+            mt = mt%60;
+            if (hr == 24) hr = 0;
+            sprintf(buffer, "%02d:%02d", hr, mt);
+            bool good = true;
+            for (int j = 0; j <5; j++) {
+                if (buffer[j] == ':') continue;
+                if (!valids.count(buffer[j])) {
+                    good = false;
                     break;
                 }
-            if (valid)
-                return res;
+            }
+            if (good) return string(buffer);
         }
-        return time;
+        return "";
     }
-
-
-
 };
 ```
 
