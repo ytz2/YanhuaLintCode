@@ -589,7 +589,7 @@ public:
         helper(result, subset, digits, dict, 0);
         return result;
     }
-    
+
     void helper(vector<string>& result, string& subset, const string& digits, vector<string>& dict, int cur) {
         if (cur == digits.size()) {
             result.push_back(subset);
@@ -602,7 +602,7 @@ public:
             subset.pop_back();
         }
     }
-}; 
+};
 ```
 
 ## 10 String Permutation II
@@ -680,6 +680,8 @@ Have you met this question in a real interview?
 
 Yes
 
+[https://leetcode.com/problems/n-queens/](https://leetcode.com/problems/n-queens/)
+
 **Example**
 
 There exist two distinct solutions to the 4-queens puzzle:
@@ -710,62 +712,43 @@ There exist two distinct solutions to the 4-queens puzzle:
 ```cpp
 class Solution {
 public:
-    /*
-     * @param n: The number of queens
-     * @return: All distinct solutions
-     */
     vector<vector<string>> solveNQueens(int n) {
-        // write your code here
-        vector<string> board(n, string(n,'.'));
-        vector<vector<string>> results;
-        dfs(results, board, 0);
-        return results;
+        vector<vector<string>> res;
+        if (n == 0) return res;
+        vector<int> board(n, -1);
+        helper(board, res, 0);
+        return res;
     }
-
-    void dfs(vector<vector<string>>& results, vector<string>& board, int index)
-    {
-        if (index >= board.size())
-        {
-            results.push_back(board);
+    
+    void helper(vector<int>& board,  vector<vector<string>>& res, int cur) {
+        if (cur == board.size()) {
+            vector<string> subset;
+            for (int i = 0; i < board.size(); i++) {
+                string tmp(board.size(),'.');
+                tmp[board[i]] = 'Q';
+                subset.push_back(move(tmp));
+            }
+            res.push_back(move(subset));
             return;
         }
-        for (int i = 0; i < board.size(); i++)
-        {
-            if (!isValid(board, index, i))
-                continue;
-            board[index][i] = 'Q';
-            dfs(results, board, index+1);
-            board[index][i] = '.';
+        for (int i = 0; i < board.size(); i++) {
+            if (!isValid(board, cur, i)) continue;
+            board[cur] = i;
+            helper(board, res, cur + 1);
+            board[cur] = -1;
         }
     }
-
-    bool isValid(vector<string>& board, int i, int j)
-    {
-        for (int k = 0; k < i; k++)
-        {
-            if (board[k][j] == 'Q')
-                return false;
-        }
-
-        int m = i, n = j;
-        while(m>=0 && n>=0)
-        {
-            if (board[m][n] == 'Q')
-                return false;
-            m--;n--;
-        }
-        m = i;
-        n = j;
-        while(m>=0 && n<board.size())
-        {
-            if (board[m][n] == 'Q')
-                return false;
-            m--;
-            n++;
+    
+    bool isValid(const vector<int>& board, int row, int col) {
+        // same col
+        for ( int i = row - 1; i >= 0; i--) {
+            if (board[i] == col ) return false;
+            int delta = row - i;
+            if (col - delta >= 0 && board[i] == col-delta) return false;
+            if (col + delta < board.size() && board[i] == col + delta) return false;
         }
         return true;
     }
-
 };
 ```
 
