@@ -719,7 +719,7 @@ public:
         helper(board, res, 0);
         return res;
     }
-    
+
     void helper(vector<int>& board,  vector<vector<string>>& res, int cur) {
         if (cur == board.size()) {
             vector<string> subset;
@@ -738,7 +738,7 @@ public:
             board[cur] = -1;
         }
     }
-    
+
     bool isValid(const vector<int>& board, int row, int col) {
         // same col
         for ( int i = row - 1; i >= 0; i--) {
@@ -775,63 +775,36 @@ For n=4, there are 2 distinct solutions.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param n: The number of queens.
-     * @return: The total number of distinct solutions.
-     */
     int totalNQueens(int n) {
-        // write your code here
-        int res = 0;
-        vector<string> board(n, string(n,'.'));
-        dfs(res, board, 0);
-        return res;
+        if (n <= 1) return n;
+        vector<int> board(n, -1);
+        return helper(board, 0);
     }
-
-    void dfs(int& res, vector<string>& board, int index)
-    {
-        if (index >= board.size())
-        {
-            res++;
-            return;
+    int helper(vector<int>& board, int cur) {
+        if (cur == board.size()) {
+            return 1;
         }
-        for (int i = 0; i < board.size(); i++)
-        {
-            if (!isValid(board, index, i))
-                continue;
-            board[index][i] = 'Q';
-            dfs(res, board, index+1);
-            board[index][i] = '.';
+        int total = 0;
+        for (int i = 0; i < board.size(); i++) {
+            if (!isValid(board, cur, i)) continue;
+            board[cur] = i;
+            total += helper(board, cur + 1);
+            board[cur] = -1;
         }
+        return total;
     }
-
-    bool isValid(vector<string>& board, int i, int j)
-    {
-        for (int k = 0; k < i; k++)
-        {
-            if (board[k][j] == 'Q')
-                return false;
-        }
-
-        int m = i, n = j;
-        while(m>=0 && n>=0)
-        {
-            if (board[m][n] == 'Q')
-                return false;
-            m--;n--;
-        }
-        m = i;
-        n = j;
-        while(m>=0 && n<board.size())
-        {
-            if (board[m][n] == 'Q')
-                return false;
-            m--;
-            n++;
+    
+    bool isValid(const vector<int>& board, int row, int col) {
+        // same col
+        for ( int i = row - 1; i >= 0; i--) {
+            if (board[i] == col ) return false;
+            int delta = row - i;
+            if (col - delta >= 0 && board[i] == col-delta) return false;
+            if (col + delta < board.size() && board[i] == col + delta) return false;
         }
         return true;
     }
-
-};
+};  
 ```
 
 
