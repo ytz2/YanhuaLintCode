@@ -56,7 +56,7 @@ Given two strings, write a method to decide if one is a permutation of the other
 
 `abcd`is a permutation of`bcad`, but`abbe`is not a permutation of`abe`
 
-[https://www.lintcode.com/problem/word-pattern/description](https://www.lintcode.com/problem/word-pattern/description)
+[https://www.lintcode.com/problem/string-permutation/description](https://www.lintcode.com/problem/string-permutation/description)
 
 ### 解题分析:
 
@@ -116,45 +116,34 @@ BFS/DFS all OK, use DFS here
 ```cpp
 class Solution {
 public:
-    /**
-     * @param board: A list of lists of character
-     * @param word: A string
-     * @return: A boolean
-     */
-    bool exist(vector<vector<char>> &board, string &word) {
-        // write your code here
-        if (word.empty() || board.empty())
-            return false;
-        int m = board.size();
-        int n = board[0].size();
-        vector<vector<bool>> visited(m, vector<bool>(n, false));
-        auto leading = word[0];
-        for (int i =0; i < m; i++)
-            for (int j = 0; j < n; j++)
-                if (dfs(board, visited, word, 0, i, j))
-                    return true;
+    bool exist(vector<vector<char>>& board, string word) {
+        if (board.empty() || board[0].empty() || word.empty()) return false;
+        vector<vector<bool>> visited(board.size(), vector<bool>(board[0].size(), false));
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board[0].size(); j++) {
+                if (board[i][j] == word[0]){
+                    visited[i][j] = true;
+                    if (search(board, word, 0, visited, i, j)) return true;
+                    visited[i][j] = false;
+                }
+            }
+        }
         return false;
     }
-
-    bool dfs(vector<vector<char>>& board, vector<vector<bool>>& visited, string& word, int current, int i, int j)
-    {
-        if (current>= word.size() || word[current]== board[i][j] && current == word.size()-1 )
-            return true;
-        if (word[current] != board[i][j])
-            return false;
-        static vector<int> dx={-1, 1, 0, 0};
-        static vector<int> dy={ 0, 0, 1, -1};
-        visited[i][j] = true;
-        for (int k =0; k < 4; k++)
-        {
-            int next_i = i + dx[k];
-            int next_j = j + dy[k];
-            if (next_i < 0 || next_i >=board.size()|| next_j < 0 || next_j >= board[0].size() || visited[next_i][next_j])
-                continue;
-            if (dfs(board, visited, word, current+1, next_i, next_j))
-                return true;
+    
+    bool search(const vector<vector<char>>& board, const string& word, int cur , vector<vector<bool>>& visited, int x, int y) {
+        if (board[x][y] != word[cur]) return false;
+        if (cur >= word.size() - 1) return true;
+        static vector<int> dx{-1, 1, 0, 0};
+        static vector<int> dy{0, 0, -1, 1};
+        for (int i = 0; i < 4; i++) {
+            auto nx = x + dx[i];
+            auto ny = y + dy[i];
+            if (nx < 0 || nx >= board.size() || ny < 0 || ny >= board[0].size() || visited[nx][ny]) continue;
+            visited[nx][ny] = true;
+            if (search(board, word, cur + 1, visited, nx, ny)) return true;
+            visited[nx][ny] = false;
         }
-        visited[i][j] = false;
         return false;
     }
 };
