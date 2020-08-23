@@ -13,6 +13,8 @@ Given pattern =`"abba"`, str =`"dog dog dog dog"`, return`false`.
 
 [https://www.lintcode.com/problem/word-pattern/description](https://www.lintcode.com/problem/word-pattern/description)
 
+[https://leetcode.com/problems/word-pattern/](https://leetcode.com/problems/word-pattern/)
+
 ### 解题分析:
 
 用两个hash table来回搜索， 另外有corner case 就是一个比另外一个长的问题
@@ -42,7 +44,7 @@ public:
         }
         return ss.eof();
     }
-    
+
 };
 ```
 
