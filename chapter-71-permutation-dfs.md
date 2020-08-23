@@ -520,9 +520,9 @@ public:
     string nextClosestTime(string time) {
         unordered_set<char> valids(time.begin(), time.end());
         char buffer[6];
-        
+
         auto delim = time.find(":");
-        
+
         int hr = stoi(time.substr(0, delim));
         int mt = stoi(time.substr(delim + 1));
         for (int i = 1; i < 3600 * 24; i++) {
@@ -570,6 +570,8 @@ Return`["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]` since it is small
 
 [https://www.lintcode.com/en/old/problem/letter-combinations-of-a-phone-number/](https://www.lintcode.com/en/old/problem/letter-combinations-of-a-phone-number/)
 
+[https://leetcode.com/problems/letter-combinations-of-a-phone-number/](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
+
 ### 解题分析:
 
 好多年前做过的面试题。。。。
@@ -579,41 +581,28 @@ Return`["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]` since it is small
 ```cpp
 class Solution {
 public:
-    /**
-     * @param digits: A digital string
-     * @return: all posible letter combinations
-     */
-    vector<string> letterCombinations(string &digits) {
-        // write your code here
-
+    vector<string> letterCombinations(string digits) {
         vector<string> result;
-        if (digits.empty())
-            return result;
-
-        unordered_map<char, string> dict({{'2',"abc"},{'3',"def"},{'4',"ghi"},{'5',"jkl"},{'6',"mno"},{'7',"pqrs"},{'8', "tuv"},{'9',"wxyz"}});
-
+        if (digits.empty()) return result;
         string subset;
-        dfs(digits, dict, result, subset , 0);
+        static vector<string> dict { "","","abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        helper(result, subset, digits, dict, 0);
         return result;
     }
-
-    void dfs(const string& digits, unordered_map<char, string>& dict, vector<string>& results, string& subset, int index)
-    {
-        if (index >= digits.size())
-        {
-            results.push_back(subset);
+    
+    void helper(vector<string>& result, string& subset, const string& digits, vector<string>& dict, int cur) {
+        if (cur == digits.size()) {
+            result.push_back(subset);
             return;
         }
-
-        const auto& str = dict[digits[index]];
-        for (const auto c: str)
-        {
+        const auto& str = dict[digits[cur] - '0'];
+        for (auto c : str) {
             subset.push_back(c);
-            dfs(digits, dict, results, subset, index+1);
+            helper(result, subset, digits, dict, cur + 1);
             subset.pop_back();
         }
     }
-};
+}; 
 ```
 
 ## 10 String Permutation II
