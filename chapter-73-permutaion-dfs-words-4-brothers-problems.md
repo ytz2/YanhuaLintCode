@@ -94,50 +94,38 @@ Given pattern =`"aabb"`, str =`"xyzabcxzyabc"`, return`false`.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param pattern: a string,denote pattern string
-     * @param str: a string, denote matching string
-     * @return: a boolean
-     */
-    bool wordPatternMatch(string &pattern, string &str) {
-        // write your code here
-        return dfs(pattern, str, 0, 0);
+    bool wordPatternMatch(string pattern, string str) {
+        if (pattern.empty() || str.empty()) {
+            return pattern.empty() && str.empty();
+        }
+        vector<string> dict(26, "");
+        unordered_set<string> used;
+        return helper(pattern, str, dict, used, 0, 0);
     }
-
-    bool dfs(const string& pattern, const string& str, int i, int j)
-    {
-        if (i == pattern.size() && j == str.size())
-            return true;
-        if (i == pattern.size() || j == str.size())
-            return false;
-        char p = pattern[i];
-        if (cache.find(p) != cache.end())
-        {
-            auto strpos = str.find(cache[p], j);
-            if (str.size()-j < cache[p].size() || str.substr(j, cache[p].size()) != cache[p] )
-                return false;
-            auto next_j = j + cache[p].size();
-            return dfs(pattern, str, i+1, next_j);
+    
+    bool helper(const string& pattern, const string& str, vector<string>& dict, unordered_set<string>& used, int l, int r) {
+        if ( l == pattern.size() || r == str.size()) {
+            return l == pattern.size() && r == str.size();
         }
-
-        for (int jj = j; jj < str.size(); jj++)
-        {
-            auto substr = str.substr(j, jj-j + 1);
-            if (cacheImage.find(substr) != cacheImage.end())
-                continue;
-            cache[p] = substr;
-            cacheImage[substr] = p;
-            if (dfs(pattern, str, i+1, jj+1))
+        char c = pattern[l];
+        int ind = c - 'a';
+        if (!dict[ind].empty()) {
+            const auto& ref = dict[ind];
+            if (r + ref.size() > str.size()) return false;
+            return str.substr(r, ref.size()) == ref && helper(pattern, str, dict, used, l + 1, r + ref.size());
+        }
+        for (int len = 1; len <= str.size() - r; len++) {
+            auto sub =str.substr(r, len);
+            if (used.count(sub)) continue;
+            used.insert(sub);
+            dict[ind] = sub;
+            if (helper(pattern, str, dict, used, l + 1, r + sub.size()))
                 return true;
-            cache.erase(p);
-            cacheImage.erase(substr);
+            used.erase(sub);
+            dict[ind] = "";           
         }
-
         return false;
     }
-
-    unordered_map<char, string> cache;
-    unordered_map<string, char> cacheImage;
 };
 ```
 
