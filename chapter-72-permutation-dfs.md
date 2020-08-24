@@ -382,105 +382,73 @@ The output consists of two word squares. The order of output does not matter (ju
 ### 代码：
 
 ```cpp
-class TrieNode{
-public:
-    vector<string> words;
-    vector<TrieNode*> children;
-    TrieNode()
-        : children(vector<TrieNode*>(26, nullptr))
-    {
-    }
-    ~TrieNode()
-    {
-        for (auto child : children)
-            if (child) delete child;
-    }
-};
-
-class Trie{
-public:
-    Trie(const vector<string>& words)
-    {
-        root = new TrieNode();
-        for ( const auto& word : words)
-        {
-            auto p = root;
-            for (int i = 0; i < word.size(); i++)
-            {
-                int ind = word[i] - 'a';
-                if (!p->children[ind])
-                {
-                    p->children[ind] = new TrieNode();
-                }
-                p->children[ind]->words.push_back(word);
-                p = p->children[ind];
-            }
-        }
-    }
-
-    const vector<string>& startWith(const string& str)
-    {
-        static vector<string> dummy;
-        auto p = root;
-        for (int i = 0; i < str.size(); i++)
-        {
-            int ind = str[i]-'a';
-            if (!p->children[ind])
-                return dummy;
-            p = p->children[ind];
-        }
-        return p->words;
-    }
-
-    ~Trie()
-    {
-        delete root;
-    }
-private:
-  TrieNode* root;  
-};
-
-
 class Solution {
 public:
-    /*
-     * @param words: a set of words without duplicates
-     * @return: all word squares
-     */
-    vector<vector<string>> wordSquares(vector<string> &words) {
+    struct Node {
+        vector<Node*> children = vector<Node*>(26, nullptr);
+        vector<string> words; 
+        Node() = default;
+        ~Node() {
+            for (auto each : children) {
+                if (each) delete each;
+            }
+        }
+    };
+    
+    struct Trie {
+        Trie(vector<string>& words) {
+            root.words = words;
+            for (const auto& word : words) {
+                auto cur = &root;
+                for (auto c : word) {
+                    int i = c - 'a';
+                    if (nullptr == cur->children[i])
+                        cur->children[i] = new Node;
+                    cur = cur->children[i];
+                    cur->words.push_back(word);
+                }
+            }
+        }
+        
+        const vector<string>& startWith(const string& prefix) const {
+            static vector<string> dummy;
+            auto cur = &root;
+            for (auto c : prefix) {
+                int i = c - 'a';
+                if (!cur->children[i]) return dummy;
+                cur = cur->children[i];
+            }
+            return cur->words;
+        }
+        ~Trie() = default;
+        Node root;
+    };
+    
+    vector<vector<string>> wordSquares(vector<string>& words) {
         Trie trie(words);
-        vector<vector<string>> results;
-        if (words.empty())
-            return results;
         vector<string> subset;
-        for (auto word: words)
-        {
-            subset.push_back(word);
-            dfs(subset, results, trie);
+        vector<vector<string>> result;
+        for (const auto& each : words) {
+            subset.push_back(each);
+            helper(result, subset, trie);
             subset.pop_back();
         }
-        dfs( subset, results,trie);
-        return results;
+        return result;
     }
-
-    void dfs(vector<string>& subset, vector<vector<string>>& results, Trie& trie)
-    {
-        if (subset.size() == subset[0].size())
-        {
-            results.push_back(subset);
+    
+    void helper(vector<vector<string>>&result, vector<string>& subset, const Trie& trie) {
+        if (subset.size() == subset[0].size()) {
+            result.push_back(subset);
             return;
         }
         int n = subset.size();
-        string str;
-        for (int i = 0; i < n; i++)
-        {
-            str.push_back(subset[i][n]);
-        }
-        const auto& words = trie.startWith(str);
-        for (const auto& word : words)
-        {
+        string prefix;
+        for (int i = 0; i < n; i++) 
+            prefix.push_back(subset[i][n]);
+        const auto& words = trie.startWith(prefix);
+        for (const auto& word : words) {
             subset.push_back(word);
-            dfs(subset, results, trie);
+            helper(result, subset, trie);
             subset.pop_back();
         }
     }
