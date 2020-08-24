@@ -94,50 +94,38 @@ Given pattern =`"aabb"`, str =`"xyzabcxzyabc"`, return`false`.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param pattern: a string,denote pattern string
-     * @param str: a string, denote matching string
-     * @return: a boolean
-     */
-    bool wordPatternMatch(string &pattern, string &str) {
-        // write your code here
-        return dfs(pattern, str, 0, 0);
+    bool wordPatternMatch(string pattern, string str) {
+        if (pattern.empty() || str.empty()) {
+            return pattern.empty() && str.empty();
+        }
+        vector<string> dict(26, "");
+        unordered_set<string> used;
+        return helper(pattern, str, dict, used, 0, 0);
     }
 
-    bool dfs(const string& pattern, const string& str, int i, int j)
-    {
-        if (i == pattern.size() && j == str.size())
-            return true;
-        if (i == pattern.size() || j == str.size())
-            return false;
-        char p = pattern[i];
-        if (cache.find(p) != cache.end())
-        {
-            auto strpos = str.find(cache[p], j);
-            if (str.size()-j < cache[p].size() || str.substr(j, cache[p].size()) != cache[p] )
-                return false;
-            auto next_j = j + cache[p].size();
-            return dfs(pattern, str, i+1, next_j);
+    bool helper(const string& pattern, const string& str, vector<string>& dict, unordered_set<string>& used, int l, int r) {
+        if ( l == pattern.size() || r == str.size()) {
+            return l == pattern.size() && r == str.size();
         }
-
-        for (int jj = j; jj < str.size(); jj++)
-        {
-            auto substr = str.substr(j, jj-j + 1);
-            if (cacheImage.find(substr) != cacheImage.end())
-                continue;
-            cache[p] = substr;
-            cacheImage[substr] = p;
-            if (dfs(pattern, str, i+1, jj+1))
+        char c = pattern[l];
+        int ind = c - 'a';
+        if (!dict[ind].empty()) {
+            const auto& ref = dict[ind];
+            if (r + ref.size() > str.size()) return false;
+            return str.substr(r, ref.size()) == ref && helper(pattern, str, dict, used, l + 1, r + ref.size());
+        }
+        for (int len = 1; len <= str.size() - r; len++) {
+            auto sub =str.substr(r, len);
+            if (used.count(sub)) continue;
+            used.insert(sub);
+            dict[ind] = sub;
+            if (helper(pattern, str, dict, used, l + 1, r + sub.size()))
                 return true;
-            cache.erase(p);
-            cacheImage.erase(substr);
+            used.erase(sub);
+            dict[ind] = "";           
         }
-
         return false;
     }
-
-    unordered_map<char, string> cache;
-    unordered_map<string, char> cacheImage;
 };
 ```
 
@@ -145,207 +133,112 @@ public:
 
 Given a matrix of lower alphabets and a dictionary. Find all words in the dictionary that can be found in the matrix. A word can start from any position in the matrix and go left/right/up/down to the adjacent position.
 
-### Example
-
-Given matrix:
-
-```
-doaf
+[https://leetcode.com/problems/word-search-ii/](https://leetcode.com/problems/word-search-ii/)
 
 
-agai
 
+**Note:**
 
-dcan
-```
-
-and dictionary:
-
-```
-{"dog", "dad", "dgdg", "can", "again"}
-```
-
-return {"dog", "dad", "can", "again"}
-
-dog:
-
-```
-do
-af
-
-
-a
-g
-ai
-
-
-dcan
-```
-
-dad:
-
-```
-d
-oaf
-
-
-a
-gai
-
-
-d
-can
-```
-
-can:
-
-```
-doaf
-
-
-agai
-
-
-d
-can
-```
-
-again:
-
-```
-doaf
-
-
-agai
-
-
-dca
-n
-```
-
-### Challenge
-
-Using trie to implement your algorithm.
+1. All inputs are consist of lowercase letters
+   `a-z`
+   .
+2. The values of 
+   `words`
+   are distinct.
 
 ### 
 
 ### 代码：
 
 ```cpp
-struct TrieNode{
-    TrieNode()
-        :children(vector<TrieNode*>(26, nullptr)),
-         isWord(false)
-        {}
-    ~TrieNode()
-    {
-        for (auto ptr : children)
-            if (ptr) delete ptr;
-    }
-    vector<TrieNode*> children;
-    bool isWord;
-};
-
-
-class Trie{
- public:
-    Trie(const vector<string>& words)
-    {
-        root = new TrieNode();
-        for (const auto& word: words)
-        {
-            auto p = root;
-            for (char c : word)
-            {
-                int ind = c-'a';
-                if (!p->children[ind])
-                    p->children[ind] = new TrieNode();
-                p = p->children[ind];
-            }
-            p->isWord = true;
-        }
-    }
-    ~Trie()
-    {
-        delete root;
-    }
-
-    bool startWith(const string& str, bool& isWord)
-    {
-        auto p = root;
-        isWord = false;
-        for ( const auto c : str)
-        {
-            int ind = c - 'a';
-            if (!p->children[ind])
-                return false;
-            p = p->children[ind];
-        }
-        isWord = p->isWord;
-
-        return true;
-    }
-
- private:
-    TrieNode* root;
-};
-
 class Solution {
 public:
-    /**
-     * @param board: A list of lists of character
-     * @param words: A list of string
-     * @return: A list of string
-     */
-    vector<string> wordSearchII(vector<vector<char>> &board, vector<string> &words) {
-        // write your code here
-        vector<string> results;
-        if (board.empty() || board[0].empty())
-            return results;
-        Trie trie(words);
-        int m = board.size(), n = board[0].size();
-        vector<vector<bool>> visited(m, vector<bool>(n, false));
-
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                string sub(1, board[i][j]);
-                visited[i][j] = true;
-                dfs(board, visited, trie, i, j, sub, results);
-                visited[i][j] = false;
+    struct Node {
+        vector<Node*> children = vector<Node*>(26, nullptr);
+        bool isWord = false;
+        Node() = default;
+        ~Node() {
+            for (auto c : children) 
+                if (c) delete c;
+        }
+    };
+    
+    struct Trie {
+        Trie(const vector<string>& words) {
+            for (const auto& word : words) {
+                auto cur = &root;
+                for (auto c : word) {
+                    auto ind = c - 'a';
+                    if (!cur->children[ind]) cur->children[ind] = new Node;
+                    cur = cur->children[ind];
+                }
+                cur->isWord = true;
             }
         }
-        return results;
-    }
-
-    void dfs(vector<vector<char>> &board, vector<vector<bool>>& visited,  Trie& trie, int i, int j, string& substr, vector<string> & results)
-    {
-        bool isWord=false;
-        if (!trie.startWith(substr, isWord))
-            return;
-        if (isWord && find(results.begin(), results.end(), substr) == results.end())
-            results.push_back(substr);
-        int m = board.size();
-        int n = board[0].size();
-        static vector<int> dx{ -1, 1, 0, 0};
-        static vector<int> dy{ 0,  0, -1, 1};
-        for (int k = 0; k < 4; k++)
-        {
-            int next_i = i + dx[k];
-            int next_j = j + dy[k];
-
-            if (next_i < 0 || next_i >= m || next_j < 0 || next_j >= n || visited[next_i][next_j])
-                continue;
-            visited[next_i][next_j] = true;
-            substr.push_back(board[next_i][next_j]);
-            dfs(board, visited, trie, next_i, next_j, substr, results);
-            substr.pop_back();
-            visited[next_i][next_j] = false;
+        
+        Node* find(const string& prefix) {
+            auto cur = &root;
+            for (auto c : prefix) {
+                auto ind = c - 'a';
+                if (ind < 0 || ind >= 26) return nullptr;
+                if (!cur->children[ind]) return nullptr;
+                cur = cur->children[ind];
+            }
+            return cur;
         }
+        
+        bool search(const string& word) {
+            auto node = find(word);
+            return node && node->isWord;
+        }
+        
+        bool startWith(const string& word) {
+            return nullptr != find(word);
+        }
+        
+        Node root;
+    };
+    
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        unordered_set<string> result;
+        if (board.empty() || board[0].empty() || words.empty()) return {};
+        
+        Trie trie(words);
+        string str;
 
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board[0].size(); j++) {
+                char c = board[i][j];
+                board[i][j] = ' ';
+                str.push_back(c);
+                if (trie.startWith(str)) 
+                    helper(board, result, str, trie, i, j);
+                str.pop_back();
+                board[i][j] = c;
+            }
+        }
+        return vector<string>(result.begin(), result.end());
     }
-
+    
+    void helper(vector<vector<char>>& board, unordered_set<string>& result, string& str, Trie& trie, int i, int j) {
+        if (trie.search(str)) {
+            result.insert(str);
+        }
+        const static vector<int> dx{0, 0, -1, 1};
+        const static vector<int> dy{-1, 1, 0, 0};
+        for (int k = 0; k < 4; k++){
+            int x = i + dx[k];
+            int y = j + dy[k];
+            if (x < 0 || x >= board.size() || y < 0 || y >= board[0].size()) continue;
+            char c = board[x][y];
+            board[x][y] = ' ';
+            str.push_back(c);
+            if (trie.startWith(str)) helper(board, result, str, trie, x, y);
+            str.pop_back();
+            board[x][y] = c;
+        } 
+    }
+    
 };
 ```
 
