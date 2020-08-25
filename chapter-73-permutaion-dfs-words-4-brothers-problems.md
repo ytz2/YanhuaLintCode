@@ -340,13 +340,13 @@ public:
         helper(beginWord, endWord, subset, result, graph, counter);
         return result;
     }
-    
+
     void helper(const string& begin, const string& end, vector<string>& subset, vector<vector<string>>& res, unordered_map<string, unordered_set<string>>& graph, unordered_map<string, int>& counter) {
         if (begin == end) {
             res.push_back(subset);
             return;
         }
-        
+
         const auto& nexts = graph[begin];
         for (const auto& word : nexts) {
             if (counter[word] != counter[begin] + 1) continue;
