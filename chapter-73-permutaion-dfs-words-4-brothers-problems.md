@@ -135,14 +135,12 @@ Given a matrix of lower alphabets and a dictionary. Find all words in the dictio
 
 [https://leetcode.com/problems/word-search-ii/](https://leetcode.com/problems/word-search-ii/)
 
-
-
 **Note:**
 
 1. All inputs are consist of lowercase letters
    `a-z`
    .
-2. The values of 
+2. The values of 
    `words`
    are distinct.
 
@@ -162,7 +160,7 @@ public:
                 if (c) delete c;
         }
     };
-    
+
     struct Trie {
         Trie(const vector<string>& words) {
             for (const auto& word : words) {
@@ -175,7 +173,7 @@ public:
                 cur->isWord = true;
             }
         }
-        
+
         Node* find(const string& prefix) {
             auto cur = &root;
             for (auto c : prefix) {
@@ -186,23 +184,23 @@ public:
             }
             return cur;
         }
-        
+
         bool search(const string& word) {
             auto node = find(word);
             return node && node->isWord;
         }
-        
+
         bool startWith(const string& word) {
             return nullptr != find(word);
         }
-        
+
         Node root;
     };
-    
+
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
         unordered_set<string> result;
         if (board.empty() || board[0].empty() || words.empty()) return {};
-        
+
         Trie trie(words);
         string str;
 
@@ -219,7 +217,7 @@ public:
         }
         return vector<string>(result.begin(), result.end());
     }
-    
+
     void helper(vector<vector<char>>& board, unordered_set<string>& result, string& str, Trie& trie, int i, int j) {
         if (trie.search(str)) {
             result.insert(str);
@@ -238,7 +236,7 @@ public:
             board[x][y] = c;
         } 
     }
-    
+
 };
 ```
 
@@ -304,71 +302,56 @@ graph[original].push_back(str);
 ```cpp
 class Solution {
 public:
-    /*
-     * @param start: a string
-     * @param end: a string
-     * @param dict: a set of string
-     * @return: a list of lists of string
-     */
-    vector<vector<string>> findLadders(string &start, string &end, unordered_set<string> &dict) {
-        // write your code here
-        dict.insert(end);
-        unordered_map<string, int> counter;
-        unordered_map<string, vector<string>> next;
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_map<string, unordered_set<string>> graph;
+        unordered_map<string,int> counter;
+        vector<vector<string>> result;
         queue<string> q;
-        q.push(start);
-        counter[start] = 0;
-        vector<vector<string>> results;
-        vector<string> subset;
-        while(!q.empty())
-        {
-            string word = q.front();
-            string original = word;
-            q.pop();
-            if (word == end)
-                break;
-            vector<string> snext;
-            for (int i = 0; i < word.size(); i++)
-            {
-                char c = word[i];
-                for (char ch = 'a'; ch <='z'; ch++)
-                {
-                    if (ch == c)
-                        continue;
-                    word[i] = ch;
-                    if (dict.find(word) == dict.end())
-                        continue;
-                    if (counter.find(word) == counter.end())
-                    {
-                        q.push(word);
-                        counter[word] = counter[original] + 1;
+        q.push(beginWord);
+        unordered_set<string> dict(wordList.begin(), wordList.end());
+        unordered_set<string> visited{beginWord};
+        bool found = false;
+        while(!q.empty()) {
+            int n = q.size();
+            for (int i = 0; i < n; i++) {
+                auto str = q.front(); q.pop();
+                auto orig = str;
+                if (str == endWord) found = true;
+                for (int j = 0; j < str.size(); j++) {
+                    auto c = str[j];
+                    for (auto ch = 'a'; ch <= 'z'; ch++) {
+                        if (ch == c) continue;
+                        str[j] = ch;
+                        if (!dict.count(str)) continue;
+                        if (!counter.count(str)) counter[str] = counter[orig] + 1;
+                        // cache the option
+                        graph[orig].insert(str);
+                        if (visited.count(str)) continue;
+                        visited.insert(str);
+                        q.push(str);
                     }
-                    snext.push_back(word);
+                    str[j] = c;
                 }
-                word[i] = c;
             }
-            next[original] = snext;
+            if (found) break;
         }
-        subset.push_back(start);
-        dfs(start, end, counter, next, results, subset);
-        return results;
+        if (!found) return result;
+        vector<string> subset{beginWord};
+        helper(beginWord, endWord, subset, result, graph, counter);
+        return result;
     }
-
-    void dfs(const string& now, const string& end, unordered_map<string, int>& counter, unordered_map<string, vector<string>>& next, vector<vector<string>>& results, vector<string>& subset )
-    {
-        if (now == end)
-        {
-            results.push_back(subset);
+    
+    void helper(const string& begin, const string& end, vector<string>& subset, vector<vector<string>>& res, unordered_map<string, unordered_set<string>>& graph, unordered_map<string, int>& counter) {
+        if (begin == end) {
+            res.push_back(subset);
             return;
         }
-
-        const auto& vec = next[now];
-        for (auto each : vec)
-        {
-            if (counter[now]+1 != counter[each])
-                continue;
-            subset.push_back(each);
-            dfs(each, end, counter, next, results, subset);
+        
+        const auto& nexts = graph[begin];
+        for (const auto& word : nexts) {
+            if (counter[word] != counter[begin] + 1) continue;
+            subset.push_back(word);
+            helper(word, end, subset, res, graph, counter);
             subset.pop_back();
         }
     }
