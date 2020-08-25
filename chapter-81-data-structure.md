@@ -19,6 +19,8 @@ isEmpty() // return false
 
 [https://www.lintcode.com/problem/implement-stack/description](https://www.lintcode.com/problem/implement-stack/description)
 
+
+
 ### 解题分析:
 
 当年面CGG的一道题。。。哈哈哈哈
