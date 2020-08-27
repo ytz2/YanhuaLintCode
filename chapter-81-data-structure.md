@@ -73,6 +73,8 @@ isEmpty() // return true
 
 [https://www.lintcode.com/problem/implement-stack-by-two-queues/description](https://www.lintcode.com/problem/implement-stack-by-two-queues/description)
 
+[https://leetcode.com/problems/implement-stack-using-queues/](https://leetcode.com/problems/implement-stack-using-queues/)
+
 ### 解题分析:
 
 两个q，一个存储，一个调整顺序， push to q1, pop/top的时候把q1的丢到q2里，然后处理最后一个元素，最后swap\(q1,q2\)
@@ -84,14 +86,14 @@ class MyStack {
 public:
     /** Initialize your data structure here. */
     MyStack() {
-        
+
     }
-    
+
     /** Push element x onto stack. */
     void push(int x) {
         q1.push(x);
     }
-    
+
     /** Removes the element on top of the stack and returns that element. */
     int pop() {
         flap();
@@ -99,7 +101,7 @@ public:
         q2.pop();
         return res;
     }
-    
+
     /** Get the top element. */
     int top() {
         flap();
@@ -108,7 +110,7 @@ public:
         q2.pop();
         return res;
     }
-    
+
     /** Returns whether the stack is empty. */
     bool empty() {
         return q1.empty() && q2.empty();
@@ -126,7 +128,6 @@ private:
     queue<int> q1;
     queue<int> q2;
 };
-
 ```
 
 ## 224. Implement Three Stacks by Single Array
