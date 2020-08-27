@@ -227,7 +227,7 @@ private:
 };
 ```
 
-## 494.Implement Stack by Two Queues
+## 494.Implement Queue by Two Stacks
 
 Implement a stack by two queues. The queue is first in first out \(FIFO\). That means you can not directly pop the last element in a queue.
 
@@ -243,7 +243,7 @@ pop()
 isEmpty() // return true
 ```
 
-[https://www.lintcode.com/problem/implement-stack-by-two-queues/description](https://www.lintcode.com/problem/implement-stack-by-two-queues/description)
+[https://leetcode.com/problems/implement-queue-using-stacks/](https://leetcode.com/problems/implement-queue-using-stacks/)
 
 ### 解题分析:
 
@@ -254,54 +254,45 @@ isEmpty() // return true
 ```cpp
 class MyQueue {
 public:
+    /** Initialize your data structure here. */
     MyQueue() {
-        // do intialization if necessary
+        
     }
-
-    /*
-     * @param element: An integer
-     * @return: nothing
-     */
-    void push(int element) {
-        // write your code here
-         stk1_.push(element);
+    
+    /** Push element x to the back of queue. */
+    void push(int x) {
+        stk1.push(x);
     }
-
-    /*
-     * @return: An integer
-     */
+    
+    /** Removes the element from in front of queue and returns that element. */
     int pop() {
-        // write your code here
-        int res = top();
-        assert(!stk2_.empty());
-        stk2_.pop();
+        if (stk2.empty()) flap();
+        auto res = stk2.top();
+        stk2.pop();
         return res;
     }
-
-    /*
-     * @return: An integer
-     */
-    int top() {
-        // write your code here
-        if (!stk2_.empty())
-            return stk2_.top();
-        flap();
-        assert(!stk2_.empty());
-        return stk2_.top();
+    
+    /** Get the front element. */
+    int peek() {
+        if (stk2.empty()) flap();
+        return stk2.top();
     }
-
+    
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return stk1.empty() && stk2.empty();
+    }
 private:
-    void flap()
-    {
-        while(!stk1_.empty())
-        {
-            stk2_.push(stk1_.top());
-            stk1_.pop();
+    void flap() {
+        while(!stk1.empty()) {
+            stk2.push(stk1.top());
+            stk1.pop();
         }
     }
 private:
-    stack<int> stk1_, stk2_;
+    stack<int> stk1, stk2;    
 };
+
 ```
 
 ## 494.Implement Stack by Two Queues
