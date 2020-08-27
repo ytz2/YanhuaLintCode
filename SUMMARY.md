@@ -37,9 +37,11 @@
 * [Chapter 9.4  Data Structure 杂 2](chapter-94-data-structure-za-2.md)
 * [Chapter 10.1 DP 坐标动归](chapter-101-dp-zuo-biao-dong-gui.md)
 * [Chapter 10.2 DP 坐标入门](chapter-102-dp-zuo-biao-ru-men.md)
+* [Chapter Adv: DP](chapter-adv-dp.md)
 * [Chapter Adv: Sliding window & kth largest](chapter-adv-sliding-window-and-kth-largest.md)
 * [Chapter Adv: Union Find & Trie](chapter-adv-union-find-and-trie.md)
 * [Chapter Adv: Heap and Stack](chapter-adv-heap-and-stack.md)
+* [Chapter Adv: BS&Sweep Line](chapter-adv-bsandsweep-line.md)
 * [Uber](uber.md)
 * [Lyft ](chapter-11-lyft.md)
 * [Microsoft](chapter-12-microsoft.md)
@@ -51,6 +53,4 @@
 * [System Design: Map Reduce](system-design-map-reduce.md)
 * [System Design: Design Uber](system-design-design-uber.md)
 * [System Design:  Realtime Communitcate, Rate Limiter and Metrics](system-design-realtime-communitcate-rate-limiter-and-metrics.md)
-* [Chapter Adv: BS&Sweep Line](chapter-adv-bsandsweep-line.md)
-* [Chapter Adv: DP](chapter-adv-dp.md)
 
