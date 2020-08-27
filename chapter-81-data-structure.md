@@ -48,7 +48,7 @@ public:
     bool isEmpty() {
         return size == 0;
     }
-    
+
 private:
     vector<int> data;
     size_t size;
@@ -80,64 +80,53 @@ isEmpty() // return true
 ### 代码：
 
 ```cpp
-class Stack {
+class MyStack {
 public:
-    /*
-     * @param x: An integer
-     * @return: nothing
-     */
+    /** Initialize your data structure here. */
+    MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
     void push(int x) {
-        // write your code here
         q1.push(x);
     }
-
-    /*
-     * @return: nothing
-     */
-    void pop() {
-        // write your code here
-        flapTillLast();
-        q1.pop();
-        swap(q1, q2);
-    }
-
-    /*
-     * @return: An integer
-     */
-    int top() {
-        // write your code here
-        assert(!q1.empty());
-        flapTillLast();
-        int res = q1.front();
-        q1.pop();
-        q2.push(res);
-        swap(q1,q2);
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        flap();
+        auto res = q2.front();
+        q2.pop();
         return res;
     }
-
-    /*
-     * @return: True if the stack is empty
-     */
-    bool isEmpty() {
-        // write your code here
-        return q1.empty();
+    
+    /** Get the top element. */
+    int top() {
+        flap();
+        auto res = q2.front();
+        q1.push(q2.front());
+        q2.pop();
+        return res;
     }
-private:
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return q1.empty() && q2.empty();
+    }
 
-    void flapTillLast()
-    {
-        if (q1.empty())
-            return;
-        while(q1.size() != 1)
-        {
+private:
+    void flap() {
+        while(q1.size() > 1) {
             q2.push(q1.front());
             q1.pop();
         }
+        swap(q1, q2);
     }
-
+private:
     queue<int> q1;
     queue<int> q2;
 };
+
 ```
 
 ## 224. Implement Three Stacks by Single Array
