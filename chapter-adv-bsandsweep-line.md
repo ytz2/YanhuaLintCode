@@ -260,11 +260,7 @@ event处理的方式，要分析清楚，
 
 第二个是sort的时候的特殊情况要清楚
 
-
-
 ```cpp
-
-
 class Solution {
 public:   
     struct Event{
@@ -283,13 +279,13 @@ public:
             store.emplace_back(each[0], each[2], 1);
             store.emplace_back(each[1], each[2], -1);
         }
-        
+
         sort (store.begin(), store.end(), [](const Event& left, const Event& right){
             if (left.t == right.t)
                 return left.h*left.type > right.h * right.type;
             return left.t < right.t;
         });
-        
+
         for (auto& event : store)
         {
             if (event.type == 1)

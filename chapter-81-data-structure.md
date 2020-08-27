@@ -26,48 +26,32 @@ isEmpty() // return false
 ### 代码：
 
 ```cpp
-#include <list>
 class Stack {
 public:
-    /*
-     * @param x: An integer
-     * @return: nothing
-     */
     void push(int x) {
-        // write your code here
-        store.push_front(x);
+        if (data.size() == size) {
+            data.push_back(x);
+            size++;
+        } else {
+            data[size] = x;
+            size++;
+        }
     }
-
-    /*
-     * @return: nothing
-     */
     void pop() {
-        // write your code here
-        if (!isEmpty())
-            store.pop_front();
+        size--;
     }
 
-    /*
-     * @return: An integer
-     */
     int top() {
-        // write your code here
-        if (!isEmpty())
-            return store.front();
-        return INT_MAX;
+        return data[size-1];
     }
 
-    /*
-     * @return: True if the stack is empty
-     */
     bool isEmpty() {
-        // write your code here
-        return store.empty();
+        return size == 0;
     }
-
-
+    
 private:
-    deque<int> store;
+    vector<int> data;
+    size_t size;
 };
 ```
 
