@@ -256,14 +256,14 @@ class MyQueue {
 public:
     /** Initialize your data structure here. */
     MyQueue() {
-        
+
     }
-    
+
     /** Push element x to the back of queue. */
     void push(int x) {
         stk1.push(x);
     }
-    
+
     /** Removes the element from in front of queue and returns that element. */
     int pop() {
         if (stk2.empty()) flap();
@@ -271,13 +271,13 @@ public:
         stk2.pop();
         return res;
     }
-    
+
     /** Get the front element. */
     int peek() {
         if (stk2.empty()) flap();
         return stk2.top();
     }
-    
+
     /** Returns whether the queue is empty. */
     bool empty() {
         return stk1.empty() && stk2.empty();
@@ -291,84 +291,6 @@ private:
     }
 private:
     stack<int> stk1, stk2;    
-};
-
-```
-
-## 494.Implement Stack by Two Queues
-
-Implement a stack by two queues. The queue is first in first out \(FIFO\). That means you can not directly pop the last element in a queue.
-
-### Example
-
-```
-push(1)
-pop()
-push(2)
-isEmpty() // return false
-top() // return 2
-pop()
-isEmpty() // return true
-```
-
-[https://www.lintcode.com/problem/implement-stack-by-two-queues/description](https://www.lintcode.com/problem/implement-stack-by-two-queues/description)
-
-### 解题分析:
-
-画一下图就可以了, sk2是从stk1 过去的，倒转的时候 stk2的最顶上就是q的top了。
-
-### 代码：
-
-```cpp
-class MyQueue {
-public:
-    MyQueue() {
-        // do intialization if necessary
-    }
-
-    /*
-     * @param element: An integer
-     * @return: nothing
-     */
-    void push(int element) {
-        // write your code here
-         stk1_.push(element);
-    }
-
-    /*
-     * @return: An integer
-     */
-    int pop() {
-        // write your code here
-        int res = top();
-        assert(!stk2_.empty());
-        stk2_.pop();
-        return res;
-    }
-
-    /*
-     * @return: An integer
-     */
-    int top() {
-        // write your code here
-        if (!stk2_.empty())
-            return stk2_.top();
-        flap();
-        assert(!stk2_.empty());
-        return stk2_.top();
-    }
-
-private:
-    void flap()
-    {
-        while(!stk1_.empty())
-        {
-            stk2_.push(stk1_.top());
-            stk1_.pop();
-        }
-    }
-private:
-    stack<int> stk1_, stk2_;
 };
 ```
 
