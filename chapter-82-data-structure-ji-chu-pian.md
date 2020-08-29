@@ -121,8 +121,7 @@ one parameter per line.
 
 \)
 
-[                                    
-](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
+[https://leetcode.com/problems/insert-delete-getrandom-o1/](https://leetcode.com/problems/insert-delete-getrandom-o1/)
 
 ### 解题分析:
 
@@ -153,9 +152,9 @@ class RandomizedSet {
 public:
     /** Initialize your data structure here. */
     RandomizedSet() {
-        
+
     }
-    
+
     /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     bool insert(int val) {
         if (hash.count(val)) return false;
@@ -168,7 +167,7 @@ public:
         hash[val] = size;
         return true;
     }
-    
+
     /** Removes a value from the set. Returns true if the set contained the specified element. */
     bool remove(int val) {
         if (!hash.count(val)) return false;
@@ -180,12 +179,12 @@ public:
         hash.erase(val);
         return true;
     }
-    
+
     /** Get a random element from the set. */
     int getRandom() {
         return vals[rand() % hash.size()];
     }
-    
+
 private:
     unordered_map<int, int> hash;
     vector<int> vals;
@@ -247,6 +246,8 @@ return`[[1,1],[2,5],[4,4]]`
 
 [https://www.lintcode.com/problem/k-closest-points/description](https://www.lintcode.com/problem/k-closest-points/description)
 
+[https://leetcode.com/problems/k-closest-points-to-origin/](https://leetcode.com/problems/k-closest-points-to-origin/)
+
 ### 解题分析:
 
 PRIORITY QUEUE
@@ -258,149 +259,28 @@ PRIORITY QUEUE
 ### 代码：
 
 ```cpp
-/**
- * Definition for a point.
- * struct Point {
- *     int x;
- *     int y;
- *     Point() : x(0), y(0) {}
- *     Point(int a, int b) : x(a), y(b) {}
- * }; * Definition for a point.
- * struct Point {
- *     int x;
- *     int y;
- *     Point() : x(0), y(0) {}
- *     Point(int a, int b) : x(a), y(b) {}
- * };
- */
-
-class CmpOp{
-
-public:
-    CmpOp(const Point& origin)
-    {
-        origin_ = Point(origin.x, origin.y);
-    }
-
-
-    bool operator()(const Point& left, const Point& right)
-    {
-        return mincmp(left,right);
-    }
-private:
-    bool mincmp(const Point& left, const Point& right)
-    {
-        int distl = dist(left);
-        int dist2 = dist(right);
-        if (distl < dist2)
-            return true;
-        else if (distl > dist2)
-            return false;
-        else if (left.x < right.x)
-            return true;
-        else if (left.x > right.x)
-            return false;
-        return left.y<right.y;
-    }
-    int dist(const Point& p)
-    {
-        return (p.x-origin_.x)*(p.x-origin_.x) + (p.y-origin_.y)*(p.y-origin_.y);
-    }
-private:
-    Point origin_;    
-};
-
-
 class Solution {
 public:
-    /**
-     * @param points: a list of points
-     * @param origin: a point
-     * @param k: An integer
-     * @return: the k closest points
-     */
-    vector<Point> kClosest(vector<Point> &points, Point &origin, int k) {
-        // write your code here
-        CmpOp cmp(origin);
-        priority_queue<Point, vector<Point>,CmpOp> pq(cmp);
-        for (auto& p : points)
-        {
-            if (pq.size() < k)
-                pq.push(p);
-            else
-            {
-                auto& top = pq.top();
-                if (cmp(p, top))
-                {
-                    pq.pop();
-                    pq.push(p);
-                }
-            }
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        auto dist = [&](int i) {
+            return  points[i][0]*points[i][0] + points[i][1]*points[i][1];
+        };
+        auto cmp = [&](int i, int j) {
+            return dist(i) < dist(j);
+        };
+        priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
+        for (int i = 0; i < points.size(); i++) {
+            pq.push(i);
+            if (pq.size() > K) pq.pop();
         }
-        vector<Point> results;
-        while(!pq.empty())
-        {
-            results.push_back(pq.top());
+        vector<vector<int>> result;
+        while(!pq.empty()) {
+            result.push_back(points[pq.top()]);
             pq.pop();
         }
-        reverse(results.begin(), results.end());
-        return results;
+        return result;
     }
-};
-
-
-/**
- * Definition for a point.
- * struct Point {
- *     int x;
- *     int y;
- *     Point() : x(0), y(0) {}
- *     Point(int a, int b) : x(a), y(b) {}
- * }; * Definition for a point.
- * struct Point {
- *     int x;
- *     int y;
- *     Point() : x(0), y(0) {}
- *     Point(int a, int b) : x(a), y(b) {}
- * };
- */
-
-class CmpOp{
-
-public:
-    CmpOp(const Point& origin)
-    {
-        origin_ = Point(origin.x, origin.y);
-    }
-
-
-    bool operator()(const Point& left, const Point& right)
-    {
-        return !mincmp(left,right);
-    }
-private:
-    bool mincmp(const Point& left, const Point& right)
-    {
-        int distl = dist(left);
-        int dist2 = dist(right);
-        if (distl < dist2)
-            return true;
-        else if (distl > dist2)
-            return false;
-        else if (left.x < right.x)
-            return true;
-        else if (left.x > right.x)
-            return false;
-        return left.y<right.y;
-    }
-    int dist(const Point& p)
-    {
-        return (p.x-origin_.x)*(p.x-origin_.x) + (p.y-origin_.y)*(p.y-origin_.y);
-    }
-private:
-    Point origin_;    
-};
-
+}
 
 class Solution {
 public:
