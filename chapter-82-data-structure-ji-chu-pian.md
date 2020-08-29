@@ -121,7 +121,7 @@ one parameter per line.
 
 \)
 
-[                                  
+[                                    
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
@@ -151,32 +151,53 @@ tbl.erase\(val\); n-- ; 做删除操作并把最后一位忽略
 ```cpp
 class RandomizedSet {
 public:
+    /** Initialize your data structure here. */
     RandomizedSet() {
-        // do intialization if necessary
-        srand(time(NULL));
-        n = 0;
+        
     }
-
-    /*
-     * @param val: a value to the set
-     * @return: true if the set did not already contain the specified element or false
-     */
+    
+    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     bool insert(int val) {
-        // write your code here
-        if (tbl.count(val))
-            return false;
-        tbl[val] = n;
-        if (n < store.size())
-            store[n] = val;
-        else
-            store.push_back(val);
-        n++;
+        if (hash.count(val)) return false;
+        int size = hash.size();
+        if (vals.size() < size + 1) {
+            vals.push_back(val);
+        } else {
+            vals[size] = val;
+        }
+        hash[val] = size;
         return true;
     }
+    
+    /** Removes a value from the set. Returns true if the set contained the specified element. */
+    bool remove(int val) {
+        if (!hash.count(val)) return false;
+        int last = hash.size() - 1;
+        int lastVal = vals[last];
+        int cur = hash[val];
+        vals[cur] = lastVal;
+        hash[lastVal] = cur;
+        hash.erase(val);
+        return true;
+    }
+    
+    /** Get a random element from the set. */
+    int getRandom() {
+        return vals[rand() % hash.size()];
+    }
+    
+private:
+    unordered_map<int, int> hash;
+    vector<int> vals;
+};
 
-    /*
-     * @param val: a value from the set
-     * @return: true if the set contained the specified element or false
+/**
+ * Your RandomizedSet object will be instantiated and called as such:
+ * RandomizedSet* obj = new RandomizedSet();
+ * bool param_1 = obj->insert(val);
+ * bool param_2 = obj->remove(val);
+ * int param_3 = obj->getRandom();
+ */
      */
     bool remove(int val) {
         // write your code here
