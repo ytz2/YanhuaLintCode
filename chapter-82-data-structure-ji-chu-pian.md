@@ -390,6 +390,8 @@ null
 
 return`-1->2->4->null`.
 
+[https://leetcode.com/problems/merge-k-sorted-lists/](https://leetcode.com/problems/merge-k-sorted-lists/)
+
 ### 解题分析:
 
 两种思路，比较流行的思路是priority\_queue， 田忌赛马的故事， 放k个进去，优胜的出去，递补同组下一个，继续，复杂度为o\(nlogk\) k为单组平均长度
