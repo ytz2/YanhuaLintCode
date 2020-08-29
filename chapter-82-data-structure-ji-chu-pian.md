@@ -344,6 +344,24 @@ public:
        return results;
     }
 };
+
+class Solution {
+public:
+    vector<int> topk(vector<int> &nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> pq;
+        for (auto& num : nums) {
+            pq.push(num);
+            if (pq.size() > k) pq.pop();
+        }
+        vector<int> res;
+        while(!pq.empty()) {
+            res.push_back(pq.top());
+            pq.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
 ```
 
 ## 104. Merge K Sorted Lists
@@ -381,47 +399,24 @@ return`-1->2->4->null`.
 ### 代码：
 
 ```cpp
-/**
- * Definition of ListNode
- * class ListNode {
- * public:
- *     int val;
- *     ListNode *next;
- *     ListNode(int val) {
- *         this->val = val;
- *         this->next = NULL;
- *     }
- * }
- */
 class Solution {
 public:
-    /**
-     * @param lists: a list of ListNode
-     * @return: The head of one sorted list.
-     */
-    struct Compare{
-        bool operator()(ListNode* left, ListNode* right){
-            return left->val > right->val;
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        auto cmp = [](ListNode* l, ListNode* r) {
+            return l->val > r->val;
+        };
+        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> pq(cmp);
+        for (auto each : lists) {
+            if (each) pq.push(each);
         }
-    };
-    ListNode *mergeKLists(vector<ListNode *> &lists) {
-        // write your code here
-        priority_queue<ListNode*, vector<ListNode*>,Compare> pq;
-        for (auto node : lists)
-        {
-            if (node)   
-                pq.push(node);
-        }
-        ListNode dummy; 
-        ListNode* head = &dummy;
-        while(!pq.empty())
-        {
+        ListNode dummy;
+        ListNode* cur = &dummy;
+        while(!pq.empty()) {
             auto node = pq.top();
             pq.pop();
-            head->next = node;
-            head = head->next;
-            if (node->next)
-                pq.push(node->next);
+            cur->next = node;
+            cur = cur->next;
+            if (node->next) pq.push(node->next);
         }
         return dummy.next;
     }
