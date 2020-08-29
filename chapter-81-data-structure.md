@@ -340,58 +340,37 @@ dequeue()  =
 ```cpp
 class CircularQueue {
 public:
-    /**
-     * @return:  return true if the array is full
-     */
     CircularQueue(int n) {
-        // do intialization if necessary
-        front = 0;
-        rear = 0;
-        size = 0;
-        buffer_ = vector<int>(n, 0);
+        n_ = n;
+        data_ = vector<int>(n + 1, 0);
     }
     bool isFull() {
-        // write your code here
-        return size == buffer_.size();
+        return next(tail) == head;
     }
-
-    /**
-     * @return: return true if there is no element in the array
-     */
     bool isEmpty() {
-        // write your code here
-        return size == 0;
+        return head == tail;
     }
-
-    /**
-     * @param element: the element given to be added
-     * @return: nothing
-     */
     void enqueue(int element) {
-        // write your code here
-        assert(!isFull());
-        buffer_[rear] = element;
-        rear = ++rear % buffer_.size();
-        size++;
+        data_[tail] = element;
+        if (isEmpty()) head = tail;
+        tail = next(tail);
     }
-
-    /**
-     * @return: pop an element from the queue
-     */
     int dequeue() {
-        // write your code here
-        assert(!isEmpty());
-        auto val = buffer_[front];
-        front = ++front%buffer_.size();
-        size--;
-        return val;
+        auto v = data_[head];
+        head = next(head);
+        return v;
     }
-
+    
 private:
-    int front;
-    int rear;
-    int size;
-    vector<int> buffer_;
+
+    int next(int v) {
+        return (v + 1) % (n_ + 1);
+    }
+    
+    int n_ = 0;
+    vector<int> data_;
+    int head = 0;
+    int tail = 0;
 };
 ```
 
@@ -409,11 +388,9 @@ Given \[3,2,1,4,5\], return \[1,2,3,4,5\] or any legal heap array.
 
 O\(n\) time complexity
 
-[https://www.lintcode.com/problem/heapify/leaderboard](https://www.lintcode.com/problem/heapify/leaderboard)
 
-[https://www.lintcode.com/problem/implement-queue-by-circular-array/description](https://www.lintcode.com/problem/implement-queue-by-circular-array/description)
 
-### 解题分析:
+解题分析:
 
 heapfy用两种方法: siftup， 一直换到老子比儿子小  ， 因为从k只能反推一个爹出来，所以要从1 到 n遍历
 
@@ -426,48 +403,33 @@ heapfy用两种方法: siftup， 一直换到老子比儿子小  ， 因为从k�
 ```cpp
 class Solution {
 public:
-    /*
-     * @param A: Given an integer array
-     * @return: nothing
-     */
+
     void heapify(vector<int> &A) {
-        // write your code here
-        //for (int i = 1; i < A.size(); i++)
-        //    siftup(A,i);
-        for (int i = A.size()/2; i >=0; i--)
-            siftdown(A, i);
+        //for (int i = A.size() / 2; i >= 0; i--) helper(A, i);
+        for (int i = 0; i < A.size(); i++) helper2(A, i);
     }
-
-    void siftup(vector<int>& A, int k)
-    {
-        while(k > 0)
-        {
-            int father = (k - 1)/2;
-            if (A[father] < A[k])
-                break;
-            swap(A[father], A[k]);
-            k = father;
+    
+    void helper(vector<int>& A, int index) {
+        while(index < A.size()) {
+            int minInd = index;
+            auto l = 2 * index + 1;
+            auto r = l + 1;
+            if (l < A.size() && A[l] < A[minInd]) minInd = l;
+            if (r < A.size() && A[r] < A[minInd]) minInd = r;
+            if (index == minInd) break;
+            swap(A[index], A[minInd]);
+            index = minInd;
+        }
+    } 
+    
+    void helper2(vector<int>& A, int index) {
+        while(index > 0) {
+            int parent = (index - 1) / 2;
+            if (A[parent] > A[index]) swap(A[parent], A[index]);
+            else break;
+            index = parent;
         }
     }
-
-    void siftdown(vector<int>& A, int k)
-    {
-        while(k < A.size())
-        {
-            int child1 = 2 * k + 1;
-            int child2 = 2 * k + 2;
-            int smallest = k;
-            if (child1 < A.size() )
-                smallest = A[child1] < A[smallest] ? child1 : k;
-            if (child2 < A.size() )
-                smallest = A[child2] < A[smallest] ? child2 : smallest;
-            if (k == smallest)
-                break;
-            swap(A[smallest], A[k]);
-            k = smallest;
-        }
-    }
-
 };
 ```
 
