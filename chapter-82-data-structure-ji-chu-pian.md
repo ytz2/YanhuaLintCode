@@ -27,7 +27,7 @@ public:
     MovingAverage(int size) {
         this->size = size;
     }
-    
+
     double next(int val) {
         total += val;
         q.push(val);
@@ -37,12 +37,11 @@ public:
         }
         return total / q.size();
     }
-    
+
     int  size = 0;
     queue<int> q;
     double total = 0;
 };
-
 ```
 
 ## 209. First Unique Character in a String
@@ -64,19 +63,13 @@ hashtable
 ```cpp
 class Solution {
 public:
-    /**
-     * @param str: str: the given string
-     * @return: char: the first unique character in a given string
-     */
-    char firstUniqChar(string &str) {
-        // Write your code here
-        unordered_map<char, int> tbl;
-        for (auto c : str)
-            tbl[c]++;
-        for (auto c : str)
-            if (tbl[c] == 1)
-                return c;
-        return 0;
+    int firstUniqChar(string s) {
+        vector<int> counter(26, 0);
+        for (auto c : s) counter[c-'a']++;
+        for (int i = 0; i < s.size(); i++) {
+            if (counter[s[i] - 'a'] == 1) return i;
+        }
+        return -1;
     }
 };
 ```
@@ -128,7 +121,7 @@ one parameter per line.
 
 \)
 
-[                                
+[                                  
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
