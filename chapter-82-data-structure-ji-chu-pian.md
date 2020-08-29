@@ -12,7 +12,7 @@ m.next(3) = (1 + 10 + 3) / 3 // return 4.66667
 m.next(5) = (10 + 3 + 5) / 3 // return 6.00000
 ```
 
-[https://www.lintcode.com/problem/moving-average-from-data-stream/description](https://www.lintcode.com/problem/moving-average-from-data-stream/description)
+[https://leetcode.com/problems/moving-average-from-data-stream/](https://leetcode.com/problems/moving-average-from-data-stream/)
 
 ### 解题分析:
 
@@ -23,41 +23,26 @@ m.next(5) = (10 + 3 + 5) / 3 // return 6.00000
 ```cpp
 class MovingAverage {
 public:
-    /*
-    * @param size: An integer
-    */MovingAverage(int size)
-        : size(size), total(0)
-    {
-        // do intialization if necessary
+    /** Initialize your data structure here. */
+    MovingAverage(int size) {
+        this->size = size;
     }
-
-    /*
-     * @param val: An integer
-     * @return:  
-     */
+    
     double next(int val) {
-        // write your code here
         total += val;
         q.push(val);
-        if (q.size() > size )
-        {
+        if (q.size() > size) {
             total -= q.front();
             q.pop();
         }
-        return double(total)/q.size();
+        return total / q.size();
     }
-
-private:
-    int size; 
-    long total;
+    
+    int  size = 0;
     queue<int> q;
+    double total = 0;
 };
 
-/**
- * Your MovingAverage object will be instantiated and called as such:
- * MovingAverage obj = new MovingAverage(size);
- * double param = obj.next(val);
- */
 ```
 
 ## 209. First Unique Character in a String
@@ -143,7 +128,7 @@ one parameter per line.
 
 \)
 
-[                              
+[                                
 ](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)[https://www.lintcode.com/problem/insert-delete-getrandom-o1/description](https://www.lintcode.com/problem/insert-delete-getrandom-o1/description)
 
 ### 解题分析:
