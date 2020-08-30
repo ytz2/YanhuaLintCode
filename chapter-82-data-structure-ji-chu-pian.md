@@ -709,6 +709,8 @@ Given`capacity=3`
 
 [https://www.lintcode.com/problem/lfu-cache/description](https://www.lintcode.com/problem/lfu-cache/description)
 
+[https://leetcode.com/problems/lfu-cache/](https://leetcode.com/problems/lfu-cache/)
+
 ### 解题分析:
 
 1. get, set 是log\(n\)的解法，维护一个set来查找freq,一个unordered map来维护存在不存在以及Node的快速access. 
@@ -716,21 +718,19 @@ Given`capacity=3`
 
 ### 代码：
 
-
-
 ```cpp
 class LFUCache {
 public:
     LFUCache(int capacity) {
         size = capacity;
     }
-    
+
     int get(int key) {
         if (!hash.count(key)) return -1;
         touch(key);
         return (*hash[key])->val;
     }
-    
+
     void put(int key, int value) {
         if (size == 0) return;
         if (hash.count(key)) {
@@ -757,13 +757,13 @@ private:
         int freq = 0;
         Node(int key, int val) : key(key), val(val) {}
     };
-    
+
     typedef list<Node*> List;
     unordered_map<int, List> buckets;
     unordered_map<int, List::iterator> hash;
     int size = 0;
     int minFreq = 0;
-    
+
 private:
     void touch(int key) {
         if (!hash.count(key)) return;
