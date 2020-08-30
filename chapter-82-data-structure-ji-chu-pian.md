@@ -574,15 +574,13 @@ If`n=9`, return`10`.
 
 O\(_n\_log\_n_\) or O\(_n_\) time.
 
-[https://www.lintcode.com/problem/ugly-number-ii/description](https://www.lintcode.com/problem/ugly-number-ii/description)
+[https://leetcode.com/problems/ugly-number-ii/](https://leetcode.com/problems/ugly-number-ii/)
 
 ### 解题分析:
 
 狗屎一样的题目
 
 ### 代码：
-
-
 
 ```cpp
 class Solution {
