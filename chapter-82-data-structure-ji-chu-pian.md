@@ -716,192 +716,76 @@ Given`capacity=3`
 
 ### 代码：
 
-```cpp
-#include <set>
-class NodeType{
-public:
-    NodeType(int k, int v, int f, int t)
-        : key(k), val(v),freq(f),tick(t)
-    {}
-    NodeType()
-    {}
-    int key;
-    int val;
-    int freq;
-    int tick;
 
-    friend bool operator<( const NodeType& left, const NodeType& right)
-    {
-        if (left.freq < right.freq)
-            return true;
-        if (left.freq == right.freq)
-            return left.tick < right.tick;
-        return false;
-    }
-};
-
-class LFUCache {
-public:
-    /*
-    * @param capacity: An integer
-    */LFUCache(int capacity) {
-        // do intialization if necessary
-        capacity_ = capacity;
-        tick_ = 0;
-    }
-
-    /*
-     * @param key: An integer
-     * @param value: An integer
-     * @return: nothing
-     */
-    void set(int key, int value) {
-        // write your code here
-        if (map_.count(key))
-        {
-            auto& node = map_[key];
-            node.val = value;
-            touch(key);
-            return;
-        }
-        NodeType node(key, value, 1, ++tick_);
-        if (map_.size() == capacity_)
-        {
-            auto it = freq_.begin();
-            int k = it->key;
-            freq_.erase(it);
-            map_.erase(k);
-        }
-        map_[key] = node;
-        freq_.insert(node);
-    }
-
-    /*
-     * @param key: An integer
-     * @return: An integer
-     */
-    int get(int key) {
-        // write your code here
-        if (!map_.count(key))
-            return -1;
-        int v = map_[key].val;
-        touch(key);
-        return v; 
-    }
-private:
-    void touch(int key)
-    {
-        if (!map_.count(key))
-            return;
-        auto& node = map_[key];
-        freq_.erase(node);
-        node.freq++;
-        node.tick = ++tick_;
-        freq_.insert(node);
-    }
-private:
-    int tick_;
-    int capacity_;
-    unordered_map<int, NodeType> map_;
-    std::set<NodeType> freq_;
-};
-```
 
 ```cpp
-#include <list>
-struct NodeType
-{
-    NodeType(int k, int v, int f, list<int>::iterator iter)
-        :key(k),val(v),freq(f),it(iter)
-    {
-    }
-
-    int key;
-    int val;
-    int freq;
-    list<int>::iterator it;
-};
-
 class LFUCache {
 public:
-    /*
-    * @param capacity: An integer
-    */LFUCache(int capacity) {
-        // do intialization if necessary
-        capacity_ = capacity;
-        minFreq_ = 0;
+    LFUCache(int capacity) {
+        size = capacity;
     }
-
-    /*
-     * @param key: An integer
-     * @param value: An integer
-     * @return: nothing
-     */
-    void set(int key, int value) {
-        // write your code here
-        if (map_.count(key))
-        {
-            auto nodeptr = map_[key];
-            nodeptr->val = value;
-            touch(key);
-            return;
-        }
-
-        if (map_.size() == capacity_)
-        {
-            int k = freq_[minFreq_].back();
-            freq_[minFreq_].pop_back();
-            if (freq_[minFreq_].empty())
-                freq_.erase(minFreq_);
-            auto ptr = map_[k];
-            map_.erase(k);
-            delete ptr;
-        }
-
-        minFreq_ = 1;
-        freq_[minFreq_].push_front(key);
-        map_[key] = new NodeType(key, value, 1, freq_[minFreq_].begin());
-    }
-
-    /*
-     * @param key: An integer
-     * @return: An integer
-     */
+    
     int get(int key) {
-        // write your code here
-        if (!map_.count(key))
-            return -1;
-        auto nodeptr = map_[key];
+        if (!hash.count(key)) return -1;
         touch(key);
-        return nodeptr->val;
+        return (*hash[key])->val;
     }
-private:
-
-    void touch(int key)
-    {
-        if (!map_.count(key))
+    
+    void put(int key, int value) {
+        if (size == 0) return;
+        if (hash.count(key)) {
+            touch(key);
+            (*hash[key])->val = value;
             return;
-
-        auto nodeptr = map_[key];
-        int freq = nodeptr->freq;
-        nodeptr->freq++;
-        freq_[freq].erase(nodeptr->it);
-        if (freq_[freq].empty() && minFreq_ == freq)
-        {
-            freq_.erase(freq);
-            minFreq_++;
         }
-        freq++;
-        freq_[freq].push_front(key);
-        nodeptr->it = freq_[freq].begin();
+        if (hash.size() == size) {
+            auto node = buckets[minFreq].back();
+            buckets[minFreq].pop_back();
+            if (buckets[minFreq].empty()) buckets.erase(minFreq);
+            hash.erase(node->key);
+            delete node;
+        }
+        minFreq = 0;
+        buckets[minFreq].push_front(new Node(key, value));
+        hash[key] = buckets[minFreq].begin();
     }
 
 private:
-    int capacity_;
-    int minFreq_;
-    unordered_map<int, NodeType*> map_;
-    unordered_map<int, list<int>> freq_;
+    struct Node {
+        int key;
+        int val;
+        int freq = 0;
+        Node(int key, int val) : key(key), val(val) {}
+    };
+    
+    typedef list<Node*> List;
+    unordered_map<int, List> buckets;
+    unordered_map<int, List::iterator> hash;
+    int size = 0;
+    int minFreq = 0;
+    
+private:
+    void touch(int key) {
+        if (!hash.count(key)) return;
+        auto it = hash[key];
+        auto node = *it;
+        buckets[node->freq].erase(it);
+        if (buckets[node->freq].empty()) {
+            buckets.erase(node->freq);
+            if (minFreq == node->freq) minFreq++;
+        }
+        node->freq++;
+        buckets[node->freq].push_front(node);
+        hash[key] = buckets[node->freq].begin();
+    }
 };
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
 ```
 
 
