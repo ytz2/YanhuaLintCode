@@ -177,35 +177,21 @@ In array`[1,2,3,4,5]`, the`1st`largest element is`5`,`2nd`largest element is`4`,
 ```cpp
 class Solution {
 public:
-    /**
-     * @param nums: an integer unsorted array
-     * @param k: an integer from 1 to n
-     * @return: the kth largest element
-     */
-    int kthLargestElement2(vector<int> &nums, int k) {
-        // write your code here
-        return helper(nums, 0, nums.size()-1, k);
+    int findKthLargest(vector<int>& nums, int k) {
+        return quickSelect(nums, k, 0, nums.size() - 1);
     }
-
-    int helper(vector<int>& nums, int beg, int end, int k)
-    {
-        if (beg >= end)
-            return nums[end];
-        int mid = nums[(beg + end)/2];
-        int s = beg, e = end;
-        while ( s <= e)
-        {
-            while( s <= e && nums[s] > mid)
-                s++;
-            while( s <= e && nums[e] < mid)
-                e--;
-            if (s <= e )
-                swap(nums[s++], nums[e--]);
+    
+    int quickSelect(vector<int>& nums, int k, int beg, int end) {
+        int pivot = nums[beg + (end -beg)/2];
+        int b = beg, e = end;
+        while( b <= e ) {
+            while( b <= e && nums[b] > pivot) b++;
+            while( b <= e && nums[e] < pivot) e--;
+            if ( b <= e ) swap(nums[b++], nums[e--]);
         }
-        if (beg + k - 1 <= e )
-            return helper(nums, beg, e, k);
-        else if ( beg + k - 1 >= s)
-            return helper(nums, s, end, k - (s-beg));
+        int ind = beg + k - 1;
+        if ( ind <= e) return quickSelect(nums, k, beg, e);
+        if ( ind >= b) return quickSelect(nums, k - b + beg , b, end);
         return nums[e+1];
     }
 };
@@ -441,7 +427,7 @@ pick()
  3
 ```
 
-[                              
+[                                
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -530,7 +516,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                              
+[                                
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -607,7 +593,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                          
+[   https://www.lintcode.com/problem/rehashing/description                            
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
