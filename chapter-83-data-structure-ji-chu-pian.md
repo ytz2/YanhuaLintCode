@@ -48,18 +48,20 @@ public:
 
 You have a queue of integers, you need to retrieve the first unique integer in the queue.
 
-Implement the`FirstUnique` class:
+Implement the`FirstUnique` class:
 
 * `FirstUnique(int[] nums)`
   Initializes the object with the numbers in the queue.
 * `int showFirstUnique()`
-   returns the value of
-  **the first unique**
+   returns the value of
+  **the first unique**
   integer of the queue, and returns
   **-1**
   if there is no such integer.
 * `void add(int value)`
-   insert value to the queue.
+   insert value to the queue.
+
+[https://leetcode.com/problems/first-unique-number/](https://leetcode.com/problems/first-unique-number/)
 
 ### 解题分析:
 
@@ -75,11 +77,11 @@ public:
             add(num);
         }
     }
-    
+
     int showFirstUnique() {
         return q.empty()? -1 : q.front();
     }
-    
+
     void add(int value) {
         if (iters.count(value)) {
             q.erase(iters[value]);
@@ -90,7 +92,7 @@ public:
         }
         collection.insert(value);
     }
-    
+
 private:
     list<int> q;
     unordered_map<int, list<int>::iterator> iters; 
@@ -465,7 +467,7 @@ pick()
  3
 ```
 
-[                          
+[                            
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -554,7 +556,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                          
+[                            
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -631,7 +633,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                      
+[   https://www.lintcode.com/problem/rehashing/description                        
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
