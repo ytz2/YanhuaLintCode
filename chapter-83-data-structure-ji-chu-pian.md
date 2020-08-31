@@ -119,7 +119,7 @@ Given results = [[1,91],[1,92],[2,93],[2,99],[2,98],[2,97],[1,60],[1,58],[2,100]
 Return
 ```
 
-[https://www.lintcode.com/problem/high-five/description](https://www.lintcode.com/problem/high-five/description)
+[https://leetcode.com/problems/high-five/](https://leetcode.com/problems/high-five/)
 
 ### 解题分析:
 
@@ -128,56 +128,30 @@ top k 的一个复杂版。。。。
 ### 代码：
 
 ```cpp
-/**
- * Definition for a Record
- * class Record {
- * public:
- *   int id, score;
- *   Record(int id, int score) {
- *     this->id = id;
- *     this->score = score;
- *   }
- * };
- */
 class Solution {
 public:
-    /**
-     * @param results a list of <student_id, score>
-     * @return find the average of 5 highest scores for each person
-     * map<int, double> (student_id, average_score)
-     */
-    map<int, double> highFive(vector<Record>& results) {
-        // Write your code here
-        map<int, double> result;
-        typedef priority_queue<int, vector<int>, greater<int>> pqType;
-        unordered_map<int, pqType> tbl;
-        for (auto& each : results)
-        {
-            auto& pq = tbl[each.id];
-            if (pq.size() < 5)
-            {
-                pq.push(each.score);
-                continue;
-            }
-
-            if (pq.top() >= each.score)
-                continue;
-            pq.pop();
-            pq.push(each.score);
+    vector<vector<int>> highFive(vector<vector<int>>& items) {
+        vector<vector<int>> result;
+        set<int> ids;
+        unordered_map<int, priority_queue<int, vector<int>, greater<int>>> scores;
+        for (const auto& each : items) {
+            const auto& id = each[0];
+            const auto& score = each[1];
+            if (!scores.count(id)) ids.insert(id);
+            scores[id].push(score);
+            if (scores[id].size() > 5) scores[id].pop();
         }
-        for (auto& pair : tbl)
-        {
-            auto& id = pair.first;
-            auto& pq = pair.second;
-            double sum = 0;
-            while(!pq.empty())
-            {
-                sum += pq.top();
-                pq.pop();
+        for (auto id : ids) {
+            int sum = 0, count = 0;
+            auto& q = scores[id];
+            while(!q.empty()) {
+                sum += q.top();
+                count++;
+                q.pop();
             }
-            result[id] = sum / 5;
+            result.push_back({id, sum/count});
         }
-        return result; 
+        return result;
     }
 };
 ```
@@ -467,7 +441,7 @@ pick()
  3
 ```
 
-[                            
+[                              
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -556,7 +530,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                            
+[                              
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -633,7 +607,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                        
+[   https://www.lintcode.com/problem/rehashing/description                          
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
