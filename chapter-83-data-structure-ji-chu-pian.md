@@ -44,19 +44,22 @@ public:
 };
 ```
 
-## 685. First Unique Number In Stream
+## 1429. First Unique Number In Stream
 
-Given a continuous stream of numbers, write a function that returns the first unique number whenever terminating number is reached\(include terminating number\). If there no unique number before terminating number or you can't find this terminating number, return`-1`.
+You have a queue of integers, you need to retrieve the first unique integer in the queue.
 
-### Example
+Implement the`FirstUnique` class:
 
-Given a stream`[1, 2, 2, 1, 3, 4, 4, 5, 6]`and a number`5`  
-return`3`
-
-Given a stream`[1, 2, 2, 1, 3, 4, 4, 5, 6]`and a number`7`  
-return`-1`
-
-[https://www.lintcode.com/problem/first-unique-number-in-stream/description](https://www.lintcode.com/problem/first-unique-number-in-stream/description)
+* `FirstUnique(int[] nums)`
+  Initializes the object with the numbers in the queue.
+* `int showFirstUnique()`
+   returns the value of
+  **the first unique**
+  integer of the queue, and returns
+  **-1**
+  if there is no such integer.
+* `void add(int value)`
+   insert value to the queue.
 
 ### 解题分析:
 
@@ -65,45 +68,41 @@ return`-1`
 ### 代码：
 
 ```cpp
-#include <list>
-class Solution {
+class FirstUnique {
 public:
-    /**
-     * @param nums: a continuous stream of numbers
-     * @param number: a number
-     * @return: returns the first unique number
-     */
-    int firstUniqueNumber(vector<int> &nums, int number) {
-        // Write your code here
-        list<int> l;
-        unordered_map<int, list<int>::iterator> map_;
-        unordered_set<int> dup_;
-
-        bool found = false;
-        for (int i = 0; i <nums.size(); i++)
-        {
-            int v = nums[i];
-            if (dup_.count(v))
-                continue;
-            if (map_.count(v))
-            {
-                l.erase(map_[v]);
-                dup_.insert(v);
-                continue;
-            }
-            l.push_back(v);
-            map_[v] = prev(l.end());
-            if (v == number)
-            {
-                found = true;
-                break;
-            }
+    FirstUnique(vector<int>& nums) {
+        for (const auto num : nums) {
+            add(num);
         }
-        if (l.empty() || !found)
-            return -1;
-        return l.front();
     }
+    
+    int showFirstUnique() {
+        return q.empty()? -1 : q.front();
+    }
+    
+    void add(int value) {
+        if (iters.count(value)) {
+            q.erase(iters[value]);
+            iters.erase(value);
+        } else if (!collection.count(value)) {
+            q.push_back(value);
+            iters[value] = prev(q.end());
+        }
+        collection.insert(value);
+    }
+    
+private:
+    list<int> q;
+    unordered_map<int, list<int>::iterator> iters; 
+    unordered_set<int> collection;
 };
+
+/**
+ * Your FirstUnique object will be instantiated and called as such:
+ * FirstUnique* obj = new FirstUnique(nums);
+ * int param_1 = obj->showFirstUnique();
+ * obj->add(value);
+ */
 ```
 
 ## 613. High Five
@@ -466,7 +465,7 @@ pick()
  3
 ```
 
-[                        
+[                          
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -555,7 +554,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                        
+[                          
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -632,7 +631,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                    
+[   https://www.lintcode.com/problem/rehashing/description                      
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -702,8 +701,6 @@ Given an unsorted array of integers, find the length of the longest consecutive 
 
 Given`[100, 4, 200, 1, 3, 2]`,  
 The longest consecutive elements sequence is`[1, 2, 3, 4]`. Return its length:`4`.
-
-
 
 ### 解题分析
 
