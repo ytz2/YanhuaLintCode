@@ -180,7 +180,7 @@ public:
     int findKthLargest(vector<int>& nums, int k) {
         return quickSelect(nums, k, 0, nums.size() - 1);
     }
-    
+
     int quickSelect(vector<int>& nums, int k, int beg, int end) {
         int pivot = nums[beg + (end -beg)/2];
         int b = beg, e = end;
@@ -226,41 +226,35 @@ By calling next repeatedly until hasNext returns false, the order of elements re
 ```cpp
 class Vector2D {
 public:
-    Vector2D(vector<vector<int>>& vec2d)
-        : vect_(vec2d), i(0),j(0)
-    {
-        // Initialize your data structure here
+    Vector2D(vector<vector<int>>& v) {
+        data = move(v);
+        if (data.empty()) return;
+        it1 = data.begin();
+        it2 = it1->begin();
+        moveToNext();
     }
-
+    
     int next() {
-        // Write your code here
-        int val = vect_[i][j];
-        if (j == vect_[i].size()-1)
-        {
-            i++;j=0;
-        }
-        else
-        {
-            j++;
-        }
-        return val;
+        auto v = *it2++;
+        moveToNext();
+        return v;
     }
-
+    
     bool hasNext() {
-
-        return (i<vect_.size()-1) || (i == vect_.size()-1 && j < vect_[i].size());
+        return !data.empty() && it1 != data.end();
     }
-
 private:
-    vector<vector<int>>& vect_;
-    int i , j;
+    vector<vector<int>> data;
+    vector<vector<int>>::iterator it1;
+    vector<int>::iterator it2;
+private:
+    void moveToNext() {
+        while(it1 != data.end() && it2 == it1->end()) {
+            it1++;
+            if (it1 != data.end()) it2 = it1->begin();
+        }
+    }
 };
-
-/**
- * Your Vector2D object will be instantiated and called as such:
- * Vector2D i(vec2d);
- * while (i.hasNext()) cout << i.next();
- */
 ```
 
 ## 545. Top k Largest Numbers II
@@ -427,7 +421,7 @@ pick()
  3
 ```
 
-[                                
+[                                  
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -516,7 +510,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                                
+[                                  
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -593,7 +587,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                            
+[   https://www.lintcode.com/problem/rehashing/description                              
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
