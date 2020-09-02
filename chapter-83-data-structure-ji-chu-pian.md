@@ -233,13 +233,13 @@ public:
         it2 = it1->begin();
         moveToNext();
     }
-    
+
     int next() {
         auto v = *it2++;
         moveToNext();
         return v;
     }
-    
+
     bool hasNext() {
         return !data.empty() && it1 != data.end();
     }
@@ -421,7 +421,7 @@ pick()
  3
 ```
 
-[                                  
+[                                    
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -510,7 +510,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                                  
+[                                    
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -587,7 +587,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                              
+[   https://www.lintcode.com/problem/rehashing/description                                
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -691,6 +691,33 @@ public:
             longest = max(longest, up - down - 1);
         }
         return longest;
+    }
+};
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> dedup;
+        for (auto each : nums) dedup.insert(each);
+        unordered_set<int> visited;
+        int res = 0;
+        for (auto each : dedup) {
+            if (visited.count(each)) continue;
+            visited.insert(each);
+            int count = 1;
+            auto v = each;
+            while(dedup.count(v - 1)) {
+                v--; count++;
+                visited.insert(v);
+            }
+            v = each;
+            while(dedup.count(v + 1)) {
+                v++; count++;
+                visited.insert(v);
+            }
+            res= max(res, count);
+        }
+        return res;
     }
 };
 ```
