@@ -421,7 +421,7 @@ pick()
  3
 ```
 
-[                                    
+[                                      
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -510,7 +510,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                                    
+[                                      
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -587,7 +587,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                                
+[   https://www.lintcode.com/problem/rehashing/description                                  
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -1047,6 +1047,8 @@ Each element is either an integer, or a list -- whose elements may also be integ
 
 [https://www.lintcode.com/problem/flatten-nested-list-iterator/description](https://www.lintcode.com/problem/flatten-nested-list-iterator/description)
 
+[https://leetcode.com/problems/flatten-nested-list-iterator/solution/](https://leetcode.com/problems/flatten-nested-list-iterator/solution/)
+
 ### 解题分析
 
 这个挺好玩的，自己包含自己，维护一个cur index和cur index对应的iter,剩下的全是递归了。。。
@@ -1138,6 +1140,37 @@ public:
  * NestedIterator i(nestedList);
  * while (i.hasNext()) v.push_back(i.next());
  */
+ 
+ class NestedIterator {
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for (auto& each: nestedList) {
+            data.push_back(each);
+        }
+    }
+    
+    int next() {
+        auto v = data.front().getInteger();
+        data.pop_front();
+        return v;
+    }
+    
+    bool hasNext() {
+        while(!data.empty() && !data.front().isInteger()) {
+            auto v = data.front();
+            data.pop_front();
+            const auto& l = v.getList();
+            for (auto it = l.rbegin(); it != l.rend(); it++) {
+                data.push_front(*it);
+            }
+        }
+        return !data.empty();
+    }
+    
+private:
+    list<NestedInteger> data;
+};
+
 ```
 
 ## \*\*\*\*471. Top K Frequent Words
