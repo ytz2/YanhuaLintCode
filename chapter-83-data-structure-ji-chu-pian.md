@@ -421,7 +421,7 @@ pick()
  3
 ```
 
-[                                      
+[                                        
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/load-balancer/description](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -510,7 +510,7 @@ Do it in O\(N log k\).
 * _k_
   is the number of arrays.
 
-[                                      
+[                                        
 ](https://www.lintcode.com/problem/load-balancer/description)[https://www.lintcode.com/problem/merge-k-sorted-arrays/description](https://www.lintcode.com/problem/merge-k-sorted-arrays/description)
 
 ### 解题分析：
@@ -587,7 +587,7 @@ here we have three numbers, 9, 14 and 21, where 21 and 9 share the same position
 
 rehashing this hash table, double the capacity, you will get:
 
-[   https://www.lintcode.com/problem/rehashing/description                                  
+[   https://www.lintcode.com/problem/rehashing/description                                    
 ](https://www.lintcode.com/problem/load-balancer/description)
 
 ### 解题分析：
@@ -888,58 +888,28 @@ By calling next repeatedly until hasNext returns`false`, the order of elements r
 ```cpp
 class ZigzagIterator {
 public:
-    /*
-    * @param v1: A 1d vector
-    * @param v2: A 1d vector
-    */
     ZigzagIterator(vector<int>& v1, vector<int>& v2) 
-        : cur_(0), indices_(vector<int>{0, 0}), array_(vector<vector<int>*>{&v1, &v2})
+        :v1(v1), v2(v2)
     {
-        // do intialization if necessary
+        
     }
 
-    /*
-     * @return: An integer
-     */
     int next() {
-        // write your code here
-        if (!hasNext())
-            return -1;
-        int v;
-        if (indices_[cur_] != array_[cur_]->size())
-        {
-            v = array_[cur_]->at(indices_[cur_]);
-            indices_[cur_]++;
-            cur_ = ++cur_%2;
-        }
-        else
-        {
-            cur_ = ++cur_%2;
-            return next();
-        }
-        return v;
+        if (i >= v1.size()) return v2[j++];
+        if (j >= v2.size()) return v1[i++];
+        if (i == j) return v1[i++];
+        return v2[j++];
     }
 
-    /*
-     * @return: True if has next
-     */
     bool hasNext() {
-        // write your code here
-        int next = (cur_+1)%2;
-        return !(array_[cur_]->size() == indices_[cur_] && array_[next]->size() == indices_[next]);
+        return i < v1.size() || j < v2.size();
     }
-
-    int cur_;
-    vector<int> indices_;
-    vector<vector<int>*> array_;
+    
+    const vector<int>& v1;
+    const vector<int>& v2;
+    int i = 0;
+    int j = 0;
 };
-
-/**
- * Your ZigzagIterator object will be instantiated and called as such:
- * ZigzagIterator solution(v1, v2);
- * while (solution.hasNext()) result.push_back(solution.next());
- * Ouptut result
- */
 ```
 
 ## 541. Zigzag Iterator II
@@ -1140,7 +1110,7 @@ public:
  * NestedIterator i(nestedList);
  * while (i.hasNext()) v.push_back(i.next());
  */
- 
+
  class NestedIterator {
 public:
     NestedIterator(vector<NestedInteger> &nestedList) {
@@ -1148,13 +1118,13 @@ public:
             data.push_back(each);
         }
     }
-    
+
     int next() {
         auto v = data.front().getInteger();
         data.pop_front();
         return v;
     }
-    
+
     bool hasNext() {
         while(!data.empty() && !data.front().isInteger()) {
             auto v = data.front();
@@ -1166,11 +1136,10 @@ public:
         }
         return !data.empty();
     }
-    
+
 private:
     list<NestedInteger> data;
 };
-
 ```
 
 ## \*\*\*\*471. Top K Frequent Words
@@ -1210,54 +1179,34 @@ Do it in O\(nlogk\) time and O\(n\) extra space.
 ### 代码：
 
 ```cpp
-#include <list>
-
 class Solution {
 public:
-    /**
-     * @param words: an array of string
-     * @param k: An integer
-     * @return: an array of string
-     */
-    vector<string> topKFrequentWords(vector<string> &words, int k) {
-        if (k == 0)
-            return vector<string>();
-
-        unordered_map<string, int> tbl;
-
-        auto cmp = [&](const string& left, const string& right){
-          if (tbl[left] == tbl[right])
-            return left < right;
-          return tbl[left] > tbl[right];
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string, int> counter;
+        for (const auto& word : words) {
+            counter[word]++;
+        }
+        
+        auto cmp = [&counter](const string& l, const string& r) {
+            if (counter[l] == counter[r]) return l < r;
+            return counter[l] > counter[r];
         };
-        for (auto& word : words)
-            tbl[word]++;
         priority_queue<string, vector<string>, decltype(cmp)> pq(cmp);
-        for (auto& elem : tbl)
-        {
-            if (pq.size() != k)
-                pq.push(elem.first);
-            else
-            {
-                auto& t = pq.top();
-                if (tbl[t] < tbl[elem.first] || tbl[t] == tbl[elem.first] && elem.first < t )
-                {
-                    pq.pop();
-                    pq.push(elem.first);
-                }
+        for (const auto& each : counter) {
+            if (pq.size() < k) pq.push(each.first);
+            else {
+                pq.push(each.first);
+                pq.pop();
             }
         }
         vector<string> res;
-        while(!pq.empty())
-        {
+        while(!pq.empty()) {
             res.push_back(pq.top());
             pq.pop();
         }
         reverse(res.begin(), res.end());
         return res;
     }
-
-
 };
 ```
 
