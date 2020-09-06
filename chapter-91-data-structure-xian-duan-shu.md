@@ -582,7 +582,7 @@ public:
         // write your code here
         modify(root, index, value);
     }
-    
+
 private:
     struct Node {
         Node* left = nullptr;
@@ -604,7 +604,7 @@ private:
         node->sum = node->left->sum + node->right->sum;
         return node;
     }
-    
+
     long long query(Node* root, int start, int end) {
         if (!root || start > end) return 0;
         if (start <= root->start && root->end <= end) return root->sum;
@@ -614,7 +614,7 @@ private:
         if (mid + 1 <= end && root->right) res += query(root->right, start, end);
         return res;
     }
-    
+
     void modify(Node* root, int index, int value) {
         if (!root) return;
         if (root->start == root->end && root->start == index) {
@@ -679,44 +679,20 @@ O\(n\)
 ### 代码：
 
 ```cpp
-/**
- * Definition of SegmentTreeNode:
- * class SegmentTreeNode {
- * public:
- *     int start, end, max;
- *     SegmentTreeNode *left, *right;
- *     SegmentTreeNode(int start, int end, int max) {
- *         this->start = start;
- *         this->end = end;
- *         this->max = max;
- *         this->left = this->right = NULL;
- *     }
- * }
- */
-
 class Solution {
 public:
-    /**
-     * @param A: a list of integer
-     * @return: The root of Segment Tree
-     */
     SegmentTreeNode * build(vector<int> &A) {
-        // write your code here
-        return helper(0, A.size()-1, A);
+        return helper(A, 0, A.size() - 1);
     }
-
-    SegmentTreeNode* helper(int beg, int end, vector<int>& A)
-    {
-        if (beg > end)
-            return nullptr;
-        auto node = new SegmentTreeNode(beg, end, A[beg]);
-        if (beg == end)
-            return node;
-        int mid = (beg + end)/2;
-        node->left = helper(beg, mid, A);
-        node->right = helper(mid+1, end, A);
-        node->max = max(node->left!=nullptr? node->left->max:INT_MIN, 
-                        node->right!=nullptr? node->right->max:INT_MIN);
+    
+    SegmentTreeNode* helper(vector<int> &A, int start, int end) {
+        if (start > end) return nullptr;
+        auto node = new SegmentTreeNode(start, end, A[start]);
+        if (start == end) return node;
+        int mid = (start + end) / 2;
+        node->left = helper(A, start, mid);
+        node->right = helper(A, mid + 1, end);
+        node->max = max(node->left->max, node->right->max);
         return node;
     }
 };
