@@ -564,121 +564,70 @@ O\(n\)
 ### 代码：
 
 ```cpp
-struct Node{
-    Node(int s, int e, long long v)
-    :start(s),end(e),sum(v),left(nullptr),right(nullptr)
-    {}
-    ~Node()
-    {
-        if (left) delete left;
-        if (right) delete right;
-    }
-    int start, end;
-    long long sum;
-    Node *left,*right;
-};
-
 class Solution {
 public:
-    /* you may need to use some attributes here */
 
-    /*
-    * @param A: An integer array
-    */
     Solution(vector<int> A) {
         // do intialization if necessary
-        root  = build(0,A.size()-1,A);
+        if (A.empty()) return;
+        root = build(A, 0, A.size());
     }
-    ~Solution()
-    {
-        //if (root)
-        //    delete root;
-    }
-    /*
-     * @param start: An integer
-     * @param end: An integer
-     * @return: The sum from start to end
-     */
+
     long long query(int start, int end) {
         // write your code here
         return query(root, start, end);
     }
 
-    /*
-     * @param index: An integer
-     * @param value: An integer
-     * @return: nothing
-     */
     void modify(int index, int value) {
         // write your code here
         modify(root, index, value);
     }
-
+    
 private:
-    long long query(Node* root, int beg, int end)
-    {
-        if ( !root)
-            return 0;
-        if (beg <= root->start && root->end <= end)
-            return root->sum;
-        int mid = (root->start + root->end)/2;
-        long long res = 0;
-        if (mid >= beg && root->left)
-        {
-            res += query(root->left, beg, end);
-        }
-        if (mid + 1 <= end && root->right)
-        {
-            res += query(root->right, beg, end);
-        }
-        return res;
-    }
-
-    void modify(Node* root, int i, int v)
-    {
-        if (!root)
-            return;
-        if (root->start == root->end && root->start == i)
-        {
-            root->sum = v;
-            return;
-        }
-
-        int mid = (root->start + root->end)/2;
-        if (i<=mid)
-        {
-            modify(root->left, i, v);
-        }
-        else
-        {
-            modify(root->right, i, v);
-        }
-        root->sum = 0;
-        if (root->left)
-            root->sum += root->left->sum;
-        if (root->right)
-            root->sum += root->right->sum;
-    }
-    Node* build(int beg, int end, vector<int>& A)
-    {
-        if ( beg > end)
-            return nullptr;
-        Node* node = new Node(beg, end, A[beg]);
-        if (beg == end)
-            return node;
+    struct Node {
+        Node* left = nullptr;
+        Node* right = nullptr;
+        int start;
+        int end;
+        long long sum;
+        Node(int s, int e, int sum) : start(s), end(e), sum(sum) {};
+    };
+    Node* root;
+private:
+    Node* build(vector<int>& A, int beg, int end) {
+        if (end < beg) return nullptr;
+        auto node = new Node(beg, end, A[beg]);
+        if (beg == end) return node;
         int mid = (beg + end) / 2;
-
-        node->left = build( beg, mid, A);
-        node->right = build(mid+1, end, A);
-        node->sum = 0;
-        if (node->left)
-            node->sum += node->left->sum;
-        if (node->right)
-            node->sum += node->right->sum;
-
+        node->left = build(A, beg, mid);
+        node->right = build(A, mid+1, end);
+        node->sum = node->left->sum + node->right->sum;
         return node;
     }
-    Node* root;
+    
+    long long query(Node* root, int start, int end) {
+        if (!root || start > end) return 0;
+        if (start <= root->start && root->end <= end) return root->sum;
+        int mid = (root->start + root->end) / 2;
+        long long res = 0;
+        if (start <= mid && root->left) res += query(root->left, start, end);
+        if (mid + 1 <= end && root->right) res += query(root->right, start, end);
+        return res;
+    }
+    
+    void modify(Node* root, int index, int value) {
+        if (!root) return;
+        if (root->start == root->end && root->start == index) {
+            root->sum = value;
+            return;
+        }
+        int mid = (root->start + root->end) / 2;
+        if (index <= mid && root->left) modify(root->left, index, value);
+        else modify(root->right, index, value);
+        root->sum = 0;
+        if (root->left) root->sum += root->left->sum;
+        if (root->right) root->sum += root->right->sum;
+    }
 };
 ```
 
