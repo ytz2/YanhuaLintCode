@@ -366,28 +366,18 @@ O\(n\)
  * }
  */
 
-
 class Solution {
 public:
-    /*
-     * @param start: start value.
-     * @param end: end value.
-     * @return: The root of Segment Tree.
-     */
     SegmentTreeNode * build(int start, int end) {
         // write your code here
-        if (start > end)
-            return nullptr;
+        if (start > end) return nullptr;
         auto node = new SegmentTreeNode(start, end);
-        if (start == end)
-            return node;
-        int mid = (start + end)/2;
+        if ( start == end ) return node;
+        int mid = start + (end - start) / 2;
         node->left = build(start, mid);
-        node->right = build(mid+1, end);
+        node->right = build(mid + 1, end);
         return node;
     }
-
-
 };
 ```
 
@@ -542,28 +532,17 @@ public:
      */
     void modify(SegmentTreeNode * root, int index, int value) {
         // write your code here
-        if (!root)
-            return;
-        if (root->start == root->end && root->start == index)
-        {
+        if (!root) return;
+        if (root->start == root->end && root->start == index) {
             root->max = value;
             return;
         }
-
-        int mid = (root->start + root->end) /2 ;
-
-        if (index <= mid)
-        {
-            modify(root->left, index, value);
-            root->max = max( root->left? root->left->max:INT_MIN, root->right? root->right->max:INT_MIN);
-        }
-        else
-        {
-            modify(root->right, index, value);
-            root->max = max( root->left? root->left->max:INT_MIN, root->right? root->right->max:INT_MIN);
-        }
-
-
+        int mid = (root->start + root->end)/2;
+        if (index <= mid) modify(root->left, index, value);
+        if (index >= mid + 1) modify(root->right, index, value);
+        root->max = INT_MIN;
+        root->max = max(root->max , root->left? root->left->max : INT_MIN);
+        root->max = max(root->max , root->right? root->right->max : INT_MIN);
     }
 };
 ```
