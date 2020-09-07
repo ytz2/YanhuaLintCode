@@ -790,7 +790,7 @@ public:
         delete root;
         return res;
     }
-    
+
 private:
     struct Node {
         Node* left = nullptr;
@@ -800,7 +800,7 @@ private:
         int count = 0;
         Node(int s, int e) : start(s), end(e) {}
     };
-    
+
     Node* build(int start, int end) {
         if (start > end) return nullptr;
         auto node = new Node(start, end);
@@ -810,7 +810,7 @@ private:
         node->right = build(mid + 1, end);
         return node;
     }
-    
+
     void modify(Node* root, int index) {
         if (!root) return;
         if  (root->start == root->end && root->start == index) {
@@ -824,7 +824,7 @@ private:
         if (root->left) root->count += root->left->count;
         if (root->right) root->count += root->right->count;
     }
-    
+
     int query(Node* root, int index) {
         if (!root || root->start >= index) return 0;
         if (root->end < index) return root->count;
@@ -854,53 +854,24 @@ O\(logN\) time for each query
 ### 代码：
 
 ```cpp
-/**
- * Definition of Interval:
- * classs Interval {
- *     int start, end;
- *     Interval(int start, int end) {
- *         this->start = start;
- *         this->end = end;
- *     }
- * }
- */
-
 class Solution {
 public:
-    /**
-     * @param A: An integer list
-     * @param queries: An query list
-     * @return: The result list
-     */
     vector<long long> intervalSum(vector<int> &A, vector<Interval> &queries) {
         // write your code here
-        vector<long long> sumArr;
-        long long sum=0;
-        for (int i=0; i<A.size(); i++)
-        {
-            sum += A[i];
-            sumArr.push_back(sum);
-        }
+        vector<long long> sumArr{0};
+        for (auto each : A) sumArr.push_back(sumArr.back() + each);
         vector<long long> res;
-        for (auto& interval :queries)
-        {
-            int start = interval.start-1;
-            int end = interval.end;
-            long long left, right;
-            if (start < 0)
-                left = 0;
-            else
-                left = sumArr[start];
-            if ( end >= sumArr.size())
-            {
-                right = sumArr[sumArr.size()-1];
+        for (const auto& each : queries) {
+            int start = each.start;
+            int end = each.end + 1;
+            if (start > sumArr.size()-1 || end <= 0) {
+                res.push_back(0);
+                continue;
             }
-            else
-            {  
-                right = sumArr[end];
-            }
-            res.push_back(right-left);
-        }       
+            if (start < 0) start = 0;
+            if (end > sumArr.size() - 1) end = sumArr.size() - 1;
+            res.push_back(sumArr[end] - sumArr[start]);
+        }
         return res;
     }
 };
