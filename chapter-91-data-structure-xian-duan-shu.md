@@ -1078,5 +1078,98 @@ public:
 };
 ```
 
+Leetcode 315 有类似题目
+
+[https://leetcode.com/problems/count-of-smaller-numbers-after-self/](https://leetcode.com/problems/count-of-smaller-numbers-after-self/)
+
+第一版用的multiset， 超时了，看了眼就是因为重复元素很多，单因为BST所以还contribute 复杂度， 且二分在重复情况下退化为o\(n\)
+
+线段树无重复问题，相对上题存在负值问题，所有找到最小数，build, modify, query的时候shift一下
+
+```
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        multiset<int> data;
+        vector<int> res;
+        for (auto it = nums.rbegin(); it != nums.rend(); ++it) {
+            auto p = data.lower_bound(*it);
+            if (p == data.end()) {
+                res.push_back(data.size());
+            } else {
+                res.push_back(distance(data.begin(), p));
+            }
+            data.insert(*it);
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        if (nums.empty()) return {};
+        int minV = INT_MAX;
+        int maxV = INT_MIN;
+        for (auto& num:nums) {
+            minV = min(minV, num);
+            maxV = max(maxV, num);
+        }
+        auto root= build(0, maxV - minV);
+        vector<int> res;
+        for (auto it = nums.rbegin(); it != nums.rend(); it++) {
+            res.push_back(query(root, *it - minV));
+            modify(root, *it - minV);
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+    
+private:
+    struct Node {
+        Node* left = nullptr;
+        Node* right = nullptr;
+        int start = 0;
+        int end = 0;
+        int count = 0;
+        Node(int start, int end) : start(start), end(end) {}
+        ~Node() {if (left) delete left; if (right) delete right;}
+     };
+    
+    Node* build(int start, int end) {
+        if ( start > end) return nullptr;
+        auto node = new Node(start, end);
+        if (start == end) return node;
+        int mid = (start + end) / 2;
+        node->left = build(start, mid);
+        node->right = build(mid+1, end);     
+        return node;
+    }
+    
+    void modify(Node* root, int index) {
+        if (!root || root->start > index || root->end < index) return;
+        if (root->start == root->end && root->start == index) {
+            root->count++;
+            return;
+        }
+        int mid = (root->start + root->end) / 2;
+        if (index <= mid) modify(root->left, index);
+        else modify(root->right, index);
+        root->count = 0;
+        if (root->left) root->count += root->left->count;
+        if (root->right) root->count += root->right->count;
+    } 
+    
+    int query(Node* root, int v) {
+        if (!root || root->start >= v) return 0;
+        if (root->end < v ) return root->count;
+        return query(root->left, v) + query(root->right, v);
+    }
+};
+```
+
+
+
 
 
