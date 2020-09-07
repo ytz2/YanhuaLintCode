@@ -684,7 +684,7 @@ public:
     SegmentTreeNode * build(vector<int> &A) {
         return helper(A, 0, A.size() - 1);
     }
-    
+
     SegmentTreeNode* helper(vector<int> &A, int start, int end) {
         if (start > end) return nullptr;
         auto node = new SegmentTreeNode(start, end, A[start]);
@@ -733,43 +733,17 @@ O\(logn\)
 ### 代码：
 
 ```cpp
-/**
- * Definition of SegmentTreeNode:
- * class SegmentTreeNode {
- * public:
- *     int start, end, count;
- *     SegmentTreeNode *left, *right;
- *     SegmentTreeNode(int start, int end, int count) {
- *         this->start = start;
- *         this->end = end;
- *         this->count = count;
- *         this->left = this->right = NULL;
- *     }
- * }
- */
-
-
 class Solution {
 public:
-    /*
-     * @param root: The root of segment tree.
-     * @param start: start value.
-     * @param end: end value.
-     * @return: The count number in the interval [start, end]
-     */
     int query(SegmentTreeNode * root, int start, int end) {
         // write your code here
-        if (!root)
-            return 0;
-        if (start <= root->start && root->end <= end)
-            return root->count;
-        int mid = (root->start + root->end) / 2;
-        int c = 0;
-        if (start <= mid)
-            c += query(root->left, start, end);
-        if (mid+1 <= end)
-            c += query(root->right, start, end);
-        return c;
+        if (!root || start > end) return 0;
+        if (start <= root->start && root->end <= end) return root->count;
+        int mid = (root->start + root->end)/2;
+        int res = 0;
+        if (start <= mid && root->left) res += query(root->left, start, end);
+        if (end >= mid + 1 && root->right) res += query(root->right, start, end);
+        return res;
     }
 };
 ```
@@ -799,84 +773,63 @@ O\(n + klog\(n\)\)
 ### 代码：
 
 ```cpp
-struct Node{
-  Node(int b, int e, int c)
-    : beg(b), end(e), count(c), left(nullptr),right(nullptr)
-  {}
-  ~Node()
-  {
-      if (left)
-        delete left;
-      if (right)
-        delete right;
-  }
-  int beg, end, count;
-  Node *left, *right;
-};
-
-
 class Solution {
 public:
-    /**
-     * @param A: An integer array
-     * @param queries: The query list
-     * @return: The number of element in the array that are smaller that the given integer
-     */
     vector<int> countOfSmallerNumber(vector<int> &A, vector<int> &queries) {
-        // write your code here
-        auto root = build(0, 10000);
-        for (const auto& num : A)
-            modify(root, num);
         vector<int> res;
-        for (auto& q : queries)
-            res.push_back(query(root, q));
-        if (root)
-            delete root;
+        if (A.empty()) return vector<int>(queries.size(), 0);
+        int minV = INT_MAX;
+        int maxV = INT_MIN;
+        for (auto each : A) {
+            minV = min(each, minV);
+            maxV = max(each, maxV);
+        }
+        auto root = build(minV, maxV);
+        for (auto each : A) modify(root, each);
+        for (auto each : queries) res.push_back(query(root, each));
+        delete root;
         return res;
     }
-
-    Node* build(int beg, int end)
-    {
-        if (beg > end)
-            return nullptr;
-        auto node = new Node(beg, end, 0);
-        if (beg == end)
-            return node;
-        int mid = (beg + end)/2;
-        node->left = build(beg, mid);
-        node->right = build(mid+1, end);
+    
+private:
+    struct Node {
+        Node* left = nullptr;
+        Node* right = nullptr;
+        int start;
+        int end;
+        int count = 0;
+        Node(int s, int e) : start(s), end(e) {}
+    };
+    
+    Node* build(int start, int end) {
+        if (start > end) return nullptr;
+        auto node = new Node(start, end);
+        if (start == end) return node;
+        int mid = (start + end) / 2;
+        node->left = build(start, mid);
+        node->right = build(mid + 1, end);
         return node;
     }
-
-    int query(Node* root, int q)
-    {
-        if (!root || root->beg >= q)
-            return 0;
-        if (root->end < q)
-            return root->count;
-        return query(root->left, q) + query(root->right, q);
-    }
-
-    void modify(Node* root, int v)
-    {
-        if (!root)
-            return;
-        if (root->beg == root->end && root->beg == v)
-        {
-            root->count += 1;
+    
+    void modify(Node* root, int index) {
+        if (!root) return;
+        if  (root->start == root->end && root->start == index) {
+            root->count++;
             return;
         }
-        int mid = (root->beg + root->end) / 2;
-        if (v <= mid)
-            modify(root->left, v);
-        else
-            modify(root->right,v);
+        int mid = (root->start + root->end) / 2;
+        if (index <= mid) modify(root->left, index);
+        else modify(root->right, index);
         root->count = 0;
-        if (root->left)
-            root->count += root->left->count;
-        if (root->right)
-            root->count += root->right->count;
+        if (root->left) root->count += root->left->count;
+        if (root->right) root->count += root->right->count;
     }
+    
+    int query(Node* root, int index) {
+        if (!root || root->start >= index) return 0;
+        if (root->end < index) return root->count;
+        return query(root->left, index) + query(root->right, index);
+    } 
 };
 ```
 
