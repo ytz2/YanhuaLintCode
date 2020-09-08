@@ -187,6 +187,8 @@ Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
 
 [https://www.lintcode.com/problem/maximum-average-subarray-ii/description](https://www.lintcode.com/problem/maximum-average-subarray-ii/description)
 
+[https://leetcode.com/problems/maximum-average-subarray-ii/](https://leetcode.com/problems/maximum-average-subarray-ii/)
+
 ### 解题分析:
 
 复杂度：O\(nlog\(max + min\)\)，其中n是nums的长度，max和min分别是nums中的最大值和最小值。这里用了“二分答案”思想。
@@ -202,40 +204,37 @@ Return`15.667`// \(-6 + 50 + 3\) / 3 = 15.667
 ```cpp
 class Solution {
 public:
-    /*
-     * @param nums: an array with positive and negative numbers
-     * @param k: an integer
-     * @return: the maximum average
-     */
-    double maxAverage(vector<int> &nums, int k) {
-        // write your code here
-        double l = INT_MAX, r = INT_MIN;
-        for ( auto& num : nums)
-        {
-            l = min(l, (double)num);
-            r = max(r, (double)num);
-        }
-        vector<double> sumarr(nums.size()+1, 0);
-        while( l + 1e-6 < r)
-        {
-            double mid = (l + r)/2;
-            for (int i = 0; i< nums.size(); i++)
-                sumarr[i+1] = sumarr[i]+nums[i] - mid;
-
-            double maxV = INT_MIN;
-            double preMin = 0;
-            for (int i = k; i<sumarr.size(); i++)
-            {
-                maxV = max(maxV, sumarr[i] - preMin);
-                preMin = min(preMin, sumarr[i-k+1]);
+    double findMaxAverage(vector<int>& nums, int k) {
+        if (nums.size() < k) return 0;
+        auto check = [&](double avg) {
+            double maxSum = 0, minSum = 0; 
+            double minV = 0, maxV = INT_MIN;
+            for (int i = 0; i < nums.size(); i++) {
+                maxSum += nums[i] - avg;
+                if (i + 1 < k) continue;
+                maxV = max(maxV, maxSum - minV);
+                minSum += nums[i-k+1] - avg;
+                minV = min(minV, minSum);
             }
-
-            if (maxV >= 0)
-                l = mid;
-            else
-                r = mid;
+            return maxV >= 0; 
+        };
+        
+        int b = (double) INT_MAX;
+        int e = (double) INT_MIN;
+        for (auto num : nums) {
+           b = min(num, b);
+           e = max(num, e);
         }
-        return l;
+        double beg = b;
+        double end = e;
+        double eps = 1e-6;
+        while(beg + eps < end) {
+            double mid = ( beg + end) / 2;
+            if (check(mid)) beg = mid;
+            else end = mid;
+        }
+        if (check(beg)) return beg;
+        return end;
     }
 };
 ```
