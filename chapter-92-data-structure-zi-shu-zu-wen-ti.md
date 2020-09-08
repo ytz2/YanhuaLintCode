@@ -105,6 +105,8 @@ Can you do it in time complexity O\(n\)?
 
 [https://www.lintcode.com/problem/maximum-subarray/description](https://www.lintcode.com/problem/maximum-subarray/description)
 
+[https://leetcode.com/problems/maximum-subarray/](https://leetcode.com/problems/maximum-subarray/)
+
 ### 解题分析:
 
 最大前缀和减去最小前缀和就是结果了，打一个擂台
@@ -114,21 +116,16 @@ Can you do it in time complexity O\(n\)?
 ```cpp
 class Solution {
 public:
-    /**
-     * @param nums: A list of integers
-     * @return: A integer indicate the sum of max subarray
-     */
-    int maxSubArray(vector<int> &nums) {
-        // write your code here
-        int minV = 0, maxV = INT_MIN;
-        int sum = 0; 
-        for (int i = 0; i < nums.size(); i++)
-        {
-            sum+= nums[i];
-            maxV = max(maxV, sum - minV);
-            minV = min(minV, sum);
+    int maxSubArray(vector<int>& nums) {
+        int minV = 0;
+        int sum = 0;
+        int res = INT_MIN;
+        for (const auto& num : nums) {
+            sum += num;
+            res = max(res, sum - minV);
+            minV = min(sum, minV);
         }
-        return maxV;
+        return res;
     }
 };
 ```
