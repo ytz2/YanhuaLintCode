@@ -69,30 +69,24 @@ public:
      */
     vector<int> subarraySumClosest(vector<int> &nums) {
         // write your code here
-        if (nums.size()<=1)
-            return vector<int>{0,0};
-        vector<pair<int,int>> sumarr{make_pair(0,0)};
-        int sum = 0;
-        for (int i = 0; i < nums.size(); i++)
-        {
-            sum += nums[i];
-            sumarr.push_back(make_pair(sum, i+1));
-        }
-        sort(sumarr.begin(), sumarr.end(),[](const pair<int,int>& left, const pair<int, int>&right){
-            return left.first < right.first;
+        vector<int> result;
+        vector<pair<int, int>> sum{make_pair(0, 0)};
+        for (auto& num : nums) sum.push_back(make_pair(sum.size(), sum.back().second + num));
+        sort(sum.begin(), sum.end(), [](const pair<int,int>& l, const pair<int, int>& r){
+           return  l.second < r.second;
         });
-        int minInd = 0, minVal = INT_MAX;
-        for (int i = 1; i < sumarr.size(); i++)
-        {
-            int diff = abs(sumarr[i].first - sumarr[i-1].first);
-            if (diff < minVal)
-            {
-                minInd = i;
-                minVal = diff;
+        int diff = INT_MAX;
+        int ind = 0;
+        for(int i = 0; i <sum.size() - 1; i++) {
+            auto dif = abs(sum[i].second - sum[i+1].second);
+            if (dif < diff) {
+                ind = i;
+                diff = dif;
             }
         }
-        int ind1 = sumarr[minInd].second , ind2 =  sumarr[minInd-1].second;
-        return ind1 > ind2?vector<int>{ind2, ind1-1} : vector<int>{ind1, ind2-1};
+        if (sum[ind].first < sum[ind+1].first) 
+            return {sum[ind].first, sum[ind+1].first-1};
+        return { sum[ind+1].first, sum[ind].first -1};
     }
 };
 ```
