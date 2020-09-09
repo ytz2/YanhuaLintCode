@@ -373,32 +373,30 @@ public:
      */
     int maxDiffSubArrays(vector<int> &nums) {
         // write your code here
-        int n = nums.size();
-        vector<int> leftMax(n, 0), leftMin(n, 0), rightMax(n,0), rightMin(n,0);
-        leftMax[0] = leftMin[0] = nums[0];
-        rightMax[n-1] = rightMin[n-1] = nums[n-1];
-        int leftSum = nums[0], leftMinv = 0, leftMaxv = 0;
-        for (int i = 1; i < n; i++)
-        {
-            leftMinv = min(leftMinv, leftSum);
-            leftMaxv = max(leftMaxv, leftSum);
-            leftSum += nums[i];
-            leftMax[i] = max(leftMax[i-1], leftSum - leftMinv);
-            leftMin[i] = min(leftMin[i-1], leftSum - leftMaxv);
+        vector<int> leftMin(nums.size(), 0), leftMax(nums.size(), 0);
+        int sum = 0, minV = 0, maxV = 0, minRes = INT_MAX, maxRes = INT_MIN;
+        for (auto i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            minRes = min(minRes, sum - maxV);
+            maxRes = max(maxRes, sum - minV);
+            leftMax[i] = minRes;
+            leftMin[i] = maxRes;
+            minV = min(minV, sum);
+            maxV = max(maxV, sum);
         }
-        int rightSum = nums[n-1], rightMinv = 0, rightMaxv = 0;
-        for (int i = n-2; i >= 0; i--)
-        {
-            rightMinv = min(rightMinv, rightSum);
-            rightMaxv = max(rightMaxv, rightSum);
-            rightSum += nums[i];
-            rightMax[i] = max(rightMax[i+1], rightSum -rightMinv);
-            rightMin[i] = min(rightMin[i+1], rightSum - rightMaxv);
+        vector<int> rightMin(nums.size(), 0), rightMax(nums.size(), 0);
+        sum = 0; minV = 0; maxV = 0; minRes = INT_MAX; maxRes = INT_MIN;
+        for (int i = nums.size() - 1; i >= 0; i--) {
+            sum += nums[i];
+            minRes = min(minRes, sum - maxV);
+            maxRes = max(maxRes, sum - minV);
+            rightMax[i] = minRes;
+            rightMin[i] = maxRes;
+            minV = min(minV, sum);
+            maxV = max(maxV, sum);
         }
-
         int res = INT_MIN;
-        for (int i =0; i<n-1; i++)
-        {
+        for (auto i = 0; i < nums.size() -1 ;i++) {     
             res = max(res, max(abs(leftMax[i] - rightMin[i+1]), abs(leftMin[i] - rightMax[i+1])));
         }
         return res;
