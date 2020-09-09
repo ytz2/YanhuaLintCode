@@ -435,29 +435,27 @@ public:
      */
     int maxTwoSubArrays(vector<int> &nums) {
         // write your code here
-        int n = nums.size();
-        vector<int> leftMax(n, 0), rightMax(n,0);
-        leftMax[0] = nums[0];
-        rightMax[n-1] = nums[n-1];
-
-        int leftSum = nums[0], prevLeftMin = min(0,nums[0]);
-        for (int i = 1; i < n; i++)
-        {
-            leftSum+= nums[i];
-            leftMax[i] = max(leftMax[i-1], leftSum-prevLeftMin);
-            prevLeftMin = min(prevLeftMin, leftSum);
+        int sum = 0, minV = 0, res = INT_MIN;
+        vector<int> left(nums.size(), 0), right(nums.size(), 0);
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            res =  max(res, sum - minV);
+            left[i] = res;
+            minV = min(minV, sum);
         }
-        int rightSum = nums[n-1], prevRightMin = min(0,nums[n-1]);
-        for (int i = n-2; i >= 0; i--)
-        {
-            rightSum += nums[i];
-            rightMax[i] = max(rightMax[i+1] , rightSum - prevRightMin);
-            prevRightMin = min(prevRightMin, rightSum);
+        sum = 0, minV = 0, res = INT_MIN;
+        for (int i = nums.size() - 1; i >= 0; i--) {
+            sum += nums[i];
+            res =  max(res, sum - minV);
+            right[i] = res;
+            minV = min(minV, sum);
         }
-        int res = INT_MIN;
-        for (int i = 0; i<n-1; i++)
-            res = max(res, leftMax[i] + rightMax[i+1]);
-        return res;
+        
+        res = INT_MIN;
+        for (int i = 0; i < nums.size() - 1; i++) {
+            res = max(res, left[i] + right[i+1]);
+        }
+        return res; 
     }
 };
 ```
