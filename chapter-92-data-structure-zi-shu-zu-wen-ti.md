@@ -218,7 +218,7 @@ public:
             }
             return maxV >= 0; 
         };
-        
+
         int b = (double) INT_MAX;
         int e = (double) INT_MIN;
         for (auto num : nums) {
@@ -248,6 +248,8 @@ Find the contiguous subarray within an array \(containing at least one number\) 
 For example, given the array`[2,3,-2,4]`, the contiguous subarray`[2,3]`has the largest product =`6`.
 
 [https://www.lintcode.com/problem/maximum-product-subarray/description](https://www.lintcode.com/problem/maximum-product-subarray/description)
+
+[https://leetcode.com/problems/maximum-product-subarray/](https://leetcode.com/problems/maximum-product-subarray/)
 
 ### 解题分析:
 
@@ -305,6 +307,33 @@ public:
                 maxDp.push_back(max(minDp[i] * num, num));
             }
             res = max(res, maxDp.back());
+        }
+        return res;
+    }
+};
+
+// instead of using dp, we reset when encounter 0 and maintain the maxNegative as denominator thus always compare 
+// current positive product vs negativeProdcut / maxNegative, space friendly solution
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int product = 1;
+        int res = INT_MIN;
+        int maxNeg = 1;
+        for (auto each : nums) {
+            if (each == 0) {
+                res = max(res, 0);
+                product = 1;
+                maxNeg = 1;
+                continue;
+            }
+            product *= each;
+            res = max(product, res);
+            res = max(product/maxNeg, res);
+            if (product < 0) {
+                if (maxNeg == 1) maxNeg = product;
+                else maxNeg = max(maxNeg, product);
+            }
         }
         return res;
     }
