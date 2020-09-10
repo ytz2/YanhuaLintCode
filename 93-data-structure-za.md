@@ -15,17 +15,6 @@ Given list1 =`[(1,2),(3,4)]`and list2 =`[(2,3),(5,6)]`, return`[(1,4),(5,6)]`.
 ### 代码：
 
 ```cpp
-/**
- * Definition of Interval:
- * classs Interval {
- *     int start, end;
- *     Interval(int start, int end) {
- *         this->start = start;
- *         this->end = end;
- *     }
- * }
- */
-
 class Solution {
 public:
     /**
@@ -35,35 +24,28 @@ public:
      */
     vector<Interval> mergeTwoInterval(vector<Interval> &list1, vector<Interval> &list2) {
         // write your code here
-        vector<Interval> res;
-        if (list1.empty() && list2.empty())
-            return res;
-        if (list2.size() < list1.size())
-            swap(list1, list2);
-        auto sortFunc = [](const Interval& l, const Interval& r){
+        vector<Interval> result;
+        int i = 0, j = 0;
+        auto cmp = [](const Interval& l, const Interval& r) {
+            if (l.start == r.start) return l.end < r.end;
             return l.start < r.start;
         };
-        for (auto& elem : list2)
-            list1.push_back(elem);
-        sort(list1.begin(), list1.end(), sortFunc);
-
-        auto prev = Interval(list1[0].start, list1[0].start);
-        for (int i = 0; i < list1.size(); i++)
-        {
-            auto& node = list1[i];
-            if (prev.end >= node.start)
-            {
-                if (node.end > prev.end)
-                    prev.end = node.end;
-            }
-            else
-            {
-                res.push_back(prev);
-                prev = node;
-            }
+        
+        auto merge = [](vector<Interval>& res, const Interval& interval) {
+          if (res.empty() || interval.start > res.back().end) 
+            res.push_back(interval); 
+          else {
+              res.back().end = max(res.back().end, interval.end);
+          }
+        };
+        
+        while(i < list1.size() && j < list2.size()) {
+            const auto& toMerge = cmp(list1[i], list2[j]) ? list1[i++] : list2[j++];
+            merge(result, toMerge);
         }
-        res.push_back(prev);
-        return res;
+        while(i < list1.size()) merge(result, list1[i++]);
+        while(j < list2.size()) merge(result, list2[j++]);
+        return result;
     }
 };
 ```

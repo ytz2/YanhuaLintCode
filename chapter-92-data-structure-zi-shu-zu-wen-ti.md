@@ -450,7 +450,7 @@ public:
             right[i] = res;
             minV = min(minV, sum);
         }
-        
+
         res = INT_MIN;
         for (int i = 0; i < nums.size() - 1; i++) {
             res = max(res, left[i] + right[i+1]);
