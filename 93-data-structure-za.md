@@ -334,73 +334,37 @@ Return
 ### 代码：
 
 ```cpp
-/**
- * Definition of Interval:
- * classs Interval {
- *     int start, end;
- *     Interval(int start, int end) {
- *         this->start = start;
- *         this->end = end;
- *     }
- * }
- */
-
 class Solution {
 public:
-    /**
-     * @param intervals: the given k sorted interval lists
-     * @return:  the new sorted interval list
-     */
     vector<Interval> mergeKSortedIntervalLists(vector<vector<Interval>> &intervals) {
         // write your code here
-
-
-        typedef pair<Interval, int> IntType;
-
-        auto sortFunc = [](const IntType& left, const IntType& right){
-            return left.first.start > right.first.start;
+        auto cmp = [&](const pair<int, int>& l, const pair<int,int>&r) {
+          auto& li = intervals[l.first][l.second];
+          auto& ri = intervals[r.first][r.second];
+          if (li.start == ri.start) return li.end > ri.end;
+          return li.start > ri.start;
         };
-
-        vector<int> indices(intervals.size(), 0);
-        priority_queue<IntType, vector<IntType>, decltype(sortFunc)> pq(sortFunc);
-        for (int i = 0; i < intervals.size(); i++)
-        {
-            if (intervals[i].empty())
-                continue;
-            auto& interv = intervals[i].front();
-            pq.push(make_pair(interv, i));
+        
+        priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
+        for (int i = 0; i < intervals.size(); i++) {
+            if (intervals[i].empty()) continue;
+            pq.push(make_pair(i, 0));
         }
-
-        vector<Interval> res;
-        if (pq.empty())
-            return res;
-        auto& t = pq.top().first;
-        Interval prev(t.start, t.start);
-        while(!pq.empty())
-        {
-            auto node = pq.top();
-            pq.pop();
-            int ind = node.second;
-            auto& intervalNode = node.first;
-
-            if (intervalNode.start > prev.end)
-            {
-                res.push_back(prev);
-                prev = intervalNode;
+        vector<Interval> result;
+        auto merge = [&](const pair<int,int>& cur) {
+            const auto& interval = intervals[cur.first][cur.second];
+            if (result.empty() || result.back().end < interval.start) {
+                result.push_back(interval);
+            } else {
+                result.back().end = max(result.back().end, interval.end);   
             }
-            else if (intervalNode.end > prev.end)
-            {
-                prev.end = intervalNode.end;
-            }
-            int next = ++indices[ind];
-            if (next < intervals[ind].size())
-            {
-                auto& nextInterval = intervals[ind][next];
-                pq.push(make_pair(intervals[ind][next], ind));
-            }
+        };
+        while(!pq.empty()) {
+            auto cur = pq.top(); pq.pop();
+            merge(cur);
+            if (++cur.second != intervals[cur.first].size()) pq.push(cur);
         }
-        res.push_back(prev);
-        return res;
+        return result;
     }
 };
 ```
