@@ -344,7 +344,7 @@ public:
           if (li.start == ri.start) return li.end > ri.end;
           return li.start > ri.start;
         };
-        
+
         priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
         for (int i = 0; i < intervals.size(); i++) {
             if (intervals[i].empty()) continue;
@@ -398,115 +398,78 @@ SegmentTree
 ### 代码：
 
 ```cpp
-class SegNode{
-public:
-    SegNode(int l,int r, int v)
-        : start(l), end(r),value(v), left(nullptr), right(nullptr)
-    {}
-    ~SegNode()
-    {
-        if (left)
-            delete left;
-        if (right)
-            delete right;
-    }
-    int start, end, value;
-    SegNode *left, *right;
-};
-
-
 class NumArray {
 public:
     NumArray(vector<int> nums) {
-        root_ = build(0, nums.size()-1,nums);
+        if (nums.empty()) return;
+        root = build(nums, 0, nums.size() - 1);
     }
-
-    ~NumArray()
-    {
-        if (root_)
-            delete root_;
+    
+    ~NumArray() {
+        if (root) delete root;
     }
+    
     void update(int i, int val) {
-        update(root_, i, val);   
+        if (root) modify(root, i, val);
     }
-
+    
     int sumRange(int i, int j) {
-
-        return sumRange(root_, i, j);
+        return query(root, i, j);
     }
-
-
-    void update(SegNode* node, int i, int val)
-    {
-        if (!node)
-            return;
-        if (node->start == node->end && node->start == i)
-        {
-            node->value = val;
-            return;
-        }
-        int mid = (node->start + node->end) /2 ;
-        if (i<=mid)
-        {
-            update(node->left, i, val);
-        }
-        else if (i>= mid+1)
-        {
-            update(node->right, i, val);
-        }
-        node->value = 0;
-        if (node->left)
-            node->value += node->left->value;
-        if (node->right)
-            node->value += node->right->value;
-    }
-
-
-    int sumRange(SegNode* node, int i, int j)
-    {
-        if (!node)
-            return 0;
-
-        if (i<= node->start && node->end <= j)
-            return node->value;
-
-        int mid = (node->start + node->end) / 2;
-        int sum = 0;
-        if (node->left && i<=mid)
-            sum += sumRange(node->left, i, j);
-        if (node->right && mid+1 <= j)
-            sum += sumRange(node->right, i, j);
-
-        return sum;
-    }
-
-    SegNode* root_;
-    SegNode* build( int beg, int end, vector<int>& A)
-    {
-        if ( beg > end)
-            return nullptr;
-        SegNode* node = new SegNode( beg, end,A[beg]);
-        if (beg == end)
-            return node;
-        int mid = (beg + end) / 2;
-
-        node->left = build( beg, mid, A);
-        node->right = build(mid+1, end, A);
-        node->value = 0;
-        if (node->left)
-            node->value += node->left->value;
-        if (node->right)
-            node->value += node->right->value;
+    
+private:
+    struct Node {
+      int start = 0;
+      int end = 0;
+      Node* left = nullptr;
+      Node* right = nullptr;
+      int sum = 0;
+      Node(int s, int e, int sumv=0) : start(s), end(e), sum(sumv){};
+      ~Node() {
+          if (left) delete left;
+          if (right) delete right;
+      };
+    };
+    Node* build(vector<int>& nums, int start, int end) {
+        if (start > end) return nullptr;
+        auto node = new Node(start, end, nums[start]);
+        if (start == end) return node;
+        int mid = (start + end) / 2;
+        node->left = build(nums, start, mid);
+        node->right = build(nums, mid + 1, end);
+        node->sum = 0;
+        if (node->left) node->sum += node->left->sum;
+        if (node->right) node->sum += node->right->sum;
         return node;
     }
+    
+    void modify(Node* node, int i, int val) {
+        if (!node || i < node->start || i > node->end) return;
+        if (node->start == node->end && i == node->start) {
+            node->sum = val;
+            return;
+        }
+        int mid = (node->start + node->end) / 2;
+        if (i <= mid) modify(node->left, i, val);
+        else modify(node->right, i, val);
+        node->sum = 0;
+        if (node->left) node->sum += node->left->sum;
+        if (node->right) node->sum += node->right->sum;
+    }
+    
+    int query(Node* root, int start, int end) {
+        if (!root) return 0;
+        if (start <= root->start && root->end <= end) return root->sum;
+        int mid = (root->start + root->end) / 2;
+        int res = 0;
+        if (root->left && start <= mid) res += query(root->left, start, end);
+        if (root->right && mid + 1 <= end) res += query(root->right, start, end);
+        return res;
+    }
+private:
+    Node* root = nullptr;
 };
 
-/**
- * Your NumArray object will be instantiated and called as such:
- * NumArray obj = new NumArray(nums);
- * obj.update(i,val);
- * int param_2 = obj.sumRange(i,j);
- */
 ```
 
 ## 931. Median of K Sorted Arrays
