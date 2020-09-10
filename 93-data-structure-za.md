@@ -201,52 +201,24 @@ AB = | -1 0 3 | x | 0 0 0 | = | -7 0 3 |
 ```cpp
 class Solution {
 public:
-    /**
-     * @param A: a sparse matrix
-     * @param B: a sparse matrix
-     * @return: the result of A * B
-     */
     vector<vector<int>> multiply(vector<vector<int>> &A, vector<vector<int>> &B) {
         // write your code here
-        if (A.empty() || B.empty())
-        {
-            return vector<vector<int>>();
-        }
-
-        int m = A.size();
-        int n = B[0].size();
-        vector<vector<int>> res(m, vector<int>(n, 0));
-
-        // build A 
-
-        vector<vector<pair<int,int> >> sparseA(m,vector<pair<int,int>>());
-        for (int i = 0; i < A.size(); i++)
-        {
-            for (int j = 0; j <A[0].size(); j++ )
-            {
-                if (A[i][j])
-                {
-                    sparseA[i].push_back(make_pair(j, A[i][j]));
+        static vector<vector<int>> def;
+        if (A.empty() || A[0].empty() || B.empty() || B[0].empty()) return def;
+        int m1 = A.size();
+        int n1 = A[0].size();
+        int m2 = B.size();
+        int n2 = B[0].size();
+        if (m2 != n1) return def;
+        vector<vector<int>> result(m1, vector<int>(n2, 0));
+        for (int i = 0; i < m1; i++) {
+            for (int j = 0; j < n2; j++) {
+                for (int k = 0; k < n1; k++) {
+                    result[i][j] += A[i][k]*B[k][j];
                 }
             }
         }
-
-        for (int i = 0; i < m; i++)
-        {
-            if (sparseA.empty())
-                continue;
-            for (auto& each : sparseA[i])
-            {
-                int j = each.first;
-                int v = each.second;
-                for (int k = 0; k <n; k++)
-                {
-                    res[i][k] += B[j][k]*v;
-                }
-            }
-        }
-        return res;
-
+        return result;
     }
 };
 ```
