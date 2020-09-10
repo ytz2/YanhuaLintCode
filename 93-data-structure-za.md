@@ -30,7 +30,7 @@ public:
             if (l.start == r.start) return l.end < r.end;
             return l.start < r.start;
         };
-        
+
         auto merge = [](vector<Interval>& res, const Interval& interval) {
           if (res.empty() || interval.start > res.back().end) 
             res.push_back(interval); 
@@ -38,7 +38,7 @@ public:
               res.back().end = max(res.back().end, interval.end);
           }
         };
-        
+
         while(i < list1.size() && j < list2.size()) {
             const auto& toMerge = cmp(list1[i], list2[j]) ? list1[i++] : list2[j++];
             merge(result, toMerge);
@@ -71,31 +71,14 @@ Given_nums1_=`[1, 2, 2, 1]`,_nums2_=`[2, 2]`, return`[2]`.
 ```cpp
 class Solution {
 public:
-
-    /*
-     * @param nums1: an integer array
-     * @param nums2: an integer array
-     * @return: an integer array
-     */
-    vector<int> intersection(vector<int> nums1, vector<int> nums2) {
+    vector<int> intersection(vector<int> &nums1, vector<int> &nums2) {
         // write your code here
-        vector<int> res;
-        unordered_map<int, int> counter;
-        if (nums2.size() > nums1.size())
-            swap(nums1,nums2);
-        for (auto& each : nums1)
-            counter[each] = 1;
-        for (auto& each : nums2)
-        {
-            if (!counter.count(each) )
-                continue;
-            if (counter[each] == 1)
-            {
-                counter[each]++;
-                res.push_back(each);
-            }
+        unordered_set<int> num1Set(nums1.begin(), nums1.end());
+        set<int> res;
+        for (auto each : nums2) {
+            if (num1Set.count(each)) res.insert(each);
         }
-        return res;
+        return vector<int>(res.begin(), res.end());
     }
 };
 ```
