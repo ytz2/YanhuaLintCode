@@ -117,6 +117,10 @@ kadene 算法求得的是单行最大，然后按照\(i,j\)打一个擂台就好
 
 o\(n^2\*m\)
 
+2020/09/20重新犯了一次错误。。。。 弄了一个prefix sum 和min subsum 然后尝试减掉， 但是如果你画画图就发现减出来的不是submatrix而是个L型的矩阵。
+
+所以还是老老实实的写吧。
+
 ### 代码：
 
 ```cpp
@@ -129,38 +133,33 @@ public:
     int maxSubmatrix(vector<vector<int>> &matrix) {
         // write your code here
         int m = matrix.size();
-        if (!m)
-            return 0;
+        if ( 0 == m ) return 0;
         int n = matrix[0].size();
-        if (!n)
-            return 0;
-        vector<int> buffer(m, 0);
-        int maxVal = INT_MIN;
-        auto eval = [](vector<int>& buffer){
-          int res = INT_MIN;
-          int sum = 0; 
-          for (auto& each : buffer)
-          {
-              sum += each; 
-              res = max(sum, res);
-              if (sum < 0)
-                sum = 0;
-          }
-          return res;
-        };
-        for (int j = 0; j < n; j++)
-        {
-            for (int k = j; k < n; k++)
-            {
-                for (int i = 0; i < m; i++)
-                {
-                    buffer[i] += matrix[i][k];
-                }
-                maxVal = max(maxVal, eval(buffer));
+        if ( 0 == n ) return 0;
+
+        auto solve = [](const vector<int>& buff){
+            int sum = 0, mVal = 0;
+            int ret = INT_MIN;
+            for (auto each : buff) {
+                sum += each;
+                ret = max(ret, sum - mVal);
+                mVal = min(mVal, sum);
             }
-            fill(buffer.begin(), buffer.end(), 0);
+            return ret;
+        };
+        int res = INT_MIN;
+        vector<int> buff(m, 0);
+        for (int j = 0; j < n; j++) {
+            for (int k = j; k < n; k++) {
+                for (int i = 0; i < m; i++) {
+                    buff[i] += matrix[i][k];
+                }
+                // must be here, it should be line by line scan
+                res = max(res, solve(buff));
+            }
+            fill(buff.begin(), buff.end(), 0);
         }
-        return maxVal;
+        return res;
     }
 };
 ```
