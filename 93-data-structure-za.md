@@ -270,7 +270,7 @@ public:
         auto s = helper(nums1, nums2, 0, 0, sum/2) + helper(nums1, nums2, 0, 0, sum/2+1);
         return s/2.0;
     }
-    
+
     int helper(vector<int>& nums1, vector<int>& nums2, int beg1, int beg2, int k) {
         // left is shorter
         if ( nums1.size() - beg1 > nums2.size() - beg2) {
