@@ -29,27 +29,17 @@ sumRange(0, 5) -
 ```cpp
 class NumArray {
 public:
-
     NumArray(vector<int> nums) {
-        prefixsum.push_back(0);
-        for (int i = 0; i < nums.size(); i++)
-            prefixsum.push_back(nums[i]+prefixsum[i]);
-
+        sarr.resize(nums.size() + 1);
+        for (int i = 0; i < nums.size(); i++) sarr[i+1] = sarr[i] + nums[i];
     }
-
+    
     int sumRange(int i, int j) {
-        if (i < 0) i = 0;
-        if (j+1 > prefixsum.size()-1) j = prefixsum.size()-2;
-        return prefixsum[j+1] - prefixsum[i];
+        return sarr[j+1] - sarr[i];
     }
-    vector<int> prefixsum;    
+    vector<int> sarr;
 };
 
-/**
- * Your NumArray object will be instantiated and called as such:
- * NumArray obj = new NumArray(nums);
- * int param_1 = obj.sumRange(i,j);
- */
 ```
 
 ## 548. Intersection of Two Arrays II
@@ -108,30 +98,17 @@ public:
 
 class Solution {
 public:
-
-    /*
-     * @param nums1: an integer array
-     * @param nums2: an integer array
-     * @return: an integer array
-     */
-    vector<int> intersection(vector<int> nums1, vector<int> nums2) {
-        // write your code here
-        vector<int> res;
-        if (nums1.size() < nums2.size())
-            swap(nums1, nums2);
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> result;
         unordered_map<int, int> counter;
-        for (auto each : nums1)
-            counter[each]++;
-        for (auto each : nums2)
-        {
-            if (counter.count(each) )
-            {
-                res.push_back(each);
-                if (--counter[each] == 0)
-                    counter.erase(each);
-            }
+        for (auto num : nums1) counter[num]++;
+        for (auto num : nums2) {
+            auto it = counter.find(num);
+            if (it == counter.end()) continue;
+            result.push_back(num);
+            if (--it->second == 0) counter.erase(it);
         }
-        return res;
+        return result;
     }
 };
 ```
