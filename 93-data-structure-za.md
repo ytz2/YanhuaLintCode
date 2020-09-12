@@ -263,43 +263,28 @@ The overall run time complexity should be`O(log (m+n))`.
 ```cpp
 class Solution {
 public:
-    /*
-     * @param A: An integer array
-     * @param B: An integer array
-     * @return: a double whose format is *.5 or *.0
-     */
-    double findMedianSortedArrays(vector<int> &A, vector<int> &B) {
-        // write your code here
-        int n = A.size()+B.size();
-        if (n == 0)
-            return 0;
-        if (n == 1)
-        {
-            return A.empty()? B[0] : A[0];
-        }
-        if (n%2)
-            return findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2+1);
-        return double(findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2) 
-                + findK(A, 0, A.size()-1, B, 0, B.size()-1, n/2+1) ) / 2.;
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size(), n = nums2.size();;
+        int sum = m + n;
+        if (sum % 2) return (double)helper(nums1, nums2, 0, 0, sum / 2 + 1);
+        auto s = helper(nums1, nums2, 0, 0, sum/2) + helper(nums1, nums2, 0, 0, sum/2+1);
+        return s/2.0;
     }
-
-    int findK(vector<int> &A, int abeg, int aend, vector<int> &B, int bbeg, int bend, int k)
-    {
-
-        if (bbeg > bend)
-            return A[abeg + k-1];
-        if (abeg > aend)
-            return B[bbeg + k -1];
-        if (k == 1)
-            return min(A[abeg], B[bbeg]);
-
-        int a_half = abeg + k/2-1 > aend ? INT_MAX : A[abeg + k/2 - 1];
-        int b_half = bbeg + k/2-1 > bend ? INT_MAX : B[bbeg + k/2 - 1];
-
-        if (a_half < b_half)
-            return findK(A, abeg + k/2, aend, B, bbeg, bend, k-k/2);
-        else
-            return findK(A, abeg, aend, B, bbeg + k/2, bend, k-k/2);
+    
+    int helper(vector<int>& nums1, vector<int>& nums2, int beg1, int beg2, int k) {
+        // left is shorter
+        if ( nums1.size() - beg1 > nums2.size() - beg2) {
+            return helper(nums2, nums1, beg2, beg1, k);
+        }
+        // exit conditions
+        if (nums1.size() == beg1) return nums2[beg2 + k -1];
+        if (nums2.size() == beg2) return nums1[beg1 + k -1];
+        if (k == 1) return min(nums1[beg1], nums2[beg2]);
+        int left =  beg1 + k/2 -1;
+        if (left >= nums1.size()) left = nums1.size() - 1;
+        int right = beg2 + (k - k/2) - 1;
+        if (nums1[left] < nums2[right]) return helper(nums1, nums2, left + 1, beg2,  k - (left - beg1 + 1));
+        return helper(nums1, nums2, beg1, right + 1, k/2);
     }
 };
 ```
@@ -404,19 +389,19 @@ public:
         if (nums.empty()) return;
         root = build(nums, 0, nums.size() - 1);
     }
-    
+
     ~NumArray() {
         if (root) delete root;
     }
-    
+
     void update(int i, int val) {
         if (root) modify(root, i, val);
     }
-    
+
     int sumRange(int i, int j) {
         return query(root, i, j);
     }
-    
+
 private:
     struct Node {
       int start = 0;
@@ -442,7 +427,7 @@ private:
         if (node->right) node->sum += node->right->sum;
         return node;
     }
-    
+
     void modify(Node* node, int i, int val) {
         if (!node || i < node->start || i > node->end) return;
         if (node->start == node->end && i == node->start) {
@@ -456,7 +441,7 @@ private:
         if (node->left) node->sum += node->left->sum;
         if (node->right) node->sum += node->right->sum;
     }
-    
+
     int query(Node* root, int start, int end) {
         if (!root) return 0;
         if (start <= root->start && root->end <= end) return root->sum;
@@ -469,7 +454,6 @@ private:
 private:
     Node* root = nullptr;
 };
-
 ```
 
 ## 931. Median of K Sorted Arrays
