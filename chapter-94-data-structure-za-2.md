@@ -218,14 +218,13 @@ public:
             }
         }
     }
-    
+
     int sumRegion(int row1, int col1, int row2, int col2) {
         return mat[row2+1][col2+1] - mat[row2 + 1][col1] - mat[row1][col2+1] + mat[row1][col1];        
     }
-    
+
     vector<vector<int>> mat;
 };
-
 ```
 
 ## 793. Intersection of Arrays
@@ -313,6 +312,28 @@ public:
         }
         if (count == arrs.size())
             res++;
+        return res;
+    }
+};
+
+class Solution {
+public:
+    /**
+     * @param arrs: the arrays
+     * @return: the number of the intersection of the arrays
+     */
+    int intersectionOfArrays(vector<vector<int>> &arrs) {
+        // write your code here
+        unordered_map<int, int> counter;
+        for(auto& arr : arrs) {
+            for (auto& each : arr) {
+                counter[each]++;
+            }
+        }
+        int res = 0;
+        for (auto& each : counter) {
+            res += each.second == arrs.size();
+        }
         return res;
     }
 };
