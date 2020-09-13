@@ -33,13 +33,12 @@ public:
         sarr.resize(nums.size() + 1);
         for (int i = 0; i < nums.size(); i++) sarr[i+1] = sarr[i] + nums[i];
     }
-    
+
     int sumRange(int i, int j) {
         return sarr[j+1] - sarr[i];
     }
     vector<int> sarr;
 };
-
 ```
 
 ## 548. Intersection of Two Arrays II
@@ -146,61 +145,34 @@ O\(n3\) time.
 ```cpp
 class Solution {
 public:
-    /*
-     * @param matrix: an integer matrix
-     * @return: the coordinate of the left-up and right-down number
-     */
     vector<vector<int>> submatrixSum(vector<vector<int>> &matrix) {
-        // write your code here
         vector<vector<int>> res;
-        int m = matrix.size();
-        if (m == 0)
-            return res;
-        int n = matrix[0].size();
-        if (n == 0)
-            return res;
-        vector<int> buffer(n, 0);
-
-        for (int i =0; i < m; i++)
-        {
-            for (int j = i; j <m; j++)
-            {
-                compress(i,j, buffer, matrix, n);
-                auto ret = eval(buffer);
-                if (ret.first !=-1)
-                {
-                    res.push_back(vector<int>{i, ret.first});
-                    res.push_back(vector<int>{j, ret.second});
-                    return res;
+        vector<int> buff(matrix[0].size(), 0);
+        auto solve = [&](int i0, int i1) {
+            unordered_map<int, int> counter{{0, 0}};
+            int sum = 0;
+            for (int j = 0; j < buff.size(); j++) {
+                sum += buff[j];
+                if (!counter.count(sum)) {
+                    counter[sum] = j + 1;
+                } else {
+                    res = {{i0, counter[sum]}, {i1, j}};
+                    return true;
                 }
+            };
+            return false;
+        };
+        
+        for (int i = 0; i < matrix.size(); i++) {
+            for (int k = i; k < matrix.size(); k++) {
+                for (int j = 0; j < matrix[0].size(); j++) {
+                    buff[j] += matrix[k][j];
+                }
+                if (solve(i, k)) return res;
             }
+            fill(buff.begin(), buff.end(), 0);
         }
-        return res;
-    }
-
-    void compress(int i, int j, vector<int>& buffer, vector<vector<int>>& matrix, int n)
-    {
-        fill(buffer.begin(), buffer.end(), 0);
-        for (int k = i; k <= j; k++)
-        {
-            for (int l = 0; l < n; l++)
-                buffer[l] += matrix[k][l];
-        }
-    }
-
-    pair<int, int> eval(const vector<int>& buffer)
-    {
-      unordered_map<int,int> dict{{0,-1}};
-      int sum = 0;
-      for (int i = 0; i < buffer.size(); i++)
-      {
-          sum += buffer[i];
-          if (dict.count(sum))
-            return make_pair(dict[sum]+1, i);
-          else
-            dict[sum] = i;
-      }
-      return make_pair(-1,-1);
+        return {{0, 0},{0, 0}};
     }
 };
 ```
