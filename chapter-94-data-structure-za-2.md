@@ -258,60 +258,35 @@ pq
 ```cpp
 class Solution {
 public:
-    /**
-     * @param arrs: the arrays
-     * @return: the number of the intersection of the arrays
-     */
-    struct Node{
-        Node(int r, int c)
-            : row(r), col(c)
-        {}
-        int row, col;
-    };
     int intersectionOfArrays(vector<vector<int>> &arrs) {
-        // write your code here
-
-        for (int i = 0; i < arrs.size(); i++)
-        {
-            sort(arrs[i].begin(), arrs[i].end());
-        }
-        auto cmp = [&arrs](const Node& left, const Node& right)
-        {
-            return arrs[left.row][left.col] > arrs[right.row][right.col];
+        typedef pair<int, int> Pair;
+        auto cmp = [&](const Pair& l, const Pair& r) {
+            return arrs[l.first][l.second] > arrs[r.first][r.second];
         };
-
-        priority_queue<Node,vector<Node>, decltype(cmp)> pq(cmp);
-        for (int i = 0; i < arrs.size(); i++)
-        {
-            if (!arrs[i].empty())
-                pq.push(Node(i,0));
-            else
-                return 0;
+        priority_queue<Pair, vector<Pair>, decltype(cmp)> pq(cmp);
+        for (int i = 0; i < arrs.size(); i++) {
+            if (arrs[i].empty()) return 0;
+            sort(arrs[i].begin(), arrs[i].end());
+            pq.push(make_pair(i, 0));
         }
-
-        int res = 0, count = 0, last = 0;
-
-        while(!pq.empty())
-        {
+        int res = 0;
+        int count = 0;
+        auto tp = pq.top();
+        auto num = arrs[tp.first][tp.second];
+        while(!pq.empty()) {
             auto node = pq.top();
             pq.pop();
-            if (arrs[node.row][node.col] != last || count == 0)
-            {
-                if (count == arrs.size())
-                    res++;
-                count = 1;
-                last = arrs[node.row][node.col];
-            }
-            else
-            {
+            auto val = arrs[node.first][node.second];
+            if (val == num) {
                 count++;
+                if (count == arrs.size()) res++;
+            } else {
+                count = 1;
+                num = val;
             }
-            node.col++;
-            if (node.col < arrs[node.row].size())
-                pq.push(node);
+            node.second++;
+            if (arrs[node.first].size() != node.second) pq.push(node);
         }
-        if (count == arrs.size())
-            res++;
         return res;
     }
 };
