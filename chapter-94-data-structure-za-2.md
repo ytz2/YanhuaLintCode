@@ -326,6 +326,8 @@ Given an example\[2,1,2,0,1\], return 2
 
 [https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-ii/description](https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-ii/description)
 
+[https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/)
+
 ### 解题分析:
 
 market making
@@ -358,6 +360,8 @@ Given an example`[4,4,6,1,1,4,2,5]`, return`6`.
 
 [https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-iii/description](https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock-iii/description)
 
+[https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/)
+
 ### 解题分析:
 
 DP
@@ -367,33 +371,26 @@ DP
 ```cpp
 class Solution {
 public:
-    /**
-     * @param prices: Given an integer array
-     * @return: Maximum profit
-     */
-    int maxProfit(vector<int> &prices) {
-        // write your code here
-
-        if (prices.size()<=1)
-            return 0;
-        int prevMin = prices[0];
-        vector<int> left{0};
-        for (int i = 1; i<prices.size(); i++)
-        {
-            left.push_back(max(left.back(), prices[i] - prevMin));
-            prevMin = min(prices[i], prevMin);
-        }
+    
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() < 2) return 0;
+        vector<int> left(prices.size(), 0);
         vector<int> right(prices.size(), 0);
-        int prevMax = prices.back();
-        int n = prices.size();
-        for (int i = n-2; i>=0; i--)
-        {
-            right[i] = max(right[i+1], prevMax - prices[i] );
-            prevMax = max(prevMax, prices[i]);
+        int lmin = prices[0];
+        for (int i = 1; i < prices.size(); i++) {
+            left[i] = max(prices[i] - lmin, left[i-1]);
+            lmin = min(lmin, prices[i]);
+        }
+        int rmax = prices.back();
+        for (int i = prices.size() - 2; i >= 0; i--) {
+            right[i] = max(rmax - prices[i], right[i+1]);
+            rmax = max(rmax, prices[i]);
         }
         int res = 0;
-        for (int i = 0; i < n-1; i++)
-            res = max(res, left[i]+right[i]);
+        for (int i = 0; i < prices.size(); i++) {
+            
+            res = max(res, left[i] + (i == prices.size() -1? 0 : right[i+1]) );
+        }
         return res;
     }
 };
