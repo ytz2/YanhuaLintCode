@@ -159,6 +159,8 @@ For example, Given s =`"eceba"`,`k = 3`,
 
 T is`"eceb"`which its length is`4`.
 
+[https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/)
+
 ### Challenge
 
 O\(n\), n is the size of the string_s_.
