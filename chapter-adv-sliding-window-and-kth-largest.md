@@ -20,6 +20,8 @@ Given the array`[2,3,1,2,4,3]`and s =`7`, the subarray`[4,3]`has the minimal len
 
 If you have figured out the O\(n\) solution, try coding another solution of which the time complexity is O\(n log n\).
 
+[https://leetcode.com/problems/minimum-size-subarray-sum/submissions/](https://leetcode.com/problems/minimum-size-subarray-sum/submissions/)
+
 **Note:**  
 跑一个暴力的例子
 
@@ -40,32 +42,20 @@ i = 1:  3, 4, 6 j = 3 j不需要动， 因为j以前的已经被上次遍历证�
 ```cpp
 class Solution {
 public:
-    /**
-     * @param nums: an array of integers
-     * @param s: An integer
-     * @return: an integer representing the minimum size of subarray
-     */
-    int minimumSize(vector<int> &nums, int s) {
-        // write your code here
-        int sum = 0;
-        int len = INT_MAX;
-        int j = 0;
-        int n = nums.size();
-        for (int i = 0; i < n; i++) // start of window
-        {
-            while(j < n) // no need to go back 
-            {
-                if (sum >= s) // if condition break
-                    break;
-                else // update local window
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int res = INT_MAX;
+        int sum = 0, j = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            while(j < nums.size()) {
+                if (sum >= s) break;
+                else {
                     sum += nums[j++];
+                }
             }
-            // update state of i; 
-            if (sum >= s) 
-                len = min(len, j-i);
+            if (sum >= s) res = min(res, j-i);
             sum -= nums[i];
         }
-        return len == INT_MAX? -1:len;
+        return res == INT_MAX? 0:res;
     }
 };
 ```
@@ -242,8 +232,6 @@ public:
     }
 };
 ```
-
-
 
 ## ![](/assets/heapfortopk.png)
 
