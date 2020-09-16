@@ -97,7 +97,7 @@ public:
             res = max(res, j - i);
             buff[s[i]]--;
         }
-        
+
         return res;
     }
 };
@@ -111,6 +111,8 @@ Given a string source and a string target, find the minimum window in source whi
 
 For source =`"ADOBECODEBANC"`, target =`"ABC"`, the minimum window is`"BANC"`
 
+[https://leetcode.com/problems/minimum-window-substring/](https://leetcode.com/problems/minimum-window-substring/)
+
 ### Challenge
 
 Can you do it in time complexity O\(n\) ?
@@ -118,51 +120,31 @@ Can you do it in time complexity O\(n\) ?
 ```cpp
 class Solution {
 public:
-    /**
-     * @param source : A string
-     * @param target: A string
-     * @return: A string denote the minimum window, return "" if there is no such a string
-     */
-
-
-    bool isAll(vector<int>& sourceHash, vector<int>& targetHash)
-    {
-        for (int i = 0; i < 256; i++)
-        {
-            if (targetHash[i] !=0 && sourceHash[i] < targetHash[i])
-                return false;
-        }
-        return true;
-    }
-    string minWindow(string &source , string &target) {
-        // write your code here
-        vector<int> targetHash(256, 0);
-        for (auto each : target)
-            targetHash[each]++;
-        vector<int> sourceHash(256, 0);
-        int j = 0;
+    string minWindow(string s, string t) {
+        vector<int> buff(256, 0);
+        vector<int> target(256, 0);
+        for (auto c : t) target[c]++;
+        auto check = [&]() {
+            for (int i = 0; i < 256; i++) {
+                if (buff[i] < target[i]) return false;
+            }
+            return true;
+        };
+        int j = 0, n = s.size();
+        int start = -1;
         int len = INT_MAX;
-        string res;
-
-        for (int i = 0; i < source.size(); i++)
-        {
-            while(j < source.size())
-            {
-                if (isAll(sourceHash, targetHash))
-                    break;
-                else
-                {
-                    sourceHash[source[j++]]++;
-                }
+        for (int i = 0; i < n; i++) {
+            while(j < n) {
+                if (check()) break;
+                else buff[s[j++]]++;
             }
-            if ( isAll(sourceHash, targetHash) && j-i < len) // this place, the j might be the end, we cannot control
-            {
-                len = j-i;
-                res = source.substr(i, j-i);
-            }
-            sourceHash[source[i]]--;
+            if (check() && j-i < len) {
+                start = i;
+                len = j - i;
+            }  
+            buff[s[i]]--;
         }
-        return res;
+        return start == -1 ? "" : s.substr(start, len);
     }
 };
 ```
