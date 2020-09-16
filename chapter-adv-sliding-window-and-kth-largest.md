@@ -79,29 +79,25 @@ O\(n\) time
 ```cpp
 class Solution {
 public:
-    /**
-     * @param s: a string
-     * @return: an integer
-     */
-    int lengthOfLongestSubstring(string &s) {
-        // write your code here
-        // substring , without repeating, longest
-        unordered_set<char> windowCounter;
+    int lengthOfLongestSubstring(string s) {
         int res = 0;
-        int j = 0;
-        for (int i = 0; i < s.size(); i++)
-        {
-            while(j < s.size())
-            {
-                if (windowCounter.count(s[j]))
+        vector<int> buff(256, 0);
+        auto scan = [&](char c){
+            return buff[c] == 0;
+        };
+        int j = 0, n = s.size();
+        for (int i = 0; i < n; i++) {
+            while(j < n) {
+                if (scan(s[j])) {
+                    buff[s[j++]]++;
+                } else {
                     break;
-                else
-                    windowCounter.insert(s[j++]);
+                }
             }
-            // update state i 
             res = max(res, j - i);
-            windowCounter.erase(s[i]);
+            buff[s[i]]--;
         }
+        
         return res;
     }
 };
