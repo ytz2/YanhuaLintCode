@@ -170,43 +170,25 @@ O\(n\), n is the size of the string_s_.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param s: A string
-     * @param k: An integer
-     * @return: An integer
-     */
-    int lengthOfLongestSubstringKDistinct(string &s, int k) {
-        // write your code here
-        int n = s.size();
-        if (k == 0)
-            return 0;
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        if (k == 0 || s.empty()) return 0;
+        int count = 0;
+        vector<int> counter(256, 0);
         int res = 0;
         int j = 0;
-        unordered_map<char,int> dict;
-        for (int i = 0; i < n; i++)
-        {
-            while(j < n)
-            {
-                /* this is wrong, why ? because once dict.size == k, and the next is also 
-                in the dict, it does not change it and we can still increase the value
-                if (dict.size() >= k)
+        for (int i = 0; i < s.size(); i++) {
+            while( j < s.size()) {
+                if (count <= k) {
+                    res = max(res, j - i);
+                    count += counter[s[j]] == 0;
+                    counter[s[j++]]++;
+                } else {
                     break;
-                else
-                    dict[s[j++]]++;
-                */
-                if (dict.count(s[j]))
-                    dict[s[j++]]++;
-                else 
-                {
-                    if (dict.size() == k)
-                        break;
-                    dict[s[j++]]++;
                 }
-
             }
-            res = max(res, j-i);
-            if (--dict[s[i]] == 0)
-                dict.erase(s[i]);
+            if (count <= k) res = max(res, j - i);
+            counter[s[i]]--;
+            count -= counter[s[i]] == 0;
         }
         return res;
     }
@@ -237,49 +219,42 @@ return`5`
 
 Solve it in O\(k log n\) time where n is the bigger one between row size and column size.
 
-这也算一类题目了， 用的思想是top k 就上pq, 碰到不确定的备选答案就丢进去，因为他始终给你维护一个最优的答案。 另外记住pq default是他妈的最大heap,日。
+这也算一类题目了， 用的思想是top k 就上pq, 碰到不确定的备选答案就丢进去，因为他始终给你维护一个最优的答案
 
 用pq做BFS的辅助找第k大，是多选情况下的应用
 
 ```cpp
 class Solution {
 public:
-    /**
-     * @param matrix: a matrix of integers
-     * @param k: An integer
-     * @return: the kth smallest number in the matrix
-     */
-    int kthSmallest(vector<vector<int>> &matrix, int k) {
-        // write your code here
-        int m = matrix.size();
-        int n = matrix[0].size();
-
-        auto cmp = [&matrix](const pair<int,int>& left, const pair<int,int>& right){
-            return matrix[left.first][left.second] > matrix[right.first][right.second];
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n = matrix.size();
+        vector<vector<bool>> visited(n, vector<bool>(n, false));
+        const static vector<int> dx{0, 1};
+        const static vector<int> dy{1, 0};
+        auto cmp=[&](int i, int j) {
+            return matrix[i/n][i%n] > matrix[j/n][j%n];
         };
-        priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(cmp)> pq(cmp);
-        pq.emplace(0, 0);
-        int v = 0;
-        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
+        pq.push(0);
         visited[0][0] = true;
-        static vector<int> dx{0, 1};
-        static vector<int> dy{1, 0};
-        for (int i = 0; i < k; i++)
-        {
-            auto p = pq.top();
+        int count = 0;
+        while(!pq.empty()) {
+            auto ind = pq.top();
             pq.pop();
-            v = matrix[p.first][p.second];
-            for (int j = 0; j < 2; j++)
-            {
-                int nx = p.first + dx[j];
-                int ny = p.second + dy[j];
-                if (nx < 0 || nx >= m || ny<0 || ny >=n || visited[nx][ny])
+            count++;
+            if (count == k) {
+                return matrix[ind/n][ind%n];
+            }
+            for (int i = 0; i < 2; i++) {
+                auto nx = ind / n + dx[i];
+                auto ny = ind % n + dy[i];
+                if (nx < 0 || nx >= n || ny < 0 || ny >= n || visited[nx][ny])
                     continue;
                 visited[nx][ny] = true;
-                pq.emplace(nx,ny);
+                pq.push(nx*n + ny);
             }
         }
-        return v; 
+        return 0;
     }
 };
 ```
