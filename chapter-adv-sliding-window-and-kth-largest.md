@@ -311,42 +311,29 @@ return`5`
 ```cpp
 class Solution {
 public:
-    vector<pair<int, int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
-        vector<pair<int,int>> result;
-
-        auto cmp = [&nums1,&nums2](const pair<int,int>& left, const pair<int,int>& right){
-            return nums1[left.first]+nums2[left.second] > nums1[right.first]+nums2[right.second];  
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        vector<vector<int>> result;
+        if (k == 0 || nums1.empty() || nums2.empty()) return result;
+        auto cmp = [&](const pair<int, int>& l, const pair<int, int>&r) {
+            return nums1[l.first] + nums2[l.second] > nums1[r.first] + nums2[r.second];  
         };
-
-
-        int m = nums1.size();
-        int n = nums2.size();
-        if (0 == m || 0 == n)
-            return result;
-        vector<vector<bool>> visited(m, vector<bool>(n, false));
-
-        priority_queue<pair<int,int>, vector<pair<int,int>>,decltype(cmp)> pq(cmp);
-
+        priority_queue<pair<int,int>, vector<pair<int,int>>, decltype(cmp)> pq(cmp);
         pq.emplace(0, 0);
-        visited[0][0] = true;
-        for (int i = 0; i < k && !pq.empty(); i++)
-        {
-            auto p = pq.top();
+        unordered_set<int> visited{0};
+        const static vector<int> dx{0, 1};
+        const static vector<int> dy{1, 0};
+        while(!pq.empty()) {
+            auto ind = pq.top();
             pq.pop();
-            result.emplace_back(nums1[p.first], nums2[p.second]);
-            int next_num1 = p.first+1;
-            int next_num2 = p.second+1;
-
-            if (next_num1 < m && !visited[next_num1][p.second])
-            {
-                pq.emplace(next_num1, p.second);
-                visited[next_num1][p.second] = true;
-            }
-
-            if (next_num2 < n && !visited[p.first][next_num2])
-            {
-                pq.emplace(p.first,next_num2);
-                visited[p.first][next_num2] = true;
+            result.push_back(vector<int>{nums1[ind.first], nums2[ind.second]});
+            if (result.size() == k) break;
+            for (int i = 0; i < 2; i++) {
+                auto nx = ind.first + dx[i];
+                auto ny = ind.second + dy[i];
+                auto index = nx*nums2.size() + ny;
+                if (nx >= nums1.size() || ny >= nums2.size() || visited.count(index)) continue;
+                visited.insert(index);
+                pq.emplace(nx, ny);
             }
         }
         return result;
