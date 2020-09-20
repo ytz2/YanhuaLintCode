@@ -43,8 +43,6 @@ You can assume that no duplicate edges will appear in`edges`. Since all edges ar
 
 [https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
 
-
-
 看到这种图联通不连通就想到UF了， 这里是UF的一个变种，找有几个subset.维护一个n就可以了，最开始为n个，每连一个就--
 
 另外还有一个考察的地方可能是query每个subset的size,其实就是维护一个size\[n\] 每次connect的时候。 应该说这道题的变种是数岛II。
@@ -67,14 +65,14 @@ public:
         }
         return n;
     }
-    
+
     int Find(int i, vector<int>& parent) {
         if (parent[i] != i) {
             parent[i] = Find(parent[i], parent);
         }
         return parent[i];
     }
-    
+
     bool Union(int i, int j, vector<int>& parent) {
         auto pi = Find(i, parent);
         auto pj = Find(j, parent);
@@ -142,31 +140,27 @@ We have overhauled the problem description + test cases and specified clearly th
 class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-        vector<int> father(edges.size()+1, 0);
-        for (int i = 1; i <= edges.size(); i++)
-            father[i] = i;
-
-        for (auto& edge : edges)
-            if (!Union(father, edge[0], edge[1]))
-                return edge;
+        vector<int> parent(edges.size() + 1, 0);
+        for (int i = 0; i < parent.size(); i++) parent[i] = i;
+        for (auto& each : edges) {
+            if (!connect(each[0], each[1], parent) ) return each;
+        }
         return {};
     }
-
-    bool Union(vector<int>& father, int i, int j)
-    {
-        int ri = Find(father, i);
-        int rj = Find(father, j);
-        if (ri == rj)
-            return false;
-        father[ri] = rj;
-        return true;
+    
+    int find(int i, vector<int>& parent) {
+        if (parent[i] != i) {
+            parent[i] = find(parent[i], parent);
+        }
+        return parent[i];
     }
-
-    int Find(vector<int>& father, int i)
-    {
-        if (father[i] != i)
-            father[i] = Find(father, father[i]);
-        return father[i];
+    
+    bool connect(int i, int j, vector<int>& parent) {
+        auto pi = find(i, parent);
+        auto pj = find(j, parent);
+        if (pi == pj) return false;
+        parent[pi] = pj;
+        return true;
     }
 };
 ```
