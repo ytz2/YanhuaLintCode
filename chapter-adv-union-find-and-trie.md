@@ -41,6 +41,10 @@ Output:
 **Note:**  
 You can assume that no duplicate edges will appear in`edges`. Since all edges are undirected,`[0, 1]`is the same as`[1, 0]`and thus will not appear together in`edges`.
 
+[https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
+
+
+
 看到这种图联通不连通就想到UF了， 这里是UF的一个变种，找有几个subset.维护一个n就可以了，最开始为n个，每连一个就--
 
 另外还有一个考察的地方可能是query每个subset的size,其实就是维护一个size\[n\] 每次connect的时候。 应该说这道题的变种是数岛II。
@@ -54,39 +58,30 @@ size\[j\] += size\[i\]就可以了
 ```cpp
 class Solution {
 public:
-
-    int countComponents(int n, vector<pair<int, int>>& edges) {
-        father_ = vector<int>(n, 0);
-        size = n;
-        for (int i = 0; i < n; i++)
-            father_[i] = i;
-
-        for (auto& p : edges)
-            connect(p.first, p.second);
-        return size;
-
-    }
-
-    void connect(int i, int j)
-    {
-        int ri = find(i);
-        int rj = find(j);
-        if (ri != rj)
-        {
-            father_[ri] = rj;
-            size--;
+    int countComponents(int n, vector<vector<int>>& edges) {
+        if (edges.empty() || n <= 1) return n;
+        vector<int> parent(n, 0);
+        for (auto i = 0; i < n; i++) parent[i] = i;
+        for (auto& each : edges) {
+            if (Union(each[0], each[1], parent)) n--;
         }
+        return n;
     }
-
-    int find(int v)
-    {
-        if (father_[v] != v)
-            father_[v] = find(father_[v]);
-        return father_[v];
+    
+    int Find(int i, vector<int>& parent) {
+        if (parent[i] != i) {
+            parent[i] = Find(parent[i], parent);
+        }
+        return parent[i];
     }
-
-    int size;
-    vector<int> father_;
+    
+    bool Union(int i, int j, vector<int>& parent) {
+        auto pi = Find(i, parent);
+        auto pj = Find(j, parent);
+        if (pi == pj) return false;
+        parent[pi] = pj;
+        return true;
+    }
 };
 ```
 
