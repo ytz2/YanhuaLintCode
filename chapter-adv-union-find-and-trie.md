@@ -147,14 +147,14 @@ public:
         }
         return {};
     }
-    
+
     int find(int i, vector<int>& parent) {
         if (parent[i] != i) {
             parent[i] = find(parent[i], parent);
         }
         return parent[i];
     }
-    
+
     bool connect(int i, int j, vector<int>& parent) {
         auto pi = find(i, parent);
         auto pj = find(j, parent);
@@ -210,64 +210,47 @@ Every integer represented in the 2D-array will be between 1 and N, where N is th
 class Solution {
 public:
     vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
-
         int n = edges.size();
-        vector<int> father(n+1, 0);
         vector<int> parent(n+1, 0);
-        vector<int> ans1, ans2;
-
-
-        for (int i = 0; i <=n; i++)
-            father[i] = i;
-
-        // check how many parents one node have 
-        for (auto& edge : edges)
-        {
-            int u = edge[0];
-            int v = edge[1];
-            // u->v, v's parent is u
-
-            // ok, we have more than one parent
-            if (parent[v] > 0)
-            {
-                // do below:
-                // 1. record the duplicate edge
-                ans2 = edge;
-                ans1 = {parent[v] ,v};
-                // delete the edge
-                edge[0] = -1;
-                edge[1] = -1;
-            }
-            parent[v] = u;
+        for (auto i = 0; i < n+1; i++) {
+            parent[i] = i;
         }
-
-        for (auto& edge : edges)
-        {
-            if (edge[0] == -1)
+        vector<int> father(n+1, 0);
+        vector<int> p1, p2;
+        for (auto& edge : edges) {
+            if (father[edge[1]] == 0) {
+                father[edge[1]] = edge[0];
                 continue;
-            if (!Union(father, edge[0], edge[1]))
-                return ans1.empty()? edge : ans1;
+            }
+            p1 = edge;
+            p2 = {father[edge[1]], edge[1]};
+            edge.clear();
         }
-
-
-        return ans2;
+        
+        for (const auto& edge : edges) {
+            if (edge.empty()) continue;
+            if (!connect(edge[0], edge[1], parent)) {
+                return p2.empty() ? edge : p2;
+            }
+        }
+        return p1;
     }
-
-    int Find(vector<int>& father, int i){
-      if (father[i] != i)
-          father[i] = Find(father, father[i]);
-      return father[i];
-    };
-
-    bool Union(vector<int>& father, int i, int j){
-        int root_i = Find(father,i);
-        int root_j = Find(father,j);
-        if (root_i == root_j)
-            return false;
-        father[root_i] = root_j;
+    
+    int find(int i, vector<int>& parent) {
+        if (parent[i] != i) {
+            parent[i] = find(parent[i], parent);
+        }
+        return parent[i];
+    }
+    
+    bool connect(int i, int j, vector<int>& parent) {
+        auto pi = find(i, parent);
+        auto pj = find(j, parent);
+        if (pi == pj) return false;
+        parent[pi] = pj;
         return true;
-    };
-
+    }
+    
 };
 ```
 
