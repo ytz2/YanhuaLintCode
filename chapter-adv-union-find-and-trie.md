@@ -226,7 +226,7 @@ public:
             p2 = {father[edge[1]], edge[1]};
             edge.clear();
         }
-        
+
         for (const auto& edge : edges) {
             if (edge.empty()) continue;
             if (!connect(edge[0], edge[1], parent)) {
@@ -235,14 +235,14 @@ public:
         }
         return p1;
     }
-    
+
     int find(int i, vector<int>& parent) {
         if (parent[i] != i) {
             parent[i] = find(parent[i], parent);
         }
         return parent[i];
     }
-    
+
     bool connect(int i, int j, vector<int>& parent) {
         auto pi = find(i, parent);
         auto pj = find(j, parent);
@@ -250,7 +250,7 @@ public:
         parent[pi] = pj;
         return true;
     }
-    
+
 };
 ```
 
@@ -292,58 +292,50 @@ We could return these lists in any order, for example the answer [['Mary', 'mary
 class Solution {
 public:
     vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
-        unordered_map<string, string> parent;
-        unordered_map<string, string> owner;
-        unordered_map<string, set<string>> chain;
-        for ( auto& account : accounts)
-        {
-            string& name = account[0];
-            for (int i = 1; i < account.size(); i++)
-            {
-                parent[account[i]] = account[i];
-                owner[account[i]] = account[0];
+        unordered_map<string, pair<int,int>> parent;
+        for (int i = 0; i < accounts.size(); i++) {
+            for (int j = 1; j < accounts[i].size(); j++) {
+                if (parent.count(accounts[i][j])) continue;
+                parent[accounts[i][j]] = make_pair(i, j);
             }
         }
-
-        for (  auto& account : accounts)
-        {
-            for (int i = 2; i < account.size(); i++)
-                connect(parent, account[i], account[i-1]);
+        for (int i = 0; i < accounts.size(); i++) {
+            for (int j = 2; j < accounts[i].size(); j++) {
+                connect(accounts[i][1], accounts[i][j], parent, accounts);
+            }
         }
-
-        for ( auto& each : parent)
-        {
-            auto p = Find(parent, each.first);
-            chain[p].insert(each.first);
+        unordered_map<string, vector<string>> hash;
+        for (auto& each : parent) {
+            const auto ppos = Find(each.first, parent, accounts);
+            const auto& par = accounts[ppos.first][ppos.second];
+            if (!hash.count(par))
+                hash[par] = {accounts[ppos.first][0]};
+            hash[par].push_back(each.first);
         }
-
-        vector<vector<string>> result;
-        for (auto& each  : chain)
-        {
-            vector<string> v;
-            v.push_back(owner[each.first]);
-            for (auto& e : each.second)
-                v.push_back(e);
-            result.push_back(v);
+        vector<vector<string>> res;
+        for (auto& each : hash) {
+            sort(each.second.begin()+1, each.second.end());
+            res.push_back(each.second);
         }
-        return result;
+        return res;
     }
-
-    string Find(unordered_map<string, string>& parent, string email)
-    {
-        if (parent[email] != email)
-            parent[email] = Find(parent, parent[email]);
-        return parent[email];
+    
+    pair<int, int> Find(const std::string& val,  unordered_map<string, pair<int,int>>& parent, const vector<vector<string>>& accounts) {
+        const auto& pos = parent[val];
+        const auto& pstr = accounts[pos.first][pos.second];
+        if ( pstr != val) {
+            parent[val] = Find(pstr, parent, accounts);
+        }
+        return parent[val];
     }
-
-    void connect (unordered_map<string, string>& parent, string& a, string& b)
-    {
-        auto pa = Find(parent, a);
-        auto pb = Find(parent, b);
-        if (pa != pb)
-            parent[pa] = pb;
+    
+    void connect(const std::string& l, const std::string& r,  unordered_map<string, pair<int,int>>& parent, const vector<vector<string>>& accounts) {
+        auto pl = Find(l, parent, accounts);
+        auto pr = Find(r, parent, accounts);
+        if (pl == pr) return;
+        const auto& plstr = accounts[pl.first][pl.second];
+        parent[plstr] = pr;
     }
-
 };
 ```
 
