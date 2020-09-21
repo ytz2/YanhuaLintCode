@@ -604,106 +604,86 @@ void update\(const string& str\)
 ```cpp
 #include <functional>
 using namespace std;
-class TrieNode{
-public:
-
-
-    TrieNode()
-    {
-
-    }
-
-    ~TrieNode()
-    {
-
-    }
-
-    void update(const string& str, int times)
-    {
-        freq[str] = times;
-        top3.insert(str);
-        if (top3.size() > 3)
-            top3.erase(*top3.rbegin());
-    }
-
-    void update(const string& str)
-    {   
-
-        if (top3.count(str))
-            top3.erase(str);
-        freq[str]++;
-        top3.insert(str);
-        if (top3.size() > 3)
-            top3.erase(*top3.rbegin());
-
-    }
-
-    vector<string> topThree()
-    {
-        vector<string> res(top3.begin(), top3.end());
-        return res;
-    }
-
-    unordered_map<char, TrieNode*> children;
-    unordered_map<string ,int> freq;
-    set<string, std::function<bool(const string& left,const  string& right)>> top3{
-        [this](const string& left,const  string& right)
-        {
-          if (freq[left] == freq[right])
-              return left < right;
-          return freq[left] > freq[right];
-        }
+struct Node {
+    vector<Node*> children = vector<Node*>(256, nullptr);
+    unordered_map<string,int> counter;
+    set<string, function<bool(const string&, const string&)>> top3{
+      [this](const string& l, const string& r ) {
+        if (this->counter[l] == this->counter[r]) return l > r;
+        return this->counter[l] < this->counter[r];
+      }
     };
-
+    
+    void add(const string& val) {
+        if (top3.count(val)) 
+            top3.erase(val);
+        counter[val]++;
+        top3.insert(val);
+        if (top3.size() > 3) 
+            top3.erase(top3.begin());
+    }
+    
+    void add(const string& val, int freq) {
+        if (top3.count(val))
+            top3.erase(val);
+        counter[val] = freq;
+        top3.insert(val);
+        if (top3.size() > 3) 
+            top3.erase(top3.begin());        
+    }
+    
+    vector<string> get() {
+        return vector<string>(top3.rbegin(), top3.rend());
+    }
 };
-
-
 
 class AutocompleteSystem {
 public:
-    AutocompleteSystem(vector<string> sentences, vector<int> times) {
-        root = new TrieNode();
-        cur = root;
-        for (int i = 0; i < sentences.size(); i++)
-        {
-            auto& sentence = sentences[i];
-            int time = times[i];
-            auto p = root;
-            for (auto c : sentence)
-            {
-                if (!p->children.count(c))
-                    p->children[c] = new TrieNode();
-                p = p->children[c];
-                p->update(sentence, time);
+    AutocompleteSystem(vector<string>& sentences, vector<int>& times) {
+        for (int i = 0; i < sentences.size(); i++) {
+            auto  cur = &root;
+            const string& str =sentences[i];
+            int freq= times[i];
+            for (auto ch : str) {
+                if (!cur->children[ch]) cur->children[ch] = new Node;
+                cur = cur->children[ch];
+                cur->add(str, freq);
             }
         }
     }
-
+    
     vector<string> input(char c) {
-        if (c == '#')
-        {
-            auto p = root;
-            for (auto c : typed)
-            {
-                if (!p->children.count(c))
-                    p->children[c] = new TrieNode();
-                p = p->children[c];
-                p->update(typed);
+        if (c == '#') {
+            auto  node = &root;
+            for (auto ch : curstr) {
+                if (!node->children[ch]) node->children[ch] = new Node;
+                node = node->children[ch];
+                node->add(curstr);
             }
-            typed.clear();
-            cur = root;
+            cur = &root;
+            curstr = "";
             return {};
         }
-        typed.push_back(c);
-        if (!cur->children.count(c))
-            cur->children[c] = new TrieNode;
+        curstr.push_back(c);
+        if (!cur) return {};
+        if (!cur->children[c]){
+            cur = nullptr;
+            return {};
+        }
         cur = cur->children[c];
-        return cur->topThree();
+        return cur->get();
     }
-    string typed;
-    TrieNode *root;
-    TrieNode *cur;
+    
+    Node root;
+    Node* cur = &root;
+    string curstr;
 };
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem* obj = new AutocompleteSystem(sentences, times);
+ * vector<string> param_1 = obj->input(c);
+ */
 ```
 
 ## 425. Word Squares
