@@ -613,7 +613,7 @@ struct Node {
         return this->counter[l] < this->counter[r];
       }
     };
-    
+
     void add(const string& val) {
         if (top3.count(val)) 
             top3.erase(val);
@@ -622,7 +622,7 @@ struct Node {
         if (top3.size() > 3) 
             top3.erase(top3.begin());
     }
-    
+
     void add(const string& val, int freq) {
         if (top3.count(val))
             top3.erase(val);
@@ -631,7 +631,7 @@ struct Node {
         if (top3.size() > 3) 
             top3.erase(top3.begin());        
     }
-    
+
     vector<string> get() {
         return vector<string>(top3.rbegin(), top3.rend());
     }
@@ -651,7 +651,7 @@ public:
             }
         }
     }
-    
+
     vector<string> input(char c) {
         if (c == '#') {
             auto  node = &root;
@@ -673,7 +673,7 @@ public:
         cur = cur->children[c];
         return cur->get();
     }
-    
+
     Node root;
     Node* cur = &root;
     string curstr;
