@@ -422,14 +422,16 @@ search("b..") -
 **Note:**  
 You may assume that all words are consist of lowercase letters`a-z`.
 
+[https://leetcode.com/problems/design-add-and-search-words-data-structure/](https://leetcode.com/problems/design-add-and-search-words-data-structure/)
+
 ```cpp
 class WordDictionary {
 public:
     /** Initialize your data structure here. */
     WordDictionary() {
-        
+
     }
-    
+
     /** Adds a word into the data structure. */
     void addWord(string word) {
         auto cur = &root;
@@ -440,12 +442,12 @@ public:
         }
         cur->isWord = true;
     }
-    
+
     /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
     bool search(string word) {
         return search(word, 0, &root);
     }
-    
+
 private:
     struct Node {
         bool isWord = false;
@@ -459,7 +461,7 @@ private:
     };
     Node root;    
 private:
-    
+
     bool search(const string& word, int pos, Node*  cur) {
         if (!cur) return false;
         if (pos >= word.size()) return false;
@@ -476,7 +478,7 @@ private:
         if (!node) return false;
         return isLast? node->isWord : search(word, pos + 1, node);
     }
-    
+
 
 };
 
