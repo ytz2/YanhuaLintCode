@@ -369,14 +369,14 @@ public:
         }
         return true;
     }
-    
+
     string find(const string& str,  unordered_map<string, string>& parent) {
         if (parent[str] != str) {
             parent[str] = find(parent[str], parent);
         }
         return parent[str];
     }
-    
+
     void connect(const string& l, const string& r, unordered_map<string, string>& parent) {
         auto pl = find(l, parent);
         auto pr = find(r, parent);
@@ -426,77 +426,65 @@ You may assume that all words are consist of lowercase letters`a-z`.
 class WordDictionary {
 public:
     /** Initialize your data structure here. */
-
-    struct TrieNode{
-        TrieNode()
-            :isWord(false), children(vector<TrieNode*>(26, nullptr))
-            {}
-        ~TrieNode()
-        {
-            for (auto ptr : children)
-            {
-                if (ptr) delete ptr;
-            }
-        }
-        bool isWord;
-        vector<TrieNode*> children;  
-    };
-
-
     WordDictionary() {
-        root = new TrieNode();
+        
     }
-
-    ~WordDictionary(){
-        delete root;
-    }
+    
     /** Adds a word into the data structure. */
     void addWord(string word) {
-        auto p = root;
-        for (auto c : word)
-        {
-            int ind = c-'a';
-            if (nullptr == p->children[ind])
-                p->children[ind] = new TrieNode();
-            p = p->children[ind];
+        auto cur = &root;
+        for (auto c : word) {
+            if (nullptr == cur->children[c- 'a']) 
+                cur->children[c - 'a'] = new Node;
+            cur = cur->children[c - 'a'];
         }
-        p->isWord = true;
+        cur->isWord = true;
     }
-
+    
     /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
     bool search(string word) {
-        return search(word, 0, root);
+        return search(word, 0, &root);
     }
-
+    
 private:
-
-    bool search(string& word, int i, TrieNode* p)
-    {
-        if (i >= word.size())
-            return p && p->isWord;
-        if (word[i] == '.')
-        {
-            for (auto ptr : p->children)
-            {
-                if (ptr && search(word, i+1, ptr))
-                    return true;
+    struct Node {
+        bool isWord = false;
+        vector<Node*> children = vector<Node*>(26, nullptr);
+        Node() = default;
+        ~Node() {
+            for(auto each : children) {
+                if (each) delete each;
+            }
+        }
+    };
+    Node root;    
+private:
+    
+    bool search(const string& word, int pos, Node*  cur) {
+        if (!cur) return false;
+        if (pos >= word.size()) return false;
+        auto c = word[pos];
+        bool isLast = pos == word.size() - 1;
+        if (c == '.') {
+            for (auto each : cur->children) {
+                if (isLast && each && each->isWord) return true;
+                if (!isLast && each && search(word, pos+1, each)) return true;
             }
             return false;
         }
-        int ind = word[i] - 'a';
-        if (!p->children[ind])
-            return false;
-        return search(word, i+1, p->children[ind]);
+        auto node = cur->children[c - 'a'];
+        if (!node) return false;
+        return isLast? node->isWord : search(word, pos + 1, node);
     }
+    
 
-    TrieNode *root;
 };
 
 /**
  * Your WordDictionary object will be instantiated and called as such:
- * WordDictionary obj = new WordDictionary();
- * obj.addWord(word);
- * bool param_2 = obj.search(word);
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
  */
 ```
 
