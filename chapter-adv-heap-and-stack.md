@@ -35,63 +35,24 @@ trap water 这种基本上是两根指针
 class Solution {
 public:
     int trap(vector<int>& height) {
-        if (height.size() <=2)
-            return 0;
-        int l = 0, r = height.size()-1;
+        if (height.size() <= 1) return 0;
         int sum = 0;
-        while(l <= r)
-        {
-            if (height[l] <= height[r])
-            {
-                int bar = height[l];
-                while (l<=r && height[l] <= bar)
-                {
-                    sum +=bar - height[l];
-                    l++;
+        int l = 0, r = height.size() -1;
+        int hl = height[l], hr = height[r];
+        
+        while( l < r) {
+            if (hl <= hr) {
+                if (height[l] <= hl) {
+                    sum += hl - height[l++]; 
+                } else {
+                    hl = height[l];
                 }
-            }
-            else
-            {
-                int bar = height[r];
-                while(l<=r && height[r] <= bar)
-                {
-                    sum +=bar - height[r];
-                    r--;
+            } else {
+                if (height[r] <= hr) {
+                    sum += hr - height[r--];
+                } else {
+                    hr = height[r];
                 }
-            }
-        }
-        return sum;
-    }
-};
-
-
-//更简洁的一个
-
-class Solution {
-public:
-    int trap(vector<int>& height) {
-        if (height.size() <=2)
-            return 0;
-        int l = 0, r = height.size()-1;
-        int sum = 0;
-        int lh = height[l], rh = height[r];
-        while( l < r)
-        {
-            if (lh < rh)
-            {
-                l++;
-                if (lh > height[l])
-                    sum += lh-height[l];
-                else
-                    lh = height[l];
-            }
-            else
-            {
-                r--;
-                if (rh > height[r])
-                    sum += rh - height[r];
-                else
-                    rh = height[r];
             }
         }
         return sum;
