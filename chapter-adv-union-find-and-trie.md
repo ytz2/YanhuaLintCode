@@ -319,7 +319,7 @@ public:
         }
         return res;
     }
-    
+
     pair<int, int> Find(const std::string& val,  unordered_map<string, pair<int,int>>& parent, const vector<vector<string>>& accounts) {
         const auto& pos = parent[val];
         const auto& pstr = accounts[pos.first][pos.second];
@@ -328,7 +328,7 @@ public:
         }
         return parent[val];
     }
-    
+
     void connect(const std::string& l, const std::string& r,  unordered_map<string, pair<int,int>>& parent, const vector<vector<string>>& accounts) {
         auto pl = Find(l, parent, accounts);
         auto pr = Find(r, parent, accounts);
@@ -353,93 +353,35 @@ Also, a word is always similar with itself. For example, the sentences`words1 = 
 
 Finally, sentences can only be similar if they have the same number of words. So a sentence like`words1 = ["great"]`can never be similar to`words2 = ["doubleplus","good"]`.
 
-**Note:**
-
-The length of
-
-`words1`
-
-and
-
-`words2`
-
-will not exceed
-
-`1000`
-
-.
-
-The length of
-
-`pairs`
-
-will not exceed
-
-`2000`
-
-.
-
-The length of each
-
-`pairs[i]`
-
-will be
-
-`2`
-
-.
-
-The length of each
-
-`words[i]`
-
-and
-
-`pairs[i][j]`
-
-will be in the range
-
-`[1, 20]`
-
-.
+[https://leetcode.com/problems/sentence-similarity-ii/](https://leetcode.com/problems/sentence-similarity-ii/)
 
 ```cpp
 class Solution {
 public:
-    bool areSentencesSimilarTwo(vector<string>& words1, vector<string>& words2, vector<pair<string, string>> pairs) {
-        if (words1.size() != words2.size())
-            return false;
-        unordered_map<string, string> cluster;
-        for (const auto& p : pairs)
-        {
-            cluster[p.first] = p.first;
-            cluster[p.second] = p.second;
-        }
-
-        for (const auto& p : pairs)
-            Connect(cluster, p.first, p.second);
-
-        for (int i = 0; i < words1.size(); i++)
-        {
-            if (Find(cluster, words1[i]) != Find(cluster, words2[i]))
-                return false;
+    bool areSentencesSimilarTwo(vector<string>& words1, vector<string>& words2, vector<vector<string>>& pairs) {
+        if (words1.size() != words2.size()) return false;
+        unordered_map<string, string> parent;
+        for (const auto& each : words1) parent[each] = each;
+        for (const auto& each : words2) parent[each] = each;
+        for (auto& each : pairs) connect(each[0], each[1], parent);
+        for (int i = 0; i < words1.size(); i++) {
+            if (find(words1[i], parent) != find(words2[i], parent)) return false;
         }
         return true;
     }
-
-    string Find(unordered_map<string, string>& cluster, const string& ref)
-    {
-        if (cluster[ref] != ref)
-            cluster[ref] = Find(cluster, cluster[ref]);
-        return cluster[ref];
+    
+    string find(const string& str,  unordered_map<string, string>& parent) {
+        if (parent[str] != str) {
+            parent[str] = find(parent[str], parent);
+        }
+        return parent[str];
     }
-
-    void Connect(unordered_map<string, string>& cluster, const string& l, const string& r)
-    {
-        auto lroot = Find(cluster, l);
-        auto rroot = Find(cluster, r);
-        if (lroot != rroot)
-            cluster[lroot] = rroot;
+    
+    void connect(const string& l, const string& r, unordered_map<string, string>& parent) {
+        auto pl = find(l, parent);
+        auto pr = find(r, parent);
+        if (pl == pr) return;
+        parent[pl] = pr;
     }
 };
 ```
@@ -557,113 +499,6 @@ private:
  * bool param_2 = obj.search(word);
  */
 ```
-
-## 773. Sentence Similarity II
-
-Given two sentences`words1, words2`\(each represented as an array of strings\), and a list of similar word pairs`pairs`, determine if two sentences are similar.
-
-For example,`words1 = ["great", "acting", "skills"]`and`words2 = ["fine", "drama", "talent"]`are similar, if the similar word pairs are`pairs = [["great", "good"], ["fine", "good"], ["acting","drama"], ["skills","talent"]]`.
-
-Note that the similarity relation**is**transitive. For example, if "great" and "good" are similar, and "fine" and "good" are similar, then "great" and "fine"**are similar**.
-
-Similarity is also symmetric. For example, "great" and "fine" being similar is the same as "fine" and "great" being similar.
-
-Also, a word is always similar with itself. For example, the sentences`words1 = ["great"], words2 = ["great"], pairs = []`are similar, even though there are no specified similar word pairs.
-
-Finally, sentences can only be similar if they have the same number of words. So a sentence like`words1 = ["great"]`can never be similar to`words2 = ["doubleplus","good"]`.
-
-**Note:**
-
-The length of
-
-`words1`
-
-and
-
-`words2`
-
-will not exceed
-
-`1000`
-
-.
-
-The length of
-
-`pairs`
-
-will not exceed
-
-`2000`
-
-.
-
-The length of each
-
-`pairs[i]`
-
-will be
-
-`2`
-
-.
-
-The length of each
-
-`words[i]`
-
-and
-
-`pairs[i][j]`
-
-will be in the range
-
-`[1, 20]`
-
-.
-
-```cpp
-class Solution {
-public:
-    bool areSentencesSimilarTwo(vector<string>& words1, vector<string>& words2, vector<pair<string, string>> pairs) {
-        if (words1.size() != words2.size())
-            return false;
-        unordered_map<string, string> cluster;
-        for (const auto& p : pairs)
-        {
-            cluster[p.first] = p.first;
-            cluster[p.second] = p.second;
-        }
-
-        for (const auto& p : pairs)
-            Connect(cluster, p.first, p.second);
-
-        for (int i = 0; i < words1.size(); i++)
-        {
-            if (Find(cluster, words1[i]) != Find(cluster, words2[i]))
-                return false;
-        }
-        return true;
-    }
-
-    string Find(unordered_map<string, string>& cluster, const string& ref)
-    {
-        if (cluster[ref] != ref)
-            cluster[ref] = Find(cluster, cluster[ref]);
-        return cluster[ref];
-    }
-
-    void Connect(unordered_map<string, string>& cluster, const string& l, const string& r)
-    {
-        auto lroot = Find(cluster, l);
-        auto rroot = Find(cluster, r);
-        if (lroot != rroot)
-            cluster[lroot] = rroot;
-    }
-};
-```
-
-## 
 
 ## 642. Design Search Autocomplete System
 
