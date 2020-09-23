@@ -39,7 +39,7 @@ public:
         int sum = 0;
         int l = 0, r = height.size() -1;
         int hl = height[l], hr = height[r];
-        
+
         while( l < r) {
             if (hl <= hr) {
                 if (height[l] <= hl) {
@@ -152,6 +152,53 @@ public:
             }
         }
         return ans;
+    }
+};
+
+
+class Solution {
+public:
+    int trapRainWater(vector<vector<int>>& heightMap) {
+        if (heightMap.empty() || heightMap[0].empty()) return 0;
+        int m = heightMap.size();
+        int n = heightMap[0].size();
+        
+        auto cmp = [&heightMap, n](const int i, const int j) {
+            return heightMap[i/n][i%n] > heightMap[j/n][j%n];
+        };
+        priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        for (int i = 0; i < m; i++) {
+            pq.push(i*n);
+            pq.push(i*n + n -1);
+            visited[i][0] = visited[i][n-1] = true;
+        }
+        for (int j = 1; j < n - 1; j++) {
+            pq.push(j);
+            pq.push((m-1)*n + j);
+            visited[0][j] = visited[m-1][j] = true;
+        }
+        static const vector<int> dx{-1, 1, 0, 0};
+        static const vector<int> dy{0, 0, -1, 1};
+        int res = 0;
+        while(!pq.empty()) {
+            auto ind = pq.top();pq.pop();
+            int x = ind / n, y = ind % n;
+            visited[x][y] = true;
+
+            for (int i = 0; i < 4; i++){
+                auto nx = x + dx[i];
+                auto ny = y + dy[i];
+                if (nx < 0 || nx >= m || ny < 0 || ny >= n || visited[nx][ny])
+                    continue;
+                if (heightMap[nx][ny] < heightMap[x][y]) {
+                    res += heightMap[x][y] - heightMap[nx][ny];
+                    heightMap[nx][ny] = heightMap[x][y];  
+                }
+                pq.push(nx * n + ny);
+             }
+        }
+        return res;
     }
 };
 ```
