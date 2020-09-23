@@ -162,7 +162,7 @@ public:
         if (heightMap.empty() || heightMap[0].empty()) return 0;
         int m = heightMap.size();
         int n = heightMap[0].size();
-        
+
         auto cmp = [&heightMap, n](const int i, const int j) {
             return heightMap[i/n][i%n] > heightMap[j/n][j%n];
         };
@@ -245,44 +245,36 @@ class MedianFinder {
 public:
     /** initialize your data structure here. */
     MedianFinder() {
-
+        
     }
-
+    
     void addNum(int num) {
-        if (lq.empty() || num < lq.top())
-            lq.push(num);
-        else 
-            rq.push(num);
-        if (lq.size() - rq.size() == 2)
-        {
-            rq.push(lq.top());
-            lq.pop();
+        if (left.empty() || num < left.top()) left.push(num);
+        else right.push(num);
+        if(left.size() - right.size() == 2) {
+            right.push(left.top());
+            left.pop();
         }
-        if (rq.size() - lq.size() == 1)
-        {
-            lq.push(rq.top());
-            rq.pop();
+        if ( right.size() - left.size() == 1) {
+            left.push(right.top());
+            right.pop();
         }
     }
-
+    
     double findMedian() {
-        if (lq.size() - rq.size() == 1)
-            return lq.top();
-
-        return double(lq.top() + rq.top()) / 2.;
+        if (left.size() == right.size()) return double(left.top() +  right.top()) / 2;
+        return left.top();
     }
-
-    // maintain lq and rq
-    // to make lq.size() == rq.size() || lq.size() == rq.size()+1
-    priority_queue<int> lq; // max heap
-    priority_queue<int, vector<int>, greater<int>> rq;  // min heap
+    
+    priority_queue<int> left;
+    priority_queue<int, vector<int>, greater<int>> right;
 };
 
 /**
  * Your MedianFinder object will be instantiated and called as such:
- * MedianFinder obj = new MedianFinder();
- * obj.addNum(num);
- * double param_2 = obj.findMedian();
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
  */
 ```
 
