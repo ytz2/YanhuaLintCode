@@ -326,50 +326,52 @@ good practice是写一个balance函数，抽插完毕balance一下
 ---
 
 ```cpp
-class MedianFinder {
+class Solution {
 public:
-    /** initialize your data structure here. */
-    MedianFinder() {
-
-    }
-
-    void addNum(int num) {
-        if (lq.empty() || num < lq.top())
-            lq.push(num);
-        else 
-            rq.push(num);
-        if (lq.size() - rq.size() == 2)
-        {
-            rq.push(lq.top());
-            lq.pop();
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        if (k == 1) return vector<double>(nums.begin(), nums.end());
+        multiset<int> tmp(nums.begin(), next(nums.begin(), k));
+        multiset<int> left(tmp.begin(), next(tmp.begin(), (k + 1) / 2));
+        multiset<int> right(next(tmp.begin(), (k + 1) /2), next(tmp.begin(), k));
+        auto med = [&left,&right]() {
+            if (left.size() > right.size()) return double(*left.rbegin());
+            return (double(*left.rbegin()) + double(*right.begin())) / 2;
+        };
+        vector<double> result;
+        auto balance = [&left, &right]() {
+          while(left.size() > right.size() + 1) {
+              right.insert(*left.rbegin());
+              left.erase(prev(left.end()));
+          }  
+          while(right.size() > left.size()) {
+              left.insert(*right.begin());
+              right.erase(right.begin());
+          }
+        };
+        result.push_back(med());
+        for (int i = k; i < nums.size(); i++) {
+            auto toAdd = nums[i];
+            auto toErase = nums[i - k];
+            if (toAdd > *left.rbegin()) {
+                right.insert(toAdd);
+            } else {
+                left.insert(toAdd);
+            }
+            if (toErase <= *left.rbegin()){
+                left.erase(left.lower_bound(toErase));
+            } else {
+                right.erase(right.lower_bound(toErase));
+            }
+            balance();
+            result.push_back(med());
         }
-        if (rq.size() - lq.size() == 1)
-        {
-            lq.push(rq.top());
-            rq.pop();
-        }
+        return result;
     }
+    
+    
 
-    double findMedian() {
-        if (lq.size() - rq.size() == 1)
-            return lq.top();
-
-        return double(lq.top() + rq.top()) / 2.;
-    }
-
-    // maintain lq and rq
-    // to make lq.size() == rq.size() || lq.size() == rq.size()+1
-    priority_queue<int> lq; // max heap
-    priority_queue<int, vector<int>, greater<int>> rq;  // min heap
 };
 
-/**
- * Your MedianFinder object will be instantiated and called as such:
- * MedianFinder obj = new MedianFinder();
- * obj.addNum(num);
- * double param_2 = obj.findMedian();
- */
- 
  class Solution {
 public:
     vector<double> medianSlidingWindow(vector<int>& nums, int k) {
