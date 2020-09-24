@@ -245,9 +245,9 @@ class MedianFinder {
 public:
     /** initialize your data structure here. */
     MedianFinder() {
-        
+
     }
-    
+
     void addNum(int num) {
         if (left.empty() || num < left.top()) left.push(num);
         else right.push(num);
@@ -260,12 +260,12 @@ public:
             right.pop();
         }
     }
-    
+
     double findMedian() {
         if (left.size() == right.size()) return double(left.top() +  right.top()) / 2;
         return left.top();
     }
-    
+
     priority_queue<int> left;
     priority_queue<int, vector<int>, greater<int>> right;
 };
@@ -369,6 +369,41 @@ public:
  * obj.addNum(num);
  * double param_2 = obj.findMedian();
  */
+ 
+ class Solution {
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        vector<double> result;
+        multiset<int> container(nums.begin(), next(nums.begin(), k));
+        auto midIt = next(container.begin(), (k - 1) /2);
+        auto push = [&](){
+          if (k%2 == 0) {
+              result.push_back((double(*midIt) + double(*next(midIt))) / 2);
+          } else {
+              result.push_back(*midIt);
+          } 
+        };
+        push();
+        for (int i = k; i < nums.size(); i++) {
+            auto toAdd = nums[i];
+            auto toErase = nums[i - k];
+            container.insert(toAdd);
+            if (k % 2)  {
+                if (toAdd < *midIt) 
+                    midIt--;
+                if (toErase <= *midIt )
+                    midIt++;
+                container.erase(container.lower_bound(toErase));
+            } else {
+                if (toAdd >= *midIt) midIt++;
+                if (toErase >= *midIt) midIt--;
+                container.erase(prev(container.upper_bound(toErase)));
+            }
+            push();
+        }
+        return result;
+    }
+};
 ```
 
 ## ![](/assets/slidingwindowA.png)
