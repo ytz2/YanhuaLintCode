@@ -235,7 +235,6 @@ Input:
 [[0,30],[5,10],[15,20]]
 Output:
  false
-
 ```
 
 **Example 2:**
@@ -246,10 +245,9 @@ Input:
 
 Output:
  true
-
 ```
 
-**NOTE:** input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
+**NOTE:** input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
 
 [https://leetcode.com/problems/meeting-rooms/](https://leetcode.com/problems/meeting-rooms/)
 
@@ -270,8 +268,6 @@ public:
     }
 };
 ```
-
-
 
 # 253 Meeting Rooms II {#find-peak-element-ii}
 
@@ -296,11 +292,9 @@ Output:
  1
 ```
 
-**NOTE:** input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
+**NOTE:** input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
 
 [https://leetcode.com/problems/meeting-rooms-ii/](https://leetcode.com/problems/meeting-rooms-ii/)
-
-
 
 分析： sweep line
 
@@ -329,8 +323,6 @@ public:
     }
 };
 ```
-
-
 
 # 218 The Skyline Problem {#find-peak-element-ii}
 
@@ -372,46 +364,45 @@ event处理的方式，要分析清楚，
 
 ```cpp
 class Solution {
-public:   
-    struct Event{
-        Event(int t0, int h0, int tp)
-            :t(t0), h(h0), type(tp)
-            {}
-        int t, h, type ; // type 1 enter -1 exit
+public:
+    struct line {
+        int x = 0;
+        int h = 0;
+        bool flag = false;
+        line(int x, int h, bool flag)
+            :x(x), h(h), flag(flag){}
     };
-
-    vector<pair<int, int>> getSkyline(vector<vector<int>>& buildings) {
-        vector<pair<int,int>> ret;
-        multiset<int> height;
-        vector<Event> store;
-        for (auto& each : buildings)
-        {
-            store.emplace_back(each[0], each[2], 1);
-            store.emplace_back(each[1], each[2], -1);
-        }
-
-        sort (store.begin(), store.end(), [](const Event& left, const Event& right){
-            if (left.t == right.t)
-                return left.h*left.type > right.h * right.type;
-            return left.t < right.t;
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        vector<line> lines;
+        for (const auto& building : buildings) {
+            lines.emplace_back(building[0], building[2], false);
+            lines.emplace_back(building[1], building[2], true);
+        }  
+        sort(lines.begin(), lines.end(), [](const line& l, const line& r){
+           if (l.x == r.x) {
+               if (l.flag ^ r.flag) return !l.flag;
+               if (l.flag && r.flag) return l.h < r.h;
+               return l.h > r.h;
+           }
+            return l.x < r.x;
         });
-
-        for (auto& event : store)
-        {
-            if (event.type == 1)
-            {
-                if (height.empty() || event.h > *height.rbegin())
-                    ret.emplace_back(event.t, event.h);
-                height.insert(event.h);
-            }
-            else
-            {
-                height.erase(height.lower_bound(event.h));
-                if (height.empty() || event.h > *height.rbegin())
-                    ret.emplace_back(event.t, height.empty()? 0 : *height.rbegin());
+        multiset<int> height;
+        vector<vector<int>> result;
+        for (auto& line : lines) {
+            if (!line.flag) {
+                if (height.empty() || line.h > *height.rbegin())
+                    result.push_back({line.x, line.h});
+                height.insert(line.h);
+            } else {
+                height.erase(height.lower_bound(line.h));
+                if (height.empty()) {
+                    result.push_back({line.x, 0});
+                } else if (line.h > *height.rbegin()){
+                    result.push_back({line.x, *height.rbegin()});
+                }
             }
         }
-        return ret;
+        return result;
     }
 };
 ```
