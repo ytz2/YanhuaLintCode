@@ -169,6 +169,8 @@ Return`3`
 
 If landing and flying happens at the same time, we consider landing should happen at first.
 
+[https://www.lintcode.com/problem/number-of-airplanes-in-the-sky/description](https://www.lintcode.com/problem/number-of-airplanes-in-the-sky/description)
+
 ![](/assets/countFlight.png)
 
 扫描线的本质就是对于起点和终点的事件化，并且根据事件的不同来处理
@@ -221,6 +223,114 @@ public:
     }
 };
 ```
+
+# 252 Meeting Rooms {#find-peak-element-ii}
+
+Given an array of meeting time intervals consisting of start and end times`[[s1,e1],[s2,e2],...]`\(si&lt; ei\), determine if a person could attend all meetings.
+
+**Example 1:**
+
+```
+Input:
+[[0,30],[5,10],[15,20]]
+Output:
+ false
+
+```
+
+**Example 2:**
+
+```
+Input:
+ [[7,10],[2,4]]
+
+Output:
+ true
+
+```
+
+**NOTE:** input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
+
+[https://leetcode.com/problems/meeting-rooms/](https://leetcode.com/problems/meeting-rooms/)
+
+分析： 排序
+
+```cpp
+class Solution {
+public:
+    bool canAttendMeetings(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end(), [](const vector<int>& l, const vector<int>& r) {
+            if (l[0] == r[0]) return l[1] < r[1];
+            return l[0] < r[0];
+        });
+        for (int i = 0; i < (int)intervals.size() - 1; i++) {
+            if (intervals[i][1] > intervals[i + 1][0]) return false;
+        }
+        return true;
+    }
+};
+```
+
+
+
+# 253 Meeting Rooms II {#find-peak-element-ii}
+
+Given an array of meeting time intervals consisting of start and end times`[[s1,e1],[s2,e2],...]`\(si&lt; ei\), find the minimum number of conference rooms required.
+
+**Example 1:**
+
+```
+Input:
+[[0, 30],[5, 10],[15, 20]]
+Output:
+ 2
+```
+
+**Example 2:**
+
+```
+Input:
+ [[7,10],[2,4]]
+
+Output:
+ 1
+```
+
+**NOTE:** input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
+
+[https://leetcode.com/problems/meeting-rooms-ii/](https://leetcode.com/problems/meeting-rooms-ii/)
+
+
+
+分析： sweep line
+
+```cpp
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        if (intervals.empty()) return 0;
+        vector<pair<int, bool>> timelines;
+        for (auto& interval : intervals) {
+            timelines.emplace_back(interval[0], false);
+            timelines.emplace_back(interval[1], true);
+        }
+        sort(timelines.begin(), timelines.end(), [](const pair<int,bool>& l, const pair<int, bool>&r) {
+           if (l.first == r.first) return l.second;
+            return l.first < r.first;
+        });
+        int res = 0;
+        int count = 0;
+        for (auto& each : timelines) {
+            if (!each.second) count++;
+            else count--;
+            res = max(count, res);
+        }
+        return res;
+    }
+};
+```
+
+
 
 # 218 The Skyline Problem {#find-peak-element-ii}
 
