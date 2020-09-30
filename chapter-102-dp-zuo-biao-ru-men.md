@@ -19,7 +19,7 @@ The minimum path sum from top to bottom is 11 \(i.e., 2 + 3 + 5 + 1 = 11\).
 
 [https://www.lintcode.com/problem/triangle/description](https://www.lintcode.com/problem/triangle/description)
 
-https://leetcode.com/problems/triangle/
+[https://leetcode.com/problems/triangle/](https://leetcode.com/problems/triangle/)
 
 ### 解题分析:
 
@@ -86,6 +86,8 @@ the sum of all numbers along its path.
 
 [https://www.lintcode.com/problem/minimum-path-sum/description](https://www.lintcode.com/problem/minimum-path-sum/description)
 
+https://leetcode.com/problems/minimum-path-sum/
+
 ### 解题分析:
 
 同上
@@ -95,28 +97,23 @@ the sum of all numbers along its path.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param grid: a list of lists of integers
-     * @return: An integer, minimizes the sum of all numbers along its path
-     */
-    int minPathSum(vector<vector<int>> &grid) {
-        // write your code here
-        // like the triangle but much easier
+    int minPathSum(vector<vector<int>>& grid) {
         if (grid.empty() || grid[0].empty())
             return 0;
-        auto dp = grid;
-        // init
-        for (int i = 1; i< grid.size(); i++)
-            dp[i][0] = dp[i-1][0] + grid[i][0];
-        for (int j = 1; j< grid[0].size(); j++)
-            dp[0][j] = dp[0][j-1] + grid[0][j];
-        // function
-
-        for (int i = 1; i < grid.size(); i++)
-        {
-            for (int j = 1; j<grid[0].size(); j++)
-            {
-                dp[i][j] = min(dp[i][j-1], dp[i-1][j]) + grid[i][j];
+        vector<vector<int>> dp(grid.size(), vector<int>(grid[0].size(), 0));
+        int s = 0;
+        for (int i = 0; i < grid[0].size(); i++) {
+            s += grid[0][i];
+            dp[0][i] = s;
+        }
+        s = 0;
+        for (int i = 0; i < grid.size(); i++) {
+            s += grid[i][0];
+            dp[i][0] = s;
+        }
+        for (int i = 1; i < grid.size(); i++) {
+            for (int j = 1; j < grid[0].size(); j++) {
+                dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j];
             }
         }
         return dp.back().back();
