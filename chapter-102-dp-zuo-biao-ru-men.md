@@ -86,7 +86,7 @@ the sum of all numbers along its path.
 
 [https://www.lintcode.com/problem/minimum-path-sum/description](https://www.lintcode.com/problem/minimum-path-sum/description)
 
-https://leetcode.com/problems/minimum-path-sum/
+[https://leetcode.com/problems/minimum-path-sum/](https://leetcode.com/problems/minimum-path-sum/)
 
 ### 解题分析:
 
@@ -135,6 +135,8 @@ return 3
 
 [https://www.lintcode.com/problem/climbing-stairs/description](https://www.lintcode.com/problem/climbing-stairs/description)
 
+https://leetcode.com/problems/climbing-stairs/
+
 ### 解题分析:
 
 递推公式都告诉你了。。。直接写吧
@@ -144,20 +146,13 @@ return 3
 ```cpp
 class Solution {
 public:
-    /**
-     * @param n: An integer
-     * @return: An integer
-     */
     int climbStairs(int n) {
-        // write your code here
-        if (n <= 2)
-            return n;
-        vector<int> dp(n+1, 0);
-        dp[1] = 1;
-        dp[2] = 2;
-        for (int i = 3; i<=n; i++ )
-            dp[i] = dp[i-1] + dp[i-2];
-        return dp[n];
+        if (n <= 2) return n;
+        vector<int> dp{1, 2};
+        for (int i = 2; i < n; i++){
+            dp[i%2] = dp[(i-1)%2] + dp[(i-2)%2];
+        }
+        return dp[(n-1)%2];
     }
 };
 ```
@@ -296,6 +291,8 @@ The total number of unique paths is`2`.
 
 [https://www.lintcode.com/problem/unique-paths-ii/description](https://www.lintcode.com/problem/unique-paths-ii/description)
 
+https://leetcode.com/problems/unique-paths-ii/
+
 ### 解题分析:
 
 同上， 有obstacle则为0
@@ -305,24 +302,22 @@ The total number of unique paths is`2`.
 ```cpp
 class Solution {
 public:
-    /**
-     * @param obstacleGrid: A list of lists of integers
-     * @return: An integer
-     */
-    int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid) {
-        int m = obstacleGrid.size(); 
-        int n = obstacleGrid[0].size();
-        vector<vector<int>> dp(m, vector<int>(n, 0));
-        dp[0][0] = obstacleGrid[0][0] == 0;
-        for (int j=1; j<n; j++)
-            dp[0][j] = dp[0][j-1] && obstacleGrid[0][j]==0; 
-        for (int i = 1; i< m; i++)
-            dp[i][0] = dp[i-1][0] && obstacleGrid[i][0]==0;
-
-        for (int i = 1; i<m; i++)
-            for (int j = 1; j<n;j++)
-                dp[i][j] = obstacleGrid[i][j]? 0 : dp[i-1][j] + dp[i][j-1];
-        return dp[m-1][n-1];
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        auto& o = obstacleGrid;
+        if (o.empty() || o[0].empty() || o[0][0] || o.back().back()) return 0;
+        vector<vector<int>> dp(o.size(), vector<int>(o[0].size(), 0));
+        dp[0][0] = 1;
+        for (int i = 1; i < o[0].size(); i++) 
+            dp[0][i] = o[0][i] == 1 ? 0 : dp[0][i-1];
+        for (int i = 1; i < o.size(); i++) 
+            dp[i][0] = o[i][0] == 1 ? 0 : dp[i - 1][0];
+        for (int i = 1; i < dp.size(); i++) {
+            for (int j = 1; j < dp[0].size(); j++) {
+                if (o[i][j] == 1) dp[i][j] = 0;
+                else dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        return dp.back().back();
     }
 };
 ```
@@ -342,6 +337,8 @@ A =`[2,3,1,1,4]`, return`true`.
 A =`[3,2,1,0,4]`, return`false`.
 
 [https://www.lintcode.com/problem/jump-game/description](https://www.lintcode.com/problem/jump-game/description)
+
+https://leetcode.com/problems/jump-game/
 
 ### 解题分析:
 
@@ -370,22 +367,14 @@ dp.back\(\)
 ```cpp
 class Solution {
 public:
-    /**
-     * @param A: A list of integers
-     * @return: A boolean
-     */
-    bool canJump(vector<int> &A) {
-        // write your code here
-        if (A.size() <= 1)
-            return true;
-        vector<bool> dp(A.size(), false);
-        dp[0] = A[0]!=0;
-        for (int i = 1; i < A.size(); i++)
-        {
-            for (int j = i-1; j>=0; j--)
-            {
-                if (dp[j] && j+A[j] >= i )
-                {
+    bool canJump(vector<int>& nums) {
+        int n = nums.size();
+        if (n <= 1) return true;
+        vector<bool> dp(n, false);
+        dp[0] = true;
+        for (int i = 1; i < n; i++) {
+            for (int j = i - 1; j >=0; j--) {
+                if (dp[j] && i - j <= nums[j]) {
                     dp[i] = true;
                     break;
                 }
@@ -417,23 +406,15 @@ The minimum number of jumps to reach the last index is`2`. \(Jump`1`step from in
 ```cpp
 class Solution {
 public:
-    /**
-     * @param A: A list of integers
-     * @return: An integer
-     */
-    int jump(vector<int> &A) {
-        // write your code here
-        int n = A.size();
-        if (n<=1)
-            return 0;
-        vector<int> dp(n, INT_MAX);
+    int jump(vector<int>& nums) {
+        vector<int> dp(nums.size(), INT_MAX);
         dp[0] = 0;
-        for (int i = 1; i<n;i++)
-        {
-            for (int j = 0; j<i;j++)
-            {
-                if (j+A[j] >=i)
-                    dp[i] =min(dp[i], dp[j]+1);
+        for (int i = 1; i < nums.size(); i++) {
+            for (int j =0; j < i; j++) {
+                if (dp[j] != INT_MAX && i - j <= nums[j]) 
+                {
+                     dp[i] = min(dp[i], dp[j] + 1);
+                }   
             }
         }
         return dp.back();
