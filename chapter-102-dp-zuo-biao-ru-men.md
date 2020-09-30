@@ -19,6 +19,8 @@ The minimum path sum from top to bottom is 11 \(i.e., 2 + 3 + 5 + 1 = 11\).
 
 [https://www.lintcode.com/problem/triangle/description](https://www.lintcode.com/problem/triangle/description)
 
+https://leetcode.com/problems/triangle/
+
 ### 解题分析:
 
 判断：
@@ -49,37 +51,19 @@ d递归的结果
 ```cpp
 class Solution {
 public:
-    /**
-     * @param triangle: a list of lists of integers
-     * @return: An integer, minimum path sum
-     */
-    int minimumTotal(vector<vector<int>> &triangle) {
-        // write your code here
-        // state dp[i][j] = min sum to i, j
-        // dp state
-        auto dp = triangle;
-        // init state
-        for (int i = 1; i < triangle.size(); i++)
-        {
-            dp[i][0] = dp[i-1][0]+triangle[i][0];
-            dp[i][i] = dp[i-1][i-1] + triangle[i][i];
+    int minimumTotal(vector<vector<int>>& triangle) {
+        if (triangle.empty()) return 0;
+        int n =  triangle.back().size();
+        vector<vector<int>> dp(2, vector<int>(n, 0));
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = triangle.back()[i];
         }
-
-        /*  i-1,j-1     i-1, j
-        *               i, j
-        */ 
-
-        for (int i = 1; i < triangle.size(); i++)
-        {
-            for (int j =1; j <triangle[i].size()-1; j++)
-            {
-                dp[i][j] = min(dp[i-1][j-1], dp[i-1][j])+triangle[i][j];
+        for (int i = 1; i < n; i++ ) {
+            for (int j = 0; j < n - i; j++) {
+                dp[i%2][j] = min(dp[(i+1)%2][j], dp[(i+1)%2][j+1]) + triangle[n - i -1][j];
             }
         }
-        int res = INT_MAX;
-        for (auto each : dp.back())
-            res = min(res, each);
-        return res;
+        return dp[(n+1) %2][0];
     }
 };
 ```
@@ -429,7 +413,7 @@ Given array A =`[2,3,1,1,4]`
 
 The minimum number of jumps to reach the last index is`2`. \(Jump`1`step from index 0 to 1, then`3`steps to the last index.\)
 
-https://www.lintcode.com/problem/jump-game-ii/description
+[https://www.lintcode.com/problem/jump-game-ii/description](https://www.lintcode.com/problem/jump-game-ii/description)
 
 ### 代码：
 
@@ -762,7 +746,6 @@ public:
             return -1;
         return dp[m-1][n-1];
     }
-
 ```
 
 
