@@ -441,7 +441,7 @@ Time complexity O\(n^2\) or O\(nlogn\)
 
 [https://www.lintcode.com/problem/longest-increasing-subsequence/description](https://www.lintcode.com/problem/longest-increasing-subsequence/description)
 
-https://leetcode.com/problems/longest-increasing-subsequence/solution/
+[https://leetcode.com/problems/longest-increasing-subsequence/solution/](https://leetcode.com/problems/longest-increasing-subsequence/solution/)
 
 ### 解题分析:
 
@@ -495,8 +495,6 @@ public:
         return res;
     }
 };
-
-
 ```
 
 ## 603. Largest Divisible Subset
@@ -520,54 +518,35 @@ Given nums =`[1,2,4,8]`, return`[1,2,4,8]`
 ```cpp
 class Solution {
 public:
-    /*
-     * @param nums: a set of distinct positive integers
-     * @return: the largest subset 
-     */
-    vector<int> largestDivisibleSubset(vector<int> &nums) {
-        // write your code here
-        if (nums.size() <= 1)
-            return nums;
-        vector<int> result;
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
         sort(nums.begin(), nums.end());
-        vector<int> dp(nums.size(), 1);
-        vector<int> prev(nums.size(), 0);
-        for (int i = 0; i<nums.size(); i++)
-            prev[i] = i;
-        for (int i = 1; i < nums.size(); i++)
-        {
-            for (int j = i-1; j >=0; j-- )
-            {
-                if (nums[i]%nums[j])
-                    continue;
-                if (dp[j]+1 > dp[i])
-                {
-                    dp[i] = dp[j]+1;
-                    prev[i] = j;
+        if (nums.empty()) return {};
+        vector<int> counter(nums.size(), 1);
+        vector<int> from(nums.size(), 0);
+        int maxInd = 0;
+        int maxCount = 1;
+        for (int i = 0; i < nums.size(); i++) from[i] = i;
+        for (int i = 1; i < nums.size(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] % nums[j]) continue;
+                if (counter[j] + 1 > counter[i]) {
+                    counter[i] = counter[j] + 1;
+                    from[i] = j;
+                    if (counter[i] > maxCount) {
+                        maxCount = counter[i];
+                        maxInd = i;
+                    }
                 }
             }
         }
-        int ind = 0;
-        for (int i = 0; i < dp.size(); i++)
-        {
-            if (dp[i] > dp[ind])
-            {
-                ind = i;
-            }
+        vector<int> res;
+        int i = maxInd;
+        res.push_back(nums[i]);
+        while( from[i] != i) {
+            res.push_back(nums[from[i]]);
+            i = from[i];
         }
-        result.push_back(nums[ind]);
-        while(prev[ind] != ind)
-        {
-            result.push_back(nums[prev[ind]]);
-            ind = prev[ind];
-        }
-        return result;
-    }
-    void print(vector<int> v)
-    {
-        for (auto each : v)
-            cout <<each<< " ";
-        cout<<endl;
+        return res;
     }
 };
 ```
