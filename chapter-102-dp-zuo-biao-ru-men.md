@@ -562,6 +562,8 @@ Given n =`13`, return`2`because`13 = 4 + 9`
 
 [https://www.lintcode.com/problem/perfect-squares/description](https://www.lintcode.com/problem/perfect-squares/description)
 
+https://leetcode.com/problems/perfect-squares/submissions/
+
 ### 解题分析:
 
 dp的定义
