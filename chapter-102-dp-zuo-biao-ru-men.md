@@ -135,7 +135,7 @@ return 3
 
 [https://www.lintcode.com/problem/climbing-stairs/description](https://www.lintcode.com/problem/climbing-stairs/description)
 
-https://leetcode.com/problems/climbing-stairs/
+[https://leetcode.com/problems/climbing-stairs/](https://leetcode.com/problems/climbing-stairs/)
 
 ### 解题分析:
 
@@ -291,7 +291,7 @@ The total number of unique paths is`2`.
 
 [https://www.lintcode.com/problem/unique-paths-ii/description](https://www.lintcode.com/problem/unique-paths-ii/description)
 
-https://leetcode.com/problems/unique-paths-ii/
+[https://leetcode.com/problems/unique-paths-ii/](https://leetcode.com/problems/unique-paths-ii/)
 
 ### 解题分析:
 
@@ -338,7 +338,7 @@ A =`[3,2,1,0,4]`, return`false`.
 
 [https://www.lintcode.com/problem/jump-game/description](https://www.lintcode.com/problem/jump-game/description)
 
-https://leetcode.com/problems/jump-game/
+[https://leetcode.com/problems/jump-game/](https://leetcode.com/problems/jump-game/)
 
 ### 解题分析:
 
@@ -441,6 +441,8 @@ Time complexity O\(n^2\) or O\(nlogn\)
 
 [https://www.lintcode.com/problem/longest-increasing-subsequence/description](https://www.lintcode.com/problem/longest-increasing-subsequence/description)
 
+https://leetcode.com/problems/longest-increasing-subsequence/solution/
+
 ### 解题分析:
 
 有一道不需要管顺序的，是放一个hash set,然后上下shoot求边界。这个题不是：
@@ -474,58 +476,27 @@ max of dp
 ### 代码：
 
 ```cpp
-#include <list>
 class Solution {
 public:
-    /**
-     * @param nums: An integer array
-     * @return: The length of LIS (longest increasing subsequence)
-     */
-    int longestIncreasingSubsequence(vector<int> &nums) {
-        // write your code here
-        if (nums.empty())
-            return 0;
+    int lengthOfLIS(vector<int>& nums) {
+        if (nums.empty()) return 0;
         vector<int> dp(nums.size(), 1);
-        vector<int> prev(nums.size(), 0);
-        for (int i = 0; i < prev.size(); i++)
-            prev[i] = i;
-        for (int i = 1; i<nums.size(); i++)
-        {
-            for (int j = i-1; j>=0; j--)
-            {
-                if (nums[j] < nums[i] && dp[j]+1 > dp[i])
+        dp[0] = 1;
+        int res = 1;
+        for (int i = 1; i < nums.size(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j])
                 {
-                    dp[i] = dp[j]+1;
-                    prev[i] = j;
-                }
+                    dp[i] = max(dp[i], dp[j]+1);
+                    res = max(dp[i], res);
+                }   
             }
         }
-        int ind = 0, val = 0;
-        for (int i = 0; i < dp.size(); i++)
-        {
-            if (dp[i] > val)
-            {
-                ind = i;
-                val = dp[i];
-            }
-        }
-
-        cout <<"max number = " <<val<<endl;
-        list<int> res;
-        res.push_front(val);
-        while(prev[ind] != ind)
-        {
-            res.push_front(nums[prev[ind]]);
-            ind = prev[ind];
-        }
-
-        cout <<" sequence is ";
-        for (auto each : res)
-            cout <<each <<" ";
-        cout <<endl;
-        return val;
+        return res;
     }
 };
+
+
 ```
 
 ## 603. Largest Divisible Subset
