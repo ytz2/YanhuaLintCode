@@ -51,17 +51,16 @@ public:
 };
 ```
 
-
-
 ## 72 Edit Distance
 
-Given two words_word1_and_word2_, find the minimum number of operations required to convert_word1_to_word2_.
+Given two words_word1\_and\_word2_, find the minimum number of operations required to convert_word1\_to\_word2_.
 
 You have the following 3 operations permitted on a word:
 
 1. Insert a character
 2. Delete a character
 3. Replace a character
+4. https://leetcode.com/problems/edit-distance/submissions/
 
 **Example 1:**
 
@@ -73,7 +72,7 @@ Output:
  3
 
 Explanation:
- 
+
 horse -
 >
  rorse (replace 'h' with 'r')
@@ -83,7 +82,6 @@ rorse -
 rose -
 >
  ros (remove 'e')
-
 ```
 
 **Example 2:**
@@ -96,7 +94,7 @@ Output:
  5
 
 Explanation:
- 
+
 intention -
 >
  inention (remove 't')
@@ -136,8 +134,6 @@ public:
 ```
 
 ## 
-
-
 
 ## 221 Maximal Square
 
