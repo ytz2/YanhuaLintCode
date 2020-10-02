@@ -6,6 +6,8 @@ You are a professional robber planning to rob houses along a street. Each house 
 
 Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight**without alerting the police**.
 
+https://leetcode.com/problems/house-robber/
+
 **Example 1:**
 
 ```
@@ -48,6 +50,79 @@ public:
     }
 };
 ```
+
+## 
+
+## 213 House Robber II
+
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are**arranged in a circle.**That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and **it will automatically contact the police if two adjacent houses were broken into on the same night**.
+
+Given a list of non-negative integers`nums`representing the amount of money of each house, return_the maximum amount of money you can rob tonight**without alerting the police**_.
+
+
+
+**Example 1:**
+
+```
+Input:
+ nums = [2,3,2]
+
+Output:
+ 3
+
+Explanation:
+ You cannot rob house 1 (money = 2) and then rob house 3 (money = 2), because they are adjacent houses.
+
+```
+
+**Example 2:**
+
+```
+Input:
+ nums = [1,2,3,1]
+
+Output:
+ 4
+
+Explanation:
+ Rob house 1 (money = 1) and then rob house 3 (money = 3).
+Total amount you can rob = 1 + 3 = 4.
+
+```
+
+**Example 3:**
+
+```
+Input:
+ nums = [0]
+
+Output:
+ 0
+
+```
+
+https://leetcode.com/problems/house-robber-ii/
+
+
+
+```cpp
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        if (nums.empty()) return 0;
+        if (nums.size() <= 2) return *max_element(nums.begin(), nums.end());
+        vector<int> dp{nums[0], max(nums[1], nums[0])};
+        for (int i = 2; i < nums.size(); i++) {
+            dp[i%2] = max(dp[(i-2)%2] + nums[i], dp[(i-1)%2]);
+        }
+        return dp[(nums.size() - 1) % 2];
+    }
+};
+```
+
+## 
+
+## 
 
 ## 221 Maximal Square
 
@@ -108,6 +183,33 @@ public:
                     dp[i][j] = min(dp[i-1][j-1],min(dp[i-1][j], dp[i][j-1]))+1;
                 }    
                 res = max(res, dp[i][j]);
+            }
+        }
+        return res*res;
+    }
+};
+
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        if (matrix.empty() || matrix[0].empty()) return 0;
+        int res = 0; 
+        vector<vector<int>> dp(2, vector<int>(matrix[0].size(), 0));
+
+        for (int i = 0; i < matrix.size(); i++) {
+            for (int j = 0; j < matrix[0].size(); j++) {
+                if (matrix[i][j] == '0') {
+                    dp[i % 2][j] = 0;
+                    continue;
+                }
+                if (i == 0 || j == 0 ) {
+                    dp[i % 2][j] = matrix[i][j] == '1';
+                    res = max(res, dp[i%2][j]);
+                    continue;
+                }
+                
+                dp[i%2][j] = min(dp[(i-1) % 2][j-1], min(dp[i % 2][j-1], dp[(i-1) % 2][j])) + 1;
+                res = max(res, dp[i % 2][j]);
             }
         }
         return res*res;
