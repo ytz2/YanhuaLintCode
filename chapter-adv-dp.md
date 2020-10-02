@@ -38,17 +38,13 @@ Explanation:
 class Solution {
 public:
     int rob(vector<int>& nums) {
-        // a[i] = max(nums[i-1] + a[i-2], a[i-1]);
-        int n = nums.size();
-        if (n== 0)
-            return 0;
-        if (n == 1)
-            return nums[0];
-        vector<int> val(2, 0);
-        val[1] = nums[0];
-        for (int i = 2; i <=n; i++)
-            val[i%2] = max(nums[i-1] + val[(i-2)%2], val[(i-1)%2]);
-        return val[n%2];
+        if (nums.empty()) return 0;
+        if (nums.size() <= 2) return *max_element(nums.begin(), nums.end());
+        vector<int> dp{nums[0], max(nums[1], nums[0])};
+        for (int i = 2; i < nums.size(); i++) {
+            dp[i%2] = max(dp[(i-2)%2] + nums[i], dp[(i-1)%2]);
+        }
+        return dp[(nums.size() - 1) % 2];
     }
 };
 ```
