@@ -6,7 +6,7 @@ You are a professional robber planning to rob houses along a street. Each house 
 
 Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight**without alerting the police**.
 
-https://leetcode.com/problems/house-robber/
+[https://leetcode.com/problems/house-robber/](https://leetcode.com/problems/house-robber/)
 
 **Example 1:**
 
@@ -51,27 +51,38 @@ public:
 };
 ```
 
-## 
-
-## 213 House Robber II
-
-You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are**arranged in a circle.**That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and **it will automatically contact the police if two adjacent houses were broken into on the same night**.
-
-Given a list of non-negative integers`nums`representing the amount of money of each house, return_the maximum amount of money you can rob tonight**without alerting the police**_.
 
 
+## 72 Edit Distance
+
+Given two words_word1_and_word2_, find the minimum number of operations required to convert_word1_to_word2_.
+
+You have the following 3 operations permitted on a word:
+
+1. Insert a character
+2. Delete a character
+3. Replace a character
 
 **Example 1:**
 
 ```
 Input:
- nums = [2,3,2]
+ word1 = "horse", word2 = "ros"
 
 Output:
  3
 
 Explanation:
- You cannot rob house 1 (money = 2) and then rob house 3 (money = 2), because they are adjacent houses.
+ 
+horse -
+>
+ rorse (replace 'h' with 'r')
+rorse -
+>
+ rose (remove 'r')
+rose -
+>
+ ros (remove 'e')
 
 ```
 
@@ -79,50 +90,54 @@ Explanation:
 
 ```
 Input:
- nums = [1,2,3,1]
+ word1 = "intention", word2 = "execution"
 
 Output:
- 4
+ 5
 
 Explanation:
- Rob house 1 (money = 1) and then rob house 3 (money = 3).
-Total amount you can rob = 1 + 3 = 4.
-
+ 
+intention -
+>
+ inention (remove 't')
+inention -
+>
+ enention (replace 'i' with 'e')
+enention -
+>
+ exention (replace 'n' with 'x')
+exention -
+>
+ exection (replace 'n' with 'c')
+exection -
+>
+ execution (insert 'u')
 ```
-
-**Example 3:**
-
-```
-Input:
- nums = [0]
-
-Output:
- 0
-
-```
-
-https://leetcode.com/problems/house-robber-ii/
-
-
 
 ```cpp
 class Solution {
 public:
-    int rob(vector<int>& nums) {
-        if (nums.empty()) return 0;
-        if (nums.size() <= 2) return *max_element(nums.begin(), nums.end());
-        vector<int> dp{nums[0], max(nums[1], nums[0])};
-        for (int i = 2; i < nums.size(); i++) {
-            dp[i%2] = max(dp[(i-2)%2] + nums[i], dp[(i-1)%2]);
+    int minDistance(string word1, string word2) {
+        vector<vector<int>> dp(2, vector<int>(word2.size() + 1, 0));
+        for (int i = 0; i <= word1.size(); i++) {
+            for (int j = 0; j <= word2.size(); j++) {
+                if (i == 0 ) {
+                    dp[i%2][j] = j; 
+                } else if ( j == 0) {
+                    dp[i%2][j] = i;
+                } else {
+                    dp[i%2][j] = min(min(dp[(i-1)%2][j], dp[i%2][j-1]) + 1, dp[(i-1)%2][j-1] + (word1[i-1] == word2[j-1] ? 0 : 1)); 
+                }
+            }
         }
-        return dp[(nums.size() - 1) % 2];
+        return dp[word1.size()%2].back();
     }
 };
 ```
 
 ## 
 
-## 
+
 
 ## 221 Maximal Square
 
@@ -207,7 +222,7 @@ public:
                     res = max(res, dp[i%2][j]);
                     continue;
                 }
-                
+
                 dp[i%2][j] = min(dp[(i-1) % 2][j-1], min(dp[i % 2][j-1], dp[(i-1) % 2][j])) + 1;
                 res = max(res, dp[i % 2][j]);
             }
