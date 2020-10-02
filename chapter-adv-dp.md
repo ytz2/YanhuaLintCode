@@ -60,7 +60,7 @@ You have the following 3 operations permitted on a word:
 1. Insert a character
 2. Delete a character
 3. Replace a character
-4. https://leetcode.com/problems/edit-distance/submissions/
+4. [https://leetcode.com/problems/edit-distance/submissions/](https://leetcode.com/problems/edit-distance/submissions/)
 
 **Example 1:**
 
@@ -139,27 +139,7 @@ public:
 
 Given a 2D binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
 
-**Example:**
 
-```
-Input: 
-
-
-1 0 1 0 0
-1 0 
-1
-1
- 1
-1 1 
-1
-1
- 1
-1 0 0 1 0
-
-
-Output: 
-4
-```
 
 ```cpp
 class Solution {
@@ -227,6 +207,66 @@ public:
     }
 };
 ```
+
+
+
+## 329 Longest Increasing Path in a Matrix
+
+Given an integer matrix, find the length of the longest increasing path.
+
+From each cell, you can either move to four directions: left, right, up or down. You may NOT move diagonally or move outside of the boundary \(i.e. wrap-around is not allowed\).
+
+https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+
+```cpp
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if (matrix.empty() || matrix[0].empty()) return 0;
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        vector<vector<int>> cache(m, vector<int>(n, 0));
+        int res = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                res = max(res, search(i, j, matrix, visited, cache));
+            }
+        }
+        return res;
+    }
+    
+    int search(int i, int j, vector<vector<int>>& matrix, vector<vector<bool>>& visited, vector<vector<int>>& cache) {
+        if (cache[i][j])
+            return cache[i][j];
+        
+        visited[i][j] = true;
+        static vector<int> dx {-1, 1, 0, 0};
+        static vector<int> dy {0, 0, -1, 1};
+        
+        int res = 1;
+        for (int k = 0; k < 4; k++) {
+            int nx = i + dx[k];
+            int ny = j + dy[k];
+            if (nx < 0 || nx >= matrix.size() || ny < 0 || 
+                ny >= matrix[0].size() || visited[nx][ny] || 
+                matrix[nx][ny] <= matrix[i][j])
+                continue;
+            res = max(res, search(nx, ny, matrix, visited, cache) + 1);
+        }
+        cache[i][j] = res;
+        visited[i][j] = false;
+        return res;
+    }
+};
+```
+
+
+
+
+
+
+
+
 
 ![](/assets/区间DP.png)
 
