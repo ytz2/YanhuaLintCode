@@ -506,19 +506,13 @@ public :
 };
 ```
 
-
-
-
-
 ## 1359.Count All Valid Pickup and Delivery Options
 
-Given`n`orders, each order consist in pickup and delivery services. 
+Given`n`orders, each order consist in pickup and delivery services.
 
-Count all valid pickup/delivery possible sequences such that delivery\(i\) is always after of pickup\(i\). 
+Count all valid pickup/delivery possible sequences such that delivery\(i\) is always after of pickup\(i\).
 
-Since the answer may be too large, return it modulo 10^9 + 7.
-
-
+Since the answer may be too large, return it modulo 10^9 + 7.
 
 **Example 1:**
 
@@ -531,7 +525,6 @@ Output:
 
 Explanation:
  Unique order (P1, D1), Delivery 1 always is after of Pickup 1.
-
 ```
 
 **Example 2:**
@@ -547,7 +540,6 @@ Explanation:
  All possible orders: 
 (P1,P2,D1,D2), (P1,P2,D2,D1), (P1,D1,P2,D2), (P2,P1,D1,D2), (P2,P1,D2,D1) and (P2,D2,P1,D1).
 This is an invalid order (P1,D2,P2,D1) because Pickup 2 is after of Delivery 2.
-
 ```
 
 **Example 3:**
@@ -567,7 +559,7 @@ public:
         unordered_set<int> picks, drops;
         return helper(picks, drops, n) % 1000000009;
     }
-    
+
     long helper(unordered_set<int>& picks, unordered_set<int>& drops, int n) {
         if (drops.size() == n)
             return 1;
@@ -599,146 +591,372 @@ public:
 using namespace std;
 class Pickup {
 public:
-	Pickup() = default;
+    Pickup() = default;
 
-	bool isValid(vector<vector<string>>& input) { // o(n), o(n)
-		unordered_set<string> picks;
-		unordered_set<string> drops;
-		for (const auto& entry : input) {
-			const auto& action = entry[0];
-			const auto& location = entry[1];
-			if (action == "P") {
-				if (picks.count(location))
-					return false;
-				picks.insert(location);
+    bool isValid(vector<vector<string>>& input) { // o(n), o(n)
+        unordered_set<string> picks;
+        unordered_set<string> drops;
+        for (const auto& entry : input) {
+            const auto& action = entry[0];
+            const auto& location = entry[1];
+            if (action == "P") {
+                if (picks.count(location))
+                    return false;
+                picks.insert(location);
+            }
+            else { // drop
+                if (drops.count(location) || !picks.count(location))
+                    return false;
+                drops.insert(location);
+            }
+        }
+        return picks.size() == drops.size();
+    }
+
+    // o(2n!)/2^n, permute (2n)!, everytime, we prune and divide by 2, thus it is
+    vector<vector<vector<string>>> permute(int n) {
+        unordered_set<int> picks, drops;
+        vector<vector<vector<string>>> result;
+        vector<vector<string>> route;
+        helper(n, picks, drops, route, result);
+        return result;
+    }
+
+    void helper(int n, unordered_set<int>& picks, unordered_set<int>& drops, vector<vector<string>>& route, vector<vector<vector<string>>>& result) {
+        if (route.size() == 2 * n) {
+            if (picks.size() == drops.size()) {
+                result.push_back(route);
+            }
+            return;
+        }
+        for (int i = 1; i <= n; i++) {
+            string location = to_string(i);
+            if (!picks.count(i)) {
+                picks.insert(i);
+                route.push_back({ "P", to_string(i) });
+                helper(n, picks, drops, route, result);
+                picks.erase(i);
+                route.pop_back();
+            }
+            else if (!drops.count(i)){
+                drops.insert(i);
+                route.push_back({ "D", to_string(i) });
+                helper(n, picks, drops, route, result);
+                drops.erase(i);
+                route.pop_back();
+            }
+        }
+    }
+
+    void testPermute() {
+        {
+            auto res = permute(1);
+            assert(res.size() == 1);
+        }
+        {
+            auto res = permute(2);
+            assert(res.size() == 6);
+        }
+        {
+            auto res = permute(3);
+            assert(res.size() == 90);
+        }
+        {
+            auto res = permute(4);
+            assert(res.size() == 2520);
+        }
+    }
+
+    void testValid() {
+        {
+            vector<vector<string>> input{
+                {"P", "1"}, {"D", "1"}
+            };
+            assert(isValid(input));
+        }
+        {
+            vector<vector<string>> input{
+                {"P", "1"}, {"D", "1"},
+                {"P", "2"}, {"D", "2"},
+            };
+            assert(isValid(input));
+        }
+        {
+            vector<vector<string>> input{
+                {"P", "2"}, {"D", "2"},
+                {"P", "1"}, {"D", "1"},
+            };
+            assert(isValid(input));
+        }
+        {
+            vector<vector<string>> input{
+                {"P", "2"}, {"D", "2"},
+                {"P", "1"}, {"D", "2"},
+            };
+            assert(!isValid(input));
+        }
+        {
+            vector<vector<string>> input{
+                {"P", "1"}, {"D", "2"},
+            };
+            assert(!isValid(input));
+        }
+        {
+            vector<vector<string>> input{
+                {"P", "2"}, {"D", "2"},
+                {"P", "1"}
+            };
+            assert(!isValid(input));
+        }
+        {
+            vector<vector<string>> input{
+                {"P", "2"}, {"D", "2"},
+                {"D", "1"}
+            };
+            assert(!isValid(input));
+        }
+        {
+            vector<vector<string>> input{
+                {"P", "2"}, {"P", "1"},
+                {"D", "1"}, {"D", "2"},
+            };
+            assert(isValid(input));
+        }
+    }
+
+    void test() {
+        testValid();
+        testPermute();
+        cout << "DD: pickup pass" << endl;
+    }
+};
+```
+
+
+
+## 973 .K Closest Points to OriginGiven`n`orders, each order consist in pickup and delivery services.
+
+We have a list of`points` on the plane.  Find the`K`closest points to the origin`(0, 0)`.
+
+\(Here, the distance between two points on a plane is the Euclidean distance.\)
+
+You may return the answer in any order.  The answer is guaranteed to be unique \(except for the order that it is in.\)
+
+
+
+**Example 1:**
+
+```
+Input: 
+points = 
+[[1,3],[-2,2]]
+, K = 
+1
+Output: 
+[[-2,2]]
+Explanation: 
+
+The distance between (1, 3) and the origin is sqrt(10).
+The distance between (-2, 2) and the origin is sqrt(8).
+Since sqrt(8) 
+<
+ sqrt(10), (-2, 2) is closer to the origin.
+We only want the closest K = 1 points from the origin, so the answer is just [[-2,2]].
+
+```
+
+**Example 2:**
+
+```
+Input: 
+points = 
+[[3,3],[5,-1],[-2,4]]
+, K = 
+2
+Output: 
+[[3,3],[-2,4]]
+
+(The answer [[-2,4],[3,3]] would also be accepted.)
+
+```
+
+```
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        vector<vector<int>> result;
+        if (points.size() <= K)
+            return points;
+        helper(points, 0, points.size() - 1, K, result);
+        return result;
+    }
+    
+    void helper(vector<vector<int>>& points, int beg, int end, int k, vector<vector<int>>& result) {
+        auto dist = [](const vector<int>& point) {
+            return point[0]*point[0] + point[1]*point[1];
+        };
+        
+        int mid = beg + (end - beg) /2;
+        auto pivot = dist(points[mid]);
+        int i = beg, j = end;
+        while(i <= j) {
+            while(i <= j && dist(points[i]) < pivot)
+                i++;
+            while(i <= j && dist(points[j]) > pivot)
+                j--;
+            if(i <= j)
+                swap(points[i++], points[j--]);
+        }
+        int ind = beg + k - 1;
+        if (ind <= j){
+            helper(points, beg, j, k, result);
+        } else if (ind >= i) {
+            helper(points, i, end, k - i + beg, result);
+        } else {
+            result = vector<vector<int>>(points.begin(),  points.begin() + j + 2);   
+        }
+    }
+};
+
+
+#pragma once
+#include <algorithm>
+#include <assert.h>  
+#include <memory>
+#include <queue>
+#include <string>
+#include <time.h>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+struct Dasher {
+	Dasher(int id, int x, int y, int r)
+		:id(id), x(x), y(y), rate(r) {}
+	int id = 0;
+	int x = 0;
+	int y = 0;
+	int rate = 0;
+};
+
+class DasherAPI {
+public:
+	DasherAPI() = default;
+	virtual ~DasherAPI() = default;
+	virtual vector<Dasher> getDashers(int x, int y) = 0;
+};
+
+class MockAPI : public DasherAPI {
+public:
+	MockAPI() = default;
+	virtual ~MockAPI() = default;
+	void Return(const vector<Dasher>& input) {
+		dashers_ = input;
+	}
+	vector<Dasher> getDashers(int x, int y) override {
+		return dashers_;
+	}
+private:
+	vector<Dasher> dashers_;
+};
+
+// offer complexity o(n) space, o(n log(k)) time comlexity
+// offer cache after done
+class NearestDasher {
+public:
+	NearestDasher(DasherAPI* api, int ttl)
+		:api_(api), ttl_(ttl)
+	{}
+	vector<int> findDashers(int x, int y) {
+		auto k = key(x, y);
+		// cache
+		if (cache_.count(k)) {
+			auto now = time(NULL);
+			if (now - cache_[k].first < ttl_)
+				return cache_[k].second;
+			cache_.erase(k);
+		}
+		// local lambda for comparison in priority queue
+		auto cmp = [x, y](const Dasher& l, const Dasher& r) {
+			int distl = (l.x - x) * (l.x - x) + (l.y - y) * (l.y - y);
+			int distr = (r.x - x) * (r.x - x) + (r.y - y) * (r.y - y);
+			if (distl == distr) {
+				return l.rate > r.rate;
 			}
-			else { // drop
-				if (drops.count(location) || !picks.count(location))
-					return false;
-				drops.insert(location);
+			return distl < distr;
+		};
+		priority_queue<Dasher, vector<Dasher>, decltype(cmp)> pq(cmp);
+		auto dashers = api_->getDashers(x, y);
+		for (const auto& dasher : dashers) {
+			pq.push(dasher);
+			if (pq.size() > 3) {
+				pq.pop();
 			}
 		}
-		return picks.size() == drops.size();
-	}
-
-	// o(2n!)/2^n, permute (2n)!, everytime, we prune and divide by 2, thus it is
-	vector<vector<vector<string>>> permute(int n) {
-		unordered_set<int> picks, drops;
-		vector<vector<vector<string>>> result;
-		vector<vector<string>> route;
-		helper(n, picks, drops, route, result);
+		vector<int> result;
+		while (!pq.empty()) {
+			result.push_back(pq.top().id);
+			pq.pop();
+		}
+		// reverse as we were maintianing max heap 
+		reverse(result.begin(), result.end());
+		cache_[k] = make_pair(time(NULL), result);
 		return result;
 	}
 
-	void helper(int n, unordered_set<int>& picks, unordered_set<int>& drops, vector<vector<string>>& route, vector<vector<vector<string>>>& result) {
-		if (route.size() == 2 * n) {
-			if (picks.size() == drops.size()) {
-				result.push_back(route);
-			}
-			return;
-		}
-		for (int i = 1; i <= n; i++) {
-			string location = to_string(i);
-			if (!picks.count(i)) {
-				picks.insert(i);
-				route.push_back({ "P", to_string(i) });
-				helper(n, picks, drops, route, result);
-				picks.erase(i);
-				route.pop_back();
-			}
-			else if (!drops.count(i)){
-				drops.insert(i);
-				route.push_back({ "D", to_string(i) });
-				helper(n, picks, drops, route, result);
-				drops.erase(i);
-				route.pop_back();
-			}
-		}
+private:
+	string key(int x, int y) const {
+		return to_string(x) + "," + to_string(y);
 	}
-	 
-	void testPermute() {
-		{
-			auto res = permute(1);
-			assert(res.size() == 1);
-		}
-		{
-			auto res = permute(2);
-			assert(res.size() == 6);
-		}
-		{
-			auto res = permute(3);
-			assert(res.size() == 90);
-		}
-		{
-			auto res = permute(4);
-			assert(res.size() == 2520);
-		}
-	}
+private:
+	DasherAPI* api_;
+	int ttl_;
+	unordered_map<string, pair<time_t, vector<int>>> cache_;
+};
 
-	void testValid() {
+class TestNearestDasher {
+public:
+	TestNearestDasher() = default;
+	void test(){
 		{
-			vector<vector<string>> input{
-				{"P", "1"}, {"D", "1"}
-			};
-			assert(isValid(input));
+			// 1. empty return
+			MockAPI emptyDasher;
+			NearestDasher emptyTest(&emptyDasher, 0);
+			vector<int> exp;
+			assert(emptyTest.findDashers(0, 0) == exp);
 		}
 		{
-			vector<vector<string>> input{
-				{"P", "1"}, {"D", "1"},
-				{"P", "2"}, {"D", "2"},
-			};
-			assert(isValid(input));
+			// 2. normal case
+			MockAPI normalDasher;
+			vector<Dasher> dashers;
+			dashers.emplace_back(1, 0, 1, 100);
+			dashers.emplace_back(2, 2, 0, 0);
+			dashers.emplace_back(3, 1, 1, 50);
+			dashers.emplace_back(4, 2, 2, 100);
+			normalDasher.Return(dashers);
+			NearestDasher normalTest(&normalDasher, 0);
+			vector<int> exp{ 1, 3, 2 };
+			assert(normalTest.findDashers(0, 0) == exp);
 		}
 		{
-			vector<vector<string>> input{
-				{"P", "2"}, {"D", "2"},
-				{"P", "1"}, {"D", "1"},
-			};
-			assert(isValid(input));
+			// 3. draw case
+			MockAPI drawlDasher;
+			vector<Dasher> dashers;
+			dashers.emplace_back(1, 0, 1, 100);
+			dashers.emplace_back(2, 2, 0, 0);
+			dashers.emplace_back(3, 1, 1, 50);
+			dashers.emplace_back(4, 0, 2, 100);
+			drawlDasher.Return(dashers);
+			NearestDasher drawTest(&drawlDasher, 0);
+			vector<int> exp{ 1, 3, 4 };
+			assert(drawTest.findDashers(0, 0) == exp);
 		}
-		{
-			vector<vector<string>> input{
-				{"P", "2"}, {"D", "2"},
-				{"P", "1"}, {"D", "2"},
-			};
-			assert(!isValid(input));
-		}
-		{
-			vector<vector<string>> input{
-				{"P", "1"}, {"D", "2"},
-			};
-			assert(!isValid(input));
-		}
-		{
-			vector<vector<string>> input{
-				{"P", "2"}, {"D", "2"},
-				{"P", "1"}
-			};
-			assert(!isValid(input));
-		}
-		{
-			vector<vector<string>> input{
-				{"P", "2"}, {"D", "2"},
-				{"D", "1"}
-			};
-			assert(!isValid(input));
-		}
-		{
-			vector<vector<string>> input{
-				{"P", "2"}, {"P", "1"},
-				{"D", "1"}, {"D", "2"},
-			};
-			assert(isValid(input));
-		}
-	}
-
-	void test() {
-		testValid();
-		testPermute();
-		cout << "DD: pickup pass" << endl;
 	}
 };
 ```
+
+
 
 
 
