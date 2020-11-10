@@ -948,104 +948,158 @@ using namespace std;
 
 class CommonVisitSubSeq {
 public:
-	CommonVisitSubSeq() = default;
-	~CommonVisitSubSeq() = default;
-	void test() {
-		cout << "DD: CommonVisitSubSeq" << endl;
-		string input = "U1 x t1\nU2 x t2\nU1 y t3\nU1 z t4\nU2 y t5\nU3 x t6\nU1 m t7\nU2 z t8";		
-		string expected = "x y z";
-		auto res = getSeq(input, 3);
-		cerr << "expecting " << expected << " got " << res << endl;
-		if (res != expected) {
-			cerr << "FAIL" << endl;
-		}
-		else {
-			cerr << "PASS" << endl;
-		}
-		test2();
-	}
+    CommonVisitSubSeq() = default;
+    ~CommonVisitSubSeq() = default;
+    void test() {
+        cout << "DD: CommonVisitSubSeq" << endl;
+        string input = "U1 x t1\nU2 x t2\nU1 y t3\nU1 z t4\nU2 y t5\nU3 x t6\nU1 m t7\nU2 z t8";        
+        string expected = "x y z";
+        auto res = getSeq(input, 3);
+        cerr << "expecting " << expected << " got " << res << endl;
+        if (res != expected) {
+            cerr << "FAIL" << endl;
+        }
+        else {
+            cerr << "PASS" << endl;
+        }
+        test2();
+    }
 
-	// O(kn), n is entries, k is length
-	// space O( uk ) + O(n) u is number of user, k is length, n is number of candidates
-	string getSeq(const std::string& input, int k) {
-		stringstream ss(input);
-		string line;
-		unordered_map<string, list<string>> userTokens;
-		unordered_map<string, int> counter;
-		int maxLen = 0;
-		string res;
-		char delim = ' ';
-		while (getline(ss, line)) {
-			stringstream ws(line);
-			vector<string> tokens;
-			string token;
-			while (getline(ws, token, delim)) {
-				tokens.push_back(token);
-			}
-			if (tokens.size() != 3) {
-				cerr << "invalid input " << line << endl;
-				continue;
-			}
-			string user = tokens[0];
-			string value = tokens[1];
-			string ts = tokens[2];
-			auto& visited = userTokens[user];
-			visited.push_back(value);
-			if (visited.size() > (size_t)k)
-				visited.pop_front();
-			string key;
-			for (auto it = visited.begin(); it != visited.end(); it++) {
-				key += *it + delim;
-			}
-			key.pop_back();
-			counter[key]++;
-			if (visited.size() == k && counter[key] > maxLen) {
-				maxLen = counter[key];
-				res = key;
-			}
-		}
-		return res;
-	}
+    // O(kn), n is entries, k is length
+    // space O( uk ) + O(n) u is number of user, k is length, n is number of candidates
+    string getSeq(const std::string& input, int k) {
+        stringstream ss(input);
+        string line;
+        unordered_map<string, list<string>> userTokens;
+        unordered_map<string, int> counter;
+        int maxLen = 0;
+        string res;
+        char delim = ' ';
+        while (getline(ss, line)) {
+            stringstream ws(line);
+            vector<string> tokens;
+            string token;
+            while (getline(ws, token, delim)) {
+                tokens.push_back(token);
+            }
+            if (tokens.size() != 3) {
+                cerr << "invalid input " << line << endl;
+                continue;
+            }
+            string user = tokens[0];
+            string value = tokens[1];
+            string ts = tokens[2];
+            auto& visited = userTokens[user];
+            visited.push_back(value);
+            if (visited.size() > (size_t)k)
+                visited.pop_front();
+            string key;
+            for (auto it = visited.begin(); it != visited.end(); it++) {
+                key += *it + delim;
+            }
+            key.pop_back();
+            counter[key]++;
+            if (visited.size() == k && counter[key] > maxLen) {
+                maxLen = counter[key];
+                res = key;
+            }
+        }
+        return res;
+    }
 
-	string getSeq2(const vector<vector<string>>& input, int k) {
-		unordered_map<string, list<string>> webs;
-		unordered_map<string, int> counter;
-		int maxLen = 0;
-		string res;
-		for (const auto& entry : input) {
-			auto& visited = webs[entry[0]];
-			visited.push_back(entry[1]);
-			if (visited.size() > k)
-				visited.pop_front();
-			if (visited.size() == k) {
-				string key;
-				for (const auto& each : visited) {
-					key +=  each + " ";
-				}
-				key.pop_back();
-				counter[key]++;
-				if (counter[key] > maxLen) {
-					maxLen = counter[key];
-					res = key;
-				}
-			}
-		}
-		return res;
-	}
+    string getSeq2(const vector<vector<string>>& input, int k) {
+        unordered_map<string, list<string>> webs;
+        unordered_map<string, int> counter;
+        int maxLen = 0;
+        string res;
+        for (const auto& entry : input) {
+            auto& visited = webs[entry[0]];
+            visited.push_back(entry[1]);
+            if (visited.size() > k)
+                visited.pop_front();
+            if (visited.size() == k) {
+                string key;
+                for (const auto& each : visited) {
+                    key +=  each + " ";
+                }
+                key.pop_back();
+                counter[key]++;
+                if (counter[key] > maxLen) {
+                    maxLen = counter[key];
+                    res = key;
+                }
+            }
+        }
+        return res;
+    }
 
-	/*
-	  auto comp = [](int x, int y){ return x < y; };
+    /*
+      auto comp = [](int x, int y){ return x < y; };
    auto set  = std::set<int,decltype(comp)>( comp );
-	*/
-	void test2() {
-		cout << "DD: CommonVisitSubSeq2" << endl;
-		string expected = "x y z";
-		vector<vector<string>> input{
-			{"u1", "x"}, {"u2", "x"}, {"u1", "y"}, {"u1", "z"}, {"u2", "y"}, {"u1", "m"}, {"u2", "z"}, {"u3", "t"}
-		};
-		auto res = getSeq2(input, 3);
-		assert(res == expected);
-	}
+    */
+    void test2() {
+        cout << "DD: CommonVisitSubSeq2" << endl;
+        string expected = "x y z";
+        vector<vector<string>> input{
+            {"u1", "x"}, {"u2", "x"}, {"u1", "y"}, {"u1", "z"}, {"u2", "y"}, {"u1", "m"}, {"u2", "z"}, {"u3", "t"}
+        };
+        auto res = getSeq2(input, 3);
+        assert(res == expected);
+    }
+};
+```
+
+
+
+## 1197 .Minimum Knight Moves
+
+In an**infinite**chess board with coordinates from`-infinity` to`+infinity`, you have a**knight**at square `[0, 0]`.
+
+A knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, then one square in an orthogonal direction.
+
+move everything to first quanrant and leave some buffer to letit jump back
+
+```
+class Solution {
+public:
+    size_t key(const pair<int,int>&p) {
+        return p.first*1000 + p.second;
+    }
+    int minKnightMoves(int x, int y) {
+        x = abs(x);
+        y = abs(y);
+        unordered_set<size_t> visited;
+        queue<pair<int, int>> q;
+        auto beg = make_pair<int, int>(0, 0);
+        q.push(beg);
+        visited.insert(key(beg));
+        int step = -1;
+        static vector<int> dx{-2, -2, -1, -1, 1, 1, 2, 2};
+        static vector<int> dy{1,  -1,  2, -2, 2, -2, 1, -1};
+        while(!q.empty()) {
+            step++;
+            int n = q.size();
+            for (int i = 0; i < n; i++) {
+                auto node = q.front();
+                if (node.first == x && node.second == y)
+                    return step;
+                q.pop();
+                for (int j = 0; j < 8; j++) {
+                    auto nx = node.first + dx[j];
+                    auto ny = node.second + dy[j];
+                    auto nextNode = make_pair(nx, ny);
+                    auto kstr = key(nextNode);
+                    if (!visited.count(kstr) && nx >= -8 && ny >= -8) {
+                        visited.insert(kstr);
+                        q.push(nextNode);   
+                    }
+
+                }
+            }
+
+        }
+        return 0;
+    }
 };
 ```
 
