@@ -732,17 +732,13 @@ public:
 };
 ```
 
-
-
 ## 973 .K Closest Points to OriginGiven`n`orders, each order consist in pickup and delivery services.
 
-We have a list of`points` on the plane.  Find the`K`closest points to the origin`(0, 0)`.
+We have a list of`points` on the plane.  Find the`K`closest points to the origin`(0, 0)`.
 
 \(Here, the distance between two points on a plane is the Euclidean distance.\)
 
-You may return the answer in any order.  The answer is guaranteed to be unique \(except for the order that it is in.\)
-
-
+You may return the answer in any order.  The answer is guaranteed to be unique \(except for the order that it is in.\)
 
 **Example 1:**
 
@@ -762,7 +758,6 @@ Since sqrt(8)
 <
  sqrt(10), (-2, 2) is closer to the origin.
 We only want the closest K = 1 points from the origin, so the answer is just [[-2,2]].
-
 ```
 
 **Example 2:**
@@ -777,48 +772,9 @@ Output:
 [[3,3],[-2,4]]
 
 (The answer [[-2,4],[3,3]] would also be accepted.)
-
 ```
 
 ```
-class Solution {
-public:
-    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
-        vector<vector<int>> result;
-        if (points.size() <= K)
-            return points;
-        helper(points, 0, points.size() - 1, K, result);
-        return result;
-    }
-    
-    void helper(vector<vector<int>>& points, int beg, int end, int k, vector<vector<int>>& result) {
-        auto dist = [](const vector<int>& point) {
-            return point[0]*point[0] + point[1]*point[1];
-        };
-        
-        int mid = beg + (end - beg) /2;
-        auto pivot = dist(points[mid]);
-        int i = beg, j = end;
-        while(i <= j) {
-            while(i <= j && dist(points[i]) < pivot)
-                i++;
-            while(i <= j && dist(points[j]) > pivot)
-                j--;
-            if(i <= j)
-                swap(points[i++], points[j--]);
-        }
-        int ind = beg + k - 1;
-        if (ind <= j){
-            helper(points, beg, j, k, result);
-        } else if (ind >= i) {
-            helper(points, i, end, k - i + beg, result);
-        } else {
-            result = vector<vector<int>>(points.begin(),  points.begin() + j + 2);   
-        }
-    }
-};
-
-
 #pragma once
 #include <algorithm>
 #include <assert.h>  
@@ -828,6 +784,9 @@ public:
 #include <time.h>
 #include <vector>
 #include <unordered_map>
+#include <time.h>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -952,11 +911,29 @@ public:
 			vector<int> exp{ 1, 3, 4 };
 			assert(drawTest.findDashers(0, 0) == exp);
 		}
+
+		{
+			// 2. normal case
+			MockAPI normalDasher;
+			vector<Dasher> dashers;
+			dashers.emplace_back(1, 0, 1, 100);
+			dashers.emplace_back(2, 2, 0, 0);
+			dashers.emplace_back(3, 1, 1, 50);
+			dashers.emplace_back(4, 2, 2, 100);
+			normalDasher.Return(dashers);
+			NearestDasher normalTest(&normalDasher, 1);
+			vector<int> exp{ 1, 3, 2 };
+			assert(normalTest.findDashers(0, 0) == exp);
+			dashers.clear();
+			normalDasher.Return(dashers);
+			assert(normalTest.findDashers(0, 0) == exp);
+			this_thread::sleep_for(chrono::seconds(2));
+			exp.clear();
+			assert(normalTest.findDashers(0, 0) == exp);
+		}
 	}
 };
 ```
-
-
 
 
 
