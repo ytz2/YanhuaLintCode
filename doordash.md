@@ -421,89 +421,88 @@ public:
 using namespace std;
 class Meeting {
 public :
-	Meeting() = default;
-	~Meeting() = default;
+    Meeting() = default;
+    ~Meeting() = default;
 	void test() {
 		vector<vector<int>> input{
-			{3, 20}, {-2, 0}, {0, 2}, {16, 17}, {19, 23}, {30,40}, {27, 32}
+			{-4,0}, {0, 2}, {4,21}, {13, 17}, {18, 21}, {32, 39} 
 		};
-		auto res = findSlots(input, -5, 27, 2);
-		cout << "input: -5, 27, 2" << endl;
-		print(res);
-		res = findSlots(input, -5, 50, 2);
-		cout << "input: -5, 27, 2" << endl;
-		print(res);
-		res = findSlots(input, 10, 27, 2);
-		cout << "input: 10, 27, 2" << endl;
-		print(res);
-		res = findSlots(input, 1-5, 0, 6);
-		cout << "input: -5, 0, 6" << endl;
-		print(res);
-	}
-	void print(vector<vector<int>>& input) {
-		for (auto& each : input) {
-			cout << each[0] << "-->" << each[1] << endl;
-		}
-		cout << endl;
-	}
 
-	vector<vector<int>> findSlots(vector<vector<int>> input, int from, int to, int minLen) {
-		vector<vector<int>> result;
-		int last_end = from;
-		sort(input.begin(), input.end(), [](const vector<int>& l, const vector<int>& r) {
-			return l[0] < r[0];
-		});
-		for (const auto& each : input) {
-			if ( min(to, each[0]) - last_end >= minLen) {
-				result.push_back({ last_end, min(each[0], to) });
-			}
-			last_end = max(last_end, each[1]);
-		}
-		if (to - last_end >= minLen) {
-			result.push_back({last_end, to});
-		}
-		return result;
+		// begin and end case
+		auto res = findSlots(input, -6, 22, 1); /// -6, -4   2, 4   21, 22
+		cout << "input:  -6, 22, 1" << endl;
+		print(res);
+		res = findSlots(input, -3,55, 2); // 2, 4   21 32,      39, 55
+		cout << "input: -3,55, 2" << endl;
+		print(res);
+		res = findSlots(input, -9, 42, 8); // 
+		cout << "input: -9, 42, 8" << endl; // 21 32
+		print(res);
 	}
+    void print(vector<vector<int>>& input) {
+        for (auto& each : input) {
+            cout << each[0] << "-->" << each[1] << endl;
+        }
+        cout << endl;
+    }
 
-	vector<vector<int>>  findSlots2(vector<vector<int>> input, int from, int to, int minLen) {
-		vector<vector<int>> result;
-		vector<pair<int, bool>> timelines;
-		for (const auto& each : input) {
-			if (each.size() != 2 || each[0] >= each[1]) // invalid input
-				continue;
-			if (each[1] < from) continue;
-			if (each[0] > to) continue;
-			timelines.emplace_back( each[0] < from ? from : each[0] , true);
-			timelines.emplace_back( each[1] > to ? to : each[1] , false);
-		}
-		sort(timelines.begin(), timelines.end(), [](const pair<int, bool>& l, const pair<int, bool>& r) {
-			if (l.first == r.first) {
-				return l.second;
-			}
-			return l.first < r.first;
-		});
+    vector<vector<int>> findSlots(vector<vector<int>> input, int from, int to, int minLen) {
+        vector<vector<int>> result;
+        int last_end = from;
+        sort(input.begin(), input.end(), [](const vector<int>& l, const vector<int>& r) {
+            return l[0] < r[0];
+        });
+        for (const auto& each : input) {
+            if ( min(to, each[0]) - last_end >= minLen) {
+                result.push_back({ last_end, min(each[0], to) });
+            }
+            last_end = max(last_end, each[1]);
+        }
+        if (to - last_end >= minLen) {
+            result.push_back({last_end, to});
+        }
+        return result;
+    }
 
-		int count = 0;
-		int start = from;
-		for (const auto& each : timelines) {
-			if (each.second) {
-				if (count == 0 && each.first - start >= minLen) {
-					result.push_back({ start, each.first });
-				}
-				count++;
-			}
-			else {
-				count--;
-				if (count == 0) {
-					start = each.first;
-				}
-			}
-		}
-		if (to - start  >= minLen) {
-			result.push_back({ start, to });
-		}
-		return result;
-	}
+    vector<vector<int>>  findSlots2(vector<vector<int>> input, int from, int to, int minLen) {
+        vector<vector<int>> result;
+        vector<pair<int, bool>> timelines;
+        for (const auto& each : input) {
+            if (each.size() != 2 || each[0] >= each[1]) // invalid input
+                continue;
+            if (each[1] < from) continue;
+            if (each[0] > to) continue;
+            timelines.emplace_back( each[0] < from ? from : each[0] , true);
+            timelines.emplace_back( each[1] > to ? to : each[1] , false);
+        }
+        sort(timelines.begin(), timelines.end(), [](const pair<int, bool>& l, const pair<int, bool>& r) {
+            if (l.first == r.first) {
+                return l.second;
+            }
+            return l.first < r.first;
+        });
+
+        int count = 0;
+        int start = from;
+        for (const auto& each : timelines) {
+            if (each.second) {
+                if (count == 0 && each.first - start >= minLen) {
+                    result.push_back({ start, each.first });
+                }
+                count++;
+            }
+            else {
+                count--;
+                if (count == 0) {
+                    start = each.first;
+                }
+            }
+        }
+        if (to - start  >= minLen) {
+            result.push_back({ start, to });
+        }
+        return result;
+    }
 };
 ```
 
