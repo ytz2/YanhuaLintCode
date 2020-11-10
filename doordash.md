@@ -322,8 +322,6 @@ public:
 };
 ```
 
-
-
 ## 759. Employee Free Time
 
 We are given a list`schedule`of employees, which represents the working time for each employee.
@@ -332,9 +330,7 @@ Each employee has a list of non-overlapping`Intervals`, and these intervals are 
 
 Return the list of finite intervals representing**common, positive-length free time**forallemployees, also in sorted order.
 
-\(Even though we are representing`Intervals`in the form`[x, y]`, the objects inside are`Intervals`, not lists or arrays. For example,`schedule[0][0].start = 1`,`schedule[0][0].end = 2`, and`schedule[0][0][0]`is not defined\).  Also, we wouldn't include intervals like \[5, 5\] in our answer, as they have zero length.
-
-
+\(Even though we are representing`Intervals`in the form`[x, y]`, the objects inside are`Intervals`, not lists or arrays. For example,`schedule[0][0].start = 1`,`schedule[0][0].end = 2`, and`schedule[0][0][0]`is not defined\).  Also, we wouldn't include intervals like \[5, 5\] in our answer, as they have zero length.
 
 **Example 1:**
 
@@ -349,7 +345,6 @@ Explanation:
  There are a total of three employees, and all common
 free time intervals would be [-inf, 1], [3, 4], [10, inf].
 We discard any intervals that contain inf as they aren't finite.
-
 ```
 
 **Example 2:**
@@ -360,12 +355,9 @@ Input:
 
 Output:
  [[5,6],[7,9]]
-
 ```
 
 [https://leetcode.com/problems/employee-free-time/](https://leetcode.com/problems/employee-free-time/)
-
-
 
 ```cpp
 /*
@@ -417,6 +409,101 @@ public:
         }
         return result;
     }
+};//
+```
+
+```
+#pragma once
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+class Meeting {
+public :
+	Meeting() = default;
+	~Meeting() = default;
+	void test() {
+		vector<vector<int>> input{
+			{3, 20}, {-2, 0}, {0, 2}, {16, 17}, {19, 23}, {30,40}, {27, 32}
+		};
+		auto res = findSlots(input, -5, 27, 2);
+		cout << "input: -5, 27, 2" << endl;
+		print(res);
+		res = findSlots(input, -5, 50, 2);
+		cout << "input: -5, 27, 2" << endl;
+		print(res);
+		res = findSlots(input, 10, 27, 2);
+		cout << "input: 10, 27, 2" << endl;
+		print(res);
+		res = findSlots(input, 1-5, 0, 6);
+		cout << "input: -5, 0, 6" << endl;
+		print(res);
+	}
+	void print(vector<vector<int>>& input) {
+		for (auto& each : input) {
+			cout << each[0] << "-->" << each[1] << endl;
+		}
+		cout << endl;
+	}
+
+	vector<vector<int>> findSlots(vector<vector<int>> input, int from, int to, int minLen) {
+		vector<vector<int>> result;
+		int last_end = from;
+		sort(input.begin(), input.end(), [](const vector<int>& l, const vector<int>& r) {
+			return l[0] < r[0];
+		});
+		for (const auto& each : input) {
+			if ( min(to, each[0]) - last_end >= minLen) {
+				result.push_back({ last_end, min(each[0], to) });
+			}
+			last_end = max(last_end, each[1]);
+		}
+		if (to - last_end >= minLen) {
+			result.push_back({last_end, to});
+		}
+		return result;
+	}
+
+	vector<vector<int>>  findSlots2(vector<vector<int>> input, int from, int to, int minLen) {
+		vector<vector<int>> result;
+		vector<pair<int, bool>> timelines;
+		for (const auto& each : input) {
+			if (each.size() != 2 || each[0] >= each[1]) // invalid input
+				continue;
+			if (each[1] < from) continue;
+			if (each[0] > to) continue;
+			timelines.emplace_back( each[0] < from ? from : each[0] , true);
+			timelines.emplace_back( each[1] > to ? to : each[1] , false);
+		}
+		sort(timelines.begin(), timelines.end(), [](const pair<int, bool>& l, const pair<int, bool>& r) {
+			if (l.first == r.first) {
+				return l.second;
+			}
+			return l.first < r.first;
+		});
+
+		int count = 0;
+		int start = from;
+		for (const auto& each : timelines) {
+			if (each.second) {
+				if (count == 0 && each.first - start >= minLen) {
+					result.push_back({ start, each.first });
+				}
+				count++;
+			}
+			else {
+				count--;
+				if (count == 0) {
+					start = each.first;
+				}
+			}
+		}
+		if (to - start  >= minLen) {
+			result.push_back({ start, to });
+		}
+		return result;
+	}
 };
 ```
 
