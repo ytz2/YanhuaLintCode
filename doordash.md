@@ -791,146 +791,260 @@ Output:
 using namespace std;
 
 struct Dasher {
-	Dasher(int id, int x, int y, int r)
-		:id(id), x(x), y(y), rate(r) {}
-	int id = 0;
-	int x = 0;
-	int y = 0;
-	int rate = 0;
+    Dasher(int id, int x, int y, int r)
+        :id(id), x(x), y(y), rate(r) {}
+    int id = 0;
+    int x = 0;
+    int y = 0;
+    int rate = 0;
 };
 
 class DasherAPI {
 public:
-	DasherAPI() = default;
-	virtual ~DasherAPI() = default;
-	virtual vector<Dasher> getDashers(int x, int y) = 0;
+    DasherAPI() = default;
+    virtual ~DasherAPI() = default;
+    virtual vector<Dasher> getDashers(int x, int y) = 0;
 };
 
 class MockAPI : public DasherAPI {
 public:
-	MockAPI() = default;
-	virtual ~MockAPI() = default;
-	void Return(const vector<Dasher>& input) {
-		dashers_ = input;
-	}
-	vector<Dasher> getDashers(int x, int y) override {
-		return dashers_;
-	}
+    MockAPI() = default;
+    virtual ~MockAPI() = default;
+    void Return(const vector<Dasher>& input) {
+        dashers_ = input;
+    }
+    vector<Dasher> getDashers(int x, int y) override {
+        return dashers_;
+    }
 private:
-	vector<Dasher> dashers_;
+    vector<Dasher> dashers_;
 };
 
 // offer complexity o(n) space, o(n log(k)) time comlexity
 // offer cache after done
 class NearestDasher {
 public:
-	NearestDasher(DasherAPI* api, int ttl)
-		:api_(api), ttl_(ttl)
-	{}
-	vector<int> findDashers(int x, int y) {
-		auto k = key(x, y);
-		// cache
-		if (cache_.count(k)) {
-			auto now = time(NULL);
-			if (now - cache_[k].first < ttl_)
-				return cache_[k].second;
-			cache_.erase(k);
-		}
-		// local lambda for comparison in priority queue
-		auto cmp = [x, y](const Dasher& l, const Dasher& r) {
-			int distl = (l.x - x) * (l.x - x) + (l.y - y) * (l.y - y);
-			int distr = (r.x - x) * (r.x - x) + (r.y - y) * (r.y - y);
-			if (distl == distr) {
-				return l.rate > r.rate;
-			}
-			return distl < distr;
-		};
-		priority_queue<Dasher, vector<Dasher>, decltype(cmp)> pq(cmp);
-		auto dashers = api_->getDashers(x, y);
-		for (const auto& dasher : dashers) {
-			pq.push(dasher);
-			if (pq.size() > 3) {
-				pq.pop();
-			}
-		}
-		vector<int> result;
-		while (!pq.empty()) {
-			result.push_back(pq.top().id);
-			pq.pop();
-		}
-		// reverse as we were maintianing max heap 
-		reverse(result.begin(), result.end());
-		cache_[k] = make_pair(time(NULL), result);
-		return result;
-	}
+    NearestDasher(DasherAPI* api, int ttl)
+        :api_(api), ttl_(ttl)
+    {}
+    vector<int> findDashers(int x, int y) {
+        auto k = key(x, y);
+        // cache
+        if (cache_.count(k)) {
+            auto now = time(NULL);
+            if (now - cache_[k].first < ttl_)
+                return cache_[k].second;
+            cache_.erase(k);
+        }
+        // local lambda for comparison in priority queue
+        auto cmp = [x, y](const Dasher& l, const Dasher& r) {
+            int distl = (l.x - x) * (l.x - x) + (l.y - y) * (l.y - y);
+            int distr = (r.x - x) * (r.x - x) + (r.y - y) * (r.y - y);
+            if (distl == distr) {
+                return l.rate > r.rate;
+            }
+            return distl < distr;
+        };
+        priority_queue<Dasher, vector<Dasher>, decltype(cmp)> pq(cmp);
+        auto dashers = api_->getDashers(x, y);
+        for (const auto& dasher : dashers) {
+            pq.push(dasher);
+            if (pq.size() > 3) {
+                pq.pop();
+            }
+        }
+        vector<int> result;
+        while (!pq.empty()) {
+            result.push_back(pq.top().id);
+            pq.pop();
+        }
+        // reverse as we were maintianing max heap 
+        reverse(result.begin(), result.end());
+        cache_[k] = make_pair(time(NULL), result);
+        return result;
+    }
 
 private:
-	string key(int x, int y) const {
-		return to_string(x) + "," + to_string(y);
-	}
+    string key(int x, int y) const {
+        return to_string(x) + "," + to_string(y);
+    }
 private:
-	DasherAPI* api_;
-	int ttl_;
-	unordered_map<string, pair<time_t, vector<int>>> cache_;
+    DasherAPI* api_;
+    int ttl_;
+    unordered_map<string, pair<time_t, vector<int>>> cache_;
 };
 
 class TestNearestDasher {
 public:
-	TestNearestDasher() = default;
-	void test(){
-		{
-			// 1. empty return
-			MockAPI emptyDasher;
-			NearestDasher emptyTest(&emptyDasher, 0);
-			vector<int> exp;
-			assert(emptyTest.findDashers(0, 0) == exp);
-		}
-		{
-			// 2. normal case
-			MockAPI normalDasher;
-			vector<Dasher> dashers;
-			dashers.emplace_back(1, 0, 1, 100);
-			dashers.emplace_back(2, 2, 0, 0);
-			dashers.emplace_back(3, 1, 1, 50);
-			dashers.emplace_back(4, 2, 2, 100);
-			normalDasher.Return(dashers);
-			NearestDasher normalTest(&normalDasher, 0);
-			vector<int> exp{ 1, 3, 2 };
-			assert(normalTest.findDashers(0, 0) == exp);
-		}
-		{
-			// 3. draw case
-			MockAPI drawlDasher;
-			vector<Dasher> dashers;
-			dashers.emplace_back(1, 0, 1, 100);
-			dashers.emplace_back(2, 2, 0, 0);
-			dashers.emplace_back(3, 1, 1, 50);
-			dashers.emplace_back(4, 0, 2, 100);
-			drawlDasher.Return(dashers);
-			NearestDasher drawTest(&drawlDasher, 0);
-			vector<int> exp{ 1, 3, 4 };
-			assert(drawTest.findDashers(0, 0) == exp);
-		}
+    TestNearestDasher() = default;
+    void test(){
+        {
+            // 1. empty return
+            MockAPI emptyDasher;
+            NearestDasher emptyTest(&emptyDasher, 0);
+            vector<int> exp;
+            assert(emptyTest.findDashers(0, 0) == exp);
+        }
+        {
+            // 2. normal case
+            MockAPI normalDasher;
+            vector<Dasher> dashers;
+            dashers.emplace_back(1, 0, 1, 100);
+            dashers.emplace_back(2, 2, 0, 0);
+            dashers.emplace_back(3, 1, 1, 50);
+            dashers.emplace_back(4, 2, 2, 100);
+            normalDasher.Return(dashers);
+            NearestDasher normalTest(&normalDasher, 0);
+            vector<int> exp{ 1, 3, 2 };
+            assert(normalTest.findDashers(0, 0) == exp);
+        }
+        {
+            // 3. draw case
+            MockAPI drawlDasher;
+            vector<Dasher> dashers;
+            dashers.emplace_back(1, 0, 1, 100);
+            dashers.emplace_back(2, 2, 0, 0);
+            dashers.emplace_back(3, 1, 1, 50);
+            dashers.emplace_back(4, 0, 2, 100);
+            drawlDasher.Return(dashers);
+            NearestDasher drawTest(&drawlDasher, 0);
+            vector<int> exp{ 1, 3, 4 };
+            assert(drawTest.findDashers(0, 0) == exp);
+        }
 
-		{
-			// 2. normal case
-			MockAPI normalDasher;
-			vector<Dasher> dashers;
-			dashers.emplace_back(1, 0, 1, 100);
-			dashers.emplace_back(2, 2, 0, 0);
-			dashers.emplace_back(3, 1, 1, 50);
-			dashers.emplace_back(4, 2, 2, 100);
-			normalDasher.Return(dashers);
-			NearestDasher normalTest(&normalDasher, 1);
-			vector<int> exp{ 1, 3, 2 };
-			assert(normalTest.findDashers(0, 0) == exp);
-			dashers.clear();
-			normalDasher.Return(dashers);
-			assert(normalTest.findDashers(0, 0) == exp);
-			this_thread::sleep_for(chrono::seconds(2));
-			exp.clear();
-			assert(normalTest.findDashers(0, 0) == exp);
+        {
+            // 2. normal case
+            MockAPI normalDasher;
+            vector<Dasher> dashers;
+            dashers.emplace_back(1, 0, 1, 100);
+            dashers.emplace_back(2, 2, 0, 0);
+            dashers.emplace_back(3, 1, 1, 50);
+            dashers.emplace_back(4, 2, 2, 100);
+            normalDasher.Return(dashers);
+            NearestDasher normalTest(&normalDasher, 1);
+            vector<int> exp{ 1, 3, 2 };
+            assert(normalTest.findDashers(0, 0) == exp);
+            dashers.clear();
+            normalDasher.Return(dashers);
+            assert(normalTest.findDashers(0, 0) == exp);
+            this_thread::sleep_for(chrono::seconds(2));
+            exp.clear();
+            assert(normalTest.findDashers(0, 0) == exp);
+        }
+    }
+};
+```
+
+```
+#pragma once
+#include <iostream>
+#include <list>
+#include <sstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <cassert>
+using namespace std;
+
+class CommonVisitSubSeq {
+public:
+	CommonVisitSubSeq() = default;
+	~CommonVisitSubSeq() = default;
+	void test() {
+		cout << "DD: CommonVisitSubSeq" << endl;
+		string input = "U1 x t1\nU2 x t2\nU1 y t3\nU1 z t4\nU2 y t5\nU3 x t6\nU1 m t7\nU2 z t8";		
+		string expected = "x y z";
+		auto res = getSeq(input, 3);
+		cerr << "expecting " << expected << " got " << res << endl;
+		if (res != expected) {
+			cerr << "FAIL" << endl;
 		}
+		else {
+			cerr << "PASS" << endl;
+		}
+		test2();
+	}
+
+	// O(kn), n is entries, k is length
+	// space O( uk ) + O(n) u is number of user, k is length, n is number of candidates
+	string getSeq(const std::string& input, int k) {
+		stringstream ss(input);
+		string line;
+		unordered_map<string, list<string>> userTokens;
+		unordered_map<string, int> counter;
+		int maxLen = 0;
+		string res;
+		char delim = ' ';
+		while (getline(ss, line)) {
+			stringstream ws(line);
+			vector<string> tokens;
+			string token;
+			while (getline(ws, token, delim)) {
+				tokens.push_back(token);
+			}
+			if (tokens.size() != 3) {
+				cerr << "invalid input " << line << endl;
+				continue;
+			}
+			string user = tokens[0];
+			string value = tokens[1];
+			string ts = tokens[2];
+			auto& visited = userTokens[user];
+			visited.push_back(value);
+			if (visited.size() > (size_t)k)
+				visited.pop_front();
+			string key;
+			for (auto it = visited.begin(); it != visited.end(); it++) {
+				key += *it + delim;
+			}
+			key.pop_back();
+			counter[key]++;
+			if (visited.size() == k && counter[key] > maxLen) {
+				maxLen = counter[key];
+				res = key;
+			}
+		}
+		return res;
+	}
+
+	string getSeq2(const vector<vector<string>>& input, int k) {
+		unordered_map<string, list<string>> webs;
+		unordered_map<string, int> counter;
+		int maxLen = 0;
+		string res;
+		for (const auto& entry : input) {
+			auto& visited = webs[entry[0]];
+			visited.push_back(entry[1]);
+			if (visited.size() > k)
+				visited.pop_front();
+			if (visited.size() == k) {
+				string key;
+				for (const auto& each : visited) {
+					key +=  each + " ";
+				}
+				key.pop_back();
+				counter[key]++;
+				if (counter[key] > maxLen) {
+					maxLen = counter[key];
+					res = key;
+				}
+			}
+		}
+		return res;
+	}
+
+	/*
+	  auto comp = [](int x, int y){ return x < y; };
+   auto set  = std::set<int,decltype(comp)>( comp );
+	*/
+	void test2() {
+		cout << "DD: CommonVisitSubSeq2" << endl;
+		string expected = "x y z";
+		vector<vector<string>> input{
+			{"u1", "x"}, {"u2", "x"}, {"u1", "y"}, {"u1", "z"}, {"u2", "y"}, {"u1", "m"}, {"u2", "z"}, {"u3", "t"}
+		};
+		auto res = getSeq2(input, 3);
+		assert(res == expected);
 	}
 };
 ```
