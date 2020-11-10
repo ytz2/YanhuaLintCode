@@ -1101,8 +1101,6 @@ public:
 };
 ```
 
-
-
 ## 1472.Design Browser History
 
 You have a**browser**of one tab where you start on the`homepage`and you can visit another`url`, get back in the history number of`steps`or move forward in the history number of`steps`.
@@ -1112,93 +1110,177 @@ Implement the`BrowserHistory`class:
 * `BrowserHistory(string homepage)`
   Initializes the object with the
   `homepage`
-   of the browser.
+   of the browser.
 * `void visit(string url)`
-   Visits 
+   Visits 
   `url`
   from the current page. It clears up all the forward history.
 * `string back(int steps)`
-   Move
+   Move
   `steps`
   back in history. If you can only return
   `x`
   steps in the history and
-  `steps `
+  `steps`
   `>`
-  ` x`
-  , you will return only
+  `x`
+  , you will return only
   `x`
   steps. Return the current
   `url`
-   after moving back in history
+   after moving back in history
   **at most**
   `steps`
   .
 * `string forward(int steps)`
-   Move
+   Move
   `steps`
   forward in history. If you can only forward
   `x`
   steps in the history and
-  `steps `
+  `steps`
   `>`
-  ` x`
-  , you will forward only 
+  `x`
+  , you will forward only 
   `x`
   steps. Return the current
   `url`
-   after forwarding in history
+   after forwarding in history
   **at most**
   `steps`
   .
 
 [https://leetcode.com/problems/design-browser-history/](https://leetcode.com/problems/design-browser-history/)
 
-```
 class BrowserHistory {
+
 public:
-    BrowserHistory(string homepage) {
-        nodes.push_back(homepage);
-        it = nodes.begin();
+
+    BrowserHistory\(string homepage\) {
+
+        nodes.push\_back\(homepage\);
+
+        it = nodes.begin\(\);
+
     }
-    
-    void visit(string url) {
+
+
+
+    void visit\(string url\) {
+
         auto& var = nodes;
-        auto n = next(it);
-        nodes.insert(n, url);
+
+        auto n = next\(it\);
+
+        nodes.insert\(n, url\);
+
         ++it;
-        if (n != nodes.end())
-            nodes.erase(n, nodes.end());
+
+        if \(n != nodes.end\(\)\)
+
+            nodes.erase\(n, nodes.end\(\)\);
+
     }
-    
-    string back(int steps) {
-        while(steps && it != nodes.begin()){
+
+
+
+    string back\(int steps\) {
+
+        while\(steps && it != nodes.begin\(\)\){
+
             steps--;
+
             it--;
+
         }
-        return *it;
+
+        return \*it;
+
     }
-    
-    string forward(int steps) {
-        for (int i = 0; i < steps; i++) {
-            if (it == prev(nodes.end()))
+
+
+
+    string forward\(int steps\) {
+
+        for \(int i = 0; i &lt; steps; i++\) {
+
+            if \(it == prev\(nodes.end\(\)\)\)
+
                 break;
+
             it++;
+
         }
-        return *it;
+
+        return \*it;
+
     }
-    
-    list<string> nodes;
-    list<string>::iterator it;
+
+
+
+    list&lt;string&gt; nodes;
+
+    list&lt;string&gt;::iterator it;
+
 };
 
-/**
- * Your BrowserHistory object will be instantiated and called as such:
- * BrowserHistory* obj = new BrowserHistory(homepage);
- * obj->visit(url);
- * string param_2 = obj->back(steps);
- * string param_3 = obj->forward(steps);
- */
+
+
+/\*\*
+
+ \* Your BrowserHistory object will be instantiated and called as such:
+
+ \* BrowserHistory\* obj = new BrowserHistory\(homepage\);
+
+ \* obj-&gt;visit\(url\);
+
+ \* string param\_2 = obj-&gt;back\(steps\);
+
+ \* string param\_3 = obj-&gt;forward\(steps\);
+
+ \*/
+
+
+
+## 1383.Maximum Performance of a Team
+
+There are`n`engineers numbered from 1 to`n` and two arrays:`speed` and`efficiency`, where`speed[i]`and`efficiency[i]`represent the speed and efficiency for the i-th engineer respectively._Return the maximum**performance**of a team composed of at most `k` engineers, since the answer can be a huge number, return this modulo 10^9 + 7._
+
+The**performance**of a team is the sum of their engineers' speeds multiplied by the minimum efficiency among their engineers. 
+
+
+
+遇到这道题可以直接背诵了，妈的
+
+```
+class Solution {
+public:
+    int maxPerformance(int n, vector<int>& speed, vector<int>& efficiency, int k) {
+        vector<pair<int, int>> container;
+        for (int i = 0; i < n; i++) {
+            container.push_back(make_pair(speed[i], efficiency[i]));
+        }
+        sort(container.begin(), container.end(), [](const pair<int,int>& l, const pair<int, int>& r){
+           return l.second > r.second; 
+        });
+        
+        priority_queue<int, vector<int>, greater<int>> pq;
+        long res = 0;
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            auto node = container[i];
+            sum += node.first;
+            long eff = node.second;
+            pq.push(node.first);
+            if (pq.size() > k ){
+                sum -= pq.top();
+                pq.pop();
+            }
+            res = max(res, long(sum * eff) );
+        }
+        return res % 1000000007 ;
+    }
+};
 ```
 
 
