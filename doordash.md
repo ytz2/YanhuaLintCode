@@ -423,22 +423,22 @@ class Meeting {
 public :
     Meeting() = default;
     ~Meeting() = default;
-	void test() {
-		vector<vector<int>> input{
-			{-4,0}, {0, 2}, {4,21}, {13, 17}, {18, 21}, {32, 39} 
-		};
+    void test() {
+        vector<vector<int>> input{
+            {-4,0}, {0, 2}, {4,21}, {13, 17}, {18, 21}, {32, 39} 
+        };
 
-		// begin and end case
-		auto res = findSlots(input, -6, 22, 1); /// -6, -4   2, 4   21, 22
-		cout << "input:  -6, 22, 1" << endl;
-		print(res);
-		res = findSlots(input, -3,55, 2); // 2, 4   21 32,      39, 55
-		cout << "input: -3,55, 2" << endl;
-		print(res);
-		res = findSlots(input, -9, 42, 8); // 
-		cout << "input: -9, 42, 8" << endl; // 21 32
-		print(res);
-	}
+        // begin and end case
+        auto res = findSlots(input, -6, 22, 1); /// -6, -4   2, 4   21, 22
+        cout << "input:  -6, 22, 1" << endl;
+        print(res);
+        res = findSlots(input, -3,55, 2); // 2, 4   21 32,      39, 55
+        cout << "input: -3,55, 2" << endl;
+        print(res);
+        res = findSlots(input, -9, 42, 8); // 
+        cout << "input: -9, 42, 8" << endl; // 21 32
+        print(res);
+    }
     void print(vector<vector<int>>& input) {
         for (auto& each : input) {
             cout << each[0] << "-->" << each[1] << endl;
@@ -503,6 +503,240 @@ public :
         }
         return result;
     }
+};
+```
+
+
+
+
+
+## 1359.Count All Valid Pickup and Delivery Options
+
+Given`n`orders, each order consist in pickup and delivery services. 
+
+Count all valid pickup/delivery possible sequences such that delivery\(i\) is always after of pickup\(i\). 
+
+Since the answer may be too large, return it modulo 10^9 + 7.
+
+
+
+**Example 1:**
+
+```
+Input:
+ n = 1
+
+Output:
+ 1
+
+Explanation:
+ Unique order (P1, D1), Delivery 1 always is after of Pickup 1.
+
+```
+
+**Example 2:**
+
+```
+Input:
+ n = 2
+
+Output:
+ 6
+
+Explanation:
+ All possible orders: 
+(P1,P2,D1,D2), (P1,P2,D2,D1), (P1,D1,P2,D2), (P2,P1,D1,D2), (P2,P1,D2,D1) and (P2,D2,P1,D1).
+This is an invalid order (P1,D2,P2,D1) because Pickup 2 is after of Delivery 2.
+
+```
+
+**Example 3:**
+
+```
+Input:
+ n = 3
+
+Output:
+ 90
+```
+
+```
+class Solution {
+public:
+    int countOrders(int n) {
+        unordered_set<int> picks, drops;
+        return helper(picks, drops, n) % 1000000009;
+    }
+    
+    long helper(unordered_set<int>& picks, unordered_set<int>& drops, int n) {
+        if (drops.size() == n)
+            return 1;
+        long res = 0;
+        for (int i = 1; i <= n; i++) {
+            if (!picks.count(i)) {
+                picks.insert(i);
+                res += helper(picks, drops, n);
+                picks.erase(i);
+            } else if (!drops.count(i)) {
+                drops.insert(i);
+                res += helper(picks, drops, n);
+                drops.erase(i);
+            }
+        }
+        return res;
+    } 
+};
+```
+
+```
+#pragma once
+#include <assert.h>
+#include <iostream>
+#include <string>
+#include <unordered_set>
+#include <vector>
+
+using namespace std;
+class Pickup {
+public:
+	Pickup() = default;
+
+	bool isValid(vector<vector<string>>& input) { // o(n), o(n)
+		unordered_set<string> picks;
+		unordered_set<string> drops;
+		for (const auto& entry : input) {
+			const auto& action = entry[0];
+			const auto& location = entry[1];
+			if (action == "P") {
+				if (picks.count(location))
+					return false;
+				picks.insert(location);
+			}
+			else { // drop
+				if (drops.count(location) || !picks.count(location))
+					return false;
+				drops.insert(location);
+			}
+		}
+		return picks.size() == drops.size();
+	}
+
+	// o(2n!)/2^n, permute (2n)!, everytime, we prune and divide by 2, thus it is
+	vector<vector<vector<string>>> permute(int n) {
+		unordered_set<int> picks, drops;
+		vector<vector<vector<string>>> result;
+		vector<vector<string>> route;
+		helper(n, picks, drops, route, result);
+		return result;
+	}
+
+	void helper(int n, unordered_set<int>& picks, unordered_set<int>& drops, vector<vector<string>>& route, vector<vector<vector<string>>>& result) {
+		if (route.size() == 2 * n) {
+			if (picks.size() == drops.size()) {
+				result.push_back(route);
+			}
+			return;
+		}
+		for (int i = 1; i <= n; i++) {
+			string location = to_string(i);
+			if (!picks.count(i)) {
+				picks.insert(i);
+				route.push_back({ "P", to_string(i) });
+				helper(n, picks, drops, route, result);
+				picks.erase(i);
+				route.pop_back();
+			}
+			else if (!drops.count(i)){
+				drops.insert(i);
+				route.push_back({ "D", to_string(i) });
+				helper(n, picks, drops, route, result);
+				drops.erase(i);
+				route.pop_back();
+			}
+		}
+	}
+	 
+	void testPermute() {
+		{
+			auto res = permute(1);
+			assert(res.size() == 1);
+		}
+		{
+			auto res = permute(2);
+			assert(res.size() == 6);
+		}
+		{
+			auto res = permute(3);
+			assert(res.size() == 90);
+		}
+		{
+			auto res = permute(4);
+			assert(res.size() == 2520);
+		}
+	}
+
+	void testValid() {
+		{
+			vector<vector<string>> input{
+				{"P", "1"}, {"D", "1"}
+			};
+			assert(isValid(input));
+		}
+		{
+			vector<vector<string>> input{
+				{"P", "1"}, {"D", "1"},
+				{"P", "2"}, {"D", "2"},
+			};
+			assert(isValid(input));
+		}
+		{
+			vector<vector<string>> input{
+				{"P", "2"}, {"D", "2"},
+				{"P", "1"}, {"D", "1"},
+			};
+			assert(isValid(input));
+		}
+		{
+			vector<vector<string>> input{
+				{"P", "2"}, {"D", "2"},
+				{"P", "1"}, {"D", "2"},
+			};
+			assert(!isValid(input));
+		}
+		{
+			vector<vector<string>> input{
+				{"P", "1"}, {"D", "2"},
+			};
+			assert(!isValid(input));
+		}
+		{
+			vector<vector<string>> input{
+				{"P", "2"}, {"D", "2"},
+				{"P", "1"}
+			};
+			assert(!isValid(input));
+		}
+		{
+			vector<vector<string>> input{
+				{"P", "2"}, {"D", "2"},
+				{"D", "1"}
+			};
+			assert(!isValid(input));
+		}
+		{
+			vector<vector<string>> input{
+				{"P", "2"}, {"P", "1"},
+				{"D", "1"}, {"D", "2"},
+			};
+			assert(isValid(input));
+		}
+	}
+
+	void test() {
+		testValid();
+		testPermute();
+		cout << "DD: pickup pass" << endl;
+	}
 };
 ```
 
