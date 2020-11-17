@@ -2,7 +2,7 @@
 
 Given an`m x nmatrix`, return_all elements of the_`matrix`_in spiral order_.
 
-[https://leetcode.com/problems/spiral-matrix/](https://leetcode.com/problems/spiral-matrix/)[    
+[https://leetcode.com/problems/spiral-matrix/](https://leetcode.com/problems/spiral-matrix/)[      
 ](https://leetcode.com/problems/spiral-matrix/)
 
 ![](/assets/import54.png)
@@ -10,8 +10,6 @@ Given an`m x nmatrix`, return_all elements of the_`matrix`_in spiral order_.
 感觉还是传统套路， 碰到二维矩阵想到的就是两点定标， \(x0, y0\), \(x1, y1\) ， 做这道题的时候因为是做的robinhood下面的tag所用模拟法都麻木了，两点定标+模拟
 
 横着向右走，x0++, 竖着向下走，y1--, 横着想左走,x1--,竖着向上走，y0++, 每次移动点的时候注意check是不是越界，最后终止条件就是收缩到x0&lt;=x1 && y0&lt;=y1
-
-
 
 ```
 class Solution {
@@ -43,8 +41,6 @@ public:
     }
 };
 ```
-
-
 
 ## 200 Number of Islands
 
@@ -285,6 +281,98 @@ public:
             }
         }
         return res;
+    }
+};
+```
+
+
+
+## 498 Diagonal Traverse
+
+Given a matrix of M x N elements \(M rows, N columns\), return all elements of the matrix in diagonal order as shown in the below image..
+
+![](/assets/import498.png)
+
+
+
+第一种是沿着上和右边缘描线， 一遍描线一边翻转
+
+```
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        if (matrix.empty() || matrix[0].empty())
+            return result;
+        auto add = [&matrix, &result](int i, int j, bool& flip) {
+            int n = result.size();
+            while(i < matrix.size() && j >=0)
+                result.push_back(matrix[i++][j--]);
+            if (flip)
+               reverse(result.begin() + n, result.end());
+            flip = !flip;
+        };
+        
+        bool flip = true;
+        for(int j = 0; j < matrix[0].size(); j++) {
+            add(0, j, flip);
+        }
+        for (int i = 1; i < matrix.size(); i++) {
+            add(i, matrix[0].size() -1, flip);          
+        }
+        
+        return result;
+    }
+```
+
+
+
+还有一种就是完全模拟法 ，不碰壁的时候按照右上 i--, j++和左下 i++, j--得走法
+
+比较有趣的是右上角和左下角，右上角是往下， 同理碰到右边也是，左下角是往右，同理碰到下边也是
+
+那么处理边界， 碰到右边往下，碰到上边往右 （右上） ，  碰到下边往右， 碰到左边往下 （左下）
+
+```
+class Solution {
+public:
+
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        if (matrix.empty() || matrix[0].empty()) 
+            return result;
+        int i = 0, j = 0, m = matrix.size(), n = matrix[0].size();
+        bool isUp = true;
+        while(i != m - 1 || j != n-1) {
+            result.push_back(matrix[i][j]);
+            if (isUp) {
+                if (j == n -1) {
+                    i++;
+                    isUp = false;
+                } else if (i == 0 ) {
+                    j++;
+                    isUp = false;
+                } else {
+                    i--;
+                    j++;
+                }
+            }
+            else {
+                if (i == m -1) {
+                    j++; 
+                    isUp = true;
+                } else if (j == 0) {
+                    i++;
+                    isUp = true;
+                } else {
+                    i++;
+                    j--;
+                }
+            }
+        }
+        
+        result.push_back(matrix[m-1][n-1]);
+        return result;
     }
 };
 ```
