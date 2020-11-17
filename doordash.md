@@ -1156,99 +1156,95 @@ class BrowserHistory {
 
 public:
 
-    BrowserHistory\(string homepage\) {
+```
+BrowserHistory\(string homepage\) {
 
-        nodes.push\_back\(homepage\);
+    nodes.push\_back\(homepage\);
 
-        it = nodes.begin\(\);
+    it = nodes.begin\(\);
 
-    }
-
-
-
-    void visit\(string url\) {
-
-        auto& var = nodes;
-
-        auto n = next\(it\);
-
-        nodes.insert\(n, url\);
-
-        ++it;
-
-        if \(n != nodes.end\(\)\)
-
-            nodes.erase\(n, nodes.end\(\)\);
-
-    }
+}
 
 
 
-    string back\(int steps\) {
+void visit\(string url\) {
 
-        while\(steps && it != nodes.begin\(\)\){
+    auto& var = nodes;
 
-            steps--;
+    auto n = next\(it\);
 
-            it--;
+    nodes.insert\(n, url\);
 
-        }
+    ++it;
 
-        return \*it;
+    if \(n != nodes.end\(\)\)
+
+        nodes.erase\(n, nodes.end\(\)\);
+
+}
+
+
+
+string back\(int steps\) {
+
+    while\(steps && it != nodes.begin\(\)\){
+
+        steps--;
+
+        it--;
 
     }
 
+    return \*it;
+
+}
 
 
-    string forward\(int steps\) {
 
-        for \(int i = 0; i &lt; steps; i++\) {
+string forward\(int steps\) {
 
-            if \(it == prev\(nodes.end\(\)\)\)
+    for \(int i = 0; i &lt; steps; i++\) {
 
-                break;
+        if \(it == prev\(nodes.end\(\)\)\)
 
-            it++;
+            break;
 
-        }
-
-        return \*it;
+        it++;
 
     }
 
+    return \*it;
+
+}
 
 
-    list&lt;string&gt; nodes;
 
-    list&lt;string&gt;::iterator it;
+list&lt;string&gt; nodes;
+
+list&lt;string&gt;::iterator it;
+```
 
 };
 
-
-
 /\*\*
 
- \* Your BrowserHistory object will be instantiated and called as such:
+\* Your BrowserHistory object will be instantiated and called as such:
 
- \* BrowserHistory\* obj = new BrowserHistory\(homepage\);
+\* BrowserHistory\* obj = new BrowserHistory\(homepage\);
 
- \* obj-&gt;visit\(url\);
+\* obj-&gt;visit\(url\);
 
- \* string param\_2 = obj-&gt;back\(steps\);
+\* string param\_2 = obj-&gt;back\(steps\);
 
- \* string param\_3 = obj-&gt;forward\(steps\);
+\* string param\_3 = obj-&gt;forward\(steps\);
 
- \*/
-
-
+\*/
 
 ## 1383.Maximum Performance of a Team
 
-There are`n`engineers numbered from 1 to`n` and two arrays:`speed` and`efficiency`, where`speed[i]`and`efficiency[i]`represent the speed and efficiency for the i-th engineer respectively._Return the maximum**performance**of a team composed of at most `k` engineers, since the answer can be a huge number, return this modulo 10^9 + 7._
+There are`n`engineers numbered from 1 to`n` and two arrays:`speed` and`efficiency`, where`speed[i]`and`efficiency[i]`represent the speed and efficiency for the i-th engineer respectively._Return the maximum**performance**of a team composed of at most _`k`_ engineers, since the answer can be a huge number, return this modulo 10^9 + 7._
 
-The**performance**of a team is the sum of their engineers' speeds multiplied by the minimum efficiency among their engineers. 
-
-
+The**performance**of a team is the sum of their engineers' speeds multiplied by the minimum efficiency among their engineers.
 
 遇到这道题可以直接背诵了，妈的
 
@@ -1263,7 +1259,7 @@ public:
         sort(container.begin(), container.end(), [](const pair<int,int>& l, const pair<int, int>& r){
            return l.second > r.second; 
         });
-        
+
         priority_queue<int, vector<int>, greater<int>> pq;
         long res = 0;
         long sum = 0;
