@@ -2,7 +2,7 @@
 
 Given an`m x nmatrix`, return_all elements of the_`matrix`_in spiral order_.
 
-[https://leetcode.com/problems/spiral-matrix/](https://leetcode.com/problems/spiral-matrix/)[      
+[https://leetcode.com/problems/spiral-matrix/](https://leetcode.com/problems/spiral-matrix/)[        
 ](https://leetcode.com/problems/spiral-matrix/)
 
 ![](/assets/import54.png)
@@ -285,15 +285,11 @@ public:
 };
 ```
 
-
-
 ## 498 Diagonal Traverse
 
 Given a matrix of M x N elements \(M rows, N columns\), return all elements of the matrix in diagonal order as shown in the below image..
 
 ![](/assets/import498.png)
-
-
 
 第一种是沿着上和右边缘描线， 一遍描线一边翻转
 
@@ -312,7 +308,7 @@ public:
                reverse(result.begin() + n, result.end());
             flip = !flip;
         };
-        
+
         bool flip = true;
         for(int j = 0; j < matrix[0].size(); j++) {
             add(0, j, flip);
@@ -320,12 +316,10 @@ public:
         for (int i = 1; i < matrix.size(); i++) {
             add(i, matrix[0].size() -1, flip);          
         }
-        
+
         return result;
     }
 ```
-
-
 
 还有一种就是完全模拟法 ，不碰壁的时候按照右上 i--, j++和左下 i++, j--得走法
 
@@ -370,12 +364,49 @@ public:
                 }
             }
         }
-        
+
         result.push_back(matrix[m-1][n-1]);
         return result;
     }
 };
 ```
 
+## 48 Rotate Image
 
+You are given an_n_x_n_2D`matrix`representing an image, rotate the image by 90 degrees \(clockwise\).
+
+You have to rotate the image[**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm), which means you have to modify the input 2D matrix directly.**DO NOT**allocate another 2D matrix and do the rotation.
+
+![](/assets/import48.png)
+
+robinhood和矩阵干上了，这道题最简单的方法叫做模拟法， 一圈一圈的砖，转到没圈， 其最终任意一圈中
+
+i0, j0 -&gt; i1, j1 选取 最上面，i 计算offset,就可以把这个元素对应的其他三个位置算出来， hardcode遍历一条边就可以旋转一层
+
+
+
+```
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int x0 = 0, x1 = matrix.size() - 1, y0 = 0, y1=matrix[0].size()-1;
+        while(x0 < x1) {
+            for (int i = y0; i < y1; i++) {
+                int dist = i - y0;                
+                int a = matrix[x0][i];
+                int b = matrix[x0 + dist][y1];
+                int c = matrix[x1][y1-dist];
+                int d = matrix[x1 - dist][y0];
+                matrix[x0 + dist][y1] = a;
+                matrix[x1][y1-dist] = b;
+                matrix[x1 - dist][y0] = c;
+                matrix[x0][i] = d;
+            }
+            x0++;x1--;y0++;y1--;
+        }
+    }
+};
+```
+
+当然，这个题的数学解按照轴对称然后按照中轴这贴， 这个就太数学了。
 
