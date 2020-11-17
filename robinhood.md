@@ -2,7 +2,7 @@
 
 Given an`m x nmatrix`, return_all elements of the_`matrix`_in spiral order_.
 
-[https://leetcode.com/problems/spiral-matrix/](https://leetcode.com/problems/spiral-matrix/)[          
+[https://leetcode.com/problems/spiral-matrix/](https://leetcode.com/problems/spiral-matrix/)[            
 ](https://leetcode.com/problems/spiral-matrix/)
 
 ![](/assets/import54.png)
@@ -408,22 +408,20 @@ public:
 
 当然，这个题的数学解按照轴对称然后按照中轴这贴， 这个就太数学了。
 
-
-
 ## 1329  Sort the Matrix Diagonally
 
-Given a`m * n`matrix`mat` of integers, sort it diagonally in ascending order from the top-left to the bottom-right then return the sorted array.
+Given a`m * n`matrix`mat` of integers, sort it diagonally in ascending order from the top-left to the bottom-right then return the sorted array.
 
 ![](/assets/import1329.png)
 
-受到diagonal traverse那题的启发，斜着的只要描边就好，描边的时候可以找一个array来sort， 也可以弄一个更无聊的quick sort, 
+受到diagonal traverse那题的启发，斜着的只要描边就好，描边的时候可以找一个array来sort， 也可以弄一个更无聊的quick sort,
 
 我写了quick sort版本，判定终止点用的min\(m, n\) 和 min\(m -i, n-j\) 取得最小 然后在二维上做快排
 
 ```
 class Solution {
 public:
-    
+
     vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
         if (mat.empty() || mat[0].empty())
             return mat;
@@ -433,24 +431,24 @@ public:
             sort(mat, i, 0);
         return mat;
     }
-    
+
     pair<int, int> computeEnd(int i, int j, int m, int n) {
         int len = min(m, n);
         len = min(len, min(m - i, n - j));
         return make_pair(i + len - 1, j + len -1);
     }
-    
+
     void sort(vector<vector<int>>& mat, int ibeg, int jbeg) {
         auto pos = computeEnd(ibeg, jbeg, mat.size(), mat[0].size());
         int iend = pos.first;
         int jend = pos.second;
         sort(mat, ibeg, jbeg, iend, jend);
     }
-    
+
     void sort(vector<vector<int>>& mat, int x0, int y0, int x1, int y1 ) {
         if (x0 >= x1)
             return;
-        
+
         int ibeg = x0, iend = x1, jbeg = y0, jend = y1;
         int pivot = mat[(ibeg + iend) /2][(jbeg + jend) /2];
         while(ibeg <= iend) {
@@ -477,7 +475,7 @@ public:
 ```
 class Solution {
 public:
-    
+
     vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
         if (mat.empty() || mat[0].empty())
             return mat;
@@ -507,14 +505,11 @@ public:
 };
 ```
 
-
-
 ## 611 Valid Triangle Number
 
 Given an array consists of non-negative integers, your task is to count the number of triplets chosen from the array that can make triangles if we take them as side lengths of a triangle.
 
-**Example 1:**  
-
+**Example 1:**
 
 ```
 Input:
@@ -529,13 +524,9 @@ Valid combinations are:
 2,3,4 (using the first 2)
 2,3,4 (using the second 2)
 2,2,3
-
 ```
 
-
-
-**Note:**  
-
+**Note:**
 
 1. The length of the given array won't exceed 1000.
 2. The integers in the given array are in the range of \[0, 1000\].
@@ -566,15 +557,13 @@ public:
 };
 ```
 
-
-
 ## 1052 Grumpy Bookstore Owner
 
-Today, the bookstore owner has a store open for`customers.length`minutes.  Every minute, some number of customers \(`customers[i]`\) enter the store, and all those customers leave after the end of that minute.
+Today, the bookstore owner has a store open for`customers.length`minutes.  Every minute, some number of customers \(`customers[i]`\) enter the store, and all those customers leave after the end of that minute.
 
-On some minutes, the bookstore owner is grumpy.  If the bookstore owner is grumpy on the i-th minute,`grumpy[i] = 1`, otherwise`grumpy[i] = 0`.  When the bookstore owner is grumpy, the customers of that minute are not satisfied, otherwise they are satisfied.
+On some minutes, the bookstore owner is grumpy.  If the bookstore owner is grumpy on the i-th minute,`grumpy[i] = 1`, otherwise`grumpy[i] = 0`.  When the bookstore owner is grumpy, the customers of that minute are not satisfied, otherwise they are satisfied.
 
-The bookstore owner knows a secret technique to keep themselves not grumpy for`X` minutes straight, but can only use it once.
+The bookstore owner knows a secret technique to keep themselves not grumpy for`X` minutes straight, but can only use it once.
 
 Return the maximum number of customers that can be satisfied throughout the day.
 
@@ -588,11 +577,11 @@ Output:
 16
 
 Explanation:
- The bookstore owner keeps themselves not grumpy for the last 3 minutes. 
+ The bookstore owner keeps themselves not grumpy for the last 3 minutes. 
 The maximum number of customers that can be satisfied = 1 + 1 + 1 + 1 + 7 + 5 = 16.
 ```
 
-说了一堆废话就是一个sliding window 
+说了一堆废话就是一个sliding window
 
 ```
 class Solution {
@@ -621,4 +610,52 @@ public:
 ```
 
 
+
+## 735  Asteroid Collision
+
+We are given an array`asteroids`of integers representing asteroids in a row.
+
+For each asteroid, the absolute value represents its size, and the sign represents its direction \(positive meaning right, negative meaning left\). Each asteroid moves at the same speed.
+
+Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.
+
+
+
+**Example 1:**
+
+```
+Input:
+ asteroids = [5,10,-5]
+
+Output:
+ [5,10]
+
+Explanation:
+ The 10 and -5 collide resulting in 10.  The 5 and 10 never collide.
+```
+
+```
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        vector<int> result;
+        for (int i = 0; i < asteroids.size(); i++) {
+            if (result.empty() || result.back() * asteroids[i] > 0 || result.back() < 0 && asteroids[i] > 0) {
+                result.push_back(asteroids[i]);
+            } else {
+                int sum = result.back() + asteroids[i];
+                if (sum > 0)
+                    continue;
+                result.pop_back();
+                if (sum < 0)
+                    i--;
+            }
+        }
+        return result;
+    }
+};
+
+```
+
+题目非常简单， 但是技巧很重要， 我第一次写的时候用了个while\(true\)， 看了答案觉得他写的好， 当把左边的干掉以后要继续干左边的， 那么i-- 就可以重新处理当前元素， 惊为天人
 
